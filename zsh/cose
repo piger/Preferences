@@ -1,0 +1,30 @@
+# ===============================================================
+# ~/.zsh/cose
+# Impostazioni e alias che dipendono dal sistema operativo in uso
+# ---------------------------------------------------------------
+
+ls_opts='-F'
+[[ $UID = 0 ]] && ls_opts='-FA'
+
+declare -A uname
+[[ ! -e ${ZDOTDIR}/uname.cache ]] && echo "uname=\"$(uname -srmn)\"" > ${ZDOTDIR}/uname.cache
+source ${ZDOTDIR}/uname.cache
+
+case $OSTYPE in
+	darwin*)
+		source ${ZDOTDIR}/os/darwin
+		;;
+	openbsd*)
+		source ${ZDOTDIR}/os/openbsd
+		;;
+	linux*)
+		source ${ZDOTDIR}/os/linux
+		;;
+	solaris*)
+		source ${ZDOTDIR}/os/solaris
+		;;
+	*)
+		;;
+esac
+
+# vim: ft=zsh

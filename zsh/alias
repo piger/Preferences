@@ -1,0 +1,46 @@
+# ==========================================================
+# ~/.zsh/alias
+# Aliases e altri comandi che non uso mai perche' sono SCEMO
+# ----------------------------------------------------------
+# man zshexpn -> search Glob Qualifier
+
+alias mv='nocorrect mv'       	# no spelling correction on mv
+alias cp='nocorrect cp'       	# no spelling correction on cp
+alias mkdir='nocorrect mkdir' 	# no spelling correction on mkdir
+
+alias h="history"
+alias ll="ls -lh"
+alias la="ls -a"
+alias lla="ls -la"
+alias lsd="ls -ld *(-/)"		# ls delle sole directory
+alias lsa="ls -ld .*"			# ls dei soli file nascosti
+alias suz="su root -c zsh"		# su to root and run zsh ;)
+alias lsgrandi="ls --color=auto -flh *(.oL)"	# ls -lrh --sort=size
+alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
+alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
+alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
+alias lsoggi="ls *(m0)"			# ls dei file modificati oggi
+alias dirdu="du -Hhs *(/,@)"	# du -h di ogni dir presente
+alias ..='cd ..'
+
+# alias globali, che pero' non gradisco.
+alias -g L='|less'
+alias -g M='|more'
+alias -g H='|head'
+alias -g T='|tail'
+
+alias tmessages="tail -f /var/log/messages"
+alias tsyslog="tail -f /var/log/syslog"
+
+# debian specific
+if [[ -e /etc/debian_version ]]; then
+	alias search="apt-cache search"
+	alias show="apt-cache show"
+	alias i="sudo apt-get install"
+fi
+
+alias pwgen_strong='pwgen -y1 15 20'
+
+alias vnc_colori='vncviewer -FullColor'
+
+# vim: ft=zsh

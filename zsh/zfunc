@@ -1,0 +1,226 @@
+# =====================================================================
+# ~/.zsh/zfunc
+# Funzioni per varie funzioni; essendo brevi non uso il metodo autoload
+# ---------------------------------------------------------------------
+
+# ZMV
+# rinomina i file sostituendo con '_'
+to_underscore() {
+	zmv '(*) (*)' '$f:gs/ /_'
+}
+to_lower() {
+	zmv '(*)' '${(L)1}'
+}
+to_upper() {
+	zmv '(*)' '${(U)1}'
+}
+
+# Utile per i dotfiles
+# zmv $HOME'/dotfiles/dot_(*)' '$HOME/$1'
+
+# dopo anni, mkdir && cd ;-P
+mcd () {
+	mkdir "$@" && cd "$@"
+}
+
+# tree amanuense se non c'e' il pacchetto installato
+# from strcat.de
+if (( ! $+commands[tree] )); then
+	tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
+fi
+
+restapache () {
+	apachectl stop
+	sleep 3
+	print -l ${(M)${(f)"$(ps xauw)"}:#*(httpd|apache)*}
+	#read -r 'res?Restarto? [yes/no]: '
+	read -r "res?$fg_bold[green]Restarto? [$fg_bold[red]Yes$fg_bold[green]/$fg_bold[red]No$fg_bold[green]]$reset_color"
+	if [[ $res = (#i)"yes" ]]; then apachectl start; fi
+}
+
+# hahahah http://www.strcat.de/dotfiles/zsh/dot.zshfunctions
+dick() { uptime | perl -ne "/(\d+) d/;print 8,q(=)x\$1,\"D\n\"" }
+
+# aggiunge una directory al $PATH
+addpath() {
+	if [[ -z $1 ]]; then
+		echo "Usage: $0 <directory>"
+		return 1
+	fi
+	path=( $path[@] $1 )
+	rehash
+}
+
+# funzioni per settare TERM velocemente
+# xt -> 'xterm'
+# xtc -> 'xterm-color'
+# xts -> 'screen'
+xt() {
+	[[ "$TERM" = 'xterm' ]] && return;
+	export TERM=xterm
+	echo "TERM changed to 'xterm'"
+}
+xtc() {
+	[[ "$TERM" = 'xterm-color' ]] && return;
+	export TERM=xterm-color
+	echo "TERM changed to 'xterm-color'"
+}
+xts() {
+	[[ "$TERM" = 'screen' ]] && return;
+	export TERM=screen
+	echo "TERM changed to 'screen'"
+}
+
+# mirror un sito web
+suca() {
+	if [[ -z "$1" ]]; then
+		echo "$0 <url>"
+		return 1
+	fi
+	wget -krmnp "$1"
+}
+
+# fa un po' di pulizia per la privacy...
+privacy() {
+	echo "+PRIVACY"
+	if [[ ! -z $SSH_AGENT_PID ]]; then
+		echo " killing ssh agent..."
+		ssh-agent -k
+	fi
+	echo " deleting ~/.viminfo..."
+	rm -f ~/.viminfo
+	echo " deleting shell history..."
+	unset HISTFILE
+	echo "done."
+}
+
+pulisci() {
+	echo "Deleting: (press enter or ctrl+c)"
+	echo *~(.UGrw)
+	read
+	rm -f *~(.UGrw)
+}
+
+# chiavi ssh
+chiavale() {
+	keychain -q --inherit local ~/.ssh/*.pub(:r)
+}
+
+schiavale() {
+	ssh-add -D
+}
+
+chiavi() {
+	if [[ ! -z "$SSH_ASKPASS" ]]; then
+		ssh-add ~/.ssh/*.pub(:r) < /dev/null
+	else
+		ssh-add ~/.ssh/*.pub(:r)
+	fi
+}
+
+# XXX si puo' fare con il completion...
+# cd nella dir con i log di cronolog di oggi
+cdwww() {
+	cd /var/log/apache/$(date +"%y/%m/%d")/
+}
+
+# Questa fantastica funzione cerca un file chiamato ~/.cvs_addrbook e se esiste,
+# lo legge e crea funzioni zsh con i parametri letti:
+# myhost :ext:cvs@host.net:/home/cvsroot
+# creera' la funzione "cvs_myhost"
+_cvsaddrbook () {
+	[[ -e ~/.cvs_addrbook ]] || return
+	lista=( ${(f)"$( < ~/.cvs_addrbook )"} )
+
+	for i in $lista
+	do
+		eval "function cvs_${${(z)i}[1]} () {
+			export CVSROOT=${${(z)i}[2]}
+			echo export CVSROOT=${${(z)i}[2]}
+		}
+		"
+	done
+}
+
+# Basta eseguirla una sola volta...
+_cvsaddrbook
+
+# dovessi mai usare tar per copiare...
+copiatar () {
+	echo "tar cvf - . | ( cd /altrove; tar xvf - )"
+}
+
+# sfortune cerca prima i miei fortune e poi quelli
+# di sistema
+sfortune () {
+	if [[ -e ~/.fortune ]]; then
+		if (( $+commands[cowsay] )); then
+			cowsay `fortune -ae ~/.fortune/*~*.dat`
+		else
+			print;$cowsay fortune -ae ~/.fortune/*~*.dat;print
+		fi
+	else
+		print;fortune -ae;print
+	fi
+}
+
+obsd_cvslist () {
+	if (( ! $+commands[curl] )); then
+		echo "You need 'curl' to run this. pkg_add -i curl"
+		return
+	fi
+	CVSURL="http://www.openbsd.org/anoncvs.html"
+
+	for cvsroot in $(curl -s ${CVSURL} | grep "CVSROOT=" | cut -d">" -f3- | cut -d"<" -f1); do
+		echo "$cvsroot"
+	done
+}
+
+obsd_ftplist () {
+	if (( ! $+commands[curl] )); then
+		echo "You need 'curl' to run this. pkg_add -i curl"
+		return
+	fi
+	MIRRORURL="http://www.openbsd.org/ftp.html"
+
+	for mirror in $(curl -s ${MIRRORURL} | egrep -i "<a.*(http|ftp)://.*openbsd" | cut -d'"' -f2); do
+		echo "$mirror"
+	done
+}
+
+# rigenera le versioni compilate degli script 
+rifaitutto () {
+	# Al contrario di quanto credevo, eseguire questi comandi all'avvio (.zshrc)
+	# rallenta di molto lo startup della shell.
+	autoload -U zrecompile
+	zrecompile -qp \
+		-R ${ZDOTDIR}/.zshrc -- \
+		-R ${HOME}/.zshenv -- \
+		-R ${ZDOTDIR}/bind -- \
+		-R ${ZDOTDIR}/cose -- \
+		-R ${ZDOTDIR}/os/darwin -- \
+		-R ${ZDOTDIR}/os/linux -- \
+		-R ${ZDOTDIR}/os/openbsd -- \
+		-R ${ZDOTDIR}/os/solaris -- \
+		-R ${ZDOTDIR}/zcomp -- \
+		-R ${ZDOTDIR}/alias -- \
+		-R ${ZDOTDIR}/zfunc -- \
+		-R ${ZDOTDIR}/welcome -- \
+		-M ${ZDOTDIR}/.zcompdump
+}
+
+# lista i file in ordine di grandezza
+bysize () {
+	if [[ -z $1 ]]; then
+		ls -flh *(.oL)
+	else
+		ls -flh $1/*(.oL)
+	fi
+}
+
+raw_kb () {
+	echo "Type your keys, then ^D to quit"
+	tput smkx && cat; tput rmkx && echo "done"
+}
+
+# vim: ft=zsh

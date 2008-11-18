@@ -1,0 +1,20 @@
+# ===============================================================
+# ~/.zsh/os/solaris
+# ---------------------------------------------------------------
+
+# -*- aliases
+#alias vim="/Applications/Vim.app/Contents/MacOS/Vim"
+#alias gvim="/Applications/gvim.app/Contents/MacOS/gvim"
+
+# -*- environment
+export CLICOLOR=1
+export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
+#[[ -e /sw/bin/init.sh ]] && source /sw/bin/init.sh
+
+# Mac Ports
+if [[ -d /opt/local ]]; then
+	export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+	export MANPATH=/opt/local/man:$MANPATH
+fi
+
+# vim: ft=zsh

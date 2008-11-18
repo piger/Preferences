@@ -1,0 +1,22 @@
+# ================================================================================
+# ~/.zsh/welcome
+# Cose che succedono all'apertura di una shell interattiva, come fortune e il todo
+# --------------------------------------------------------------------------------
+
+# fortune! ;) [ richiede extended_glob! ]
+[[ $- = *i* ]] && (( $+commands[fortune] )) && \
+	[[ -d ~/.fortune ]] && \
+	(print; fortune -ae ~/.fortune/*~*.dat; print)
+
+
+todo() {
+	if [[ -e ~/.todo ]]; then
+		print -- "Il tuo itler di fiducia ha stilato la seguente lista di cose da fare"
+		print -- " ------------------------------------------------------------------"
+		cat ~/.todo
+		print
+	fi
+}
+todo
+
+# vim: ft=zsh

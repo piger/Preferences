@@ -1,0 +1,81 @@
+# =====================================================
+# ~/.zsh/bind
+# Binding per lo Zsh Line Editor, scorciatroie & affini
+# -----------------------------------------------------
+
+# emacs bindings (odio la modalita' vi)
+bindkey -e
+
+# WORDCHAR
+# default: *?_-.[]~=/&;!#$%^(){}<>
+
+bindkey '\e[5~' up-history		# PageUp -> history up
+bindkey '\e[6~' down-history 	# PageDown -> history down
+bindkey '[Z' reverse-menu-complete # SHIFT+TAB per il tab "all'indietro"
+
+# CTRL, ALT & co.
+bindkey '^z' undo			# CTRL+z per undo di expansion e completion
+#bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
+#bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
+bindkey '\C-w' kill-region
+
+# sudo
+# Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
+_add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
+zle -N add-sudo _add-sudo
+bindkey '\es' add-sudo				# ALT+s per inserire 'sudo' a inizio cmdline
+
+# Edita la linea di comando con $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
+
+# autoload -U zkbd
+# Eseguire zkbd per compilare una lista di variabili associate ai tasti
+#source ~/.zkbd/$TERM-$VENDOR-$OSTYPE
+#    [[ -n ${key[Left]} ]] && bindkey "${key[Left]}" backward-char
+#    [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
+#    # etc.
+
+
+# PANORAMICA DEI TASTINI
+# ----------------------
+# ctrl+d	cancella il carattere sotto il cursore
+# ctrl+b	muove al carattere precedente
+# ctrl+f	muove al carattere successivo
+# ctrl+t	scambia il carattere con quello che lo precede
+# ctrl+v	inserisce il prossimo carattere letteralmente
+# esc-b		va indietro di una word
+# esc-f		va avanti di una word
+# ctrl+a	va a inizio riga
+# ctrl+e	va a fine riga
+#
+# History
+# -------
+# ctrl+r	ricerca incrementale all'indietro
+# ctrl+s	ricerca incrementale in avanti
+#
+# Cancellare e spostare pezzi di testo
+# ------------------------------------
+# esc-(delete|backspace)	killa la word precedente
+# esc-d		killa la word successiva
+# ctrl+k	killa fino alla fine della riga
+# ctrl+u	killa tutta la riga
+# ctrl+y	incolla l'ultimo testo killato
+# esc-y		rimpiazza l'ultimo testo incollato con quello precedente
+# NB: Esiste un "kill ring" contenente gli ultimi 'testi' killati, esc-y cicla tra questi
+#
+# Regions
+# -------
+# ctrl+space	inserisce un mark nel punto attuale
+# ctrl+x ctrl+x	scambia il mark con il punto attuale
+# ctrl+w	killa la region e ficca il testo nel kill ring (di default non e' bindato)
+# esc-w		copia la region selezionata
+#
+# esc-c		capitalize the next word and move over it (traducila tu, dai, DAI)
+# esc-u		upperCASSA la word successiva, e passa alla prossima
+# esc-l		lowerCASSA la word successiva, e passa alla prossima
+# ctrl+l	cancella lo schermo
+# esc-.		(punto!) inserisce l'ultimo argomento del comando precedente
+
+# vim: ft=zsh

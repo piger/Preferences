@@ -1,0 +1,96 @@
+# ==============================================================
+# ~/.zsh/zcomp
+# Completion della ZSH, perche' la pigerrimitudo e' una virtute.
+# --------------------------------------------------------------
+
+# :completion:function:completer:command:argument:tag
+
+# Lista di completers
+# _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
+# _ignored completa file/dir che per altre impostazioni verrebbero ignorati
+#zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+# Da: http://zshwiki.org/home/examples/compquickstart?s=rehash
+# Forza il rehash per ogni uso della completion (ie: premi tab); per attivare,
+# commentare lo zstyle precedente (quello con completer _complete _prefix...) e
+# scommentare le 5 righe che seguono.
+_force_rehash() {
+  (( CURRENT == 1 )) && rehash
+  return 1	# Because we didn't really complete anything
+}
+zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+
+# Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
+# e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
+zstyle ':completion:*:messages' format %d
+zstyle ':completion:*:warnings' format '%BNo matches%b: %d'
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-separator '-->'
+# Non completare i nomi delle funzioni che iniziano per '_'
+zstyle ':completion::complete:*:functions' ignored-patterns '_*'
+
+# separa i man per sezione
+zstyle ':completion:*:manuals' separate-sections true
+
+# Mostra le descrizioni per cio' che viene completato, ad esempio le opzioni di ls;
+# quando manca la descrizione, prova a "indovinare"
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' auto-description 'specify: %d'
+
+# Utilizza un pager interno quando i risultati della completion sono troppi
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
+
+# Limit this fuckung "zsh: do you wish to see all NNN possibilities (NNN
+# lines)?" downward (default is 100). Only ask before displaying
+# completions if doing so would scroll. (strcat.de)
+#LISTMAX=0
+
+# Completion approssimativa, permette un errore ogni 3 caratteri
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+zstyle -e ':completion:*:approximate:*' max-errors \
+	'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) )'
+# Completa cose tipo: gzip _-d -> gzip --decompress
+zstyle ':completion::approximate*:*' prefix-needed false
+
+# Case insensitive: converte solo le minuscole in maiuscole, perche' come dicono
+# NEL LIBRO, per scrivere le maiuscole devi premere anche shift, ed e' quindi piu'
+# probabile che sia una scelta deliberata e non un errore di battitura
+# INOLTRE, implementa la Partial Completion, usando '/' come carattere anchor: cio'
+# permette finezze come cd /u/l/b -> cd /usr/local/bin -- e' come premere TAB su ogni
+# '/'
+zstyle ':completion:*:(^approximate):*' matcher-list \
+	'r:|[/]=* r:|=* m:{a-z}={A-Z}'
+
+# Prefix Completion: se il cursore e' nel mezzo di una word, zsh completa come se il
+# cursore si trovasse a fine word; l'opposto si ottiene abilitando complete_in_word.
+# Un altro approccio consiste nel completare ignorando completamente il suffix...
+zstyle ':completion::prefix:::' completer _complete
+zstyle ':completion:*:prefix:*' add-space true	# aggiunge anche uno spazio
+
+# Esclusioni
+# Avendo '_ignored' tra i completer, le seguenti regole verranno ignorate nel caso
+# in cui non ci sia altro da completare
+zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
+# Evita di completare cio' che e' gia' sulla command line
+# Questo e' AAAH, sputtana la completion e il Tab non cycla piu' tra i possibili match :-(
+#zstyle ':completion:*:(rm|rmdir|grep|vim|vi):*' ignore-line true
+# Non completare le directory se la completion "non ha senso" (../$PWD non ha senso)
+zstyle ':completion:*' ignore-parents parent pwd
+
+# Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
+zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
+LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
+PERL5LIB:scalar
+
+# Comando usato per la completion dei processi
+zstyle ':completion:*:processes' command 'ps -xa'
+
+# cache
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
+
+# Completion con i colori di ls
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# vim: ft=zsh
