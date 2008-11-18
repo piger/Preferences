@@ -17,3 +17,5 @@ inst() {
 }
 
 dot_inst "screenrc"
+dot_inst "zshenv"
+dot_inst "zsh"
