@@ -35,6 +35,11 @@ fi
 #   PID USER     %CPU %MEM S COMMAND
 #  9639 sand      0.0  0.6 S -zsh
 #  9697 sand      0.0  0.1 R ps -o pid,user,pcpu,pmem,state,command
-alias ps='ps -o pid,user,pcpu,pmem,state,command'
+# alias ps='ps -o pid,user,pcpu,pmem,state,command'
+# Piccolo problema:
+# % ps xauw
+# ps: /dev/mem: Permission denied
+# [1]    14269 exit 1     ps -o pid,user,pcpu,pmem,state,command xauw
+
 
 # vim: ft=zsh
