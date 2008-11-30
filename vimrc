@@ -37,7 +37,7 @@ source $VIMRUNTIME/macros/matchit.vim
 
 " Un plugin molto carino per esportare un file (che sia syntax highlighted) in
 " HTML.
-source $VIMRUNTIME/plugin/tohtml.vim
+" source $VIMRUNTIME/plugin/tohtml.vim
 
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
@@ -45,7 +45,7 @@ if &t_Co > 2 || has("gui_running")
     syntax on
     set hlsearch
 	" oceandeep, vividchalk, asu1dark, peachpuff (gui)
-	colorscheme tango
+	colorscheme asu1dark
 	hi statusline ctermfg=White ctermbg=Red
 endif
 
