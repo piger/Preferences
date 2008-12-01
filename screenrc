@@ -8,10 +8,14 @@
 # F8 / ALT+RIGHT = next window
 bindkey -k k9 next
 bindkey "^[[1;3C" next
+# rxvt
+bindkey "^[^[OC" next
 
 # F9 / ALT+LEFT = prev window
 bindkey -k k8 prev
 bindkey "^[[1;3D" prev
+# rxvt
+bindkey "^[^[OD" prev
 
 # Remove some stupid / dangerous key bindings
 bind ^k
