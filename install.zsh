@@ -3,14 +3,14 @@
 [[ ! -d ~/.backup ]] && mkdir ~/.backup
 
 dot_inst() {
-	if [[ ! -g ${HOME}/.$1 ]]; then
+	if [[ ! -h ${HOME}/.$1 ]]; then
 		mv ${HOME}/.$1 ${HOME}/.backup/
 	fi
 	ln -sf ${PWD}/$1 ${HOME}/.$1
 }
 
 inst() {
-	if [[ ! -g ${HOME}/$1 ]]; then
+	if [[ ! -h ${HOME}/$1 ]]; then
 		mv ${HOME}/$1 ${HOME}/.backup/
 	fi
 	ln -sf ${PWD}/$1 ${HOME}/$1
@@ -19,3 +19,6 @@ inst() {
 dot_inst "screenrc"
 dot_inst "zshenv"
 dot_inst "zsh"
+dot_inst "vimrc"
+dot_inst "gvimrc"
+dot_inst "vim"
