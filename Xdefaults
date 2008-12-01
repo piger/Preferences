@@ -1,0 +1,134 @@
+! 24/01/2008 - Sistemo per una buona volta i maledetti colori del terminale;
+! i colori piu' astrusi (tipo bright magenta) potrebbero non essere ottimali,
+! non li ho testai.
+! riferimenti:
+! http://mkaz.com/ref/XTerm_colors.html
+! http://gentoo-wiki.com/TIP_Linux_Colors_in_Aterm/rxvt
+! http://spatof.org/doc/guida_XTerm.txt
+
+#ifdef COLOR
+   *customization: -color
+#endif
+
+URxvt.secondaryScroll:  true
+XTerm*dynamiccolors: true 
+
+! -xos4-terminus-medium-r-normal--0-0-72-72-c-0-iso8859-15
+! -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-15
+! -xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
+! -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-15
+! -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-15
+! -xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso8859-15
+! -xos4-terminus-medium-r-normal--28-280-72-72-c-140-iso8859-15
+! -xos4-terminus-medium-r-normal--32-320-72-72-c-160-iso8859-15
+! XTerm*font:-xos4-terminus-medium-r-normal--13-140-72-72-c-80-iso8859-15
+XTerm*font:-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-15
+!XTerm*vt100*geometry: 80x50
+XTerm*saveLines: 2000
+XTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
+! Se cambi TERM a XTerm-color non funziona il backspace...
+! XTerm*termName: xterm-color
+XTerm*eightBitInput: false
+XTerm*visualBell: True
+! Do not clear the screen after the program exits
+XTerm*VT100*titeInhibit: true
+XTerm*pointerColor: red
+XTerm*pointerColorBackground: white 
+XTerm*cursorColor: grey
+XTerm*scrollBar: false
+
+
+XTerm*background:  gray4
+XTerm*foreground:  FloralWhite
+
+! black
+XTerm*color0:      black
+! red
+XTerm*color1:      tomato2
+! green
+XTerm*color2:      SeaGreen3
+! yellow
+XTerm*color3:      gold1
+! blue
+XTerm*color4:      LightSkyBlue3
+! magenta
+XTerm*color5:      DeepPink2
+! cyan
+XTerm*color6:      LightSkyBlue
+! white
+XTerm*color7:      FloralWhite
+
+! bright black
+XTerm*color8:      gray5
+! bright red
+XTerm*color9:      brown1
+! bright green
+XTerm*color10:     chartreuse2
+! bright yellow
+XTerm*color11:     khaki1
+! bright blue
+XTerm*color12:     DodgerBlue2
+! bright magenta
+XTerm*color13:     VioletRed1
+! bright cyan
+XTerm*color14:     MediumTurquoise
+! bright white
+XTerm*color15:     white
+
+
+! Per URxvt
+URxvt*font:					-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
+URxvt*boldFont:				-xos4-terminus-bold-r-normal--14-140-72-72-c-80-iso8859-15
+!URxvt*font:				xft:DejaVu Sans mono:size=9,antialias=true
+!URxvt.boldFont:         xft:DejaVu Sans mono:bold:size=9,antialias=true
+URxvt.depth: 				32
+!URxvt*vt100*geometry: 80x50
+URxvt*saveLines: 			2000
+!URxvt*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
+! Se cambi TERM a URxvt-color non funziona il backspace...
+! URxvt*termName: XTerm-color
+URxvt*eightBitInput: 		false
+URxvt*visualBell: 			true
+! Do not clear the screen after the program exits
+URxvt*VT100*titeInhibit: 	true
+URxvt*scrollBar: 			false
+URxvt*perl-ext-common:		mark-urls
+! si lanciano col tasto centrale :)
+URxvt.urlLauncher:			iceweasel
+
+URxvt*background:  gray4
+URxvt*foreground:  FloralWhite
+
+! black
+URxvt*color0:      black
+! red
+URxvt*color1:      tomato2
+! green
+URxvt*color2:      SeaGreen3
+! yellow
+URxvt*color3:      gold1
+! blue
+URxvt*color4:      LightSkyBlue3
+! magenta
+URxvt*color5:      DeepPink2
+! cyan
+URxvt*color6:      LightSkyBlue
+! white
+URxvt*color7:      FloralWhite
+
+! bright black
+URxvt*color8:      gray5
+! bright red
+URxvt*color9:      brown1
+! bright green
+URxvt*color10:     chartreuse2
+! bright yellow
+URxvt*color11:     khaki1
+! bright blue
+URxvt*color12:     DodgerBlue2
+! bright magenta
+URxvt*color13:     VioletRed1
+! bright cyan
+URxvt*color14:     MediumTurquoise
+! bright white
+URxvt*color15:     white
