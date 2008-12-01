@@ -183,3 +183,6 @@ nmap ,# :s/^/# /<CR>``:nohls<CR>
 " inserisce la data (imap = in modalita' insert)
 nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
+
+" NERDTree
+nmap <Leader>nt :NERDTreeToggle<CR>
