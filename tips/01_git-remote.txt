@@ -1,0 +1,32 @@
+# http://toolmantim.com/article/2007/12/5/setting_up_a_new_remote_git_repository
+# Anche:
+# http://wiki.sourcemage.org/Git_Guide
+
+# Set up the new bare repo on the server:
+
+$ ssh myserver.com
+Welcome to myserver.com!
+$ mkdir /var/git/myapp.git && cd /var/git/myapp.git
+$ git --bare init
+Initialized empty Git repository in /var/git/myapp.git
+$ exit
+Bye!
+
+# Add the remote repository and push:
+
+$ cd ~/Sites/myapp
+$ git remote add origin ssh://myserver.com/var/git/myapp.git
+$ git push origin master
+
+# Track the remote branch
+
+You can specify the default remote repository for pushing and pulling
+using git-branch’s track option. You’d normally do this by specifying
+the --track option when creating your local master branch, but as it
+already exists we’ll just update the config manually like so:
+
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+
+Now you can simply git push and git pull.
