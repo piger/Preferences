@@ -160,7 +160,7 @@ ignorecase on
 #caption always "%{= wk} %?%-Lw%?%{= kd} %n*%f %t %{= wk}%?%+Lw%? %{= wk}%=%{= Wk} %C%a %d-%m-%Y %{= wk}"
 
 # quella giusta:
-caption always "%{= kR} %?%-Lw%?%{= rw} %n*%f %t %{= kR}%?%+Lw%? %{= kR}%=%{= kw} %C%a %d-%m-%Y %{= kd}"
+caption always "%{= kR} %?%-Lw%?%{= bk} %n*%f %t %{= kR}%?%+Lw%? %{= kR}%=%{= kw} %C%a %d-%m-%Y %{= kd}"
 
 # scrollback per window (5000 lines)
 defscrollback 5000
@@ -172,7 +172,7 @@ defscrollback 5000
 silencewait 20
 
 # Il colore testo/colore sfondo dei messaggi di screen
-sorendition wR
+sorendition kB
 
 # initial banner
 startup_message off

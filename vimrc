@@ -55,7 +55,7 @@ if &t_Co > 2 || has("gui_running")
 
 	colorscheme asu1dark-256colors
 
-	hi statusline ctermfg=White ctermbg=Red
+	hi statusline ctermfg=Black ctermbg=Blue
 endif
 
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
