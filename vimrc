@@ -53,7 +53,7 @@ if &t_Co > 2 || has("gui_running")
 	" colorscheme non male:
 	" oceandeep, vividchalk, asu1dark, peachpuff (gui)
 
-	colorscheme asu1dark-256colors
+	colorscheme dw_orange-256colors
 
 	hi statusline ctermfg=Black ctermbg=Blue
 endif
