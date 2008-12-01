@@ -1,0 +1,9 @@
+[user]
+	name = sand
+	email = daniel@spatof.org
+
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
