@@ -44,8 +44,17 @@ source $VIMRUNTIME/macros/matchit.vim
 if &t_Co > 2 || has("gui_running")
     syntax on
     set hlsearch
+
+	" COLOR SCHEME
+	" Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
+	" E' consigliabile fargli generare il nuovo colorscheme "compatibile"
+	" (vedi help) e disabilitarlo.
+
+	" colorscheme non male:
 	" oceandeep, vividchalk, asu1dark, peachpuff (gui)
-	colorscheme asu1dark
+
+	colorscheme asu1dark-256colors
+
 	hi statusline ctermfg=White ctermbg=Red
 endif
 
