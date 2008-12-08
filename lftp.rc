@@ -1,0 +1,2 @@
+set prompt "\[\e[1;37m\]lftp\] \[\e[0;32m\]\h\] \w\] \[\e[1;37m\]>\[\e[0m\] " 
+debug 3

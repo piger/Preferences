@@ -125,6 +125,18 @@ if has("autocmd")
   autocmd BufWinLeave *.rb mkview
   autocmd BufWinEnter *.rb silent loadview
 
+  " vim -b : edit binary using xxd-format!
+  augroup Binary
+	  au!
+	  au BufReadPre  *.hex let &bin=1
+	  au BufReadPost *.hex if &bin | %!xxd
+	  au BufReadPost *.hex set ft=xxd | endif
+	  au BufWritePre *.hex if &bin | %!xxd -r
+	  au BufWritePre *.hex endif
+	  au BufWritePost *.hex if &bin | %!xxd
+	  au BufWritePost *.hex set nomod | endif
+  augroup END
+
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
   " (happens when dropping a file on gvim).
@@ -185,4 +197,6 @@ nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
 " NERDTree
+let NERDTreeShowBookmarks=1
+let NERDTreeQuitOnOpen=1
 nmap <Leader>nt :NERDTreeToggle<CR>
