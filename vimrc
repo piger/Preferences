@@ -3,28 +3,29 @@
 
 " rimuove tutti gli autocommand per evitare doppioni
 autocmd!
-set nocompatible                " si comporta da vim e non da vi :)
-set bg=dark                     " background NERO
 set backspace=indent,eol,start  " permette il backspace sempre
 set backup                      " crea una copia di backup prima di sovrascrivere
-set backupdir=~/.vim/backups,.  	" directory per i file di backup
+set backupdir=~/.vim/backups,.  " directory per i file di backup
+set bg=dark                     " background NERO
+set nocompatible                " si comporta da vim e non da vi :)
 set directory=~/.vim/swap,.  	" directory per i file di swap
+set noexpandtab                 " usa SEMPRE veri tab
 set history=50                  " quante entry di history per comandi e search
 set ignorecase                  " ricerca case insensitive
 set incsearch                   " ricerca incrementale
 set laststatus=2				" mostra sempre una riga di status
 set nomodeline                  " NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
-set noexpandtab                 " usa SEMPRE veri tab
 set ruler                       " mostra la posizione del cursore in basso a destra
 set scrolloff=3                 " scrolla con un context di 3 righe
 set showcmd                     " mostra comandi parziali mentre vengono digitati
 set noshowmatch					" mostra la parentesi corrispettiva quando ne inserisci una
 set showmode                    " mostra un messaggio se in modalita' insert/visual/replace
 set smartcase                   " se la ricerca contiene caratteri uppercase, annulla ignorecase
-set nosmartindent					" indenta con saggezza
-set wrap                        " wrappa SEMPRE, e' OK!
+set nosmartindent				" indenta con saggezza
 set t_Co=256					" 256 colori
+set wrap                        " wrappa SEMPRE, e' OK!
+set nowrapscan					" la ricerca di testo si ferma alla fine del file, senza wrappare
 
 " Avvisa quando blocca qualche modeline
 let g:secure_modelines_verbose = 1
@@ -200,3 +201,63 @@ imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 let NERDTreeShowBookmarks=1
 let NERDTreeQuitOnOpen=1
 nmap <Leader>nt :NERDTreeToggle<CR>
+
+
+" ------------------------------------------------------------------------
+" PERL FUNCTIONS
+" ------------------------------------------------------------------------
+" WARNING: vim must be compiled with +perl support!
+"
+" WARNING: never embed complex perl command in the body of a Vim function
+" this will be recompiled and evaled each time for a tremendous loss of
+" time.
+" ------------------------------------------------------------------------
+
+" WARNING: Skip to the end of vimrc if +perl support wasn't found.
+if !has('perl')
+	finish
+endif
+
+perl << EOF
+	sub strip_var {
+		my $var = shift;
+
+		# skip empty lines
+		return $var if ($var =~ /^\s*$/);
+
+		my ($ret) = $var =~ /set ([^=\s]+)/;
+
+		# again, skip empty lines
+		return $var if (!defined($ret) or length($ret) < 1);
+		if ($ret =~ /^no/) {
+			$ret =~ s/^no//;
+		}
+		return $ret;
+	}
+
+	sub sort_vars {
+		my ($firstline, $lastline) = @_;
+
+		# Le variabili di Vim ovviamente NON arrivano al perl, bisogna usare
+		# VIM::Eval() oppure passarle come argomenti alla funzione perl.
+
+		# $firstline = VIM::Eval('a:firstline');
+		# $lastline = VIM::Eval('a:lastline');
+
+		@lines = $curbuf->Get($firstline .. $lastline);
+		@sorted = sort { strip_var($a) cmp strip_var($b) } @lines;
+		$curbuf->Set($firstline, @sorted)
+	}
+EOF
+
+" x,y call SortVars()
+" Esegue un sort alfabetico su un range di linee nel formato "set var=value"
+" usato da Vim. Utile per fare il sort delle opzioni in vimrc :-P
+" Utile anche per CAPIRE come funziona il perl dentro Vim...
+function! SortVars() range
+	exec "perl sort_vars " . a:firstline . ", " a:lastline
+endfunction
+
+" in :perldo il comando viene eseguito per ogni riga, mettendo la riga
+" in $_ senza <EOL>
+" perldo $_ = reverse($_);1
