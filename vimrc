@@ -8,64 +8,30 @@ set backup                      " crea una copia di backup prima di sovrascriver
 set backupdir=~/.vim/backups,.  " directory per i file di backup
 set bg=dark                     " background NERO
 set nocompatible                " si comporta da vim e non da vi :)
+set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 set directory=~/.vim/swap,.  	" directory per i file di swap
 set noexpandtab                 " usa SEMPRE veri tab
 set history=50                  " quante entry di history per comandi e search
 set ignorecase                  " ricerca case insensitive
 set incsearch                   " ricerca incrementale
-set laststatus=2				" mostra sempre una riga di status
+set laststatus=2		" mostra sempre una riga di status
+set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli spazi vuoti alla fine delle righe
 set nomodeline                  " NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
+set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler                       " mostra la posizione del cursore in basso a destra
 set scrolloff=3                 " scrolla con un context di 3 righe
 set showcmd                     " mostra comandi parziali mentre vengono digitati
-set noshowmatch					" mostra la parentesi corrispettiva quando ne inserisci una
+set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode                    " mostra un messaggio se in modalita' insert/visual/replace
 set smartcase                   " se la ricerca contiene caratteri uppercase, annulla ignorecase
-set nosmartindent				" indenta con saggezza
-set t_Co=256					" 256 colori
+set nosmartindent		" NON indentare con saggezza
+set t_Co=256			" 256 colori
+set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
+set wildmenu			" Abilita il menu carino per la completion
+set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap                        " wrappa SEMPRE, e' OK!
-set nowrapscan					" la ricerca di testo si ferma alla fine del file, senza wrappare
-
-" Avvisa quando blocca qualche modeline
-let g:secure_modelines_verbose = 1
-
-" Opzioni da IDE
-"set number
-set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
-"set cul
-source $VIMRUNTIME/macros/matchit.vim
-
-" Un plugin molto carino per esportare un file (che sia syntax highlighted) in
-" HTML.
-" source $VIMRUNTIME/plugin/tohtml.vim
-
-" se il terminale supporta i colori, abilita sintassi colorata e ricerca
-" con highlight
-if &t_Co > 2 || has("gui_running")
-    syntax on
-    set hlsearch
-
-	" COLOR SCHEME
-	" Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
-	" E' consigliabile fargli generare il nuovo colorscheme "compatibile"
-	" (vedi help) e disabilitarlo.
-
-	" colorscheme non male:
-	" oceandeep, vividchalk, asu1dark, peachpuff (gui)
-
-	colorscheme dw_orange-256colors
-
-	hi statusline ctermfg=Black ctermbg=Blue
-endif
-
-" Se il terminal emulator supporta il mouse, usalo... ma anche no
-" if has('mouse')
-"   set mouse=a
-" endif
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
+set nowrapscan			" la ricerca di testo si ferma alla fine del file, senza wrappare
 
 " il viminfo e' un file dove vengono salvate informazioni di sessione per
 " gli ultimi file editati (es: ricerche, comandi, marks ...
@@ -78,25 +44,67 @@ map Q gq
 " n~/.viminfo => nome del file
 if v:version >= 700
 	set viminfo='10,/10,:10,<20,f1,h,n~/.viminfo
-"else
-"	set viminfo=%,'50,\"100,:100,n~/.viminfo
 endif
 
-" (from: http://www.stripey.com/vim/vimrc.html )
-" have command-line completion <Tab> (for filenames, help topics, option names)
-" first list the available options and complete the longest common part, then
-" have further <Tab>s cycle through the possibilities:
-set wildmode=list:longest,full
+" se il terminale supporta i colori, abilita sintassi colorata e ricerca
+" con highlight
+if &t_Co > 2 || has("gui_running")
+    syntax on
+    set hlsearch
+
+    " COLOR SCHEME
+    " Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
+    " E' consigliabile fargli generare il nuovo colorscheme "compatibile"
+    " (vedi help) e disabilitarlo.
+
+    " colorscheme non male:
+    " oceandeep, vividchalk, asu1dark, peachpuff (gui)
+
+    colorscheme dw_orange-256colors
+
+    hi statusline ctermfg=Black ctermbg=Blue
+endif
+
+" Se il terminal emulator supporta il mouse, usalo... ma anche no
+" if has('mouse')
+"   set mouse=a
+" endif
+
+" IDE stuff
+"set number
+"set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+"set cul
+source $VIMRUNTIME/macros/matchit.vim
 
 
-"''''''''''''''''
-"	Formattazione
-"""""""""""""""""
-set tabstop=4                   " numero di spazi per <Tab>
-set shiftwidth=4                " numero di spazi per 'step' di indent
-set shiftround                  " indenta per multipli di shiftwidth
+
+" ------------------------------------------------------------------------ 
+" Formattazione
+" ------------------------------------------------------------------------ 
+"set tabstop=4                   " numero di spazi per <Tab>
+"set shiftwidth=4                " numero di spazi per 'step' di indent
+"set shiftround                  " indenta per multipli di shiftwidth
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
+" WARNING: Faccio una prova con questi valori.
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
 
+
+
+" ------------------------------------------------------------------------ 
+" Opzioni plugin & co
+" ------------------------------------------------------------------------ 
+let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
+let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
+let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
+
+
+
+" ------------------------------------------------------------------------
+" autocmd's
+" ------------------------------------------------------------------------
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
 
@@ -157,50 +165,68 @@ endif " has("autocmd")
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
+" WARNING: FA UN MACELLO !
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
+
+
 
 " Abbreviazioni
 abbreviate teh the
 abbreviate subent subnet
 
 
-"''''''''''''''
-"	Scorciatoie
-"""""""""""""""
 
-" <Leader> di default e' "\"
+"------------------------------------------------------------------------ 
+" Shortcuts
+" WARNING: <Leaders> defaults to "\"
+"------------------------------------------------------------------------ 
 
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" \th	|   <F4>
 " toggle highlight
 nnoremap <Leader>th :set invhls hls?<CR>
 nmap <F2> <Leader>th
 
+" \th	|   <F3>
 " toggle autoindent
 nnoremap <Leader>tai :set invautoindent autoindent?<CR>
 nmap <F3> <Leader>tai
 
+" \tp	|   <F4>
 " inverte paste e mostra il suo valore
 nnoremap <Leader>tp :set invpaste paste?<CR>
 nmap <F4> <Leader>tp
 imap <F4> <C-O><Leader>tp
 set pastetoggle=<F4>
 
+" \tl
 " toggle list
 nnoremap <Leader>tl :set invlist list?<CR>
-" commentatore
-nmap ,# :s/^/# /<CR>``:nohls<CR>
-"nmap <F3> !as~/boxizza.pl<CR>          " <F3> boxizza la sentence sotto il cursore
 
+" \dd	|   \dmy
 " inserisce la data (imap = in modalita' insert)
 nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
+" \nt
 " NERDTree
-let NERDTreeShowBookmarks=1
-let NERDTreeQuitOnOpen=1
 nmap <Leader>nt :NERDTreeToggle<CR>
+
+" \rot
+nmap <Leader>rot ggVGg?
+
+
+
+" ------------------------------------------------------------------------
+" Other functions
+" ------------------------------------------------------------------------
+" :TOhtml   (plugin)
+" Trasforma il file in HTML mantenendo gli stessi colori. 
 
 
 " ------------------------------------------------------------------------
@@ -219,35 +245,35 @@ if !has('perl')
 endif
 
 perl << EOF
-	sub strip_var {
-		my $var = shift;
+    sub strip_var {
+	my $var = shift;
 
-		# skip empty lines
-		return $var if ($var =~ /^\s*$/);
+	# skip empty lines
+	return $var if ($var =~ /^\s*$/);
 
-		my ($ret) = $var =~ /set ([^=\s]+)/;
+	my ($ret) = $var =~ /set ([^=\s]+)/;
 
-		# again, skip empty lines
-		return $var if (!defined($ret) or length($ret) < 1);
-		if ($ret =~ /^no/) {
-			$ret =~ s/^no//;
-		}
-		return $ret;
+	# again, skip empty lines
+	return $var if (!defined($ret) or length($ret) < 1);
+	if ($ret =~ /^no/) {
+		$ret =~ s/^no//;
 	}
+	return $ret;
+    }
 
-	sub sort_vars {
-		my ($firstline, $lastline) = @_;
+    sub sort_vars {
+	my ($firstline, $lastline) = @_;
 
-		# Le variabili di Vim ovviamente NON arrivano al perl, bisogna usare
-		# VIM::Eval() oppure passarle come argomenti alla funzione perl.
+	# Le variabili di Vim ovviamente NON arrivano al perl, bisogna usare
+	# VIM::Eval() oppure passarle come argomenti alla funzione perl.
 
-		# $firstline = VIM::Eval('a:firstline');
-		# $lastline = VIM::Eval('a:lastline');
+	# $firstline = VIM::Eval('a:firstline');
+	# $lastline = VIM::Eval('a:lastline');
 
-		@lines = $curbuf->Get($firstline .. $lastline);
-		@sorted = sort { strip_var($a) cmp strip_var($b) } @lines;
-		$curbuf->Set($firstline, @sorted)
-	}
+	@lines = $curbuf->Get($firstline .. $lastline);
+	@sorted = sort { strip_var($a) cmp strip_var($b) } @lines;
+	$curbuf->Set($firstline, @sorted)
+    }
 EOF
 
 " x,y call SortVars()
