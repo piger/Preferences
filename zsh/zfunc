@@ -223,4 +223,10 @@ raw_kb () {
 	tput smkx && cat; tput rmkx && echo "done"
 }
 
+ssh_bg () {
+	echo "ssh -f -L 6667:localhost:6667 hostname sleep 60"
+	echo "- sleep 60 indica il tempo che ssh aspettera' per connessioni sulla porta prima di morire"
+}
+
+
 # vim: ft=zsh
