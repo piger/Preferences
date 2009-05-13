@@ -1,6 +1,9 @@
 vim/backups
 vim/swap
+vim/view
 zsh/uname.cache
 zsh/.zcompdump
 zsh/.zcompcache
+zsh/local
 Pref-*.tar.gz
+*~
