@@ -4,8 +4,18 @@
 " rimuove tutti gli autocommand per evitare doppioni
 autocmd!
 set backspace=indent,eol,start  " permette il backspace sempre
+" --{ backups }
 set backup                      " crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.  " directory per i file di backup
+" Crea la dir di backup se non esiste; controlla ogni directory impostata
+" nella variabile &backupdir
+for d in split(&backupdir, ",")
+	let dd = expand(d)
+	if !isdirectory(dd)
+		call mkdir(dd, "p", 0700)
+	endif
+endfor
+" --
 set bg=dark                     " background NERO
 set nocompatible                " si comporta da vim e non da vi :)
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
@@ -14,7 +24,7 @@ set noexpandtab                 " usa SEMPRE veri tab
 set history=50                  " quante entry di history per comandi e search
 set ignorecase                  " ricerca case insensitive
 set incsearch                   " ricerca incrementale
-set laststatus=2		" mostra sempre una riga di status
+set laststatus=2				" mostra sempre la riga di status con le info sul file
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli spazi vuoti alla fine delle righe
 set nomodeline                  " NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
@@ -31,7 +41,7 @@ set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap                        " wrappa SEMPRE, e' OK!
-set nowrapscan			" la ricerca di testo si ferma alla fine del file, senza wrappare
+" set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
 
 " il viminfo e' un file dove vengono salvate informazioni di sessione per
 " gli ultimi file editati (es: ricerche, comandi, marks ...
@@ -60,15 +70,16 @@ if &t_Co > 2 || has("gui_running")
     " colorscheme non male:
     " oceandeep, vividchalk, asu1dark, peachpuff (gui)
 
-    colorscheme dw_orange-256colors
+    "colorscheme dw_orange-256colors
+    colorscheme asu1dark-256colors
 
     hi statusline ctermfg=Black ctermbg=Blue
 endif
 
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
-" if has('mouse')
-"   set mouse=a
-" endif
+"if has('mouse')
+"  set mouse=a
+"endif
 
 " IDE stuff
 "set number
@@ -82,14 +93,13 @@ source $VIMRUNTIME/macros/matchit.vim
 " ------------------------------------------------------------------------ 
 " Formattazione
 " ------------------------------------------------------------------------ 
-"set tabstop=4                   " numero di spazi per <Tab>
-"set shiftwidth=4                " numero di spazi per 'step' di indent
+set tabstop=4                   " numero di spazi per <Tab>
+set shiftwidth=4                " numero di spazi per 'step' di indent
 "set shiftround                  " indenta per multipli di shiftwidth
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
 " WARNING: Faccio una prova con questi valori.
-set softtabstop=4
-set shiftwidth=4
-set noexpandtab
+"set softtabstop=4
+"set noexpandtab
 
 
 
