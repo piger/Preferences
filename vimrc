@@ -1,5 +1,6 @@
-" vimrc [updated: 05-11-2008]
-" :options e' tuo amico!
+" vimrc [updated: 14-06-2009]
+" - :options e' tuo amico!
+" - per cercare help sulle opzioni, racchiudre il nome tra apici, :help 'nomeopzioni'
 
 " rimuove tutti gli autocommand per evitare doppioni
 autocmd!
@@ -19,29 +20,39 @@ endfor
 set bg=dark                     " background NERO
 set nocompatible                " si comporta da vim e non da vi :)
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
+
 set directory=~/.vim/swap,.  	" directory per i file di swap
+if !isdirectory($HOME . "/.vim/swap")
+	call mkdir($HOME . "/.vim/swap", "p", 0700)
+endif
+
 set noexpandtab                 " usa SEMPRE veri tab
 set history=50                  " quante entry di history per comandi e search
-set ignorecase                  " ricerca case insensitive
+
+" --{ search}
+set ignorecase                  " ricerca case insensitive...
+set smartcase                   " ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set incsearch                   " ricerca incrementale
+" set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
+" --
+
 set laststatus=2				" mostra sempre la riga di status con le info sul file
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli spazi vuoti alla fine delle righe
 set nomodeline                  " NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
-set report=0			" Mostra sempre il numero di righe modificate da un comando   
+set report=0					" Mostra sempre il numero di righe modificate da un comando   
 set ruler                       " mostra la posizione del cursore in basso a destra
 set scrolloff=3                 " scrolla con un context di 3 righe
 set showcmd                     " mostra comandi parziali mentre vengono digitati
-set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
+set noshowmatch					" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode                    " mostra un messaggio se in modalita' insert/visual/replace
-set smartcase                   " se la ricerca contiene caratteri uppercase, annulla ignorecase
-set nosmartindent		" NON indentare con saggezza
-set t_Co=256			" 256 colori
+set nosmartindent				" NON indentare con saggezza
+set t_Co=256					" 256 colori
+set virtualedit=block			" permette di posizionare il cursore dove NON ci sono caratteri, in visual block
 set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
-set wildmenu			" Abilita il menu carino per la completion
+set wildmenu					" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap                        " wrappa SEMPRE, e' OK!
-" set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
 
 " il viminfo e' un file dove vengono salvate informazioni di sessione per
 " gli ultimi file editati (es: ricerche, comandi, marks ...
@@ -53,12 +64,15 @@ set wrap                        " wrappa SEMPRE, e' OK!
 " h     =>      disabilita l'highlight della sessione precedente
 " n~/.viminfo => nome del file
 if v:version >= 700
-	set viminfo='10,/10,:10,<20,f1,h,n~/.viminfo
+	"set viminfo='10,/10,:10,<20,f1,h,n~/.viminfo
+	set viminfo='100,f1,<200,/50,:100,h
 endif
 
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
 if &t_Co > 2 || has("gui_running")
+	" impostare il modo di syncare la sintassi?
+	" syntax sync fromstart
     syntax on
     set hlsearch
 
@@ -68,7 +82,7 @@ if &t_Co > 2 || has("gui_running")
     " (vedi help) e disabilitarlo.
 
     " colorscheme non male:
-    " oceandeep, vividchalk, asu1dark, peachpuff (gui)
+    " oceandeep, vividchalk, asu1dark, peachpuff (gui), ron
 
     "colorscheme dw_orange-256colors
     colorscheme asu1dark-256colors
@@ -76,18 +90,23 @@ if &t_Co > 2 || has("gui_running")
     hi statusline ctermfg=Black ctermbg=Blue
 endif
 
+" --{ mouse support }
+" APPROFONDIRE QUESTA SEZIONE (XXX)
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
 "if has('mouse')
 "  set mouse=a
 "endif
+" set clipboard=???
+
+" --{ folding }
+"set foldcolumn=2
 
 " IDE stuff
 "set number
+" set cursorline
 "set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-"set cul
+set statusline=%<%F\ %h%m%r%w%=\ [FORMAT=%{&ff}]\ %([TYPE=%Y]\ %)[POS=%04l,%04v][%p%%]\ [LEN=%L]
 source $VIMRUNTIME/macros/matchit.vim
-
 
 
 " ------------------------------------------------------------------------ 
@@ -128,21 +147,21 @@ if has("autocmd")
   augroup vimrcEx
   au!
 
-  autocmd BufNewFile,BufRead *.txt set filetype=human
-  autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
+  " autocmd BufNewFile,BufRead *.txt set filetype=human
+  " autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
 
   " backup in $PWD e altro (da aggiungere)
-  autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
+  " autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
 
   " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
+  " autocmd FileType text setlocal textwidth=78
 
   " Tags automatiche (test)
-  autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
+  "autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
 
   " Views automatiche per i file .rb
-  autocmd BufWinLeave *.rb mkview
-  autocmd BufWinEnter *.rb silent loadview
+  " autocmd BufWinLeave *.rb mkview
+  " autocmd BufWinEnter *.rb silent loadview
 
   " vim -b : edit binary using xxd-format!
   augroup Binary
