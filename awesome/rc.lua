@@ -62,6 +62,7 @@ floatapps =
     ["MPlayer"] = true,
     ["pinentry"] = true,
     ["gimp"] = true,
+	["pidgin"] = true,
     -- by instance
     ["mocp"] = true
 }
@@ -113,6 +114,12 @@ myawesomemenu = {
 
 mymainmenu = awful.menu.new({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                         { "open terminal", terminal },
+										{ "", nil },
+										{ "Burp diretto", "/usr/local/tools/burp_ebbasta.sh" },
+										{ "Burp socks", "/usr/local/tools/burp_socks.sh" },
+										{ "", nil },
+										{ "Firefox suid", "sudo -u ff -H firefox" },
+										{ "", nil },
                                         { "Debian", debian.menu.Debian_menu.Debian }
                                       }
                             })
