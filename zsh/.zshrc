@@ -7,31 +7,31 @@
 # OPTIONS
 # -------
 setopt NO_beep			# Spegne il beep in ZLE
-setopt append_history	# Appende al file $HISTORY, invece di sovrascrivere
+setopt append_history		# Appende al file $HISTORY, invece di sovrascrivere
 setopt auto_cd			# Entra nelle directory senza usare 'cd'
 setopt auto_pushd		# Ficca $OLDPWD (dir precedente) nello stack delle dir
 setopt check_jobs		# Avverte dei processi in background prima di killare la shell
-setopt complete_in_word # Completa nel mezzo delle word (altrimenti parte dalla fine)
+setopt complete_in_word		# Completa nel mezzo delle word (altrimenti parte dalla fine)
 setopt correct			# Corregge lo spelling dei comandi
 setopt equals			# Permette =command al posto di `which command`
-setopt extended_glob	# Usa '~', '^' e '#' per i pattern
-setopt extended_history	# Salva i timestamp nella history
-setopt NO_flow_control	# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
-#setopt glob_complete	# Quando la word da completare contiene un glob pattern,
-						# invece di inserire il risultato del glob, cicla tra i
-						# risultati, come nella completion con  MENU_COMPLETE
+setopt extended_glob		# Usa '~', '^' e '#' per i pattern
+setopt extended_history		# Salva i timestamp nella history
+setopt NO_flow_control		# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
+#setopt glob_complete		# Quando la word da completare contiene un glob pattern,
+				# invece di inserire il risultato del glob, cicla tra i
+				# risultati, come nella completion con  MENU_COMPLETE
 setopt NO_hup			# Non manda -HUP ai processi quando la shell muore
 setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
-setopt long_list_jobs	# Elenca i job nel formato esteso
+setopt long_list_jobs		# Elenca i job nel formato esteso
 setopt notify			# Avvisa subito dello status dei job in background, invece di
 						# aspettare un nuovo prompt
-setopt numeric_glob_sort # Sort numerico per file contenenti numeri (a_00, a_01, ...)
-setopt print_exit_value # Printa l'exit value quando e' diverso da zero
-setopt pushd_ignore_dups # Purga i duplicati dallo stack delle directory
+setopt numeric_glob_sort	# Sort numerico per file contenenti numeri (a_00, a_01, ...)
+setopt print_exit_value		# Printa l'exit value quando e' diverso da zero
+setopt pushd_ignore_dups	# Purga i duplicati dallo stack delle directory
 #setopt pushd_silent		# Non printa lo stack delle dir dopo pushd o popd
-setopt NO_rm_star_silent # Chiede conferma per: 'rm *' o 'rm /path/*'
+setopt NO_rm_star_silent	# Chiede conferma per: 'rm *' o 'rm /path/*'
 setopt short_loops		# Permette le forme abbreviate di for, if, function, etc...
-setopt interactive_comments 	# Permette di lasciare commenti sulla cmd line, utile con 'script'
+setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, utile con 'script'
 
 
 # PROMPT
@@ -84,9 +84,9 @@ SAVEHIST=2000
 HISTFILE=${HOME}/.history
 
 # Opzioni per less
-# -c 	: pulisce lo schermo prima di mostrare il file
-# -i 	: ignore case (ma una ricerca uppercase annulla l'opzione)
-# -M 	: mostra percentuale del file ed e' piu' verboso di more
+# -c	: pulisce lo schermo prima di mostrare il file
+# -i	: ignore case (ma una ricerca uppercase annulla l'opzione)
+# -M	: mostra percentuale del file ed e' piu' verboso di more
 # -x<n> : lunghezza del tab
 LESS=-ciMx4r
 PAGER=less

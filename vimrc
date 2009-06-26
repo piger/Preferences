@@ -21,7 +21,7 @@ set bg=dark			" background NERO
 set nocompatible		" si comporta da vim e non da vi :)
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
-set directory=~/.vim/swap,.  	" directory per i file di swap
+set directory=~/.vim/swap,.	" directory per i file di swap
 if !isdirectory($HOME . "/.vim/swap")
     call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
@@ -209,14 +209,14 @@ if has("autocmd")
     
     " vim -b : edit binary using xxd-format!
     augroup Binary
-        au!
-        au BufReadPre  *.hex let &bin=1
-        au BufReadPost *.hex if &bin | %!xxd
-        au BufReadPost *.hex set ft=xxd | endif
-        au BufWritePre *.hex if &bin | %!xxd -r
-        au BufWritePre *.hex endif
-        au BufWritePost *.hex if &bin | %!xxd
-        au BufWritePost *.hex set nomod | endif
+	au!
+	au BufReadPre  *.hex let &bin=1
+	au BufReadPost *.hex if &bin | %!xxd
+	au BufReadPost *.hex set ft=xxd | endif
+	au BufWritePre *.hex if &bin | %!xxd -r
+	au BufWritePre *.hex endif
+	au BufWritePost *.hex if &bin | %!xxd
+	au BufWritePost *.hex set nomod | endif
     augroup END
 
     " When editing a file, always jump to the last known cursor position.

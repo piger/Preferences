@@ -24,15 +24,12 @@ export BROWSER="firefox"
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 
 # Se la shell e' interattiva, usa 026.
-# Peccato che sia SCOMODISSIMO, meglio impostarli a mano i permessi.
-#
-# if [[ $- == *i* ]]; then
-# 	# u+rw, g+r, o+NIENTE
-# 	umask 026
-# else
-# 	umask 022
-# fi
-umask 002
+if [[ $- == *i* ]]; then
+	# u+rw, g+r, o+NIENTE
+	umask 026
+else
+	umask 022
+fi
 
 # ulimit ?
 
