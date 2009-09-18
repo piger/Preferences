@@ -1,19 +1,20 @@
 " vimrc [updated: 18-09-2009]
+" Daniel Kertesz <daniel@spatof.org> http://spatof.org
 " vim: set foldmarker={,} foldlevel=0:
-"
-" !! :options e' tuo amico!
-" !! per cercare help sulle opzioni, racchiudre il nome tra apici, :help 'nomeopzioni'
+
+
+" NOTE, SUGGERIMENTI E AVVERTIMENTI {
+"	- lo spazio tra ogni sezione e' di due righe vuote
+"	- :options apre una finestra dove vedere e cambiare le opzioni
+"	- per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
+" }
 
 
 " Configurazione di base {
-" rimuove tutti gli autocommand per evitare doppioni
-autocmd!
 set backspace=indent,eol,start	" permette il backspace sempre
-" --{ backups }
 set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
-" Crea la dir di backup se non esiste; controlla ogni directory impostata
-" nella variabile &backupdir
+" Per ogni dir in &backupdir, controlla se esiste e in caso la crea
 for d in split(&backupdir, ",")
     let dd = expand(d)
     if !isdirectory(dd)
@@ -25,7 +26,8 @@ set bg=dark			" background NERO
 set nocompatible		" si comporta da vim e non da vi :)
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
-set directory=~/.vim/swap,.	" directory per i file di swap
+" Directory per i file di swap (crea se necessario)
+set directory=~/.vim/swap,.
 if !isdirectory($HOME . "/.vim/swap")
     call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
@@ -33,22 +35,12 @@ endif
 set noexpandtab			" usa SEMPRE veri tab
 set history=50			" quante entry di history per comandi e search
 
-" --{ search }
+" ricerca testo
 set ignorecase			" ricerca case insensitive...
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set incsearch			" ricerca incrementale
 " set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
-" --
-
-" su alcuni vim purtroppo questa feature non c'e' :(
-if exists('+autochdir')
-    set autochdir		" switch sempre alla dir del file aperto
-else
-    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
-    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
-    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
-endif
 
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
@@ -62,6 +54,7 @@ set scrolloff=3			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
+set statusline=%<%F\ %h%m%r%w%=\ [FORMAT=%{&ff}]\ %([TYPE=%Y]\ %)[POS=%04l,%04v][%p%%]\ [LEN=%L]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri, in visual block
@@ -70,21 +63,26 @@ set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap			" wrappa SEMPRE, e' OK!
 
-" folding
+" Mouse support XXX {
+" Se il terminal emulator supporta il mouse, usalo... ma anche no
+if has('mouse')
+    set mouse=a
+endif
+" set clipboard+=unnamed " share windows clipboard
+" }
+
+" folding {
 set foldenable
 set foldmarker={,}
 set foldmethod=marker
 set foldlevel=100		" trick per non foldare automaticamente
+set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "function SimpleFoldText() " {
 "    return getline(v:foldstart).' '
 "endfunction " }
 "set foldtext=SimpleFoldText()
 " }
-
-" bho ?
-let perl_extended_vars=1 " highlight advanced perl vars inside strings
-let perl_include_pod=1	    " highlight POD correclty, dicono
 
 " il viminfo e' un file dove vengono salvate informazioni di sessione per
 " gli ultimi file editati (es: ricerche, comandi, marks ...
@@ -99,6 +97,8 @@ if v:version >= 700
     "set viminfo='10,/10,:10,<20,f1,h,n~/.viminfo
     set viminfo='100,f1,<200,/50,:100,h
 endif
+" }
+
 
 " GUI e colori {
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
@@ -147,24 +147,13 @@ else
 endif
 " }
 
-"
-" --{ mouse support }
-" APPROFONDIRE QUESTA SEZIONE (XXX)
-" Se il terminal emulator supporta il mouse, usalo... ma anche no
-if has('mouse')
-    set mouse=a
-endif
-" set clipboard+=unnamed " share windows clipboard
 
-" --{ folding }
-"set foldcolumn=2
-
-" IDE stuff
-"set number
+" Settaggi utili quando si usa vim come IDE {
+" set number
 " set cursorline
-"set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
-set statusline=%<%F\ %h%m%r%w%=\ [FORMAT=%{&ff}]\ %([TYPE=%Y]\ %)[POS=%04l,%04v][%p%%]\ [LEN=%L]
+" set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
 source $VIMRUNTIME/macros/matchit.vim
+" }
 
 
 " formattazione {
@@ -180,16 +169,14 @@ set tabstop=8                   " numero di spazi per <Tab>
 set shiftwidth=4                " numero di spazi per 'step' di indent
 set softtabstop=4
 set noexpandtab
-
 "set shiftround                  " indenta per multipli di shiftwidth
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
-" WARNING: Faccio una prova con questi valori.
-"set softtabstop=4
-"set noexpandtab
 " }
 
 
 " Opzioni plugin & co {
+let perl_extended_vars=1 		" highlight advanced perl vars inside strings
+let perl_include_pod=1	    		" highlight POD correclty, dicono
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
@@ -212,84 +199,86 @@ let g:secure_modelines_allowed_items = [
 " }
 
 
-
 " autocommands {
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
-
     " Enable file type detection.
     " Use the default filetype settings, so that mail gets 'tw' set to 72,
     " 'cindent' is on in C files, etc.
     " Also load indent files, to automatically do language-dependent indenting.
     filetype plugin indent on
-    
-    " Put these in an autocmd group, so that we can delete them easily.
-    augroup vimrcEx
-    au!
-    
-    " autocmd BufNewFile,BufRead *.txt set filetype=human
-    " autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
-    
-    " backup in $PWD e altro (da aggiungere)
-    " autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
-    
-    " For all text files set 'textwidth' to 78 characters.
-    " autocmd FileType text setlocal textwidth=78
-    autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
+
+    " rimuove tutti gli autocommand per evitare doppioni
+    " autocmd!
+    " NEW: uso questo altro metodo per vedere se ci sono altri autocmd standard
+    if !exists("autocommands_loaded")
+	let autocommands_loaded = 1
+
+	" su alcuni vim purtroppo questa feature non c'e' :(
+	if exists('+autochdir')
+	    set autochdir		" switch sempre alla dir del file aperto
+	else
+	    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
+	    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+	    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
+	endif
+
+	" autocmd BufNewFile,BufRead *.txt set filetype=human
+	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
+	
+	" backup in $PWD e altro (da aggiungere)
+	" autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
+	
+	" For all text files set 'textwidth' to 78 characters.
+	" autocmd FileType text setlocal textwidth=78
+	autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
 
 
-    " template vuoti!
-    autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
-    
-    autocmd FileType perl set makeprg=perl\ -c\ %\ $*
-    autocmd FileType perl set errorformat=%f:%l:%m
-    " autocmd FileType perl set autowrite
+	" template vuoti!
+	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
+	
+	autocmd FileType perl set makeprg=perl\ -c\ %\ $*
+	autocmd FileType perl set errorformat=%f:%l:%m
+	" autocmd FileType perl set autowrite
 
-    "autocmd FileType python
-    "\ setlocal tabstop=4
-    "\ setlocal softtabstop=4
-    "\ setlocal shiftwidth=4
-    "\ setlocal textwidth=80
-    "\ setlocal smarttab
-    "\ setlocal expandtab
-    "\ setlocal smartindent
+	" Tags automatiche (test)
+	"autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
+	
+	" Views automatiche per i file .rb
+	" autocmd BufWinLeave *.rb mkview
+	" autocmd BufWinEnter *.rb silent loadview
+	
+	" vim -b : edit binary using xxd-format!
+	augroup Binary
+	    au!
+	    au BufReadPre  *.hex let &bin=1
+	    au BufReadPost *.hex if &bin | %!xxd
+	    au BufReadPost *.hex set ft=xxd | endif
+	    au BufWritePre *.hex if &bin | %!xxd -r
+	    au BufWritePre *.hex endif
+	    au BufWritePost *.hex if &bin | %!xxd
+	    au BufWritePost *.hex set nomod | endif
+	augroup END
 
-    " Tags automatiche (test)
-    "autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
-    
-    " Views automatiche per i file .rb
-    " autocmd BufWinLeave *.rb mkview
-    " autocmd BufWinEnter *.rb silent loadview
-    
-    " vim -b : edit binary using xxd-format!
-    augroup Binary
-	au!
-	au BufReadPre  *.hex let &bin=1
-	au BufReadPost *.hex if &bin | %!xxd
-	au BufReadPost *.hex set ft=xxd | endif
-	au BufWritePre *.hex if &bin | %!xxd -r
-	au BufWritePre *.hex endif
-	au BufWritePost *.hex if &bin | %!xxd
-	au BufWritePost *.hex set nomod | endif
-    augroup END
+	" When editing a file, always jump to the last known cursor position.
+	" Don't do it when the position is invalid or when inside an event handler
+	" (happens when dropping a file on gvim).
+	autocmd BufReadPost *
+	  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+	  \   exe "normal g`\"" |
+	  \ endif
 
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
-      \ endif
+    endif
 
-    augroup END
+else
 
-"else
-"
-"  set autoindent                " always set autoindenting on
+  set autoindent                " always set autoindenting on
 
 endif " has("autocmd")
 " }
 
+
+" Script e funzioni {
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
@@ -298,6 +287,7 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 	 \ | wincmd p | diffthis
 endif
+" }
 
 
 " Abbreviazioni {
@@ -308,59 +298,43 @@ abbreviate subent subnet
 
 " Shortcuts {
 " WARNING: <Leaders> defaults to "\"
+" F2	- toggle highlight
+" F3	- toggle autoindent
+" F4	- toggle paste
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
-" \th	|   <F4>
-" toggle highlight
+" toggle highlight - \th - F4
 nnoremap <Leader>th :set invhls hls?<CR>
 nmap <F2> <Leader>th
 
-" \th	|   <F3>
-" toggle autoindent
+" toggle autoindent - \th - F3
 nnoremap <Leader>tai :set invautoindent autoindent?<CR>
 nmap <F3> <Leader>tai
 
-" \tp	|   <F4>
-" inverte paste e mostra il suo valore
+" inverte paste e mostra il suo valore - \tp - F4
 nnoremap <Leader>tp :set invpaste paste?<CR>
 nmap <F4> <Leader>tp
 imap <F4> <C-O><Leader>tp
 set pastetoggle=<F4>
 
-" \tl
-" toggle list
+" toggle list - \tl
 nnoremap <Leader>tl :set invlist list?<CR>
 
-" \dd	|   \dmy
-" inserisce la data (imap = in modalita' insert)
+" inserisce la data (imap = in modalita' insert) - \dd - \dmy
 nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
-" \nt
-" NERDTree
+" NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
 
-" \rot
+" rot13 fun - \rot
 nmap <Leader>rot ggVGg?
-
-" TRINITY
-"" Open and close all the three plugins on the same time
-nmap <F8>   :TrinityToggleAll<CR>
-
-" Open and close the srcexpl.vim separately
-nmap <F9>   :TrinityToggleSourceExplorer<CR>
-
-" Open and close the taglist.vim separately
-nmap <F10>  :TrinityToggleTagList<CR>
-
-" Open and close the NERD_tree.vim separately
-nmap <F11>  :TrinityToggleNERDTree<CR> 
-
 " }
 
 
+" APPUNTI {
 " ------------------------------------------------------------------------
 " Other functions
 " ------------------------------------------------------------------------
@@ -377,6 +351,7 @@ nmap <F11>  :TrinityToggleNERDTree<CR>
 " qa2f/ly$:.!host CTRL-r"<c-r>jq
 "
 " HAI CAPITO? CTRL-r INCOLLA NELLA COMMAND LINE! e -> " <- e' l'unnamed register
+" }
 
 
 " perlism {
