@@ -76,18 +76,6 @@ if &t_Co > 2 || has("gui_running")
     syntax on
     set hlsearch
     
-    " COLOR SCHEME
-    " Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
-    " E' consigliabile fargli generare il nuovo colorscheme "compatibile"
-    " (vedi help) e disabilitarlo.
-    
-    " colorscheme non male:
-    " oceandeep, vividchalk, asu1dark, peachpuff (gui), ron
-    
-    "colorscheme dw_orange-256colors
-    "colorscheme asu1dark-256colors
-    colorscheme asu1dark
-    
     hi statusline ctermfg=Black ctermbg=Blue
 endif
 
@@ -109,6 +97,20 @@ if has("gui_running")
 
     set mousehide	" Hide the mouse when typing text
     set vb		" meglio la visual bell che l'orrendo SPEAKER
+
+    " COLOR SCHEME
+    " Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
+    " E' consigliabile fargli generare il nuovo colorscheme "compatibile"
+    " (vedi help) e disabilitarlo.
+    
+    " colorscheme non male:
+    " oceandeep, vividchalk, asu1dark, peachpuff (gui), ron
+    
+    "colorscheme dw_orange-256colors
+    "colorscheme asu1dark-256colors
+    colorscheme fnaqevan
+else
+    colorscheme asu1dark
 endif
 
 "
