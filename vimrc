@@ -1,7 +1,11 @@
-" vimrc [updated: 14-06-2009]
-" - :options e' tuo amico!
-" - per cercare help sulle opzioni, racchiudre il nome tra apici, :help 'nomeopzioni'
+" vimrc [updated: 18-09-2009]
+" vim: set foldmarker={,} foldlevel=0:
+"
+" !! :options e' tuo amico!
+" !! per cercare help sulle opzioni, racchiudre il nome tra apici, :help 'nomeopzioni'
 
+
+" Configurazione di base {
 " rimuove tutti gli autocommand per evitare doppioni
 autocmd!
 set backspace=indent,eol,start	" permette il backspace sempre
@@ -31,12 +35,17 @@ set history=50			" quante entry di history per comandi e search
 
 " --{ search }
 set ignorecase			" ricerca case insensitive...
+set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set incsearch			" ricerca incrementale
 " set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
 " --
 
+" su vim 7.2 osx non c'e' ?!
+"set autochdir			" switch sempre alla dir del file aperto
+"set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
+set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli spazi vuoti alla fine delle righe
 set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
@@ -54,6 +63,22 @@ set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap			" wrappa SEMPRE, e' OK!
 
+" folding
+set foldenable
+set foldmarker={,}
+set foldmethod=marker
+set foldlevel=100		" trick per non foldare automaticamente
+set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
+"function SimpleFoldText() " {
+"    return getline(v:foldstart).' '
+"endfunction " }
+"set foldtext=SimpleFoldText()
+" }
+
+" bho ?
+let perl_extended_vars=1 " highlight advanced perl vars inside strings
+let perl_include_pod=1	    " highlight POD correclty, dicono
+
 " il viminfo e' un file dove vengono salvate informazioni di sessione per
 " gli ultimi file editati (es: ricerche, comandi, marks ...
 " '10   =>      ricorda marks per ultimi 10 file editati
@@ -68,6 +93,7 @@ if v:version >= 700
     set viminfo='100,f1,<200,/50,:100,h
 endif
 
+" GUI e colori {
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
 if &t_Co > 2 || has("gui_running")
@@ -112,6 +138,7 @@ if has("gui_running")
 else
     colorscheme asu1dark
 endif
+" }
 
 "
 " --{ mouse support }
@@ -120,7 +147,7 @@ endif
 if has('mouse')
     set mouse=a
 endif
-" set clipboard=???
+" set clipboard+=unnamed " share windows clipboard
 
 " --{ folding }
 "set foldcolumn=2
@@ -133,9 +160,7 @@ set statusline=%<%F\ %h%m%r%w%=\ [FORMAT=%{&ff}]\ %([TYPE=%Y]\ %)[POS=%04l,%04v]
 source $VIMRUNTIME/macros/matchit.vim
 
 
-" ------------------------------------------------------------------------ 
-" Formattazione
-" ------------------------------------------------------------------------ 
+" formattazione {
 " :he 'tabstop'
 
 " There are four main ways to use tabs in Vim:
@@ -154,21 +179,18 @@ set noexpandtab
 " WARNING: Faccio una prova con questi valori.
 "set softtabstop=4
 "set noexpandtab
+" }
 
 
-
-" ------------------------------------------------------------------------ 
-" Opzioni plugin & co
-" ------------------------------------------------------------------------ 
+" Opzioni plugin & co {
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
+" }
 
 
 
-" ------------------------------------------------------------------------
-" autocmd's
-" ------------------------------------------------------------------------
+" autocommands {
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
 
@@ -191,6 +213,14 @@ if has("autocmd")
     " For all text files set 'textwidth' to 78 characters.
     " autocmd FileType text setlocal textwidth=78
     autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
+
+
+    " template vuoti!
+    " autocmd BufNew *.pl 0r ~/.vim/skeleton.pl
+    
+    autocmd FileType perl set makeprg=perl\ -c\ %\ $*
+    autocmd FileType perl set errorformat=%f:%l:%m
+    " autocmd FileType perl set autowrite
 
     "autocmd FileType python
     "\ setlocal tabstop=4
@@ -235,6 +265,7 @@ if has("autocmd")
 "  set autoindent                " always set autoindenting on
 
 endif " has("autocmd")
+" }
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
@@ -246,15 +277,14 @@ if !exists(":DiffOrig")
 endif
 
 
-" Abbreviazioni
+" Abbreviazioni {
 abbreviate teh the
 abbreviate subent subnet
+" }
 
 
-"------------------------------------------------------------------------ 
-" Shortcuts
+" Shortcuts {
 " WARNING: <Leaders> defaults to "\"
-"------------------------------------------------------------------------ 
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
@@ -305,6 +335,8 @@ nmap <F10>  :TrinityToggleTagList<CR>
 " Open and close the NERD_tree.vim separately
 nmap <F11>  :TrinityToggleNERDTree<CR> 
 
+" }
+
 
 " ------------------------------------------------------------------------
 " Other functions
@@ -324,9 +356,7 @@ nmap <F11>  :TrinityToggleNERDTree<CR>
 " HAI CAPITO? CTRL-r INCOLLA NELLA COMMAND LINE! e -> " <- e' l'unnamed register
 
 
-" ------------------------------------------------------------------------
-" PERL FUNCTIONS
-" ------------------------------------------------------------------------
+" perlism {
 " WARNING: vim must be compiled with +perl support!
 "
 " WARNING: never embed complex perl command in the body of a Vim function
@@ -382,3 +412,5 @@ endfunction
 " in :perldo il comando viene eseguito per ogni riga, mettendo la riga
 " in $_ senza <EOL>
 " perldo $_ = reverse($_);1
+"
+" }
