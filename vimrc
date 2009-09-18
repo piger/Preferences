@@ -41,8 +41,15 @@ set incsearch			" ricerca incrementale
 " set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
 " --
 
-" su vim 7.2 osx non c'e' ?!
-"set autochdir			" switch sempre alla dir del file aperto
+" su alcuni vim purtroppo questa feature non c'e' :(
+if exists('+autochdir')
+    set autochdir		" switch sempre alla dir del file aperto
+else
+    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
+    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
+endif
+
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
 set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
@@ -186,6 +193,22 @@ set noexpandtab
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
+let g:GetLatestVimScripts_allowautoinstall=1	" XXX da verificare
+" aggiungo "foldlevel"
+let g:secure_modelines_allowed_items = [
+	    \ "textwidth",   "tw",
+	    \ "softtabstop", "sts",
+	    \ "tabstop",     "ts",
+	    \ "shiftwidth",  "sw",
+	    \ "expandtab",   "et",   "noexpandtab", "noet",
+	    \ "filetype",    "ft",
+	    \ "foldmethod",  "fdm",
+	    \ "readonly",    "ro",   "noreadonly", "noro",
+	    \ "rightleft",   "rl",   "norightleft", "norl",
+	    \ "spell",
+	    \ "spelllang",
+	    \ "foldlevel", "fdl"
+	    \ ]
 " }
 
 
@@ -216,7 +239,7 @@ if has("autocmd")
 
 
     " template vuoti!
-    " autocmd BufNew *.pl 0r ~/.vim/skeleton.pl
+    autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
     
     autocmd FileType perl set makeprg=perl\ -c\ %\ $*
     autocmd FileType perl set errorformat=%f:%l:%m
