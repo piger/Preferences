@@ -15,7 +15,7 @@ alias lla="ls -la"
 alias lsd="ls -ld *(-/)"		# ls delle sole directory
 alias lsa="ls -ld .*"			# ls dei soli file nascosti
 alias suz="su root -c zsh"		# su to root and run zsh ;)
-alias lsgrandi="ls --color=auto -flh *(.oL)"	# ls -lrh --sort=size
+alias lsgrandi="ls -flh *(.oL)"	# ls -lrh --sort=size
 alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
 alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
 alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
@@ -36,7 +36,8 @@ alias tsyslog="tail -f /var/log/syslog"
 if [[ -e /etc/debian_version ]]; then
 	alias search="apt-cache search"
 	alias show="apt-cache show"
-	alias i="sudo apt-get install"
+	alias i="sudo aptitude install"
+	alias backports="sudo aptitude -t lenny-backports"
 fi
 
 alias pwgen_strong='pwgen -y1 15 20'

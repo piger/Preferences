@@ -86,6 +86,7 @@ if &t_Co > 2 || has("gui_running")
     
     "colorscheme dw_orange-256colors
     "colorscheme asu1dark-256colors
+    colorscheme asu1dark
     
     hi statusline ctermfg=Black ctermbg=Blue
 endif
@@ -106,19 +107,8 @@ if has("gui_running")
 	:set guifont=Luxi_Mono:h12:cANSI
     endif
 
-    let os = system('uname -s | tr -d "\n"')
-
-    if os == "Darwin"
-	colorscheme macvim
-    else
-	colorscheme fnaqevan
-    endif
-
     set mousehide	" Hide the mouse when typing text
     set vb		" meglio la visual bell che l'orrendo SPEAKER
-else
-    "colorscheme asu1dark-256colors
-    colorscheme fnaqevan-256colors
 endif
 
 "
@@ -198,8 +188,17 @@ if has("autocmd")
     
     " For all text files set 'textwidth' to 78 characters.
     " autocmd FileType text setlocal textwidth=78
-    autocmd FileType python :set ts=8 sw=4 sts=4 noet
-    
+    autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
+
+    "autocmd FileType python
+    "\ setlocal tabstop=4
+    "\ setlocal softtabstop=4
+    "\ setlocal shiftwidth=4
+    "\ setlocal textwidth=80
+    "\ setlocal smarttab
+    "\ setlocal expandtab
+    "\ setlocal smartindent
+
     " Tags automatiche (test)
     "autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
     
