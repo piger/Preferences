@@ -6,7 +6,7 @@
 # fortune! ;) [ richiede extended_glob! ]
 [[ $- = *i* ]] && (( $+commands[fortune] )) && \
 	[[ -d ~/.fortune ]] && \
-	(print; fortune -ae ~/.fortune/*~*.dat; print)
+	(print; fortune -e ~/.fortune/*~*.dat; print)
 
 
 todo() {
