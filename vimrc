@@ -194,7 +194,8 @@ let g:secure_modelines_allowed_items = [
 	    \ "rightleft",   "rl",   "norightleft", "norl",
 	    \ "spell",
 	    \ "spelllang",
-	    \ "foldlevel", "fdl"
+	    \ "foldlevel", "fdl",
+	    \ "fileencoding", "fenc"
 	    \ ]
 " }
 

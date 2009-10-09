@@ -1,0 +1,7 @@
+# screenrc for local screens
+
+hardstatus alwayslastline
+caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%? %= %{= kw}%10`"
+hardstatus string '%H - %= %20`- %D %d %M %Y%C%a'
+
+source $HOME/$ZPREF/screenrc.common

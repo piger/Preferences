@@ -3,28 +3,33 @@
 # Impostazioni e alias che dipendono dal sistema operativo in uso
 # ---------------------------------------------------------------
 
+# -F      Display a slash (`/') immediately after each pathname that is a
+# directory, an asterisk (`*') after each that is executable, an at sign
+# (`@') after each symbolic link, an equals sign (`=') after each socket,
+# a percent sign (`%') after each whiteout, and a vertical bar (`|') after
+# each that is a FIFO.
 ls_opts='-F'
+# se l'user e' root mostra SEMPRE i file nascosti
 [[ $UID = 0 ]] && ls_opts='-FA'
 
-declare -A uname
-[[ ! -e ${ZDOTDIR}/uname.cache ]] && echo "uname=\"$(uname -srmn)\"" > ${ZDOTDIR}/uname.cache
-source ${ZDOTDIR}/uname.cache
 
-case $OSTYPE in
-	darwin*)
-		source ${ZDOTDIR}/os/darwin
-		;;
-	openbsd*)
-		source ${ZDOTDIR}/os/openbsd
-		;;
-	linux*)
-		source ${ZDOTDIR}/os/linux
-		;;
-	solaris*)
-		source ${ZDOTDIR}/os/solaris
-		;;
-	*)
-		;;
-esac
+# OSTYPE prende il valore da un #define in compilazione,
+# non e' del tutto safe.
+if [[ -e /mach_kernel || -d /Applications ]]; then
+    # OS X
+    source ${ZDOTDIR}/os/darwin
+ 
+elif [[ -e /etc/debian_version || $OSTYPE = linux* ]]; then
+    # Ubuntu / GNU/Linux
+    source ${ZDOTDIR}/os/linux
+
+elif [[ $OSTYPE = solaris* ]]; then
+    # Solaris
+    source ${ZDOTDIR}/os/solaris
+
+elif [[ $OSTYPE = openbsd* ]]; then
+    # OpenBSD
+    source ${ZDOTDIR}/os/openbsd
+fi
 
 # vim: ft=zsh

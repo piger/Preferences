@@ -228,5 +228,9 @@ ssh_bg () {
 	echo "- sleep 60 indica il tempo che ssh aspettera' per connessioni sulla porta prima di morire"
 }
 
+nssh () {
+    screen -t $*[$#] ssh $*
+}
+
 
 # vim: ft=zsh

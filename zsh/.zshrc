@@ -20,6 +20,8 @@ setopt NO_flow_control		# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
 #setopt glob_complete		# Quando la word da completare contiene un glob pattern,
 				# invece di inserire il risultato del glob, cicla tra i
 				# risultati, come nella completion con  MENU_COMPLETE
+setopt hist_ignore_dups		# se il comando e' uguale al precedente non metterlo nella history
+setopt hist_no_store		# non salvare nella history i comandi "history"
 setopt NO_hup			# Non manda -HUP ai processi quando la shell muore
 setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
 setopt long_list_jobs		# Elenca i job nel formato esteso
@@ -80,7 +82,7 @@ export FTP_PASSIVE=1
 
 # History
 HISTSIZE=2000
-SAVEHIST=2000
+SAVEHIST=10000
 HISTFILE=${HOME}/.history
 
 # Opzioni per less

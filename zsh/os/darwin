@@ -13,8 +13,9 @@ export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
 
 # Mac Ports
 if [[ -d /opt/local ]]; then
-	export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-	export MANPATH=/opt/local/man:$MANPATH
+	path=( /opt/local/sbin /opt/local/bin $path )
+	# manpath non serve, perche' man sa dove cercare in base a $PATH
+	# manpath=( /opt/local/man /usr/share/man /usr/local/man $manpath )
 fi
 
 # vim: ft=zsh
