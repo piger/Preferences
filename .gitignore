@@ -7,3 +7,4 @@ zsh/.zcompcache
 zsh/local
 Pref-*.tar.gz
 *~
+*.zwc

@@ -6,4 +6,4 @@ hardstatus string '%H - %= %20`- %D %d %M %Y %C%a'
 
 sorendition kB
 
-source $HOME/$ZPREF/screenrc.common
+source $ZPREFS/screenrc.common
