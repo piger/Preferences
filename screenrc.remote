@@ -1,8 +1,9 @@
 # screenrc for remote screens
 
 hardstatus alwayslastline
-hardstatus string '%H - %=%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw%?'
+hardstatus string '%{gk}%H%{wk} + %{wk}%-Lw%{bw}(%{wk} %{yk}%n*%f %t%?(%u)%? %{bw})%{wk}%{wk}%+Lw'
 
 escape ^ff
+sorendition kR
 
 source $HOME/$ZPREF/screenrc.common
