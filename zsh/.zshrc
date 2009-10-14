@@ -70,6 +70,58 @@ eval cprompt='%{${fg[$crandname]}%}'
 # PS1="[%T] ${fcyan}%m${fdefault}%(2j.|%j.):%3c%# "
 PS1="[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# "
 
+# Esperimento per opzione "shelltitle" di screen (shelltitle '% |zsh')
+#if [[ $TERM == screen* ]]; then
+#    PROMPT=$'\ek\e\\[%T] '"${cprompt}%m${fdefault}"'%(1j.|%j.):%3c%# '
+#else
+#    PROMPT=$'[%T] '"${cprompt}%m${fdefault}"'%(1j.|%j.):%3c%# '
+#fi
+
+# utile con screen e un caption che mostri l'hardstatus della window
+# usato nelle shell remote e' comodo con la finestra splittata.
+function precmd {
+    case $TERM in
+    rxvt*|screen*|*xterm*|(dt|k)term|Eterm)
+	print -Pn "\e]2;%n@%m:%~\e\134"
+    ;;
+    linux)
+    ;;
+    esac
+
+    # resetta il titolo a "zsh" dopo un comando
+    #if [[ $TERM == screen* ]]; then
+    #    echo -ne "\ekzsh\e\\"
+    #fi
+}
+
+# $1 e' TUTTA la string del comando, argomenti compresi.
+function preexec () {
+    local -a cmd
+    cmd=(${(z)1})
+
+    if [[ $TERM == screen* ]]; then
+	# Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
+	# titolo
+	if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
+	    echo -ne "\ek${cmd[-1]##*@}\e\\"
+	#else
+	#    echo -ne "\ek${1%% *}\e\\"
+	fi
+    fi
+}
+
+#function title {
+#  if [[ $TERM == "screen" ]]; then
+#    # Use these two for GNU Screen:
+#    print -nR $'\033k'$1$'\033'\\
+#
+#    print -nR $'\033]0;'$2$'\a'
+#  elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then
+#    # Use this one instead for XTerms:
+#    print -nR $'\033]0;'$*$'\a'
+#  fi
+#}
+
 # ENVIRONMENT
 # -----------
 # Queste variabili d'ambiente servono solo in modalita' interattiva

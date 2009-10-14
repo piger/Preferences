@@ -28,11 +28,11 @@ export BROWSER="firefox"
 # la mia dir Preferences
 export ZPREFS=~/Preferences
 
-if [[ -z $SSH_CONNECTION ]]; then
-    export SCREENRC=$ZPREFS/screenrc.local
-else
-    export SCREENRC=$ZPREFS/screenrc.remote
-fi
+#if [[ -z $SSH_CONNECTION ]]; then
+#    export SCREENRC=$ZPREFS/screenrc.local
+#else
+#    export SCREENRC=$ZPREFS/screenrc.remote
+#fi
 
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 

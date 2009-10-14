@@ -232,5 +232,12 @@ nssh () {
     screen -t $*[$#] ssh $*
 }
 
+piugrandi () {
+    echo ls -fldh ./**/*(d`stat +device .`OL[1,10])
+}
+
+rscreen () {
+    autossh -t $1 "screen -e^Ff -daAR"
+}
 
 # vim: ft=zsh

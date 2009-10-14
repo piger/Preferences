@@ -27,7 +27,11 @@ zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '-->'
 # Non completare i nomi delle funzioni che iniziano per '_'
-zstyle ':completion::complete:*:functions' ignored-patterns '_*'
+#zstyle ':completion::complete:*:functions' ignored-patterns '_*'
+# che sia cosi'?
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+
 
 # separa i man per sezione
 zstyle ':completion:*:manuals' separate-sections true
@@ -48,8 +52,9 @@ bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
 
 # Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle -e ':completion:*:approximate:*' max-errors \
-	'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) )'
+#zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) )'
+# che sia giusto cosi' ? con numeric?
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Completa cose tipo: gzip _-d -> gzip --decompress
 zstyle ':completion::approximate*:*' prefix-needed false
 
@@ -76,7 +81,10 @@ zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
 # Questo e' AAAH, sputtana la completion e il Tab non cycla piu' tra i possibili match :-(
 #zstyle ':completion:*:(rm|rmdir|grep|vim|vi):*' ignore-line true
 # Non completare le directory se la completion "non ha senso" (../$PWD non ha senso)
-zstyle ':completion:*' ignore-parents parent pwd
+#zstyle ':completion:*' ignore-parents parent pwd
+# meglio?
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
 zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
@@ -84,7 +92,9 @@ LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
 PERL5LIB:scalar
 
 # Comando usato per la completion dei processi
-zstyle ':completion:*:processes' command 'ps -xa'
+#zstyle ':completion:*:processes' command 'ps -xa'
+# meglio?
+zstyle ':completion:*:processes' command 'ps x -o pid,pcpu,tt,args'
 
 # cache
 zstyle ':completion:*' use-cache on
@@ -92,5 +102,10 @@ zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 
 # Completion con i colori di ls
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# Completion per altri comandi
+# ############################
+# per avere la comletion di ssh su autossh basta questo !?
+compdef autossh=ssh
 
 # vim: ft=zsh

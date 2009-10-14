@@ -52,7 +52,7 @@ termcapinfo vt100 dl=5\E[M
 
 # uso la hardstatus per il titolo dell'xterm, quindi non voglio messaggi
 # (leggi la man per capire questo oscuro messaggio).
-hardstatus off
+hardstatus alwayslastline
 
 # Set the hardstatus prop on gui terms to set the titlebar/icon title
 termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
@@ -69,7 +69,8 @@ termcapinfo xterm*|linux*|rxvt*|Eterm* OP
 termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 
 # Enable non-blocking mode to better cope with flaky ssh connections.
-defnonblock 5
+#defnonblock 5
+defnonblock off
 
 # http://aperiodic.net/screen/faq
 #
@@ -160,7 +161,15 @@ ignorecase on
 #caption always "%{= wk} %?%-Lw%?%{= kd} %n*%f %t %{= wk}%?%+Lw%? %{= wk}%=%{= Wk} %C%a %d-%m-%Y %{= wk}"
 
 # quella giusta:
-caption always "%{= kR} %?%-Lw%?%{= bk} %n*%f %t %{= kR}%?%+Lw%? %{= kR}%=%{= kw} %C%a %d-%m-%Y %{= kd}"
+# caption always "%{= kR} %?%-Lw%?%{= bk} %n*%f %t %{= kR}%?%+Lw%? %{= kR}%=%{= kw} %C%a %d-%m-%Y %{= kd}"
+
+caption splitonly "%?%F%{.R.}%?%3n %t%? [%h]%?%= %C%a"
+hardstatus string "%{= kw}%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw %=%20`%d %M %Y, %10`"
+##############################
+backtick 10 	60	60		$HOME/bin/fuzzyclock.zsh
+backtick 20	60	60		$HOME/Preferences/screen/load
+
+# shelltitle '% |zsh'
 
 # scrollback per window (5000 lines)
 defscrollback 5000
@@ -211,3 +220,6 @@ termcapinfo urxvt 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 # screen -t monkey ssh monkey
 # screen -t mail 8 mutt
 # screen -t daemon 9 tail -f /var/log/daemon.log
+
+# di default cambia dir a $HOME
+chdir
