@@ -44,4 +44,6 @@ alias pwgen_strong='pwgen -y1 15 20'
 
 alias vnc_colori='vncviewer -FullColor'
 
+alias screenf='screen -e "^ff"'
+
 # vim: ft=zsh
