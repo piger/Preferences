@@ -8,3 +8,5 @@ zsh/local
 Pref-*.tar.gz
 *~
 *.zwc
+vim/.VimballRecord
+vim/GetLatest/*

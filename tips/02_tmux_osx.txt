@@ -1,0 +1,4 @@
+per ovviare alla mancanza di binding "seri" in tmux, si puo' configurare
+Terminal.app per sendare ^a-p e ^a-n quando si preme alt-sinistra o
+alt-destra, e ottenere lo stesso effetto dei binding di screen.
+Idem per F8/F9, che tanto qui su OSX non uso.
