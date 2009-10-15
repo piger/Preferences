@@ -79,7 +79,7 @@ PS1="[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# "
 
 # utile con screen e un caption che mostri l'hardstatus della window
 # usato nelle shell remote e' comodo con la finestra splittata.
-function precmd {
+function no_precmd {
     case $TERM in
     rxvt*|screen*|*xterm*|(dt|k)term|Eterm)
 	print -Pn "\e]2;%n@%m:%~\e\134"
@@ -95,7 +95,7 @@ function precmd {
 }
 
 # $1 e' TUTTA la string del comando, argomenti compresi.
-function preexec () {
+function no_preexec () {
     local -a cmd
     cmd=(${(z)1})
 
