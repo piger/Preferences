@@ -137,7 +137,7 @@ if has("gui_running")
     " (vedi help) e disabilitarlo.
     
     " colorscheme non male:
-    " oceandeep, vividchalk, asu1dark, peachpuff (gui), ron
+    " oceandeep (su gVim), vividchalk, asu1dark, peachpuff (gui), ron
     
     "colorscheme dw_orange-256colors
     "colorscheme asu1dark-256colors
@@ -197,6 +197,11 @@ let g:secure_modelines_allowed_items = [
 	    \ "foldlevel", "fdl",
 	    \ "fileencoding", "fenc"
 	    \ ]
+
+" TwitVim configuration
+if filereadable($HOME . "/.twitter.vim")
+    source $HOME/.twitter.vim
+endif
 " }
 
 
@@ -216,13 +221,13 @@ if has("autocmd")
 	let autocommands_loaded = 1
 
 	" su alcuni vim purtroppo questa feature non c'e' :(
-	if exists('+autochdir')
-	    set autochdir		" switch sempre alla dir del file aperto
-	else
-	    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
-	    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
-	    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
-	endif
+	"if exists('+autochdir')
+	"    set autochdir		" switch sempre alla dir del file aperto
+	"else
+	"    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
+	"    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
+	"    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
+	"endif
 
 	" autocmd BufNewFile,BufRead *.txt set filetype=human
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
@@ -232,7 +237,8 @@ if has("autocmd")
 	
 	" For all text files set 'textwidth' to 78 characters.
 	" autocmd FileType text setlocal textwidth=78
-	autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
+	"autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
+	autocmd FileType python :setl ts=4 sw=4 sts=4 et tw=80 smarttab smartindent
 
 
 	" template vuoti!
@@ -412,4 +418,7 @@ endfunction
 " in $_ senza <EOL>
 " perldo $_ = reverse($_);1
 "
+"
+" WARNING: LA PARTE DI QUESTO FILE E' IGNORATA SE VIM E' COMPILATO
+" SENZA IL SUPPORTO PERL!
 " }
