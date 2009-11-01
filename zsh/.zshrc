@@ -95,7 +95,7 @@ function no_precmd {
 }
 
 # $1 e' TUTTA la string del comando, argomenti compresi.
-function no_preexec () {
+function preexec () {
     local -a cmd
     cmd=(${(z)1})
 
@@ -128,6 +128,7 @@ function no_preexec () {
 # Binda le seguenti variabili d'ambiente ai loro rispettivi array (ex: $perl5lib[@] )
 declare -T LD_LIBRARY_PATH ld_library_path
 declare -T PERL5LIB perl5lib
+declare -T PYTHONPATH pythonpath
 
 # FTP in passive mode (CPAN)
 export FTP_PASSIVE=1
