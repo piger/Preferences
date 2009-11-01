@@ -15,7 +15,7 @@ alias lla="ls -la"
 alias lsd="ls -ld *(-/)"		# ls delle sole directory
 alias lsa="ls -ld .*"			# ls dei soli file nascosti
 alias suz="su root -c zsh"		# su to root and run zsh ;)
-alias lsgrandi="ls -flh *(.oL)"	# ls -lrh --sort=size
+alias lsgrandi="ls -fl *(.oL)"	# ls -lrh --sort=size
 alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
 alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
 alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
@@ -41,9 +41,11 @@ if [[ -e /etc/debian_version ]]; then
 fi
 
 alias pwgen_strong='pwgen -y1 15 20'
-
 alias vnc_colori='vncviewer -FullColor'
-
-alias screenf='screen -e "^ff"'
+alias screenf='screen -e "^Ff"'
+# todo.sh -> t
+alias t='todo.sh -d ~/.todo.cfg'
+# todo.sh aggiunge data attuale al todo
+alias tt='t -t'
 
 # vim: ft=zsh

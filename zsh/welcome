@@ -4,19 +4,27 @@
 # --------------------------------------------------------------------------------
 
 # fortune! ;) [ richiede extended_glob! ]
-[[ $- = *i* ]] && (( $+commands[fortune] )) && \
-	[[ -d ~/.fortune ]] && \
-	(print; fortune -e ~/.fortune; print)
+#[[ $- = *i* ]] && (( $+commands[fortune] )) && \
+#	[[ -d ~/.fortune ]] && \
+#	(print; fortune -e ~/.fortune; print)
+
+if [[ $- = *i* ]] && (( $+commands[fortune] )); then
+    if [[ -d ~/.fortune ]]; then
+	print; fortune -e ~/.fortune; print
+    else
+	print; fortune; print
+    fi
+fi
 
 
-todo() {
-	if [[ -e ~/.todo ]]; then
-		print -- "Il tuo itler di fiducia ha stilato la seguente lista di cose da fare"
-		print -- " ------------------------------------------------------------------"
-		cat ~/.todo
-		print
-	fi
-}
-todo
+#todo() {
+#	if [[ -e ~/.todo ]]; then
+#		print -- "Il tuo itler di fiducia ha stilato la seguente lista di cose da fare"
+#		print -- " ------------------------------------------------------------------"
+#		cat ~/.todo
+#		print
+#	fi
+#}
+#todo
 
 # vim: ft=zsh

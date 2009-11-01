@@ -87,6 +87,7 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
+# XXX non penso che PERL5LIB sia scalar...
 zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
 LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
 PERL5LIB:scalar
@@ -107,5 +108,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # ############################
 # per avere la comletion di ssh su autossh basta questo !?
 compdef autossh=ssh
+compdef nssh=ssh
+compdef t=todo.sh
 
 # vim: ft=zsh

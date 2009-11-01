@@ -47,7 +47,8 @@ addpath() {
 		echo "Usage: $0 <directory>"
 		return 1
 	fi
-	path=( $path[@] $1 )
+	path+=$1
+	#path=( $path[@] $1 )
 	rehash
 }
 

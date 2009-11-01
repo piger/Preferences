@@ -9,7 +9,9 @@ ZDOTDIR=${HOME}/.zsh
 
 # $PATH
 # -----
-# -U elimina sempre i duplicati
+# Le variabili path e manpath sono due array legati agli equivalenti
+# $PATH e $MANPATH; in piu' con -U setto l'attributo che elimina i
+# duplicati.
 typeset -U path
 typeset -U manpath
 path=(
@@ -18,6 +20,7 @@ path=(
     /opt/bin
 )
 
+# esempio pratico di utilizzo dell'array path
 [[ -d ~/bin ]] && path+=~/bin
 
 export CVS_RSH=ssh
@@ -30,6 +33,8 @@ export ZPREFS=~/Preferences
 
 #if [[ -z $SSH_CONNECTION ]]; then
 #    export SCREENRC=$ZPREFS/screenrc.local
+#    # ancora meglio, visto che alcuni screen ignorano $SCREENRC:
+#    alias screen='screen -c .screenrc.remote'
 #else
 #    export SCREENRC=$ZPREFS/screenrc.remote
 #fi
@@ -37,31 +42,15 @@ export ZPREFS=~/Preferences
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 
 # Se la shell e' interattiva, usa 026.
-if [[ $- == *i* ]]; then
-	# u+rw, g+r, o+NIENTE
-	umask 026
-else
-	umask 022
-fi
+#if [[ $- == *i* ]]; then
+#	# u+rw, g+r, o+NIENTE
+#	umask 026
+#else
+#	umask 022
+#fi
+
+umask 022
 
 # ulimit ?
-
-# Non va bene, da rifare.
-# export TSOCKS_CONF_FILE=${HOME}/tsocks.conf
-
-# OS X Leopard gestisce ssh-agent tramite launchd e lo collega
-# al Keychain, quindi non c'e' bisogno di usare keychain di gentoo.
-# GNOME invece usa seahorse-agent.
-# Quindi... keychain di gentoo... VAFFANCULO.
-#
-# if [[ -z $SSH_AUTH_SOCK ]]; then
-# 	if (( $+commands[keychain] )); then
-# 		keychain -q
-# 		[[ -f ${HOME}/.keychain/${HOST}-sh ]] &&
-# 		. ${HOME}/.keychain/${HOST}-sh
-# 		[[ -f ${HOME}/.keychain/${HOST}-sh-gpg ]] &&
-# 		. ${HOME}/.keychain/${HOST}-sh-gpg
-# 	fi
-# fi
 
 # vim: ft=zsh
