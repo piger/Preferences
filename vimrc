@@ -242,6 +242,9 @@ if has("autocmd")
 	" sia perl che python
 	autocmd FileType python,perl :setl foldcolumn=2
 
+	" txt2tags
+	au BufNewFile,BufRead *.t2t setl ft=txt2tags
+
 	" Il numero di riga con il tema oceanblack sembra OK
 	if has("gui_running")
 	    autocmd FileType python,perl,shell :setl number

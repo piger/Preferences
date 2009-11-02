@@ -1,0 +1,19 @@
+# ~/.ssh/config
+
+# Host example.com
+#     hostname example.com
+#     port 20123
+#     IdentityFile ~/.ssh/key
+
+# Defaults
+Host *
+    User sand
+    Protocol 2
+    HashKnownHosts yes
+    ControlPath ~/.ssh/socket/s_%r@%h:%p
+    # Usa solo le chiavi definite in questo file.
+    IdentitiesOnly yes
+    #ControlMaster auto
+    #PreferredAuthentications publickey,password,keyboard-interactive
+    #PreferredAuthentications password,publickey,keyboard-interactive
+    #VisualHostKey yes
