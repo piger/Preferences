@@ -1,0 +1,45 @@
+#!/usr/bin/zsh
+# portachiavi.zsh
+# Dialog script for ssh key management.
+# by: Daniel Kertesz <daniel@spatof.org> on 03-03-2008
+
+: ${DIALOG=dialog}
+setopt extendedglob
+
+tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+trap "rm -f $tempfile" 0 1 2 5 15
+
+the_dialog () {
+	keys=()
+	foreach key ($HOME/.ssh/*.pub(:r)); do
+		if ! ssh-add -l | grep -w $key > /dev/null; then
+			keys=($keys[@] $key:t $key)
+		fi
+	done
+
+	if [[ -z $keys ]]; then
+		echo "No more keys in keychain ($HOME/.ssh/*.pub)"
+		exit
+	fi
+
+	$DIALOG --clear --title "Camomilla" \
+		--menu "Choose the key you want to load on the agent\n" 20 51 4 \
+		$keys[@] 2> $tempfile
+
+	retval=$?
+	choice=`cat $tempfile`
+
+	case $retval in
+		0)
+			ssh-add $HOME/.ssh/$choice
+			the_dialog
+			;;
+		1)
+			echo "Goodbye!";;
+		255)
+			echo "Goodbye!";;
+	esac
+}
+the_dialog
+
+# vim: ft=zsh

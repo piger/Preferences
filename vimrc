@@ -32,7 +32,6 @@ if !isdirectory($HOME . "/.vim/swap")
     call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
 
-set noexpandtab			" usa SEMPRE veri tab
 set history=50			" quante entry di history per comandi e search
 
 " ricerca testo
@@ -65,9 +64,9 @@ set wrap			" wrappa SEMPRE, e' OK!
 
 " Mouse support XXX {
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
-if has('mouse')
-    set mouse=a
-endif
+" if has('mouse')
+"     set mouse=a
+" endif
 " set clipboard+=unnamed " share windows clipboard
 " }
 
@@ -76,7 +75,7 @@ set foldenable
 set foldmarker={,}
 set foldmethod=marker
 set foldlevel=100		" trick per non foldare automaticamente
-set foldcolumn=2
+" set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "function SimpleFoldText() " {
 "    return getline(v:foldstart).' '
@@ -117,8 +116,8 @@ if has("gui_running")
 	" Una selezione di possibili font decenti, in ordine di decenza.
 	" NOTA: Alcuni, tipo Proggy, si vedono bene solo a size 12
 	" set guifont=Liberation\ Mono\ 9
-	set guifont=ProggySquareTT\ 12
-	" set guifont=Terminus\ 10
+	" set guifont=ProggySquareTT\ 12
+	set guifont=Terminus\ 10
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
     elseif has("x11")
@@ -141,7 +140,7 @@ if has("gui_running")
     
     "colorscheme dw_orange-256colors
     "colorscheme asu1dark-256colors
-    colorscheme fnaqevan
+    colorscheme oceanblack
 else
     colorscheme asu1dark
 endif
@@ -240,9 +239,21 @@ if has("autocmd")
 	"autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
 	autocmd FileType python :setl ts=4 sw=4 sts=4 et tw=80 smarttab smartindent
 
+	" sia perl che python
+	autocmd FileType python,perl :setl foldcolumn=2
+
+	" txt2tags
+	au BufNewFile,BufRead *.t2t setl ft=txt2tags
+
+	" Il numero di riga con il tema oceanblack sembra OK
+	if has("gui_running")
+	    autocmd FileType python,perl,shell :setl number
+	endif
+
 
 	" template vuoti!
 	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
+	autocmd BufNewFile *.py 0r ~/.vim/templates/python.py
 	
 	autocmd FileType perl set makeprg=perl\ -c\ %\ $*
 	autocmd FileType perl set errorformat=%f:%l:%m
@@ -338,6 +349,13 @@ nmap <Leader>nt :NERDTreeToggle<CR>
 
 " rot13 fun - \rot
 nmap <Leader>rot ggVGg?
+" }
+
+
+" Source local configuration {
+if filereadable($HOME . "/.vimrc.local")
+    source $HOME/.vimrc.local
+endif
 " }
 
 
