@@ -174,6 +174,7 @@ set noexpandtab
 
 
 " Opzioni plugin & co {
+let python_highlight_all=1		" full syntax highlighting ?
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
@@ -237,10 +238,13 @@ if has("autocmd")
 	" For all text files set 'textwidth' to 78 characters.
 	" autocmd FileType text setlocal textwidth=78
 	"autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
-	autocmd FileType python :setl ts=4 sw=4 sts=4 et tw=80 smarttab smartindent
+
+	" http://svn.python.org/projects/python/trunk/Misc/Vim/vimrc
+	autocmd FileType python :setl ts=8 sw=4 sts=4 expandtab tw=80 smarttab autoindent smartindent
 
 	" sia perl che python
 	autocmd FileType python,perl :setl foldcolumn=2
+	autocmd FileType python :setl foldmethod=indent
 
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
