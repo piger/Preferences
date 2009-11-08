@@ -94,6 +94,8 @@ function no_precmd {
     #fi
 }
 
+# Cambia il titolo della finestra di screen con il nome
+# dell'host verso cui si fa ssh.
 # $1 e' TUTTA la string del comando, argomenti compresi.
 function preexec () {
     local -a cmd
@@ -121,6 +123,25 @@ function preexec () {
 #    print -nR $'\033]0;'$*$'\a'
 #  fi
 #}
+
+# screen+zsh
+# da: http://stackoverflow.com/questions/171563/whats-in-your-zshrc/187877#187877
+# function title {
+#     if [[ $TERM == "screen"* ]]; then
+#         print -nR $'\033k'$1$'\033\\'
+#         print -nR $'\033]0;'$2$'\a'
+#     fi
+# }
+# 
+# function precmd {
+#     title "zsh" "$PWD"
+# }   
+# 
+# function preexec {
+#     emulate -L zsh
+#     local -a cmd; cmd=(${(z)1})
+#     title "$cmd[1]:t" "$cmd[2,-1]"
+# }
 
 # ENVIRONMENT
 # -----------
@@ -220,6 +241,14 @@ autoload -U compinit && compinit
 autoload -U zcalc
 autoload -U zmv
 autoload -U zargs
+
+# Non mi piace, ma lo segno per il futuro.
+## # zsh-mime-setup
+## autoload -U zsh-mime-setup
+## #zstyle :mime: mime-types /etc/mime.types
+## zstyle :mime: mailcap ~/.mailcap /etc/mailcap
+## zsh-mime-setup
+
 
 # Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
 return 0
