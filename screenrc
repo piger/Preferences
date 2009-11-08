@@ -8,14 +8,22 @@
 # F8 / ALT+RIGHT = next window
 bindkey -k k9 next
 bindkey "^[[1;3C" next
-# rxvt
+# rxvt (funziona?)
 bindkey "^[^[OC" next
+# urxvt (funziona.)
+bindkey "^[^[[C" next
 
 # F9 / ALT+LEFT = prev window
 bindkey -k k8 prev
 bindkey "^[[1;3D" prev
-# rxvt
+# rxvt (funziona?)
 bindkey "^[^[OD" prev
+# urxvt (funziona.)
+bindkey "^[^[[D" prev
+
+# prova
+#bindkey "^[<" eval number !echo $WINDOW-1|bc
+#bindkey "^[>" eval number !echo $WINDOW+1|bc
 
 # Remove some stupid / dangerous key bindings
 bind ^k

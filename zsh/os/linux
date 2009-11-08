@@ -16,6 +16,21 @@ alias ls="ls --color=auto $ls_opts"
 #			alias hlocate="locate -d ${HOME}/.locatedb"
 #		fi
 
+if [ -e /etc/arch-release ]; then
+    # Arch Linux
+    alias p='pacman'
+    alias search='pacman -Ss'
+    alias show='pacman -Si'
+    alias i='sudo pacman -S'
+
+elif [ -e /etc/debian_version ]; then
+    alias search="apt-cache search"
+    alias show="apt-cache show"
+    alias i="sudo aptitude install"
+    alias backports="sudo aptitude -t lenny-backports"
+fi
+
+
 # -*- environment
 
 # vim: ft=zsh

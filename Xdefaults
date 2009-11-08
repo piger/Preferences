@@ -6,21 +6,11 @@
 ! http://gentoo-wiki.com/TIP_Linux_Colors_in_Aterm/rxvt
 ! http://spatof.org/doc/guida_XTerm.txt
 
-#ifdef COLOR
-   *customization: -color
-#endif
+! xterm
+! !!!!!
 
-URxvt.secondaryScroll:  true
 XTerm*dynamiccolors: true 
 
-! -xos4-terminus-medium-r-normal--0-0-72-72-c-0-iso8859-15
-! -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-15
-! -xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
-! -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-15
-! -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-15
-! -xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso8859-15
-! -xos4-terminus-medium-r-normal--28-280-72-72-c-140-iso8859-15
-! -xos4-terminus-medium-r-normal--32-320-72-72-c-160-iso8859-15
 ! XTerm*font:-xos4-terminus-medium-r-normal--13-140-72-72-c-80-iso8859-15
 XTerm*font:-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-15
 !XTerm*vt100*geometry: 80x50
@@ -76,59 +66,65 @@ XTerm*color14:     MediumTurquoise
 XTerm*color15:     white
 
 
-! Per URxvt
-URxvt*font:					-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
-URxvt*boldFont:				-xos4-terminus-bold-r-normal--14-140-72-72-c-80-iso8859-15
-!URxvt*font:				xft:DejaVu Sans mono:size=9,antialias=true
-!URxvt.boldFont:         xft:DejaVu Sans mono:bold:size=9,antialias=true
-URxvt.depth: 				32
-!URxvt*vt100*geometry: 80x50
-URxvt*saveLines: 			2000
-!URxvt*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
-! Se cambi TERM a URxvt-color non funziona il backspace...
-! URxvt*termName: XTerm-color
-URxvt*eightBitInput: 		false
-URxvt*visualBell: 			true
-! Do not clear the screen after the program exits
-URxvt*VT100*titeInhibit: 	true
-URxvt*scrollBar: 			false
-URxvt*perl-ext-common:		mark-urls
-! si lanciano col tasto centrale :)
-URxvt.urlLauncher:			iceweasel
+! rxvt-unicode / urxvt
+! !!!!!!!!!!!!!!!!!!!!
 
-URxvt*background:  gray4
-URxvt*foreground:  FloralWhite
+! From: http://wiki.archlinux.org/index.php/Urxvt
+URxvt.buffered: true
+URxvt.background: black
+URxvt.foreground: white
+URxvt.cursorColor: green
+URxvt.underlineColor: yellow
+URxvt.font: xft:Terminus:pixelsize=14:antialias=false
+URxvt.boldFont: xft:Terminus:bold:pixelsize=14:antialias=false
+URxvt.perl-ext-common: default,tabbed,matcher
+URxvt.title: rxvt-unicode
+! end
+
+! Le mie aggiunte alla configurazione
+URxvt.saveLines: 2000
+URxvt.visualBell: True
+! URxvt.depth: 32	XXX Puo' causare problemi
+URxvt.urlLauncher: /usr/bin/firefox
+URxvt.matcher.button: 1
+URxvt.scrollBar: False
+
+! Colori scelti con amore
+URxvt.background:  gray4
+URxvt.foreground:  FloralWhite
 
 ! black
-URxvt*color0:      black
+URxvt.color0:      black
 ! red
-URxvt*color1:      tomato2
+URxvt.color1:      tomato2
 ! green
-URxvt*color2:      SeaGreen3
+URxvt.color2:      SeaGreen3
 ! yellow
-URxvt*color3:      gold1
+URxvt.color3:      gold1
 ! blue
-URxvt*color4:      LightSkyBlue3
+URxvt.color4:      LightSkyBlue3
 ! magenta
-URxvt*color5:      DeepPink2
+URxvt.color5:      DeepPink2
 ! cyan
-URxvt*color6:      LightSkyBlue
+URxvt.color6:      LightSkyBlue
 ! white
-URxvt*color7:      FloralWhite
+URxvt.color7:      FloralWhite
 
 ! bright black
-URxvt*color8:      gray5
+URxvt.color8:      gray5
 ! bright red
-URxvt*color9:      brown1
+URxvt.color9:      brown1
 ! bright green
-URxvt*color10:     chartreuse2
+URxvt.color10:     chartreuse2
 ! bright yellow
-URxvt*color11:     khaki1
+URxvt.color11:     khaki1
 ! bright blue
-URxvt*color12:     DodgerBlue2
+URxvt.color12:     DodgerBlue2
 ! bright magenta
-URxvt*color13:     VioletRed1
+URxvt.color13:     VioletRed1
 ! bright cyan
-URxvt*color14:     MediumTurquoise
+URxvt.color14:     MediumTurquoise
 ! bright white
-URxvt*color15:     white
+URxvt.color15:     white
+
+! vim: ft=xdefaults
