@@ -12,8 +12,7 @@ ZDOTDIR=${HOME}/.zsh
 # Le variabili path e manpath sono due array legati agli equivalenti
 # $PATH e $MANPATH; in piu' con -U setto l'attributo che elimina i
 # duplicati.
-typeset -U path
-typeset -U manpath
+typeset -U path manpath fpath cdpath
 path=(
     $path /sbin /bin /usr/sbin /usr/bin /usr/X11R6/bin 
     /usr/games /usr/local/sbin /usr/local/bin /opt/local/bin

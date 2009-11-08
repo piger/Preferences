@@ -67,8 +67,27 @@ end
 crand=$(( $chash % 9 ))
 crandname=$colnames[$crand]
 eval cprompt='%{${fg[$crandname]}%}'
-# PS1="[%T] ${fcyan}%m${fdefault}%(2j.|%j.):%3c%# "
-PS1="[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# "
+# PS1="[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# "
+
+# XXX da spostare tra le altre opzioni!
+setopt PROMPT_SUBST
+
+# vcs_info
+if [[ $ZSH_VERSION == 4.<1->* || $ZSH_VERSION == <5->* ]]; then
+    # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
+    autoload -Uz vcs_info
+    zstyle ':vcs_info:*' enable git cvs svn
+
+    zstyle ':vcs_info:*' actionformats \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+    zstyle ':vcs_info:*' formats       \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+    zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
+    # XXX da spostare in una sezione apposita ?
+    precmd () { vcs_info }
+fi
+PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c${vcs_info_msg_0_}%# '
 
 # Esperimento per opzione "shelltitle" di screen (shelltitle '% |zsh')
 #if [[ $TERM == screen* ]]; then
@@ -249,6 +268,16 @@ autoload -U zargs
 ## zstyle :mime: mailcap ~/.mailcap /etc/mailcap
 ## zsh-mime-setup
 
+# da /usr/share/doc/zsh
+if [ -d ~/.zsh/scripts ]; then
+    fpath=($fpath ~/.zsh/scripts)
+    for func in $^fpath/*(N-.x:t); autoload $func
+fi
+
+# help online, ma serve lo script che genera i file txt...
+# unalias run-help > /dev/null 2>&1
+# autoload run-help
+# HELPDIR=/usr/share/zsh/help
 
 # Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
 return 0
