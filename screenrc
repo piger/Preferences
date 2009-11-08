@@ -1,128 +1,15 @@
-# $HOME/.screenrc - last update: 30/11/2008
-# =========================================
+# .screenrc
+# =========
 
-# ------------------------------------------------------------------------------
-# SCREEN KEYBINDINGS
-# ------------------------------------------------------------------------------
-
-# F8 / ALT+RIGHT = next window
-bindkey -k k9 next
-bindkey "^[[1;3C" next
-# rxvt (funziona?)
-bindkey "^[^[OC" next
-# urxvt (funziona.)
-bindkey "^[^[[C" next
-
-# F9 / ALT+LEFT = prev window
-bindkey -k k8 prev
-bindkey "^[[1;3D" prev
-# rxvt (funziona?)
-bindkey "^[^[OD" prev
-# urxvt (funziona.)
-bindkey "^[^[[D" prev
-
-# prova
-#bindkey "^[<" eval number !echo $WINDOW-1|bc
-#bindkey "^[>" eval number !echo $WINDOW+1|bc
-
-# Remove some stupid / dangerous key bindings
-bind ^k
-#bind L
-bind ^\
-# Make them better
-bind \\ quit
-bind K kill
-bind I login on
-bind O login off
-bind } history
-
-# window resize with = + -
-bind = resize =
-bind + resize +3
-bind - resize -3
-
-# muoversi tra aree della stessa finestra
-bind ^j focus down
-bind ^k focus up
-bind ^t focus top
-bind ^b focus bottom
-
-
-# ------------------------------------------------------------------------------
-# TERMINAL SETTINGS
-# ------------------------------------------------------------------------------
-
-# da debian -->
-# The vt100 description does not mention "dl". *sigh*
-termcapinfo vt100 dl=5\E[M
-
-# - Il titolo della finestra xterm/urxvt/etc...
-
-# uso la hardstatus per il titolo dell'xterm, quindi non voglio messaggi
-# (leggi la man per capire questo oscuro messaggio).
-hardstatus alwayslastline
-
-# Set the hardstatus prop on gui terms to set the titlebar/icon title
-termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
-
-# screen NUMERO (TITOLO) | user@host
-defhstatus "screen ^E (^Et) | $USER@^EH"
-
-# set these terminals up to be 'optimal' instead of vt100
-termcapinfo xterm*|linux*|rxvt*|Eterm* OP
-
-# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E>
-# (This fixes the "Aborted because of window size change" konsole symptoms found
-#  in bug #134198)
-termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
-
-# Enable non-blocking mode to better cope with flaky ssh connections.
-#defnonblock 5
-defnonblock off
-
-# http://aperiodic.net/screen/faq
-#
-# First off, it's recommended that you use screen's scrollback buffer instead.
-# Since you can have multiple windows in a screen session, if you switch
-# between those windows, your terminal scrollback will mix lines from all of
-# those windows, but screen keeps separate scrollback buffers for each one.
-# Just use C-a ESC or C-a [ to enter copy mode. But if you do want scrollback
-# in your terminal window (usually xterm), read on.
-# 
-# Some background: One capability that a terminal may have is an “alternate
-# screen”. xterm has it, and you may have seen its effects–a program will
-# request the alternate screen, the terminal switches there, and when the
-# program exits the terminal goes back to the normal screen, leaving all the
-# text there intact.  It is recommended that all full-screen apps use this, so
-# as to minimize their impact on any purely command-line stuff. It makes sense,
-# for instance, for vi to use the alternate screen. The drawback to the
-# alternate screen is that only the main screen accumulates scrollback.
-#
-# As you might have guessed, screen uses the alternate screen, if it’s
-# available. There’s no real way to turn off use of the alternate screen, but
-# you can make screen think that the terminal doesn’t have an alternate screen
-# with the termcapinfo command:
-# termcapinfo xterm* ti@:te@
-
-# To get screen to add lines to xterm's scrollback buffer, uncomment the
-# following termcapinfo line which tells xterm to use the normal screen buffer
-# (which has scrollback), not the alternate screen buffer.
-
-# *NOTA* 30/11/2008
-# Non ha molto senso usare lo scrollback di xterm (o gnome-terminal), perche'
-# viene intaccato dagli altri screen
-# termcapinfo xterm*|xterms|xs|rxvt ti@:te@
-
-
-# ------------------------------------------------------------------------------
 # SCREEN SETTINGS
-# ------------------------------------------------------------------------------
+# ===============
 
 # Setta un escape alternativo: ^f
 # escape ^ff
+# ... ma anche una cosa tipo escape ``
 
 # UTF-8 Support
-# defutf8 on
+defutf8 on
 
 # activity on window X
 activity "C'e' uno che te vole sulla %n"
@@ -173,7 +60,7 @@ ignorecase on
 
 caption splitonly "%?%F%{.R.}%?%3n %t%? [%h]%?%= %C%a"
 hardstatus string "%{= kw}%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw %=%20`%d %M %Y, %10`"
-##############################
+
 backtick 10 	60	60		$HOME/bin/fuzzyclock.zsh
 backtick 20	60	60		$HOME/Preferences/screen/load
 
@@ -203,16 +90,137 @@ vbell_msg " -- SANTA POLENTA! -- "
 # Messaggi stile nethack
 nethack on
 
+# di default cambia dir a $HOME
+chdir
+
 # 256 COLORS
 # http://www.nabble.com/vim,-screen,-rxvt-unicode-and-colors-td20187494.html
 # terminfo and termcap for nice 256 color terminal
-# allow bold colors - necessary for some reason
+# 1) allow bold colors - necessary for some reason
 attrcolor b ".I"
-# tell screen how to set colors. AB = background, AF=foreground
+# 2) tell screen how to set colors. AB = background, AF=foreground
 termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 termcapinfo urxvt 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-# erase background with current bg color (cambia TERM in screen-bce, su obsd e' male)
+# 3) erase background with current bg color (cambia TERM in screen-bce, su obsd e' male)
+#    Change background-color-erase setting. If "bce" is set to on, all
+#    characters  cleared  by  an erase/insert/scroll/clear operation will be
+#    displayed in the current background color. Other- wise the default
+#    background color is used.
 # defbce on 
+
+# ------------------------------------------------------------------------------
+# SCREEN KEYBINDINGS
+# ------------------------------------------------------------------------------
+
+# F8 / ALT+RIGHT = next window
+bindkey -k k9 next
+bindkey "^[[1;3C" next
+# rxvt (funziona?)
+bindkey "^[^[OC" next
+# urxvt (funziona.)
+bindkey "^[^[[C" next
+
+# F9 / ALT+LEFT = prev window
+bindkey -k k8 prev
+bindkey "^[[1;3D" prev
+# rxvt (funziona?)
+bindkey "^[^[OD" prev
+# urxvt (funziona.)
+bindkey "^[^[[D" prev
+
+# prova
+#bindkey "^[<" eval number !echo $WINDOW-1|bc
+#bindkey "^[>" eval number !echo $WINDOW+1|bc
+
+# Remove some stupid / dangerous key bindings
+bind ^k
+#bind L
+bind ^\
+# Make them better
+bind \\ quit
+bind K kill
+#bind I login on
+#bind O login off
+bind } history
+
+# window resize with = + -
+bind = resize =
+bind + resize +3
+bind - resize -3
+
+# muoversi tra aree della stessa finestra
+bind ^j focus down
+bind ^k focus up
+bind ^t focus top
+bind ^b focus bottom
+
+
+# ------------------------------------------------------------------------------
+# TERMINAL SETTINGS
+# ------------------------------------------------------------------------------
+
+# da debian -->
+# The vt100 description does not mention "dl". *sigh*
+#termcapinfo vt100 dl=5\E[M
+
+# - Il titolo della finestra xterm/urxvt/etc...
+
+# uso la hardstatus per il titolo dell'xterm, quindi non voglio messaggi
+# (leggi la man per capire questo oscuro messaggio).
+hardstatus alwayslastline
+
+# Set the hardstatus prop on gui terms to set the titlebar/icon title
+#termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
+
+# screen NUMERO (TITOLO) | user@host
+defhstatus "screen ^E (^Et) | $USER@^EH"
+
+# set these terminals up to be 'optimal' instead of vt100
+# termcapinfo xterm*|linux*|rxvt*|Eterm* OP
+
+# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E>
+# (This fixes the "Aborted because of window size change" konsole symptoms found
+#  in bug #134198)
+#termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+# Enable non-blocking mode to better cope with flaky ssh connections.
+defnonblock 5
+#defnonblock off
+
+# http://aperiodic.net/screen/faq
+#
+# First off, it's recommended that you use screen's scrollback buffer instead.
+# Since you can have multiple windows in a screen session, if you switch
+# between those windows, your terminal scrollback will mix lines from all of
+# those windows, but screen keeps separate scrollback buffers for each one.
+# Just use C-a ESC or C-a [ to enter copy mode. But if you do want scrollback
+# in your terminal window (usually xterm), read on.
+# 
+# Some background: One capability that a terminal may have is an “alternate
+# screen”. xterm has it, and you may have seen its effects–a program will
+# request the alternate screen, the terminal switches there, and when the
+# program exits the terminal goes back to the normal screen, leaving all the
+# text there intact.  It is recommended that all full-screen apps use this, so
+# as to minimize their impact on any purely command-line stuff. It makes sense,
+# for instance, for vi to use the alternate screen. The drawback to the
+# alternate screen is that only the main screen accumulates scrollback.
+#
+# As you might have guessed, screen uses the alternate screen, if it’s
+# available. There’s no real way to turn off use of the alternate screen, but
+# you can make screen think that the terminal doesn’t have an alternate screen
+# with the termcapinfo command:
+# termcapinfo xterm* ti@:te@
+
+# To get screen to add lines to xterm's scrollback buffer, uncomment the
+# following termcapinfo line which tells xterm to use the normal screen buffer
+# (which has scrollback), not the alternate screen buffer.
+
+# *NOTA* 30/11/2008
+# Non ha molto senso usare lo scrollback di xterm (o gnome-terminal), perche'
+# viene intaccato dagli altri screen
+# termcapinfo xterm*|xterms|xs|rxvt ti@:te@
+
+
 
 # ------------------------------------------------------------------------------
 # STARTUP SCREENS
@@ -228,6 +236,3 @@ termcapinfo urxvt 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 # screen -t monkey ssh monkey
 # screen -t mail 8 mutt
 # screen -t daemon 9 tail -f /var/log/daemon.log
-
-# di default cambia dir a $HOME
-chdir

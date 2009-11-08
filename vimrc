@@ -318,7 +318,7 @@ abbreviate subent subnet
 " }
 
 
-" Shortcuts {
+" Mappings, Shortcuts & Bindings {
 " WARNING: <Leaders> defaults to "\"
 " F2	- toggle highlight
 " F3	- toggle autoindent
@@ -348,11 +348,77 @@ nnoremap <Leader>tl :set invlist list?<CR>
 nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
+" rot13 fun - \rot
+nmap <Leader>rot ggVGg?
+
+" PLUGINS:
 " NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
 
-" rot13 fun - \rot
-nmap <Leader>rot ggVGg?
+" Fuzzyfinder (from the example):
+let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'Dir':{}, 'MruFile':{}, 'MruCmd':{}, 'FavFile':{}, 'Tag':{}, 'TaggedFile':{}}
+let g:FuzzyFinderOptions.Base.ignore_case = 1
+"let g:FuzzyFinderOptions.Base.abbrev_map  = {
+"      \   '\C^VR' : [
+"      \     '$VIMRUNTIME/**',
+"      \     '~/.vim/**',
+"      \     '$VIM/.vim/**',
+"      \     '$VIM/vimfiles/**',
+"      \   ],
+"      \ }
+let g:FuzzyFinderOptions.MruFile.max_item = 200
+let g:FuzzyFinderOptions.MruCmd.max_item = 200
+nnoremap <silent> <C-n>      :FuzzyFinderBuffer<CR>
+nnoremap <silent> <C-m>      :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
+nnoremap <silent> <C-j>      :FuzzyFinderMruFile<CR>
+nnoremap <silent> <C-k>      :FuzzyFinderMruCmd<CR>
+nnoremap <silent> <C-p>      :FuzzyFinderDir <C-r>=expand('%:p:~')[:-1-len(expand('%:p:~:t'))]<CR><CR>
+nnoremap <silent> <C-f><C-d> :FuzzyFinderDir<CR>
+nnoremap <silent> <C-f><C-f> :FuzzyFinderFavFile<CR>
+nnoremap <silent> <C-f><C-t> :FuzzyFinderTag!<CR>
+nnoremap <silent> <C-f><C-g> :FuzzyFinderTaggedFile<CR>
+noremap  <silent> g]         :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
+nnoremap <silent> <C-f>F     :FuzzyFinderAddFavFile<CR>
+nnoremap <silent> <C-f><C-e> :FuzzyFinderEditInfo<CR>
+
+"   * bufexplorer
+"   <Leader>be  - Opens BufExplorer
+"   <Leader>bs  - Opens horizontally split window BufExplorer
+"   <Leader>bv  - Opens vertically split window BufExplorer
+"
+"   * man page viewer
+"   K	- exec ManPageView
+"
+"   * DirDiff
+"   :DirDiff /path/1 /path/2
+"
+"   * fuzzyfinder
+"       :FuzzyFinderBuffer      - launchs buffer-mode Fuzzyfinder.
+"       :FuzzyFinderFile        - launchs file-mode Fuzzyfinder.
+"       :FuzzyFinderDir         - launchs directory-mode Fuzzyfinder.
+"       :FuzzyFinderMruFile     - launchs MRU-file-mode Fuzzyfinder.
+"       :FuzzyFinderMruCmd      - launchs MRU-command-mode Fuzzyfinder.
+"       :FuzzyFinderFavFile     - launchs favorite-file-mode Fuzzyfinder.
+"       :FuzzyFinderTag         - launchs tag-mode Fuzzyfinder.
+"       :FuzzyFinderTaggedFile  - launchs tagged-file-mode Fuzzyfinder.
+"
+"   * Align (lettera maiuscola (T=, T@, T<, etc...) allineano a dx, lettera
+"   minuscola (t#, ts, t:, etc...) a sx.
+"   HIGHLIGHT: \t=, \t:
+" if !hasmapto('<Plug>AM_T|')|map <unique> <Leader>T|		<Plug>AM_T||endif
+" if !hasmapto('<Plug>AM_T#')	 |map <unique> <Leader>T#		<Plug>AM_T#|endif
+" if !hasmapto('<Plug>AM_T,')	 |map <unique> <Leader>T,		<Plug>AM_T,o|endif
+" if !hasmapto('<Plug>AM_Ts,') |map <unique> <Leader>Ts,		<Plug>AM_Ts,|endif
+" if !hasmapto('<Plug>AM_T:')	 |map <unique> <Leader>T:		<Plug>AM_T:|endif
+" if !hasmapto('<Plug>AM_T;')	 |map <unique> <Leader>T;		<Plug>AM_T;|endif
+" if !hasmapto('<Plug>AM_T<')	 |map <unique> <Leader>T<		<Plug>AM_T<|endif
+" if !hasmapto('<Plug>AM_T=')	 |map <unique> <Leader>T=		<Plug>AM_T=|endif
+" if !hasmapto('<Plug>AM_T?')	 |map <unique> <Leader>T?		<Plug>AM_T?|endif
+" if !hasmapto('<Plug>AM_T@')	 |map <unique> <Leader>T@		<Plug>AM_T@|endif
+" if !hasmapto('<Plug>AM_Tab') |map <unique> <Leader>Tab		<Plug>AM_Tab|endif
+" if !hasmapto('<Plug>AM_Tsp') |map <unique> <Leader>Tsp		<Plug>AM_Tsp|endif
+" if !hasmapto('<Plug>AM_T~')	 |map <unique> <Leader>T~		<Plug>AM_T~|endif
+
 " }
 
 

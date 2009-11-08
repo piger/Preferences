@@ -1,9 +1,17 @@
 [user]
-	name = sand
-	email = daniel@spatof.org
+    name = sand
+    email = daniel@spatof.org
+    signingkey = BFAC82CE
+
+[diff]
+    renames = copies
+
+[help]
+    # correction stile zsh :P dopo 3 secondi esegue il comando
+    autocorrect = 30
 
 [color]
-	branch = auto
-	diff = auto
-	interactive = auto
-	status = auto
+    ui = auto
+
+[alias]
+   ll = log --pretty=oneline 
