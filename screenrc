@@ -128,6 +128,11 @@ bindkey "^[^[OD" prev
 # urxvt (funziona.)
 bindkey "^[^[[D" prev
 
+# NOTA: come trovare gli escape su urxvt:
+# con lo Xdefaults attuale (commit 46d65dca6c24429624b795cd4f84ccbacfcfaf56)
+# bisogna lanciare urxvt SENZA SCREEN e usare la mia
+# funzione raw_kb().
+
 # prova
 #bindkey "^[<" eval number !echo $WINDOW-1|bc
 #bindkey "^[>" eval number !echo $WINDOW+1|bc
