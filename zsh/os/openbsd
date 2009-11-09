@@ -9,8 +9,6 @@ export OBSD_CVSROOT=anoncvs@anoncvs.at.openbsd.org:/cvs
 
 # -*- aliases
 if (( $+commands[gls] )); then
-	[[ ! -e ~/.dircolors ]] && gdircolors > ~/.dircolors
-	source ~/.dircolors
 	alias ls="gls --color=auto $ls_opts"
 else
 	alias ls="ls $ls_opts"

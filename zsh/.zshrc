@@ -29,6 +29,7 @@ setopt notify			# Avvisa subito dello status dei job in background, invece di
 						# aspettare un nuovo prompt
 setopt numeric_glob_sort	# Sort numerico per file contenenti numeri (a_00, a_01, ...)
 setopt print_exit_value		# Printa l'exit value quando e' diverso da zero
+setopt prompt_subst		# Esegue le varie expansion nel prompt (param expansions, command subst etc)
 setopt pushd_ignore_dups	# Purga i duplicati dallo stack delle directory
 #setopt pushd_silent		# Non printa lo stack delle dir dopo pushd o popd
 setopt NO_rm_star_silent	# Chiede conferma per: 'rm *' o 'rm /path/*'
@@ -67,10 +68,8 @@ end
 crand=$(( $chash % 9 ))
 crandname=$colnames[$crand]
 eval cprompt='%{${fg[$crandname]}%}'
-# PS1="[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# "
-
-# XXX da spostare tra le altre opzioni!
-setopt PROMPT_SUBST
+PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
+RPROMPT='${vcs_info_msg_0_}'
 
 # vcs_info
 if [[ $ZSH_VERSION == 4.<1->* || $ZSH_VERSION == <5->* ]]; then
@@ -87,7 +86,6 @@ if [[ $ZSH_VERSION == 4.<1->* || $ZSH_VERSION == <5->* ]]; then
     # XXX da spostare in una sezione apposita ?
     precmd () { vcs_info }
 fi
-PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c${vcs_info_msg_0_}%# '
 
 # Esperimento per opzione "shelltitle" di screen (shelltitle '% |zsh')
 #if [[ $TERM == screen* ]]; then
@@ -113,22 +111,45 @@ function no_precmd {
     #fi
 }
 
+precmd () {
+    (( $+functions[vcs_info] )) && vcs_info
+
+    # adjust title of xterm
+    # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
+    case $TERM in
+        (xterm*|rxvt*)
+            print -Pn "\e]0;%n@%m: %~\a"
+            ;;
+	(screen*)
+	    # print -Pn "\033k\033\134\033k%m[%1d]\033\134"
+	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
+	    ;;
+    esac
+}
+
 # Cambia il titolo della finestra di screen con il nome
 # dell'host verso cui si fa ssh.
 # $1 e' TUTTA la string del comando, argomenti compresi.
-function preexec () {
+preexec () {
     local -a cmd
     cmd=(${(z)1})
 
-    if [[ $TERM == screen* ]]; then
-	# Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
-	# titolo
-	if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
-	    echo -ne "\ek${cmd[-1]##*@}\e\\"
-	#else
-	#    echo -ne "\ek${1%% *}\e\\"
-	fi
-    fi
+    case $TERM in
+	(xterm*|rxvt*)
+            print -Pn "\e]0;%n@%m: $1\a"
+            ;;
+	(screen*)
+	    # Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
+	    # titolo
+	    if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
+		echo -ne "\ek${cmd[-1]##*@}\e\\"
+		#else
+		#    echo -ne "\ek${1%% *}\e\\"
+	    fi
+	    # print -Pn "\033k\033\134\033k%m[$1]\033\134"
+	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
+	    ;;
+    esac
 }
 
 #function title {
@@ -176,7 +197,7 @@ export FTP_PASSIVE=1
 # History
 HISTSIZE=2000
 SAVEHIST=10000
-HISTFILE=${HOME}/.history
+HISTFILE=$HOME/.history
 
 # Opzioni per less
 # -c	: pulisce lo schermo prima di mostrare il file
@@ -215,51 +236,22 @@ LOGCHECK=300		# check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
 
-# BINDINGS
-# --------
-[[ -e ${ZDOTDIR}/bind ]] && . ${ZDOTDIR}/bind
-
-
-# XXX DA SISTEMARE !!!
-# COSE che dipendono dal sistema operativo
-# ----------------------------------------
-[[ -e ${ZDOTDIR}/cose ]] && . ${ZDOTDIR}/cose
-
-
-# ALIASES
-# -------
-[[ -e ${ZDOTDIR}/alias ]] && . ${ZDOTDIR}/alias
-
-
-# COMPLETION
-# ----------
-zmodload zsh/complist
-autoload -U compinit && compinit
-[[ -e ${ZDOTDIR}/zcomp ]] && . ${ZDOTDIR}/zcomp
-
-
-# FUNCTIONS
-# ---------
-[[ -e ${ZDOTDIR}/zfunc ]] && . ${ZDOTDIR}/zfunc
-
-
-# BEN-VENUTO
-# ----------
-# Tutte le cazzate da mostrare quando si lancia una nuova shell, tipo
-# fortune, todo, etc...
-[[ -e ${ZDOTDIR}/welcome ]] && . ${ZDOTDIR}/welcome
-
-
-# LOCAL SETTINGS
-# --------------
-[[ -e ${ZDOTDIR}/local ]] && . ${ZDOTDIR}/local
-
-
 # AUTOLOAD
 # --------
-autoload -U zcalc
-autoload -U zmv
-autoload -U zargs
+zmodload zsh/complist
+autoload -U compinit && compinit
+autoload -U zcalc zmv zargs
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+# Other files
+source $ZDOTDIR/bind
+source $ZDOTDIR/cose
+source $ZDOTDIR/alias
+source $ZDOTDIR/zcomp
+source $ZDOTDIR/zfunc
+source $ZDOTDIR/welcome
+[[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
 
 # Non mi piace, ma lo segno per il futuro.
 ## # zsh-mime-setup

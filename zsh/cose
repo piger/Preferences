@@ -12,6 +12,8 @@ ls_opts='-F'
 # se l'user e' root mostra SEMPRE i file nascosti
 [[ $UID = 0 ]] && ls_opts='-FA'
 
+# LS_COLORS
+(( $+commands[dircolors] )) && eval $(dircolors -b)
 
 # OSTYPE prende il valore da un #define in compilazione,
 # non e' del tutto safe.

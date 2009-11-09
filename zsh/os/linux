@@ -3,8 +3,6 @@
 # ---------------------------------------------------------------
 
 # -*- aliases
-[[ ! -e ~/.dircolors ]] && dircolors > ~/.dircolors
-source ~/.dircolors
 alias ls="ls --color=auto $ls_opts"
 
 # DA VERIFICARE XXX !

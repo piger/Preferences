@@ -58,8 +58,28 @@ ignorecase on
 # quella giusta:
 # caption always "%{= kR} %?%-Lw%?%{= bk} %n*%f %t %{= kR}%?%+Lw%? %{= kR}%=%{= kw} %C%a %d-%m-%Y %{= kd}"
 
+#### SETTAGGI ATTUALI #
+# uso la hardstatus per il titolo dell'xterm, quindi non voglio messaggi
+# (leggi la man per capire questo oscuro messaggio).
+hardstatus alwayslastline
+## 
+## # Set the hardstatus prop on gui terms to set the titlebar/icon title
+## termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
+## 
+## # screen NUMERO (TITOLO) | user@host
+## defhstatus "screen ^E (^Et) | $USER@^EH"
+## 
 caption splitonly "%?%F%{.R.}%?%3n %t%? [%h]%?%= %C%a"
 hardstatus string "%{= kw}%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw %=%20`%d %M %Y, %10`"
+
+### SETTAGGI NUOVI ####
+## termcapinfo rxvt* 'hs:ts=\E]2;:fs=\007:ds=\E]2;\007'
+## hardstatus string "screen (%n: %t)"
+## 
+## # status line at the bottom, where it belongs
+## caption string "%{= kw}%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw %=%20`%d %M %Y, %10`"
+## caption always
+####
 
 backtick 10 	60	60		$HOME/bin/fuzzyclock.zsh
 backtick 20	60	60		$HOME/Preferences/screen/load
@@ -169,16 +189,6 @@ bind ^b focus bottom
 #termcapinfo vt100 dl=5\E[M
 
 # - Il titolo della finestra xterm/urxvt/etc...
-
-# uso la hardstatus per il titolo dell'xterm, quindi non voglio messaggi
-# (leggi la man per capire questo oscuro messaggio).
-hardstatus alwayslastline
-
-# Set the hardstatus prop on gui terms to set the titlebar/icon title
-#termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
-
-# screen NUMERO (TITOLO) | user@host
-defhstatus "screen ^E (^Et) | $USER@^EH"
 
 # set these terminals up to be 'optimal' instead of vt100
 # termcapinfo xterm*|linux*|rxvt*|Eterm* OP
