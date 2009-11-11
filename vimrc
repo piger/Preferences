@@ -249,6 +249,9 @@ if has("autocmd")
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
 
+	" tmux
+	au BufNewFile,BufRead ~/.tmux.conf,/etc/tmux.conf setl ft=tmux
+
 	" Il numero di riga con il tema oceanblack sembra OK
 	if has("gui_running")
 	    autocmd FileType python,perl,shell :setl number

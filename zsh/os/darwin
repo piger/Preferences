@@ -1,5 +1,5 @@
 # ===============================================================
-# ~/.zsh/os/solaris
+# ~/.zsh/os/darwin
 # ---------------------------------------------------------------
 
 # -*- aliases
@@ -9,13 +9,21 @@
 # -*- environment
 export CLICOLOR=1
 export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
-#[[ -e /sw/bin/init.sh ]] && source /sw/bin/init.sh
 
 # Mac Ports
-if [[ -d /opt/local ]]; then
-	path=( /opt/local/sbin /opt/local/bin $path )
+# definisce il path dei ports (e' una variabile mia, non serve
+# ai ports.)
+MACPORTS=/opt/local
+
+if [[ -d $MACPORTS ]]; then
+	path=( $MACPORTS/sbin $MACPORTS/bin $path )
 	# manpath non serve, perche' man sa dove cercare in base a $PATH
 	# manpath=( /opt/local/man /usr/share/man /usr/local/man $manpath )
+
+	# grep colorato
+	if [[ -x $MACPORTS/bin/grep ]]; then
+	    alias grep='grep --color=auto'
+	fi
 fi
 
 # vim: ft=zsh

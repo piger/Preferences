@@ -16,4 +16,6 @@ fi
 path=( $path[@] /opt/sfw/bin /usr/sfw/bin /usr/ccs/bin )
 [[ -d /usr/apache/bin ]] && path=( $path[@] /usr/apache/bin )
 
+#[[ -e /sw/bin/init.sh ]] && source /sw/bin/init.sh
+
 # vim: ft=zsh
