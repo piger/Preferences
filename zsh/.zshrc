@@ -72,7 +72,7 @@ PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 RPROMPT='${vcs_info_msg_0_}'
 
 # vcs_info
-if [[ $ZSH_VERSION == 4.<1->* || $ZSH_VERSION == <5->* ]]; then
+if [[ $ZSH_VERSION > 4.3.6 || $ZSH_VERSION == <5->* ]]; then
     # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
     autoload -Uz vcs_info
     zstyle ':vcs_info:*' enable git cvs svn
@@ -234,6 +234,11 @@ export EDITOR VISUAL
 watch=(notme)
 LOGCHECK=300		# check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
+
+# PYTHONSTARTUP per python in modalita' interattiva
+# (serve per la completion)
+PYTHONSTARTUP=~/.pythonrc
+export PYTHONSTARTUP
 
 
 # AUTOLOAD
