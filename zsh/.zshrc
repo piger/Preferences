@@ -72,7 +72,7 @@ PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 RPROMPT='${vcs_info_msg_0_}'
 
 # vcs_info
-if [[ $ZSH_VERSION > 4.3.6 || $ZSH_VERSION == <5->* ]]; then
+if [[ $ZSH_VERSION = (4.3.10|4.4*) ]]; then
     # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
     autoload -Uz vcs_info
     zstyle ':vcs_info:*' enable git cvs svn
@@ -82,9 +82,6 @@ if [[ $ZSH_VERSION > 4.3.6 || $ZSH_VERSION == <5->* ]]; then
     zstyle ':vcs_info:*' formats       \
     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-
-    # XXX da spostare in una sezione apposita ?
-    precmd () { vcs_info }
 fi
 
 # Esperimento per opzione "shelltitle" di screen (shelltitle '% |zsh')

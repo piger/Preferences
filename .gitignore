@@ -10,3 +10,4 @@ Pref-*.tar.gz
 *.zwc
 vim/.VimballRecord
 vim/GetLatest/*
+zsh/.zcalc_history
