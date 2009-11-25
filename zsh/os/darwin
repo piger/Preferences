@@ -21,9 +21,7 @@ if [[ -d $MACPORTS ]]; then
 	# manpath=( /opt/local/man /usr/share/man /usr/local/man $manpath )
 
 	# grep colorato
-	if [[ -x $MACPORTS/bin/grep ]]; then
-	    alias grep='grep --color=auto'
-	fi
+	[[ -x $MACPORTS/bin/grep ]] && alias grep='grep --color=auto'
 fi
 
 # vim: ft=zsh

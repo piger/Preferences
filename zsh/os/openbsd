@@ -5,7 +5,7 @@
 # -*- environment
 export OBSD_CVSROOT=anoncvs@anoncvs.at.openbsd.org:/cvs
 (( ${+PKG_PATH} )) ||
-	export PKG_PATH="ftp://ftp.kd85.com/pub/OpenBSD/"$uname[(w)3]"/packages/"$uname[(w)4]"/"
+	export PKG_PATH="ftp://ftp.kd85.com/pub/OpenBSD/4.6-EXAMPLE/packages/i386-EXAMPLE/"
 
 # -*- aliases
 if (( $+commands[gls] )); then
@@ -21,6 +21,7 @@ alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
 alias flavors='make show=FLAVORS'
 alias pdesc='make show=DESCRIPTION'
 
+# ?
 if [ -x /usr/libexec/locate.updatedb ]; then
 	alias hupdatedb="/usr/libexec/locate.updatedb \
 	--searchpaths=$HOME --prunepaths=\"/ $HOME/.vim\" \

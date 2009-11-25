@@ -71,114 +71,61 @@ eval cprompt='%{${fg[$crandname]}%}'
 PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 RPROMPT='${vcs_info_msg_0_}'
 
-# vcs_info
-if [[ $ZSH_VERSION = (4.3.10|4.4*) ]]; then
-    # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
-    autoload -Uz vcs_info
-    zstyle ':vcs_info:*' enable git cvs svn
+# vcs_info {{{
+### if [[ $ZSH_VERSION = (4.3.10|4.4*) ]]; then
+###     # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
+###     autoload -Uz vcs_info
+###     # il plugin bzr e' lento su linux/arch. - 24/Nov/09
+###     zstyle ':vcs_info:*' enable git svn 
+### 
+###     zstyle ':vcs_info:*' actionformats \
+###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+###     zstyle ':vcs_info:*' formats       \
+###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+###     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+### fi
+### 
+### precmd () {
+###     (( $+functions[vcs_info] )) && vcs_info
+### 
+###     # adjust title of xterm
+###     # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
+###     # case $TERM in
+###     #     (xterm*|rxvt*)
+###     #         print -Pn "\e]0;%n@%m: %~\a"
+###     #         ;;
+###     #     (screen*)
+###     #         # print -Pn "\033k\033\134\033k%m[%1d]\033\134"
+###     #         print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
+###     #         ;;
+###     # esac
+### }
 
-    zstyle ':vcs_info:*' actionformats \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-    zstyle ':vcs_info:*' formats       \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-    zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-fi
-
-# Esperimento per opzione "shelltitle" di screen (shelltitle '% |zsh')
-#if [[ $TERM == screen* ]]; then
-#    PROMPT=$'\ek\e\\[%T] '"${cprompt}%m${fdefault}"'%(1j.|%j.):%3c%# '
-#else
-#    PROMPT=$'[%T] '"${cprompt}%m${fdefault}"'%(1j.|%j.):%3c%# '
-#fi
-
-# utile con screen e un caption che mostri l'hardstatus della window
-# usato nelle shell remote e' comodo con la finestra splittata.
-function no_precmd {
-    case $TERM in
-    rxvt*|screen*|*xterm*|(dt|k)term|Eterm)
-	print -Pn "\e]2;%n@%m:%~\e\134"
-    ;;
-    linux)
-    ;;
-    esac
-
-    # resetta il titolo a "zsh" dopo un comando
-    #if [[ $TERM == screen* ]]; then
-    #    echo -ne "\ekzsh\e\\"
-    #fi
-}
-
-precmd () {
-    (( $+functions[vcs_info] )) && vcs_info
-
-    # adjust title of xterm
-    # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
-    case $TERM in
-        (xterm*|rxvt*)
-            print -Pn "\e]0;%n@%m: %~\a"
-            ;;
-	(screen*)
-	    # print -Pn "\033k\033\134\033k%m[%1d]\033\134"
-	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
-	    ;;
-    esac
-}
-
-# Cambia il titolo della finestra di screen con il nome
-# dell'host verso cui si fa ssh.
-# $1 e' TUTTA la string del comando, argomenti compresi.
-preexec () {
-    local -a cmd
-    cmd=(${(z)1})
-
-    case $TERM in
-	(xterm*|rxvt*)
-            print -Pn "\e]0;%n@%m: $1\a"
-            ;;
-	(screen*)
-	    # Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
-	    # titolo
-	    if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
-		echo -ne "\ek${cmd[-1]##*@}\e\\"
-		#else
-		#    echo -ne "\ek${1%% *}\e\\"
-	    fi
-	    # print -Pn "\033k\033\134\033k%m[$1]\033\134"
-	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
-	    ;;
-    esac
-}
-
-#function title {
-#  if [[ $TERM == "screen" ]]; then
-#    # Use these two for GNU Screen:
-#    print -nR $'\033k'$1$'\033'\\
-#
-#    print -nR $'\033]0;'$2$'\a'
-#  elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then
-#    # Use this one instead for XTerms:
-#    print -nR $'\033]0;'$*$'\a'
-#  fi
-#}
-
-# screen+zsh
-# da: http://stackoverflow.com/questions/171563/whats-in-your-zshrc/187877#187877
-# function title {
-#     if [[ $TERM == "screen"* ]]; then
-#         print -nR $'\033k'$1$'\033\\'
-#         print -nR $'\033]0;'$2$'\a'
-#     fi
-# }
-# 
-# function precmd {
-#     title "zsh" "$PWD"
-# }   
-# 
-# function preexec {
-#     emulate -L zsh
-#     local -a cmd; cmd=(${(z)1})
-#     title "$cmd[1]:t" "$cmd[2,-1]"
-# }
+### Cambia il titolo della finestra di screen con il nome
+### dell'host verso cui si fa ssh.
+### $1 e' TUTTA la string del comando, argomenti compresi.
+### no_preexec () {
+###     local -a cmd
+###     cmd=(${(z)1})
+### 
+###     case $TERM in
+### 	(xterm*|rxvt*)
+###             print -Pn "\e]0;%n@%m: $1\a"
+###             ;;
+### 	(screen*)
+### 	    # Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
+### 	    # titolo
+### 	    if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
+### 		echo -ne "\ek${cmd[-1]##*@}\e\\"
+### 		#else
+### 		#    echo -ne "\ek${1%% *}\e\\"
+### 	    fi
+### 	    # print -Pn "\033k\033\134\033k%m[$1]\033\134"
+### 	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
+### 	    ;;
+###     esac
+### }
+### }}}
 
 # ENVIRONMENT
 # -----------

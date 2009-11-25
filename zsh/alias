@@ -4,9 +4,11 @@
 # ----------------------------------------------------------
 # man zshexpn -> search Glob Qualifier
 
-alias mv='nocorrect mv'       	# no spelling correction on mv
-alias cp='nocorrect cp'       	# no spelling correction on cp
-alias mkdir='nocorrect mkdir' 	# no spelling correction on mkdir
+# 24/Nov/09 - provo a usare di default mv -i e cp -i
+# no spelling correction on mv, cp, mkdir
+alias mv='nocorrect mv -i'
+alias cp='nocorrect cp -i'
+alias mkdir='nocorrect mkdir'
 
 alias h="history"
 alias ll="ls -lh"

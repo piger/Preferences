@@ -12,8 +12,8 @@ bindkey -e
 WORDCHARS="${WORDCHARS:s#/#}"
 
 bindkey '\e[5~' up-history		# PageUp -> history up
-bindkey '\e[6~' down-history 	# PageDown -> history down
-bindkey '[Z' reverse-menu-complete # SHIFT+TAB per il tab "all'indietro"
+bindkey '\e[6~' down-history 		# PageDown -> history down
+bindkey '[Z' reverse-menu-complete	# SHIFT+TAB per il tab "all'indietro"
 
 # CTRL, ALT & co.
 bindkey '^z' undo			# CTRL+z per undo di expansion e completion

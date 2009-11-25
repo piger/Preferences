@@ -5,14 +5,11 @@
 # -*- aliases
 alias ls="ls --color=auto $ls_opts"
 
-# DA VERIFICARE XXX !
-#		if (( $+commands[slocate] )); then
-#			alias hupdatedb="sudo updatedb -U ${HOME} --output=${HOME}/.locatedb -e /home/dope/tmp,/home/dope/MuttMail,/home/dope/.cpan"
-#			alias hlocate="slocate --database=${HOME}/.locatedb $@"
-#		else
-#			alias hupdatedb="sudo updatedb --localpaths="$HOME" --output=$HOME/.locatedb --prunefs="/""
-#			alias hlocate="locate -d ${HOME}/.locatedb"
-#		fi
+# locate/updatedb solo per la $HOME
+if (( $+commands[updatedb] )); then
+    alias my_updatedb='updatedb -l 0 -o ~/.updatedb -U $HOME -e /,~/.cpan'
+    alias my_locate='locate -d ~/.updatedb'
+fi
 
 alias grep='grep --color=auto'
 
