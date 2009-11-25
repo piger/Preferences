@@ -1,10 +1,75 @@
-! 24/01/2008 - Sistemo per una buona volta i maledetti colori del terminale;
-! i colori piu' astrusi (tipo bright magenta) potrebbero non essere ottimali,
-! non li ho testai.
+! Xdefaults
+!
 ! riferimenti:
 ! http://mkaz.com/ref/XTerm_colors.html
 ! http://gentoo-wiki.com/TIP_Linux_Colors_in_Aterm/rxvt
 ! http://spatof.org/doc/guida_XTerm.txt
+!
+! rxvt-unicode, urxvt
+
+! From: http://wiki.archlinux.org/index.php/Urxvt
+
+URxvt.buffered: true
+URxvt.background: black
+URxvt.foreground: white
+URxvt.cursorColor: green
+URxvt.underlineColor: yellow
+URxvt.font: xft:Terminus:pixelsize=14:antialias=false
+URxvt.boldFont: xft:Terminus:bold:pixelsize=14:antialias=false
+!URxvt.perl-ext-common: default,tabbed,matcher
+! tolgo searchable-scrollback perche' conflitta con alt+s di zsh/sudo
+URxvt.perl-ext-common: default,matcher,-searchable-scrollback
+! URxvt.title: rxvt-unicode
+
+! my settings
+URxvt.saveLines: 2000
+URxvt.visualBell: True
+! sembra che depth 32 causi problemi
+! URxvt.depth: 32
+URxvt.urlLauncher: /usr/bin/firefox
+URxvt.matcher.button: 1
+URxvt.scrollBar: False
+! URxvt.modifier: alt
+! URxvt.meta8: False
+URxvt.loginShell: True
+
+! COLORS
+URxvt.background:  gray4
+URxvt.foreground:  FloralWhite
+
+! black
+URxvt.color0:      black
+! red
+URxvt.color1:      tomato2
+! green
+URxvt.color2:      SeaGreen3
+! yellow
+URxvt.color3:      gold1
+! blue
+URxvt.color4:      LightSkyBlue3
+! magenta
+URxvt.color5:      DeepPink2
+! cyan
+URxvt.color6:      LightSkyBlue
+! white
+URxvt.color7:      FloralWhite
+
+! bright black
+URxvt.color8:      gray5
+! bright red
+URxvt.color9:      brown1
+! bright green
+URxvt.color10:     chartreuse2
+! bright yellow
+URxvt.color11:     khaki1
+! bright blue
+URxvt.color12:     DodgerBlue2
+! bright magenta
+URxvt.color13:     VioletRed1
+! bright cyan
+URxvt.color14:     MediumTurquoise
+! bright white
+URxvt.color15:     white
 
 ! xterm
 ! !!!!!
@@ -64,67 +129,5 @@ XTerm*color13:     VioletRed1
 XTerm*color14:     MediumTurquoise
 ! bright white
 XTerm*color15:     white
-
-
-! rxvt-unicode / urxvt
-! !!!!!!!!!!!!!!!!!!!!
-
-! From: http://wiki.archlinux.org/index.php/Urxvt
-URxvt.buffered: true
-URxvt.background: black
-URxvt.foreground: white
-URxvt.cursorColor: green
-URxvt.underlineColor: yellow
-URxvt.font: xft:Terminus:pixelsize=14:antialias=false
-URxvt.boldFont: xft:Terminus:bold:pixelsize=14:antialias=false
-URxvt.perl-ext-common: default,tabbed,matcher
-URxvt.title: rxvt-unicode
-! end
-
-! Le mie aggiunte alla configurazione
-URxvt.saveLines: 2000
-URxvt.visualBell: True
-! URxvt.depth: 32	XXX Puo' causare problemi
-URxvt.urlLauncher: /usr/bin/firefox
-URxvt.matcher.button: 1
-URxvt.scrollBar: False
-
-! Colori scelti con amore
-URxvt.background:  gray4
-URxvt.foreground:  FloralWhite
-
-! black
-URxvt.color0:      black
-! red
-URxvt.color1:      tomato2
-! green
-URxvt.color2:      SeaGreen3
-! yellow
-URxvt.color3:      gold1
-! blue
-URxvt.color4:      LightSkyBlue3
-! magenta
-URxvt.color5:      DeepPink2
-! cyan
-URxvt.color6:      LightSkyBlue
-! white
-URxvt.color7:      FloralWhite
-
-! bright black
-URxvt.color8:      gray5
-! bright red
-URxvt.color9:      brown1
-! bright green
-URxvt.color10:     chartreuse2
-! bright yellow
-URxvt.color11:     khaki1
-! bright blue
-URxvt.color12:     DodgerBlue2
-! bright magenta
-URxvt.color13:     VioletRed1
-! bright cyan
-URxvt.color14:     MediumTurquoise
-! bright white
-URxvt.color15:     white
 
 ! vim: ft=xdefaults
