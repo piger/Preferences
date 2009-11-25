@@ -257,6 +257,9 @@ if has("autocmd")
 	    autocmd FileType python,perl,shell :setl number
 	endif
 
+	" ignore le modeline nei commit di git.
+	autocmd BufNewFile,BufRead COMMIT_EDITMSG :let g:secure_modelines_modelines=0
+
 
 	" template vuoti!
 	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
