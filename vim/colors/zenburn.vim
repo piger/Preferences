@@ -1,7 +1,7 @@
 " Vim color file
-" Maintainer:   Jani Nurminen <jani.nurminen@pp4.inet.fi>
-" Last Change:  $Id: zenburn.vim,v 1.15 2006/09/07 15:57:46 jnurmine Exp $
-" URL:      	http://slinky.imukuppi.org/zenburn/
+" Maintainer:   Jani Nurminen <slinky@iki.fi>
+" Last Change:  $Id: zenburn.vim,v 2.4 2008/11/18 20:43:18 slinky Exp $
+" URL:          http://slinky.imukuppi.org/zenburnpage/
 " License:      GPL
 "
 " Nothing too fancy, just some alien fruit salad to keep you in the zone.
@@ -20,6 +20,9 @@
 "  - Steve Hall & Cream posse - higher-contrast Visual selection
 "  - Kurt Maier - 256 color console coloring, low and high contrast toggle,
 "                 bug fixing
+"  - Charlie - spotted too bright StatusLine in non-high contrast mode
+"  - Pablo Castellazzi - CursorLine fix for 256 color mode
+"  - Tim Smith - force dark background
 "
 " CONFIGURABLE PARAMETERS:
 " 
@@ -44,6 +47,12 @@
 "     
 "      let g:zenburn_alternate_Include = 1
 "
+" * Work-around to a Vim bug, it seems to misinterpret ctermfg and 234 and 237
+"   as light values, and sets background to light for some people. If you have
+"   this problem, use:
+"
+"      let g:zenburn_force_dark_Background = 1
+"
 " * To turn the parameter(s) back to defaults, use UNLET:
 "
 "      unlet g:zenburn_alternate_Include
@@ -55,8 +64,6 @@
 " TODO
 "   - Visual alternate color is broken? Try GVim >= 7.0.66 if you have trouble
 "   - IME colouring (CursorIM)
-"   - obscure syntax groups: check and colourize
-"   - add more groups if necessary
 
 set background=dark
 hi clear          
@@ -106,7 +113,7 @@ hi SpecialComment  guifg=#82a282 gui=bold
 hi Special         guifg=#cfbfaf
 hi SpecialKey      guifg=#9ece9e
 hi Statement       guifg=#e3ceab gui=none
-hi StatusLine      guifg=#2e4340 guibg=#ccdc90
+hi StatusLine      guifg=#313633 guibg=#ccdc90
 hi StatusLineNC    guifg=#2e3330 guibg=#88b090
 hi StorageClass    guifg=#c3bf9f gui=bold
 hi String          guifg=#cc9393
@@ -117,10 +124,15 @@ hi Todo            guifg=#dfdfdf guibg=bg gui=bold
 hi Typedef         guifg=#dfe4cf gui=bold
 hi Type            guifg=#dfdfbf gui=bold
 hi Underlined      guifg=#dcdccc gui=underline
-hi VertSplit       guifg=#303030 guibg=#688060
+hi VertSplit       guifg=#2e3330 guibg=#688060
 hi VisualNOS       guifg=#333333 guibg=#f18c96 gui=bold,underline
 hi WarningMsg      guifg=#ffffff guibg=#333333 gui=bold
 hi WildMenu        guibg=#2c302d guifg=#cbecd0 gui=underline
+
+hi SpellBad   guisp=#bc6c4c guifg=#dc8c6c
+hi SpellCap   guisp=#6c6c9c guifg=#8c8cbc
+hi SpellRare  guisp=#bc6c9c guifg=#bc8cbc
+hi SpellLocal guisp=#7cac7c guifg=#9ccc9c
 
 " Entering Kurt zone
 if &t_Co > 255
@@ -165,8 +177,8 @@ if &t_Co > 255
     hi Special         ctermfg=181  
     hi SpecialKey      ctermfg=151  
     hi Statement       ctermfg=187   ctermbg=234     cterm=none
-    hi StatusLine      ctermfg=237   ctermbg=186    
-    hi StatusLineNC    ctermfg=236   ctermbg=108    
+    hi StatusLine      ctermfg=236   ctermbg=186    
+    hi StatusLineNC    ctermfg=235   ctermbg=108    
     hi StorageClass    ctermfg=249   cterm=bold
     hi String          ctermfg=174  
     hi Structure       ctermfg=229   cterm=bold
@@ -180,6 +192,18 @@ if &t_Co > 255
     hi VisualNOS       ctermfg=236   ctermbg=210     cterm=bold
     hi WarningMsg      ctermfg=15    ctermbg=236     cterm=bold
     hi WildMenu        ctermbg=236   ctermfg=194     cterm=bold
+    hi CursorLine      ctermbg=236   cterm=none
+
+    " spellchecking, always "bright" background
+    hi SpellLocal ctermfg=14  ctermbg=237
+    hi SpellBad   ctermfg=9   ctermbg=237
+    hi SpellCap   ctermfg=12  ctermbg=237
+    hi SpellRare  ctermfg=13  ctermbg=237
+  
+    " pmenu
+    hi PMenu      ctermfg=248  ctermbg=0
+    hi PMenuSel   ctermfg=223 ctermbg=235
+
     if exists("g:zenburn_high_Contrast")
         hi Normal ctermfg=188 ctermbg=234
     else
@@ -207,14 +231,44 @@ if &t_Co > 255
     endif
 endif
 
+if exists("g:zenburn_force_dark_Background")
+    " Force dark background, because of a bug in VIM:  VIM sets background
+    " automatically during "hi Normal ctermfg=X"; it misinterprets the high
+    " value (234 or 237 above) as a light color, and wrongly sets background to
+    " light.  See ":help highlight" for details.
+    set background=dark
+endif
 
 if exists("g:zenburn_high_Contrast")
     " use new darker background
     hi Normal          guifg=#dcdccc guibg=#1f1f1f
+    hi CursorLine      guibg=#121212 gui=bold
+    hi Pmenu           guibg=#242424 guifg=#ccccbc
+    hi PMenuSel        guibg=#353a37 guifg=#ccdc90 gui=bold
+    hi PmenuSbar       guibg=#2e3330 guifg=#000000
+    hi PMenuThumb      guibg=#a0afa0 guifg=#040404 
+    hi MatchParen      guifg=#f0f0c0 guibg=#383838 gui=bold
+    hi SignColumn      guifg=#9fafaf guibg=#181818 gui=bold
+    hi TabLineFill     guifg=#cfcfaf guibg=#181818 gui=bold
+    hi TabLineSel      guifg=#efefef guibg=#1c1c1b gui=bold
+    hi TabLine         guifg=#b6bf98 guibg=#181818 gui=bold
+    hi CursorColumn    guifg=#dcdccc guibg=#2b2b2b
 else
     " Original, lighter background
     hi Normal          guifg=#dcdccc guibg=#3f3f3f
+    hi CursorLine      guibg=#434443
+    hi Pmenu           guibg=#2c2e2e guifg=#9f9f9f
+    hi PMenuSel        guibg=#242424 guifg=#d0d0a0 gui=bold
+    hi PmenuSbar       guibg=#2e3330 guifg=#000000
+    hi PMenuThumb      guibg=#a0afa0 guifg=#040404 
+    hi MatchParen      guifg=#b2b2a0 guibg=#2e2e2e gui=bold
+    hi SignColumn      guifg=#9fafaf guibg=#343434 gui=bold
+    hi TabLineFill     guifg=#cfcfaf guibg=#353535 gui=bold
+    hi TabLineSel      guifg=#efefef guibg=#3a3a39 gui=bold
+    hi TabLine         guifg=#b6bf98 guibg=#353535 gui=bold
+    hi CursorColumn    guifg=#dcdccc guibg=#4f4f4f
 endif
+    
 
 if exists("g:zenburn_alternate_Visual")
     " Visual with more contrast, thanks to Steve Hall & Cream posse
@@ -242,4 +296,4 @@ else
     " new, less contrasted one
     hi Include         guifg=#dfaf8f gui=bold
 endif
-    " TODO check every syntax group that they're ok
+    " TODO check for more obscure syntax groups that they're ok
