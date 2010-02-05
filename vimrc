@@ -214,6 +214,9 @@ if filereadable($HOME . "/.twitter.vim")
     source $HOME/.twitter.vim
 endif
 
+" FuzzyFinder
+let g:fuf_infoFile = '~/.vim/vim-fuf'
+
 " MiniBufExplorer
 let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1
