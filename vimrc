@@ -140,9 +140,15 @@ if has("gui_running")
     
     "colorscheme dw_orange-256colors
     "colorscheme asu1dark-256colors
-    colorscheme oceanblack
+    if has("gui_macvim")
+	colorscheme molokai
+	set guifont=Monaco:h12
+    else
+	colorscheme oceanblack
+    endif
 else
-    colorscheme asu1dark
+    " non ha GUI running
+    colorscheme dante
 endif
 " }
 
@@ -177,11 +183,16 @@ set noexpandtab
 let python_highlight_all=1		" full syntax highlighting ?
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
-let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
+
+" NERDTree
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
+
+" GetLatestVimScripts
 let g:GetLatestVimScripts_allowautoinstall=1	" XXX da verificare
-" aggiungo "foldlevel"
+
+" Secure Modelines
+let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
 let g:secure_modelines_allowed_items = [
 	    \ "textwidth",   "tw",
 	    \ "softtabstop", "sts",
@@ -202,6 +213,17 @@ let g:secure_modelines_allowed_items = [
 if filereadable($HOME . "/.twitter.vim")
     source $HOME/.twitter.vim
 endif
+
+" MiniBufExplorer
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
+
+" There is a VIM bug that can cause buffers to show up without
+" their highlighting. The following setting will cause MBE to
+" try and turn highlighting back on (introduced in 6.3.1):
+let g:miniBufExplForceSyntaxEnable = 1
 " }
 
 
