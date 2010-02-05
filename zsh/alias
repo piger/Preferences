@@ -10,6 +10,9 @@ alias mv='nocorrect mv -i'
 alias cp='nocorrect cp -i'
 alias mkdir='nocorrect mkdir'
 
+alias pu='pushd'
+alias po='popd'
+
 alias h="history"
 alias ll="ls -lh"
 alias la="ls -a"

@@ -171,6 +171,10 @@ else
 fi
 export EDITOR VISUAL
 
+# grep colors (highlight verde)
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
+
 # ssh-askpass, utility grafica
 (($+commands[ssh-askpass] )) && export SSH_ASKPASS=ssh-askpass
 

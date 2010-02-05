@@ -328,4 +328,9 @@ rscreen () {
     autossh -t $1 "screen -e^Ff -daAR"
 }
 
+# da oh-my-zsh
+function zsh_stats() {
+  history | awk '{print $2}' | sort | uniq -c | sort -rn | head
+}
+
 # vim: ft=zsh
