@@ -1,4 +1,11 @@
-import readline, rlcompleter
-readline.parse_and_bind("tab: complete")
+# Questo non funzizona su Snow Leopard
+#import readline, rlcompleter
+#readline.parse_and_bind("tab: complete")
+
+# questo funziona su Snow Leopard:
+# http://stackoverflow.com/questions/675370/tab-completion-in-python-interpreter-in-os-x-terminal
+import rlcompleter
+import readline
+readline.parse_and_bind ("bind ^I rl_complete")
 
 # vim: ft=python
