@@ -229,6 +229,14 @@ let g:miniBufExplModSelTarget = 1
 " their highlighting. The following setting will cause MBE to
 " try and turn highlighting back on (introduced in 6.3.1):
 let g:miniBufExplForceSyntaxEnable = 1
+
+" python complete
+" Funziona solo se vim e' compilato con python. Lo script originale BARFA
+" un orrendo messaggio di errore che va commentato.
+" if !has('python')
+"---->"echo "Error: Required vim compiled with +python"
+"     finish
+" endif
 " }
 
 
