@@ -118,6 +118,7 @@ if has("gui_running")
 	" set guifont=Liberation\ Mono\ 9
 	" set guifont=ProggySquareTT\ 12
 	set guifont=Terminus\ 10
+	colorscheme oceanblack
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
     elseif has("x11")
@@ -125,6 +126,13 @@ if has("gui_running")
 	:set guifont=-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
     elseif has("gui_win32")
 	:set guifont=Luxi_Mono:h12:cANSI
+    elseif has("gui_macvim")
+	colorscheme molokai
+	set guifont=Monaco:h12
+	set lines=37
+	set columns=107
+    else
+	colorscheme oceanblack
     endif
 
     set mousehide	" Hide the mouse when typing text
@@ -140,12 +148,6 @@ if has("gui_running")
     
     "colorscheme dw_orange-256colors
     "colorscheme asu1dark-256colors
-    if has("gui_macvim")
-	colorscheme molokai
-	set guifont=Monaco:h12
-    else
-	colorscheme oceanblack
-    endif
 else
     " non ha GUI running
     colorscheme dante
