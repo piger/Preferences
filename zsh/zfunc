@@ -333,4 +333,9 @@ function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
 }
 
+# pulizia file python .pyc senza corrispondente .py
+pulizia_python () {
+    rm -i *.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
+}
+
 # vim: ft=zsh
