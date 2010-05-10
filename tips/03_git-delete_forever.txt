@@ -1,0 +1,29 @@
+- Io ho usato:
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch dir/*.txt' HEAD
+
+- Ma un tizio consigliava su:
+http://git.661346.n2.nabble.com/Removing-some-files-from-history-td1344670.html
+
+git filter-branch --index-filter 'git rm --cached secret' -- --all 
+
+or 
+
+git filter-branch --tree-filter 'rm -f secret' -- --all 
+
+where 'secret' is the name of the file to be removed. 
+
+- Questo l'ho fatto -->
+After that, make sure you clean up your repo before publishing: 
+Clean out the original references (command on 1 line): 
+
+git for-each-ref  --format='%(refname)' refs/original |while read ref; 
+do git update-ref -d $ref;done 
+
+Clean out the reflog: 
+
+git reflog --expire=0 expire 
+
+Remove the old objects and packs: 
+
+git prune 
+git repack -adf 
