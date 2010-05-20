@@ -1,0 +1,6 @@
+VERSION	300
+file	stats	{'word': '/Users/sand/dev/report_helpers/faitu.py', 'pattern': '/Users/sand/dev/report_helpers/'}
+file	stats	{'word': '/Users/sand/dev/report_helpers/', 'pattern': '~/dev/re'}
+dir	stats	{'word': 'dev/report_helpers/.', 'pattern': 'dev/report_helpers/'}
+dir	stats	{'word': 'dev/report_helpers/', 'pattern': 'dev/re'}
+dir	stats	{'word': 'dev/', 'pattern': 'dev'}

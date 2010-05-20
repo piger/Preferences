@@ -78,9 +78,8 @@ function s:formatItemUsingCache(item)
   endif
   if !exists('s:cache[a:item.word]')
     if filereadable(a:item.word)
-      let s:cache[a:item.word] = fuf#makePathItem(fnamemodify(a:item.word, ':~'), 0)
-      let s:cache[a:item.word].time = a:item.time
-      call fuf#setMenuWithFormattedTime(s:cache[a:item.word])
+      let s:cache[a:item.word] = fuf#makePathItem(
+            \ fnamemodify(a:item.word, ':~'), strftime(g:fuf_timeFormat, a:item.time), 0)
     else
       let s:cache[a:item.word] = {}
     endif
@@ -101,7 +100,12 @@ endfunction
 
 "
 function s:handler.getPrompt()
-  return g:fuf_mrufile_prompt
+  return fuf#formatPrompt(g:fuf_mrufile_prompt, self.partialMatching)
+endfunction
+
+"
+function s:handler.getPreviewHeight()
+  return g:fuf_previewHeight
 endfunction
 
 "
@@ -110,15 +114,24 @@ function s:handler.targetsPath()
 endfunction
 
 "
-function s:handler.onComplete(patternSet)
-  return fuf#filterMatchesAndMapToSetRanks(
-        \ self.items, a:patternSet,
-        \ self.getFilteredStats(a:patternSet.raw), self.targetsPath())
+function s:handler.makePatternSet(patternBase)
+  return fuf#makePatternSet(a:patternBase, 's:interpretPrimaryPatternForPath',
+        \                   self.partialMatching)
 endfunction
 
 "
-function s:handler.onOpen(expr, mode)
-  call fuf#openFile(a:expr, a:mode, g:fuf_reuseWindow)
+function s:handler.makePreviewLines(word, count)
+  return fuf#makePreviewLinesForFile(a:word, a:count, self.getPreviewHeight())
+endfunction
+
+"
+function s:handler.getCompleteItems(patternPrimary)
+  return self.items
+endfunction
+
+"
+function s:handler.onOpen(word, mode)
+  call fuf#openFile(a:word, a:mode, g:fuf_reuseWindow)
 endfunction
 
 "
