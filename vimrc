@@ -127,8 +127,10 @@ if has("gui_running")
     elseif has("gui_win32")
 	:set guifont=Luxi_Mono:h12:cANSI
     elseif has("gui_macvim")
-	colorscheme molokai
-	set guifont=Monaco:h12
+	"colorscheme molokai
+	colorscheme habilight
+	" set guifont=Monaco:h12
+	set guifont=DehaVu\ Sans\ Mono:h12
 	set lines=37
 	set columns=107
     else
@@ -182,7 +184,7 @@ set noexpandtab
 
 
 " Opzioni plugin & co {
-let python_highlight_all=1		" full syntax highlighting ?
+let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
 
@@ -237,6 +239,9 @@ let g:miniBufExplForceSyntaxEnable = 1
 "---->"echo "Error: Required vim compiled with +python"
 "     finish
 " endif
+
+" python syntax (syntax/python.vim)
+let python_slow_sync = 1
 " }
 
 
@@ -269,17 +274,64 @@ if has("autocmd")
 	
 	" backup in $PWD e altro (da aggiungere)
 	" autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
+	augroup PenPen
+	    au!
+	    au BufNewFile,BufRead /home/pentest/* setl backupdir=.
+	augroup END
 	
 	" For all text files set 'textwidth' to 78 characters.
 	" autocmd FileType text setlocal textwidth=78
 	"autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
 
 	" http://svn.python.org/projects/python/trunk/Misc/Vim/vimrc
-	autocmd FileType python :setl ts=8 sw=4 sts=4 expandtab tw=80 smarttab autoindent smartindent
+	""" autocmd FileType python :setl ts=8 sw=4 sts=4 expandtab tw=80 smarttab autoindent smartindent
+	""" autocmd FileType python setl omnifunc=pythoncomplete#Complete
+	""" autocmd FileType python setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+	""" autocmd FileType python setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+	"autocmd FileType python set complete+=k~/.vim/syntax/python.vim isk+=.,(
+	" Esegue lo script con <Shift> + e:
+	" autocmd FileType python map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
+	
+	" I commenti in python, con "smartindent", vanno sempre a inizio riga;
+	" questo fixa 'sto behaviour
+	" http://stackoverflow.com/questions/2360249/vim-automatically-removes-indentation-on-python-comments
+	""" autocmd FileType python inoremap # X#
 
 	" sia perl che python
-	autocmd FileType python,perl :setl foldcolumn=2
-	autocmd FileType python :setl foldmethod=indent
+	""" autocmd FileType python,perl :setl foldcolumn=2
+	""" autocmd FileType python :setl foldmethod=indent
+
+	" raggruppo gli autocmd per Python
+	augroup Pitone
+	    autocmd!
+
+	    " http://svn.python.org/projects/python/trunk/Misc/Vim/vimrc
+	    au FileType python setl ts=8
+	    au FileType python setl sw=4
+	    au FileType python setl sts=4
+	    au FileType python setl tw=80
+	    au FileType python setl expandtab
+	    au FileType python setl smarttab
+	    au FileType python setl autoindent
+	    au FileType python setl smartindent
+	    au FileType python setl omnifunc=pythoncomplete#Complete
+	    au FileType python setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+	    au FileType python setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+
+	    " I commenti in python, con "smartindent", vanno sempre a inizio riga;
+	    " questo fixa 'sto behaviour
+	    " http://stackoverflow.com/questions/2360249/vim-automatically-removes-indentation-on-python-comments
+	    au FileType python inoremap # X#
+
+	    au FileType python setl foldcolumn=2
+	    au FileType python setl foldmethod=indent
+
+	    " line number con la GUI
+	    if has("gui_running")
+		au FileType python setl number
+	    endif
+
+	augroup END
 
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
@@ -289,12 +341,11 @@ if has("autocmd")
 
 	" Il numero di riga con il tema oceanblack sembra OK
 	if has("gui_running")
-	    autocmd FileType python,perl,shell :setl number
+	    autocmd FileType perl,shell :setl number
 	endif
 
 	" ignore le modeline nei commit di git.
 	autocmd BufNewFile,BufRead COMMIT_EDITMSG :let g:secure_modelines_modelines=0
-
 
 	" template vuoti!
 	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
@@ -487,6 +538,23 @@ endif
 " qa2f/ly$:.!host CTRL-r"<c-r>jq
 "
 " HAI CAPITO? CTRL-r INCOLLA NELLA COMMAND LINE! e -> " <- e' l'unnamed register
+" }
+
+
+" python {
+" Aggiunge al path di ricerca di vim (per i comandi gf, :find, etc) il
+" sys.path di python. NOTA: "import vim" funziona solo dentro vim?
+if has('python')
+    python << EOF
+import os
+import sys
+import vim
+for p in sys.path:
+    if os.path.isdir(p):
+	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+EOF
+
+endif
 " }
 
 
