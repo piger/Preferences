@@ -1,6 +1,7 @@
 vim/backups
 vim/swap
 vim/view
+vim/vim-fuf
 zsh/uname.cache
 zsh/.zcompdump
 zsh/.zcompcache

@@ -11,3 +11,5 @@ ScriptID SourceID Filename
 1658 10767 NERD_tree.vim
 2390 10336 CSApprox.vim
 102 9375 DirDiff.vim
+1066 1 :AutoInstall: cecutil.vim
+2204 1 twitvim.vim
