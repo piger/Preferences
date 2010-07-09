@@ -193,7 +193,7 @@ let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
 
 " GetLatestVimScripts
-let g:GetLatestVimScripts_allowautoinstall=1	" XXX da verificare
+"let g:GetLatestVimScripts_allowautoinstall=1	" XXX da verificare
 
 " Secure Modelines
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
@@ -260,15 +260,6 @@ if has("autocmd")
     if !exists("autocommands_loaded")
 	let autocommands_loaded = 1
 
-	" su alcuni vim purtroppo questa feature non c'e' :(
-	"if exists('+autochdir')
-	"    set autochdir		" switch sempre alla dir del file aperto
-	"else
-	"    " da: http://vim.wikia.com/wiki/Change_to_the_directory_of_the_current_file
-	"    " autocmd BufEnter * silent! lcd %:p:h:gs/ /\\ /
-	"    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent! lcd %:p:h:gs/ /\\ / | endif
-	"endif
-
 	" autocmd BufNewFile,BufRead *.txt set filetype=human
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
 	
@@ -281,58 +272,18 @@ if has("autocmd")
 	
 	" For all text files set 'textwidth' to 78 characters.
 	" autocmd FileType text setlocal textwidth=78
-	"autocmd FileType python :setl ts=8 sw=4 sts=4 noet tw=80 smarttab smartindent
 
-	" http://svn.python.org/projects/python/trunk/Misc/Vim/vimrc
-	""" autocmd FileType python :setl ts=8 sw=4 sts=4 expandtab tw=80 smarttab autoindent smartindent
-	""" autocmd FileType python setl omnifunc=pythoncomplete#Complete
-	""" autocmd FileType python setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-	""" autocmd FileType python setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-	"autocmd FileType python set complete+=k~/.vim/syntax/python.vim isk+=.,(
 	" Esegue lo script con <Shift> + e:
 	" autocmd FileType python map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
 	
-	" I commenti in python, con "smartindent", vanno sempre a inizio riga;
-	" questo fixa 'sto behaviour
-	" http://stackoverflow.com/questions/2360249/vim-automatically-removes-indentation-on-python-comments
-	""" autocmd FileType python inoremap # X#
-
 	" sia perl che python
 	""" autocmd FileType python,perl :setl foldcolumn=2
 	""" autocmd FileType python :setl foldmethod=indent
 
-	" raggruppo gli autocmd per Python
-	augroup Pitone
-	    autocmd!
-
-	    " http://svn.python.org/projects/python/trunk/Misc/Vim/vimrc
-	    au FileType python setl ts=8
-	    au FileType python setl sw=4
-	    au FileType python setl sts=4
-	    au FileType python setl tw=80
-	    au FileType python setl expandtab
-	    au FileType python setl smarttab
-	    au FileType python setl autoindent
-	    au FileType python setl smartindent
-	    au FileType python setl omnifunc=pythoncomplete#Complete
-	    au FileType python setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-	    au FileType python setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-
-	    " I commenti in python, con "smartindent", vanno sempre a inizio riga;
-	    " questo fixa 'sto behaviour
-	    " http://stackoverflow.com/questions/2360249/vim-automatically-removes-indentation-on-python-comments
-	    au FileType python inoremap # X#
-
-	    au FileType python setl foldcolumn=2
-	    au FileType python setl foldmethod=indent
-
-	    " line number con la GUI
-	    if has("gui_running")
-		au FileType python setl number
-	    endif
-
-	augroup END
-
+	" Per python uso ftplugin/python.vim
+	au BufNewFile *.py setl fileformat=unix
+	au BufNewFile *.py setl encoding=utf-8
+	
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
 
@@ -552,6 +503,10 @@ import vim
 for p in sys.path:
     if os.path.isdir(p):
 	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+    fd = open("/tmp/sucalora.log", "w")
+    fd.write(dir(vim))
+    fd.write("\n")
+    fd.close()
 EOF
 
 endif
