@@ -232,6 +232,12 @@ let g:miniBufExplModSelTarget = 1
 " try and turn highlighting back on (introduced in 6.3.1):
 let g:miniBufExplForceSyntaxEnable = 1
 
+" FuzzyFinder
+let g:fuf_ignoreCase = 1
+let g:fuf_modesDisable = []
+let g:fuf_mrufile_maxItem = 300
+let g:fuf_mrucmd_maxItem = 400
+
 " python complete
 " Funziona solo se vim e' compilato con python. Lo script originale BARFA
 " un orrendo messaggio di errore che va commentato.
@@ -398,31 +404,30 @@ nmap <Leader>rot ggVGg?
 " NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
 
-" Fuzzyfinder (from the example):
-let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'Dir':{}, 'MruFile':{}, 'MruCmd':{}, 'FavFile':{}, 'Tag':{}, 'TaggedFile':{}}
-let g:FuzzyFinderOptions.Base.ignore_case = 1
-"let g:FuzzyFinderOptions.Base.abbrev_map  = {
-"      \   '\C^VR' : [
-"      \     '$VIMRUNTIME/**',
-"      \     '~/.vim/**',
-"      \     '$VIM/.vim/**',
-"      \     '$VIM/vimfiles/**',
-"      \   ],
-"      \ }
-let g:FuzzyFinderOptions.MruFile.max_item = 200
-let g:FuzzyFinderOptions.MruCmd.max_item = 200
-nnoremap <silent> <C-n>      :FuzzyFinderBuffer<CR>
-nnoremap <silent> <C-m>      :FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-nnoremap <silent> <C-j>      :FuzzyFinderMruFile<CR>
-nnoremap <silent> <C-k>      :FuzzyFinderMruCmd<CR>
-nnoremap <silent> <C-p>      :FuzzyFinderDir <C-r>=expand('%:p:~')[:-1-len(expand('%:p:~:t'))]<CR><CR>
-nnoremap <silent> <C-f><C-d> :FuzzyFinderDir<CR>
-nnoremap <silent> <C-f><C-f> :FuzzyFinderFavFile<CR>
-nnoremap <silent> <C-f><C-t> :FuzzyFinderTag!<CR>
-nnoremap <silent> <C-f><C-g> :FuzzyFinderTaggedFile<CR>
-noremap  <silent> g]         :FuzzyFinderTag! <C-r>=expand('<cword>')<CR><CR>
-nnoremap <silent> <C-f>F     :FuzzyFinderAddFavFile<CR>
-nnoremap <silent> <C-f><C-e> :FuzzyFinderEditInfo<CR>
+" Fuzzyfinder (dall'esempio nel man):
+nnoremap <silent> <C-n>      :FufBuffer<CR>
+nnoremap <silent> <C-p>      :FufFileWithCurrentBufferDir<CR>
+nnoremap <silent> <C-f><C-p> :FufFileWithFullCwd<CR>
+nnoremap <silent> <C-f>p     :FufFile<CR>
+nnoremap <silent> <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
+nnoremap <silent> <C-f>d     :FufDirWithFullCwd<CR>
+nnoremap <silent> <C-f>D     :FufDir<CR>
+nnoremap <silent> <C-j>      :FufMruFile<CR>
+nnoremap <silent> <C-k>      :FufMruCmd<CR>
+nnoremap <silent> <C-b>      :FufBookmark<CR>
+nnoremap <silent> <C-f><C-t> :FufTag<CR>
+nnoremap <silent> <C-f>t     :FufTag!<CR>
+noremap  <silent> g]         :FufTagWithCursorWord!<CR>
+nnoremap <silent> <C-f><C-f> :FufTaggedFile<CR>
+nnoremap <silent> <C-f><C-j> :FufJumpList<CR>
+nnoremap <silent> <C-f><C-g> :FufChangeList<CR>
+nnoremap <silent> <C-f><C-q> :FufQuickfix<CR>
+nnoremap <silent> <C-f><C-l> :FufLine<CR>
+nnoremap <silent> <C-f><C-h> :FufHelp<CR>
+nnoremap <silent> <C-f><C-b> :FufAddBookmark<CR>
+vnoremap <silent> <C-f><C-b> :FufAddBookmarkAsSelectedText<CR>
+nnoremap <silent> <C-f><C-e> :FufEditInfo<CR>
+nnoremap <silent> <C-f><C-r> :FufRenewCache<CR>
 
 "   * bufexplorer
 "   <Leader>be  - Opens BufExplorer
@@ -461,6 +466,14 @@ nnoremap <silent> <C-f><C-e> :FuzzyFinderEditInfo<CR>
 " if !hasmapto('<Plug>AM_Tab') |map <unique> <Leader>Tab		<Plug>AM_Tab|endif
 " if !hasmapto('<Plug>AM_Tsp') |map <unique> <Leader>Tsp		<Plug>AM_Tsp|endif
 " if !hasmapto('<Plug>AM_T~')	 |map <unique> <Leader>T~		<Plug>AM_T~|endif
+
+" taglist (il plugin)
+map <Leader>P :TlistToggle<CR>
+" Displaying tags for only one file~
+" The taglist window displays the tags for all the files in the Vim buffer list
+" and all the manually added files. To display the tags for only the current
+" active buffer, set the 'Tlist_Show_One_File' variable to 1.
+let Tlist_Show_One_File = 1
 
 " }
 
