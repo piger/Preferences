@@ -99,6 +99,17 @@ endif
 " }
 
 
+" Lingua e dizionari {
+set spelllang=it,en,en_US
+set dictionary=/usr/share/dict/words
+
+" thesaurus (sinonimi) italiano:
+" http://linguistico.sourceforge.net/pages/thesaurus_italiano.html
+" http://www.thegeekstuff.com/2008/12/vi-and-vim-editor-3-steps-to-enable-thesaurus-option/
+set thesaurus+=/Users/sand/Documents/thesaurus/mthesaur.txt
+" }
+
+
 " GUI e colori {
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
@@ -239,6 +250,12 @@ let g:fuf_mrufile_maxItem = 300
 let g:fuf_mrucmd_maxItem = 400
 
 " python complete
+" VALUTARE pydiction:
+" http://www.vim.org/scripts/script.php?script_id=850
+"
+" INFO:
+" http://dancingpenguinsoflight.com/2009/02/python-and-vim-make-your-own-ide/
+"
 " Funziona solo se vim e' compilato con python. Lo script originale BARFA
 " un orrendo messaggio di errore che va commentato.
 " if !has('python')
@@ -338,6 +355,15 @@ if has("autocmd")
 	  \ if line("'\"") > 0 && line("'\"") <= line("$") |
 	  \   exe "normal g`\"" |
 	  \ endif
+
+	" Usa il metodo migliore di omnicompletion
+	" http://vim.runpaint.org/typing/auto-completing-text/
+	if exists("+omnifunc")
+	    au FileType *
+			\ if &omnifunc == "" |
+			\ setl omnifunc=syntaxcomplete#Complete |
+			\ endif
+	endif
 
     endif
 
