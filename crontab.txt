@@ -1,0 +1,1 @@
+@daily find ${HOME}/.vim/backups -mtime +1w -print0 | xargs -0 rm -v
