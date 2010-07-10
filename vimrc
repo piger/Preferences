@@ -11,6 +11,7 @@
 
 
 " Configurazione di base {
+set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
@@ -23,7 +24,6 @@ for d in split(&backupdir, ",")
 endfor
 " --
 set bg=dark			" background NERO
-set nocompatible		" si comporta da vim e non da vi :)
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
 " Directory per i file di swap (crea se necessario)
@@ -53,7 +53,7 @@ set scrolloff=3			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
-set statusline=%<%F\ %h%m%r%w%=\ [FORMAT=%{&ff}]\ %([TYPE=%Y]\ %)[POS=%04l,%04v][%p%%]\ [LEN=%L]
+set statusline=%<%F\ %h%m%r%w%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri, in visual block
@@ -132,18 +132,25 @@ if has("gui_running")
 	colorscheme habilight
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+
     elseif has("x11")
 	" Also for GTK 1
 	:set guifont=-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
+
     elseif has("gui_win32")
 	:set guifont=Luxi_Mono:h12:cANSI
+
     elseif has("gui_macvim")
 	"colorscheme molokai
-	colorscheme habilight
-	" set guifont=Monaco:h12
-	set guifont=DehaVu\ Sans\ Mono:h12
+	"colorscheme habilight
+	"colorscheme autumnleaf
+	colorscheme sienna
+	"set guifont=Monaco:h12
+	set guifont="DehaVu Sans Mono:h12"
 	set lines=37
 	set columns=107
+	set transp=4
+
     else
 	" e' una gui ma non so di che tipo:
 	colorscheme robinhood
@@ -294,9 +301,10 @@ if has("autocmd")
 	" autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
 	augroup PenPen
 	    au!
-	    au BufNewFile,BufRead /home/pentest/* setl backupdir=.
+	    " backup nella directory corrente
+	    au BufNewFile,BufRead */pentest/* setl backupdir=. paste
 	augroup END
-	
+
 	" For all text files set 'textwidth' to 78 characters.
 	" autocmd FileType text setlocal textwidth=78
 
