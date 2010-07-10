@@ -44,7 +44,8 @@ set incsearch			" ricerca incrementale
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
 set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
-set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli spazi vuoti alla fine delle righe
+set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
+				" spazi vuoti alla fine delle righe.
 set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
 " set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
@@ -56,7 +57,8 @@ set showmode			" mostra un messaggio se in modalita' insert/visual/replace
 set statusline=%<%F\ %h%m%r%w%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
-set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri, in visual block
+set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
+				" in visual block
 set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
@@ -544,8 +546,9 @@ endif
 
 
 " python {
+" DOCUMENTAZIONE: :help if_pyth.txt
 " Aggiunge al path di ricerca di vim (per i comandi gf, :find, etc) il
-" sys.path di python. NOTA: "import vim" funziona solo dentro vim?
+" sys.path di python.
 if has('python')
     python << EOF
 import os
@@ -554,10 +557,6 @@ import vim
 for p in sys.path:
     if os.path.isdir(p):
 	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-    fd = open("/tmp/sucalora.log", "w")
-    fd.write(dir(vim))
-    fd.write("\n")
-    fd.close()
 EOF
 
 endif
