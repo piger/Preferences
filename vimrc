@@ -1,4 +1,4 @@
-" vimrc [updated: 18-09-2009]
+" vimrc [updated: 10-07-2010]
 " Daniel Kertesz <daniel@spatof.org> http://spatof.org
 " vim: set foldmarker={,} foldlevel=0:
 
@@ -129,7 +129,7 @@ if has("gui_running")
 	" set guifont=Liberation\ Mono\ 9
 	" set guifont=ProggySquareTT\ 12
 	set guifont=Terminus\ 10
-	colorscheme oceanblack
+	colorscheme habilight
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
     elseif has("x11")
@@ -145,7 +145,8 @@ if has("gui_running")
 	set lines=37
 	set columns=107
     else
-	colorscheme oceanblack
+	" e' una gui ma non so di che tipo:
+	colorscheme robinhood
     endif
 
     set mousehide	" Hide the mouse when typing text
@@ -163,7 +164,7 @@ if has("gui_running")
     "colorscheme asu1dark-256colors
 else
     " non ha GUI running
-    colorscheme dante
+    colorscheme winter
 endif
 " }
 
@@ -198,6 +199,9 @@ set noexpandtab
 let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
+
+" CSApprox
+let g:CSApprox_verbose_level = 0
 
 " NERDTree
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
