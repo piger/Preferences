@@ -130,8 +130,10 @@ if has("gui_running")
 	" NOTA: Alcuni, tipo Proggy, si vedono bene solo a size 12
 	" set guifont=Liberation\ Mono\ 9
 	" set guifont=ProggySquareTT\ 12
-	set guifont=Terminus\ 10
-	colorscheme habilight
+	" set guifont=Terminus\ 10
+	set guifont=Monospace\ 9
+	" colorscheme habiLight
+	colorscheme sienna
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
 
