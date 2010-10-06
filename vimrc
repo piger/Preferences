@@ -63,6 +63,11 @@ set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap			" wrappa SEMPRE, e' OK!
+" new in vim 7.3: blowfish encryption [NOTA: per cryptare bisogna settare
+" 'key', con il comando :X ]
+if v:version >= 703
+    set cryptmethod=blowfish
+endif
 
 " Mouse support XXX {
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
@@ -148,9 +153,13 @@ if has("gui_running")
 	"colorscheme molokai
 	"colorscheme habilight
 	"colorscheme autumnleaf
-	colorscheme sienna
-	"set guifont=Monaco:h12
-	set guifont="DehaVu Sans Mono:h12"
+	" colorscheme sienna
+	" Ultimamente (6-Ott-2010) mi piace molto questo:
+	colorscheme eclipse
+	" set guifont=Monaco:h12
+	set guifont=Menlo:h12
+	" non c'e' piu' questo font!? (30/Sett/2010)
+	"set guifont="DehaVu Sans Mono:h12"
 	set lines=37
 	set columns=107
 	set transp=4
@@ -176,6 +185,7 @@ if has("gui_running")
 else
     " non ha GUI running
     colorscheme winter
+    " colorscheme molokai
 endif
 " }
 
@@ -406,6 +416,7 @@ endif
 " Abbreviazioni {
 abbreviate teh the
 abbreviate subent subnet
+abbreviate directort directory
 " }
 
 
@@ -441,6 +452,16 @@ imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
 " rot13 fun - \rot
 nmap <Leader>rot ggVGg?
+
+" Tab Navigation (ala Firefox)
+nmap <C-tab> :tabnext<CR>
+nmap <C-S-tab> :tabprevious<CR>
+map <C-tab> :tabnext<CR>
+map <C-S-tab> :tabprevious<CR>
+imap <C-tab> <ESC>:tabnext<CR>
+imap <C-S-tab> <ESC>:tabprevious<CR>
+nmap <C-t> :tabnew<CR>
+imap <C-t> <ESC>:tabnew<CR>
 
 " PLUGINS:
 " NERDTree - \nt
