@@ -1,6 +1,11 @@
 source $HOME/.vimrc
 
-set toolbar-=icons
+" set toolbar-=icons
+set toolbar=icons,tooltips
+
+" Window Size
+set lines=51
+set columns=108
 
 " set mousehide		" Hide the mouse when typing text
 " set guifont=Terminus\ 10

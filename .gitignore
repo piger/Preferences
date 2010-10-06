@@ -11,4 +11,5 @@ Pref-*.tar.gz
 *.zwc
 vim/.VimballRecord
 vim/GetLatest/*
+vim/.netrwhist
 zsh/.zcalc_history
