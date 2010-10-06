@@ -35,11 +35,12 @@ endif
 set history=50			" quante entry di history per comandi e search
 
 " ricerca testo
+set noexrc			" NON leggere i file .vimrc .exrc nella dir corrente.
 set ignorecase			" ricerca case insensitive...
+set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
-set incsearch			" ricerca incrementale
-" set nowrapscan		" la ricerca di testo si ferma alla fine del file, senza wrappare
+set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrappare
 
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
@@ -584,6 +585,10 @@ EOF
 
 endif
 " }
+
+
+" In teoria da qui in poi posso attivare 'secure'
+set secure
 
 
 " perlism {
