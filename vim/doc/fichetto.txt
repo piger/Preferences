@@ -1,0 +1,74 @@
+*fichetto.txt*           I trick del fichetto	     Last Change: 06 Ott 2010
+
+Autore: Daniel Kertesz <daniel@spatof.org>
+
+"Vari trick e appunti per rendere la vita su Vim piu' semplice."
+
+==============================================================================
+1. Indice			                  *fichetto-indice*
+
+    1. Indice................................: |fichetto-indice|
+    2. Introduzione..........................: |fichetto-intro|
+    3. Python................................: |fichetto-py|
+	Scorciatoie..........................: |fichetto-py-scorciatoie|
+    4. Navigazione e Tab.....................: |fichetto-nav|
+    5. Changelog.............................: |fichetto-changelog|
+    6. Credits...............................: |fichetto-credits|
+
+Lalalalala.
+
+==============================================================================
+2. Introduzione						        *fichetto-intro*
+
+
+==============================================================================
+3. Python						           *fichetto-py*
+
+|Scorciatoie| (python_fn.vim)                            *fichetto-py-scorciatoie*
+
+ ]t      -- Jump to beginning of block
+ ]e      -- Jump to end of block
+ ]v      -- Select (Visual Line Mode) block
+ ]<      -- Shift block to left
+ ]>      -- Shift block to right
+ ]#      -- Comment selection
+ ]u      -- Uncomment selection
+ ]c      -- Select current/previous class
+ ]d      -- Select current/previous function
+ ]<up>   -- Jump to previous line with the same/lower indentation
+ ]<down> -- Jump to next line with the same/lower indentation
+
+
+==============================================================================
+4. Navigation						          *fichetto-nav*
+
+a. Apre un tab per ogni buffer: >
+    :tab sball
+
+b. Apre la lista dei buffer di bufexplorer: >
+    \be
+
+c. 
+
+
+==============================================================================
+5. Comandi dei plugin                                         *fichetto-plugins*
+
+a. Man Page Viewer >
+    :Man
+    :VMan
+    :Hman
+
+b. PyDoc >
+    :Pydoc foo.bar.baz
+    :PyDocSearch
+    <Leader>pw	    - parola sotto al cursore
+
+c. TagList >
+    :TlistToggle    - attiva la finestra taglist
+
+==============================================================================
+5. Changelog				         	    *fichetto-changelog*
+
+==============================================================================
+6. Credits						      *fichetto-credits*

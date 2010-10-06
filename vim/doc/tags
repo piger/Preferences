@@ -406,6 +406,7 @@ bufexplorer-customization	bufexplorer.txt	/*bufexplorer-customization*
 bufexplorer-installation	bufexplorer.txt	/*bufexplorer-installation*
 bufexplorer-todo	bufexplorer.txt	/*bufexplorer-todo*
 bufexplorer-usage	bufexplorer.txt	/*bufexplorer-usage*
+bufexplorer-windowlayout	bufexplorer.txt	/*bufexplorer-windowlayout*
 bufexplorer.txt	bufexplorer.txt	/*bufexplorer.txt*
 buffer-explorer	bufexplorer.txt	/*buffer-explorer*
 csapprox	CSApprox.txt	/*csapprox*
@@ -447,6 +448,13 @@ csapprox-xiterm	CSApprox.txt	/*csapprox-xiterm*
 csapprox-xterm	CSApprox.txt	/*csapprox-xterm*
 csapprox.vim	CSApprox.txt	/*csapprox.vim*
 deplate	viki.txt	/*deplate*
+fichetto-changelog	fichetto.txt	/*fichetto-changelog*
+fichetto-credits	fichetto.txt	/*fichetto-credits*
+fichetto-indice	fichetto.txt	/*fichetto-indice*
+fichetto-intro	fichetto.txt	/*fichetto-intro*
+fichetto-navigation	fichetto.txt	/*fichetto-navigation*
+fichetto-python-scorciatoie	fichetto.txt	/*fichetto-python-scorciatoie*
+fichetto.txt	fichetto.txt	/*fichetto.txt*
 fuf	fuf.txt	/*fuf*
 fuf-abbreviation	fuf.txt	/*fuf-abbreviation*
 fuf-about	fuf.txt	/*fuf-about*
@@ -532,6 +540,7 @@ g:bufExplorerFindActive	bufexplorer.txt	/*g:bufExplorerFindActive*
 g:bufExplorerReverseSort	bufexplorer.txt	/*g:bufExplorerReverseSort*
 g:bufExplorerShowDirectories	bufexplorer.txt	/*g:bufExplorerShowDirectories*
 g:bufExplorerShowRelativePath	bufexplorer.txt	/*g:bufExplorerShowRelativePath*
+g:bufExplorerShowTabBuffer	bufexplorer.txt	/*g:bufExplorerShowTabBuffer*
 g:bufExplorerShowUnlisted	bufexplorer.txt	/*g:bufExplorerShowUnlisted*
 g:bufExplorerSortBy	bufexplorer.txt	/*g:bufExplorerSortBy*
 g:bufExplorerSplitBelow	bufexplorer.txt	/*g:bufExplorerSplitBelow*
