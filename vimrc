@@ -157,6 +157,7 @@ if has("gui_running")
 	" colorscheme sienna
 	" Ultimamente (6-Ott-2010) mi piace molto questo:
 	colorscheme eclipse
+	" altro fico: slate !
 	" set guifont=Monaco:h12
 	set guifont=Menlo:h12
 	" non c'e' piu' questo font!? (30/Sett/2010)
