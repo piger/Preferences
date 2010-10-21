@@ -334,6 +334,9 @@ if has("autocmd")
 	" Per python uso ftplugin/python.vim
 	au BufNewFile *.py setl fileformat=unix
 	au BufNewFile *.py setl encoding=utf-8
+
+	" Per i file di Ren'Py
+	au BufNewFile,BufRead *.rpy setl ft=renpy
 	
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
