@@ -3,7 +3,7 @@
 # Cose che succedono all'apertura di una shell interattiva, come fortune e il todo
 # --------------------------------------------------------------------------------
 
-if [[ $- = *i* ]] && (( $+commands[fortune] )); then
+if (( $+commands[fortune] )); then
     if [[ -d ~/.fortune ]]; then
 	print; fortune -e ~/.fortune; print
     else

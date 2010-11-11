@@ -213,7 +213,8 @@ source $ZDOTDIR/cose
 source $ZDOTDIR/alias
 source $ZDOTDIR/zcomp
 source $ZDOTDIR/zfunc
-source $ZDOTDIR/welcome
+# solo shell interattive
+[[ $- = *i* ]] && source $ZDOTDIR/welcome
 [[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
 
 # Non mi piace, ma lo segno per il futuro.
