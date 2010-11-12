@@ -366,6 +366,9 @@ if has("autocmd")
 	" Views automatiche per i file .rb
 	" autocmd BufWinLeave *.rb mkview
 	" autocmd BufWinEnter *.rb silent loadview
+
+	" Per i file HTML di monbox.
+	au BufNewFile,BufRead *monbox*/*.html set ft=htmldjango
 	
 	" vim -b : edit binary using xxd-format!
 	augroup Binary
