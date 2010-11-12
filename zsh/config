@@ -15,4 +15,60 @@
 
 export ZSH_THEME="2righe"
 
+# Opzioni di zsh globali {{{
+# Disabled options 2{{{
+    # Don't you ever BEEP again.
+    setopt NO_beep
+    # Disable terminal "flow control" (^S and ^Q) which I never ever used. You
+    # should know the feeling if you ever pressed ^S by mistake and your terminal
+    # was STUCK.
+    setopt NO_flow_control
+    # Don't send a HUP signal when exiting the shell.
+    setopt NO_hup
+    # Always ask for confirmation when you type 'rm *'
+    setopt NO_rm_star_silent
+# }}}
+
+# Generic options 2{{{
+# Always append to the history file.
+setopt append_history
+						# aspettare un nuovo prompt
+# Typing a directory name is an alias to 'cd directory_name'.
+setopt auto_cd
+# When changing directory, put the previous directory in the directory stack.
+setopt auto_pushd
+# Before exiting the shell warns about background jobs.
+setopt check_jobs
+# Completion even in the middle of a word.
+setopt complete_in_word
+# Correction on mispelled command.
+setopt correct
+# =command syntax for 'which command'
+setopt equals
+# Extended globbing (~, ^ and # for patterns)
+setopt extended_glob
+# Save commands timestamps in the shell history.
+setopt extended_history
+#setopt glob_complete		# Quando la word da completare contiene un glob pattern,
+				# invece di inserire il risultato del glob, cicla tra i
+				# risultati, come nella completion con  MENU_COMPLETE
+# Don't put duplicate commands in the shell history. (XXX mmmh)
+setopt hist_ignore_dups
+# Don't save history commands in the shell history.
+setopt hist_no_store
+# Enable comments on command line (useful for script(1)ed sessions).
+setopt interactive_comments
+setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
+setopt long_list_jobs		# Elenca i job nel formato esteso
+setopt notify			# Avvisa subito dello status dei job in background, invece di
+setopt numeric_glob_sort	# Sort numerico per file contenenti numeri (a_00, a_01, ...)
+setopt print_exit_value		# Printa l'exit value quando e' diverso da zero
+setopt prompt_subst		# Esegue le varie expansion nel prompt (param expansions, command subst etc)
+setopt pushd_ignore_dups	# Purga i duplicati dallo stack delle directory
+#setopt pushd_silent		# Non printa lo stack delle dir dopo pushd o popd
+# Enable short form for some builtins like for, if, function...
+setopt short_loops
+# }}}
+# }}}
+
 # vim: ft=zsh

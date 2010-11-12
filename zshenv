@@ -21,22 +21,25 @@
 #     ]$[           ____,cccccdFFFF"""""""""""""""'''''''''`'
 #     `$hccccccdFFFFF""""''''
 #  .-------------------------------------------------------.
-#  | Questo file verra' sempre letto da zsh e dovra' quindi|
+#  | Questo file verrà' sempre letto da zsh e dovrà' quindi|
 #  |contenere tutti le impostazioni che potrebbero influire|
 #  |         sui job in crontab, su script eseguiti, etc...|
 #  `-------------------------------------------------------'
 
-
-
-
-
+# ZDOTDIR is HOME by default, by I prefer to keep everything inside a single
+# directory.
 ZDOTDIR=${HOME}/.zsh
 
-# $PATH
-# -----
-# Le variabili path e manpath sono due array legati agli equivalenti
-# $PATH e $MANPATH; in piu' con -U setto l'attributo che elimina i
-# duplicati.
+
+# PATH handling {{{
+# My default PATH *must* contain all 'sbin' directories (cause I use sudo a lot
+# and I want completion); then there are some issues:
+# - on slackware the default zsh init files in /etc overwrite any PATH value.
+# - on OSX if you use MacPorts or Homebrew you should put '/usr/local/{s,}bin
+# before /usr/{s,}bin.
+#
+# PATH and path refers to the same variable (tied), so as MANPATH and manpath.
+# The attribute flag -U is to keep unique values inside an array.
 typeset -U path manpath fpath cdpath
 path=(
     $path /sbin /bin /usr/sbin /usr/bin /usr/X11R6/bin 
@@ -44,25 +47,30 @@ path=(
     /opt/bin
 )
 
-# esempio pratico di utilizzo dell'array path
+# If you have a ~/bin directory, add it to PATH (here I use the path parameter
+# instead of the PATH environment variable).
 [[ -d ~/bin ]] && path+=~/bin
+# }}}
 
+
+# Use ssh for any remote operation involving CVS or rsync
 export CVS_RSH=ssh
 export RSYNC_RSH=ssh
-# maledico debian e il suo chiamare firefox con il nome di ICEWEASEL.
+# This should be on os/linux ?
 export BROWSER="firefox"
 
-# la mia dir Preferences
+# My Preferences repository (XXX a che serve ?)
 export ZPREFS=~/Preferences
 
-#if [[ -z $SSH_CONNECTION ]]; then
-#    export SCREENRC=$ZPREFS/screenrc.local
-#    # ancora meglio, visto che alcuni screen ignorano $SCREENRC:
-#    alias screen='screen -c .screenrc.remote'
-#else
-#    export SCREENRC=$ZPREFS/screenrc.remote
-#fi
+# This settings are valid only for remote sessions {{{
+if [[ ! -z $SSH_CONNECTION ]]; then
+    # we are on a remote system
+    # alias screen to screenf (screen with ^F binding instead of ^A)
+    alias screen='screen -e "^Ff"'
+fi
+# }}}
 
+# Format string for 'time' command:
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 
 # Se la shell e' interattiva, usa 026.
@@ -73,7 +81,10 @@ TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 #	umask 022
 #fi
 
+# -rw-r--r--
 umask 022
+# -rw-rw----
+# umask 007
 
 # ulimit ?
 
