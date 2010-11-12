@@ -80,7 +80,9 @@ endif
 
 " folding {
 set foldenable
-set foldmarker={,}
+" Perche' mai cambiai questo !?
+"set foldmarker={,}
+set foldmarker={{{,}}}
 set foldmethod=marker
 set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
