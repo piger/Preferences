@@ -51,7 +51,7 @@ bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
 #    # etc.
 
 
-# PANORAMICA DEI TASTINI
+# PANORAMICA DEI TASTINI {{{
 # ----------------------
 # ctrl+d	cancella il carattere sotto il cursore
 # ctrl+b	muove al carattere precedente
@@ -90,5 +90,6 @@ bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
 # esc-l		lowerCASSA la word successiva, e passa alla prossima
 # ctrl+l	cancella lo schermo
 # esc-.		(punto!) inserisce l'ultimo argomento del comando precedente
+# }}}
 
 # vim: ft=zsh

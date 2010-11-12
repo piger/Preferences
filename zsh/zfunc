@@ -11,9 +11,8 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
 fi
 # }}}
 
-# Find history events by search pattern and list them by date.
+# whatwhen: Find history events by search pattern and list them by date. {{{
 whatwhen()  {
-# {{{
     emulate -L zsh
     local usage help ident format_l format_s first_char remain first last
     usage='USAGE: whatwhen [options] <searchstring> <search range>'
@@ -58,9 +57,10 @@ whatwhen()  {
             fc -li -m "*${first_char}${remain}*" $first $last
         ;;
     esac
-# }}}
 }
+# }}}
 
+# cambia il titolo del xterm {{{
 xtrename() {
     emulate -L zsh
     if [[ $1 != "-f" ]] ; then
@@ -81,7 +81,9 @@ xtrename() {
     print -n "\eP\e]0;${1}\C-G\e\\"
     return 0
 }
+# }}}
 
+# vim per leggere le pagine man {{{
 # It's shameless stolen from <http://www.vim.org/tips/tip.php?tip_id=167>
 #f5# Use \kbd{vim} as your manpage reader
 vman() {
@@ -89,8 +91,9 @@ vman() {
     man $* | col -b | view -c 'set ft=man nomod nolist' -
 }
 # END OF GRML - zsh-lovers
+# }}}
 
-# ZMV
+# ZMV {{{
 # rinomina i file sostituendo con '_'
 to_underscore() {
 	zmv '(*) (*)' '$f:gs/ /_'
@@ -101,20 +104,23 @@ to_lower() {
 to_upper() {
 	zmv '(*)' '${(U)1}'
 }
+# }}}
 
 # Utile per i dotfiles
 # zmv $HOME'/dotfiles/dot_(*)' '$HOME/$1'
 
-# dopo anni, mkdir && cd ;-P
+# dopo anni, mkdir && cd ;-P {{{
 mcd () {
 	mkdir "$@" && cd "$@"
 }
+# }}}
 
-# tree amanuense se non c'e' il pacchetto installato
+# tree amanuense se non c'e' il pacchetto installato {{{
 # from strcat.de
 if (( ! $+commands[tree] )); then
 	tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
 fi
+# }}}
 
 restapache () {
 	apachectl stop
