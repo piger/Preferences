@@ -30,6 +30,7 @@ fi
 # LS_COLORS
 # (( $+commands[dircolors] )) && eval $(dircolors -b)
 
+# XXX QUESTO SU OSX NON SEMBRA FUNZIONARE!
 # ls_colors_256.zsh: Color definitions for the output of the ls command.
 # P.C. Shyamshankar <sykora@lucentbeing.com>
 
