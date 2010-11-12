@@ -1,9 +1,34 @@
-# ========================================================
-# ~/.zshenv
-# Questo file verra' sempre letto da zsh e dovra' quindi
-# contenere tutti le impostazioni che potrebbero influire
-# sui job in crontab, su script eseguiti, etc...
-# --------------------------------------------------------
+#                                   ________,cccccccc.__________
+#  cc$$FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF""""""""'''''''`"""""""""?$F
+#   ]$[                      ___                              d$'
+#   ]$[                    ,dF"?F$c.                          d$
+#   ]$[                   ,$[     7$[                        ,$F
+#    $h              ,c.  d$      `$'    ,$F           _     J$'
+#    $h        _,ccc$$$    ?h.           ]$[          d$     d$
+#    d$      c$F"'  dF      `?hc_        ]$[          d$     d$
+#    ?$.          ,dF         ``?$c.     ]$[          d$     d$
+#    ]$[         d$'              `?$c   ]$[          $h     dF
+#    ]$[       ,$F                  `?$  ,$ccccccccccp$[     $h
+#    ]$[    _d$F'         d$'       ,$F  ]$[         d$      $F
+#     $h  dd$$           ]$[       ,$F   ]$[         d$     ]$[
+#     ?h   `"?F$ccc._     ?$ccccccd$F    ]$[         $h     ]$[
+#     d$         ``"?F$cc   `'''''        '          $h     d$
+#     d$               `'                            $F     d$
+#     ?$                                            ]$[     $F
+#     ]$[                                           d$'     $h
+#     ]$[                                            '     ]$[
+#     ]$[                         _______________,cccccccccd$[
+#     ]$[           ____,cccccdFFFF"""""""""""""""'''''''''`'
+#     `$hccccccdFFFFF""""''''
+#  .-------------------------------------------------------.
+#  | Questo file verra' sempre letto da zsh e dovra' quindi|
+#  |contenere tutti le impostazioni che potrebbero influire|
+#  |         sui job in crontab, su script eseguiti, etc...|
+#  `-------------------------------------------------------'
+
+
+
+
 
 ZDOTDIR=${HOME}/.zsh
 

@@ -1,8 +1,26 @@
-# ============================================================================ #
-# ~/.zsh/zshrc
+# +----------------------------------------------------------------------------+
+# |                                                                            |
+# |            ,@@@@@@@@@,                                                     |
+# |          @@@@@@@@@@@@@@@    EHY PACE FRATELLO, QUESTO E' IL FILE PRINCIPALE|
+# |         @@@@@@@@@@@@@@@@@   DI ZSH AMICO, NIENTE PRESE A MALE! FUMIAMOCI   |
+# |         @@@@@@@@@@@@@@@@@   LA GANJA E FOTTIAMOCENE IL CAZZO DI TUTTO,     |
+# |         @@@@@'_   _'@@@@@  /     DAI !                                     |
+# |          @@@| o   o |@@@                                                   |
+# |           '@|  (_)  |@'                                                    |
+# |             \  ___  /                                                      |
+# |             |\_`~`_/|            zsh/main (ex .zshrc)                      |
+# |        ____/:  `"`  :\____       opzioni, prompt, PATH, defaults...        |
+# |      /`}}}}}\       /{{{{{`\                                               |
+# |     /  {{{{{ \     / }}}}}  \                                              |
+# |    /   }}}}}  \.-./  {{{{{   \                                             |
+# |   |    {{{{{  / | \  }}}}}    |                                            |
+#jgs  |    }}}}}  \/|\/  {{{{{    |                                            |
+# |   |   /{{{{{   '-'   }}}}}\   |                                            |
+# +----------------------------------------------------------------------------+
+
+
 # Questo file viene eseguito solo quando la shell e'
 # interattiva, quindi NO script, NO crontab, SI sadomaso.
-# ---------------------------------------------------------------------------- #
 
 # OPTIONS
 # -------
@@ -38,7 +56,15 @@ setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, util
 
 
 # PROMPT
-# ------
+# ----------------------------------------....
+#                           )/_            
+#                 _.--..---"-,--c_         
+#            \L..'           ._O__)_       
+#    ,-.     _.+  _  \..--( /           a:f
+#      `\.-''__.-' \ (     \_              
+#        `'''       `\__   /\              
+#                    ')                
+
 autoload -U colors
 colors
 
@@ -66,16 +92,54 @@ for COLOR in RED GREEN YELLOW BLUE WHITE BLACK; do
     eval PR_BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
 done
 
+# zsh/spectrum
+# http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
+typeset -Ag FX FG BG
 
-chash=0
-foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+for color in {000..255}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+
+# ---
+
+colorize_hostname() {
+    local chash crand
+
+    chash=0
+    foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
 	(( chash += #letter ))
-end
-crand=$(( $chash % 9 ))
-crandname=$colnames[$crand]
-eval cprompt='%{${fg[$crandname]}%}'
-PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
-RPROMPT='${vcs_info_msg_0_}'
+    end
+    crand=$(( $chash % 256 ))
+
+    return crand
+}
+
+#chash=0
+#foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+#	(( chash += #letter ))
+#end
+#crand=$(( $chash % 9 ))
+#crandname=$colnames[$crand]
+#eval cprompt='%{${fg[$crandname]}%}'
+# PROMPT='[%T] %(1j.|%j.)%3c%# '
+
+# NOTE PER IL PROMPT:
+# - bisogna assegnare una stringa con apici SINGOLI, altrimenti le param. expansion NON funzionano!
+# - come ${(%):-%~} ritorni $PWD a modo del prompt, e' MAGIA parameter expansion :)
+PROMPT='$FG[220][%T] in: $FX[bold]$FG[034]${${(%):-%~}//\//$FG[022]/$FG[034]}$FX[reset]%(0w#$FG[196] -> E DOMENICA! <-$FX[reset] #)
+%(1j.[%j] .)%(!.$FG[196]root .)$FG[245]%#$FX[reset] '
+
+RPROMPT="$FG[208]%n$FG[230]@$FG[075]%m$FX[reset]"
 
 # Idee per path nel prompt colorato
 # http://superuser.com/questions/49092/how-to-format-the-path-in-a-zsh-prompt
@@ -153,6 +217,8 @@ SAVEHIST=10000
 HISTFILE=$HOME/.history
 
 # Opzioni per less
+# -c	: pulisce lo schermo prima di mostrare il file
+# -i	: ignore case (ma una ricerca uppercase annulla l'opzione)
 # -c	: pulisce lo schermo prima di mostrare il file
 # -i	: ignore case (ma una ricerca uppercase annulla l'opzione)
 # -M	: mostra percentuale del file ed e' piu' verboso di more
