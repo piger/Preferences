@@ -186,7 +186,8 @@ if has("gui_running")
     "colorscheme asu1dark-256colors
 else
     " non ha GUI running
-    colorscheme winter
+    " colorscheme winter
+    colorscheme pablo
     " colorscheme molokai
 endif
 " }
