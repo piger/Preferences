@@ -44,4 +44,10 @@ alias t='todo.sh -d ~/.todo.cfg'
 # todo.sh aggiunge data attuale al todo
 alias tt='t -t'
 
+# alias simpatici
+alias suco='sudo'
+# per poter fare 'mortacci tua kill -9 31337'
+alias mortacci=";"
+alias tua=";"
+
 # vim: ft=zsh
