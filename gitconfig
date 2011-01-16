@@ -1,3 +1,6 @@
+[core]
+    excludesfile = ~/.gitignore
+
 [user]
     name = sand
     email = daniel@spatof.org
@@ -6,12 +9,27 @@
 [diff]
     renames = copies
 
-[help]
-    # correction stile zsh :P dopo 3 secondi esegue il comando
-    autocorrect = 30
+#[help]
+#    # correction stile zsh :P dopo 3 secondi esegue il comando
+#    autocorrect = 30
 
 [color]
-    ui = auto
+    ui = true
+[color "branch"]
+    current = magenta reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    whitespace = red reverse
 
 [alias]
-   ll = log --pretty=oneline 
+    ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
+    st = status
+    changes = log --oneline --reverse
+    ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+    w = whatchanged
+    ls = ls-files
+    storia = log --pretty=medium --graph --abbrev-commit --date=relative --decorate
+    istoria = log --pretty=medium --reverse --abbrev-commit --date=relative --decorate
+    storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
