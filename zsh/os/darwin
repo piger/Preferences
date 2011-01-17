@@ -3,8 +3,16 @@
 # ---------------------------------------------------------------
 
 # -*- aliases
-#alias vim="/Applications/Vim.app/Contents/MacOS/Vim"
-#alias gvim="/Applications/gvim.app/Contents/MacOS/gvim"
+if [[ -e /Applications/MacVim.app ]]; then
+    alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+    alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
+fi
+
+# ls da `homebrew` -> `coreutils`
+if [[ -x /usr/local/bin/gls ]]; then
+    alias ls="/usr/local/bin/gls --color=auto"
+    (( $+commands[gdircolors] )) && eval $(gdircolors -b)
+fi
 
 # -*- environment
 export CLICOLOR=1
