@@ -14,4 +14,7 @@
     ui = auto
 
 [alias]
-   ll = log --pretty=oneline 
+    ll = log --pretty=oneline 
+    co = checkout
+    st = status
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short

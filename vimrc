@@ -189,7 +189,7 @@ if has("gui_running")
 else
     " non ha GUI running
     " colorscheme winter
-    colorscheme pablo
+    colorscheme candycode
     " colorscheme molokai
 endif
 " }
@@ -372,6 +372,7 @@ if has("autocmd")
 
 	" Per i file HTML di monbox.
 	au BufNewFile,BufRead *monbox*/*.html set ft=htmldjango
+	au BufNewFile,BufRead *MonitoringBox*/*.html set ft=htmldjango
 	
 	" vim -b : edit binary using xxd-format!
 	augroup Binary

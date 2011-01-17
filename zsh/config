@@ -15,47 +15,63 @@
 
 export ZSH_THEME="2righe"
 
-# Opzioni di zsh globali {{{
-# Disabled options 2{{{
-    # Don't you ever BEEP again.
-    setopt NO_beep
-    # Disable terminal "flow control" (^S and ^Q) which I never ever used. You
-    # should know the feeling if you ever pressed ^S by mistake and your terminal
-    # was STUCK.
-    setopt NO_flow_control
-    # Don't send a HUP signal when exiting the shell.
-    setopt NO_hup
-    # Always ask for confirmation when you type 'rm *'
-    setopt NO_rm_star_silent
+# - Opzioni di zsh globali {{{
+
+# --- Disabled options 2{{{
+# Don't you ever BEEP again.
+setopt NO_beep
+
+# Disable terminal "flow control" (^S and ^Q) which I never ever used. You
+# should know the feeling if you ever pressed ^S by mistake and your terminal
+# was STUCK.
+setopt NO_flow_control
+
+# Don't send a HUP signal when exiting the shell.
+setopt NO_hup
+
+# Always ask for confirmation when you type 'rm *'
+setopt NO_rm_star_silent
 # }}}
 
-# Generic options 2{{{
+
+# --- Generic options 2{{{
 # Always append to the history file.
 setopt append_history
 						# aspettare un nuovo prompt
 # Typing a directory name is an alias to 'cd directory_name'.
 setopt auto_cd
+
 # When changing directory, put the previous directory in the directory stack.
 setopt auto_pushd
+
 # Before exiting the shell warns about background jobs.
 setopt check_jobs
+
 # Completion even in the middle of a word.
 setopt complete_in_word
+
 # Correction on mispelled command.
 setopt correct
+
 # =command syntax for 'which command'
 setopt equals
+
 # Extended globbing (~, ^ and # for patterns)
 setopt extended_glob
+
 # Save commands timestamps in the shell history.
 setopt extended_history
+
 #setopt glob_complete		# Quando la word da completare contiene un glob pattern,
 				# invece di inserire il risultato del glob, cicla tra i
 				# risultati, come nella completion con  MENU_COMPLETE
+
 # Don't put duplicate commands in the shell history. (XXX mmmh)
 setopt hist_ignore_dups
+
 # Don't save history commands in the shell history.
 setopt hist_no_store
+
 # Enable comments on command line (useful for script(1)ed sessions).
 setopt interactive_comments
 setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
