@@ -9,15 +9,22 @@
 # _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
 # _ignored completa file/dir che per altre impostazioni verrebbero ignorati
 #zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+
 # Da: http://zshwiki.org/home/examples/compquickstart?s=rehash
 # Forza il rehash per ogni uso della completion (ie: premi tab); per attivare,
 # commentare lo zstyle precedente (quello con completer _complete _prefix...) e
 # scommentare le 5 righe che seguono.
-_force_rehash() {
-  (( CURRENT == 1 )) && rehash
-  return 1	# Because we didn't really complete anything
-}
-zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+
+if [[ $SLOW_COMPUTER == 0 ]]; then
+    _force_rehash() {
+      (( CURRENT == 1 )) && rehash
+      return 1	# Because we didn't really complete anything
+    }
+
+    zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+else
+    zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+fi
 
 # Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
 # e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')

@@ -54,8 +54,8 @@ path=(
 
 
 # Use ssh for any remote operation involving CVS or rsync
-export CVS_RSH=ssh
-export RSYNC_RSH=ssh
+export CVS_RSH="ssh"
+export RSYNC_RSH="ssh"
 # This should be on os/linux ?
 export BROWSER="firefox"
 
@@ -87,5 +87,8 @@ umask 022
 # umask 007
 
 # ulimit ?
+
+# Supporto per SLOW_COMPUTER
+SLOW_COMPUTER="0"
 
 # vim: ft=zsh
