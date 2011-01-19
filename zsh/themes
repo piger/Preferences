@@ -33,7 +33,7 @@ done
 
 
 # Supporto per temi configurabili {{{
-if [ -z $ZSH_THEME || $ZSH_THEME = "2righe" ]; then
+if [[ -z $ZSH_THEME || $ZSH_THEME = "2righe" ]]; then
 
     PROMPT='$FG[220][%T] in: $FX[bold]$FG[034]${${(%):-%~}//\//$FG[022]/$FG[034]}$FX[reset]%(0w#$FG[196] -> E DOMENICA! <-$FX[reset] #)
     %(1j.[%j] .)%(!.$FG[196]root .)$FG[245]%#$FX[reset] '

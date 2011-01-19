@@ -261,7 +261,7 @@ WATCHFMT='%n %a %l from %m at %t.'
 
 # PYTHONSTARTUP per python in modalita' interattiva
 # (serve per la completion)
-if [ -e ~/.pythonrc ]; then
+if [[ -e ~/.pythonrc ]]; then
     export PYTHONSTARTUP=~/.pythonrc
 fi
 # }}}
@@ -293,7 +293,7 @@ source $ZDOTDIR/zfunc
 ## zsh-mime-setup
 
 # da /usr/share/doc/zsh
-if [ -d ~/.zsh/scripts ]; then
+if [[ -d ~/.zsh/scripts ]]; then
     fpath=($fpath ~/.zsh/scripts)
     for func in $^fpath/*(N-.x:t); autoload $func
 fi
