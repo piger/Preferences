@@ -6,10 +6,10 @@ endif
 let s:did_snips_mappings = 1
 
 " Provo con <C-s> (ctrl+s) per mantenere supertab con <tab>
-" ino <silent> <tab> <c-r>=TriggerSnippet()<cr>
-" snor <silent> <tab> <esc>i<right><c-r>=TriggerSnippet()<cr>
-ino <silent> <c-s> <c-r>=TriggerSnippet()<cr>
-snor <silent> <c-s> <esc>i<right><c-r>=TriggerSnippet()<cr>
+ino <silent> <tab> <c-r>=TriggerSnippet()<cr>
+snor <silent> <tab> <esc>i<right><c-r>=TriggerSnippet()<cr>
+"" ino <silent> <c-s> <c-r>=TriggerSnippet()<cr>
+"" snor <silent> <c-s> <esc>i<right><c-r>=TriggerSnippet()<cr>
 
 ino <silent> <s-tab> <c-r>=BackwardsSnippet()<cr>
 snor <silent> <s-tab> <esc>i<right><c-r>=BackwardsSnippet()<cr>
