@@ -1,6 +1,6 @@
 " vimrc [updated: 10-07-2010]
 " Daniel Kertesz <daniel@spatof.org> http://spatof.org
-" vim: set foldmarker={,} foldlevel=0:
+" vim: foldmarker={,} foldlevel=0
 
 
 " NOTE, SUGGERIMENTI E AVVERTIMENTI {
@@ -47,8 +47,8 @@ set laststatus=2		" mostra sempre la riga di status con le info sul file
 set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
 				" spazi vuoti alla fine delle righe.
-set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
-" set modelines=5                 " numero di righe valido per le modeline
+"set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
+set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
 set scrolloff=3			" scrolla con un context di 3 righe
@@ -80,11 +80,8 @@ endif
 
 " folding {
 set foldenable
-" Perche' mai cambiai questo !?
-"set foldmarker={,}
-set foldmarker={{{,}}}
 set foldmethod=marker
-set foldlevel=100		" trick per non foldare automaticamente
+"set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "function SimpleFoldText() " {
