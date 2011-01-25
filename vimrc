@@ -126,21 +126,24 @@ if &t_Co > 2 || has("gui_running")
     syntax on
     set hlsearch
     
-    hi statusline ctermfg=Black ctermbg=Blue
+    "hi statusline ctermfg=Black ctermbg=Blue
 endif
 
 if has("gui_running")
     if has("gui_gtk2")
+	" FONTS
 	" Una selezione di possibili font decenti, in ordine di decenza.
 	" NOTA: Alcuni, tipo Proggy, si vedono bene solo a size 12
 	" set guifont=Liberation\ Mono\ 9
 	" set guifont=ProggySquareTT\ 12
 	" set guifont=Terminus\ 10
-	set guifont=Monospace\ 9
-	" colorscheme habiLight
-	colorscheme sienna
 	" set guifont=ProggyCleanTTSZ\ 12
 	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+	set guifont=Monospace\ 9
+
+	" COLORSCHEME
+	" colorscheme habiLight
+	colorscheme sienna
 
     elseif has("x11")
 	" Also for GTK 1
@@ -150,21 +153,23 @@ if has("gui_running")
 	:set guifont=Luxi_Mono:h12:cANSI
 
     elseif has("gui_macvim")
-	"colorscheme molokai
-	"colorscheme habilight
-	"colorscheme autumnleaf
-	" colorscheme sienna
-	" Ultimamente (6-Ott-2010) mi piace molto questo:
-	colorscheme eclipse
-	" altro fico: slate !
+	" colorscheme molokai
+	" colorscheme habilight
+	" colorscheme autumnleaf
+	colorscheme sienna
+	" colorscheme eclipse
+	" colorscheme slate
+
+	" I FONTI POMPI
 	" set guifont=Monaco:h12
-	"set guifont=Menlo:h12
+	" set guifont=Menlo:h12
+	 "set gfn=Osaka-Mono:h14
 	set guifont=DejaVu\ Sans\ Mono:h12
-	" non c'e' piu' questo font!? (30/Sett/2010)
-	"set guifont="DehaVu Sans Mono:h12"
-	set lines=37
-	set columns=107
-	set transp=4
+
+	" Configurazione finestra (altezza, larghezza, trasparenza)
+	set lines=55
+	set columns=128
+	set transp=1
 
     else
 	" e' una gui ma non so di che tipo:
@@ -174,7 +179,7 @@ if has("gui_running")
     set mousehide	" Hide the mouse when typing text
     set vb		" meglio la visual bell che l'orrendo SPEAKER
 
-    " COLOR SCHEME
+    " COLOR SCHEME PER TUTTE LE GUI (NON ATTIVO)
     " Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
     " E' consigliabile fargli generare il nuovo colorscheme "compatibile"
     " (vedi help) e disabilitarlo.
@@ -297,6 +302,7 @@ let python_slow_sync = 1
 
 
 " pathogen {
+" NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
@@ -469,7 +475,7 @@ imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 " rot13 fun - \rot
 nmap <Leader>rot ggVGg?
 
-" Tab Navigation (ala Firefox)
+" Tab Navigation (ala Firefox): ctrl-tab, ctrl-shift-tab, ctrl-t
 nmap <C-tab> :tabnext<CR>
 nmap <C-S-tab> :tabprevious<CR>
 map <C-tab> :tabnext<CR>
