@@ -161,7 +161,8 @@ if has("gui_running")
 	colorscheme eclipse
 	" altro fico: slate !
 	" set guifont=Monaco:h12
-	set guifont=Menlo:h12
+	"set guifont=Menlo:h12
+	set guifont=DejaVu\ Sans\ Mono:h12
 	" non c'e' piu' questo font!? (30/Sett/2010)
 	"set guifont="DehaVu Sans Mono:h12"
 	set lines=37
