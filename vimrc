@@ -1,6 +1,6 @@
 " vimrc [updated: 10-07-2010]
 " Daniel Kertesz <daniel@spatof.org> http://spatof.org
-" vim: set foldmarker={,} foldlevel=0:
+" vim: foldmarker={,} foldlevel=0
 
 
 " NOTE, SUGGERIMENTI E AVVERTIMENTI {
@@ -47,15 +47,15 @@ set laststatus=2		" mostra sempre la riga di status con le info sul file
 set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
 				" spazi vuoti alla fine delle righe.
-set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
-" set modelines=5                 " numero di righe valido per le modeline
+"set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
+set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
 set scrolloff=3			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
-set statusline=%<%F\ %h%m%r%w%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
@@ -80,11 +80,8 @@ endif
 
 " folding {
 set foldenable
-" Perche' mai cambiai questo !?
-"set foldmarker={,}
-set foldmarker={{{,}}}
 set foldmethod=marker
-set foldlevel=100		" trick per non foldare automaticamente
+"set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "function SimpleFoldText() " {
@@ -298,6 +295,12 @@ let g:fuf_mrucmd_maxItem = 400
 let python_slow_sync = 1
 " }
 
+
+" pathogen {
+filetype off 
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+" }
 
 " autocommands {
 " Only do this part when compiled with support for autocommands.
