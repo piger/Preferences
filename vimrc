@@ -55,7 +55,6 @@ set scrolloff=3			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
-set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
@@ -79,8 +78,8 @@ endif
 " }
 
 " folding {
-set foldenable
-set foldmethod=marker
+"set foldenable
+"set foldmethod=marker
 "set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
@@ -464,6 +463,9 @@ nnoremap <Leader>tp :set invpaste paste?<CR>
 nmap <F4> <Leader>tp
 imap <F4> <C-O><Leader>tp
 set pastetoggle=<F4>
+
+" GUNDO
+nnoremap <F5> :GundoToggle<CR>
 
 " toggle list - \tl
 nnoremap <Leader>tl :set invlist list?<CR>
