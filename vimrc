@@ -55,7 +55,8 @@ set scrolloff=3			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
-set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
@@ -482,8 +483,9 @@ map <C-tab> :tabnext<CR>
 map <C-S-tab> :tabprevious<CR>
 imap <C-tab> <ESC>:tabnext<CR>
 imap <C-S-tab> <ESC>:tabprevious<CR>
-nmap <C-t> :tabnew<CR>
-imap <C-t> <ESC>:tabnew<CR>
+" tolgo il bind da CTRL-t che serve a saltellare con le tag.
+"nmap <C-t> :tabnew<CR>
+"imap <C-t> <ESC>:tabnew<CR>
 
 " PLUGINS:
 " NERDTree - \nt
