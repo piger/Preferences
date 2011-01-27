@@ -188,3 +188,9 @@ snippet table
 	</table>${4}
 snippet textarea
 	<textarea name="${1:Name}" rows="${2:8}" cols="${3:40}">${4}</textarea>${5}
+snippet newdjango
+	{% extends "base_auth.html" %}
+	{% block title %}${1:Title}{% endblock %}
+	{% block content %}
+
+	{% endblock %}
