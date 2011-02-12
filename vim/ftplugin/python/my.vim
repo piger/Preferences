@@ -22,7 +22,7 @@ inoremap <buffer> # X#
 " gli altri)
 
 setl foldcolumn=2
-setl foldmethod=indent
+"setl foldmethod=indent
 
 " line number con la GUI
 if has("gui_running")

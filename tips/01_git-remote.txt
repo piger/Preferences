@@ -1,3 +1,16 @@
+# MANIERA NUOVA UND FICHETTA
+
+$ git remote add origin cazzo.dyo:peto.git
+$ git push origin master:refs/heads/master
+
+
+# GIT UNDO
+# Ad esempio, l'undo di un "git add"
+$ git reset
+
+# undo di un merge
+$ git reset --merge
+
 # http://toolmantim.com/article/2007/12/5/setting_up_a_new_remote_git_repository
 # Anche:
 # http://wiki.sourcemage.org/Git_Guide

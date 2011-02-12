@@ -14,3 +14,5 @@ vim/.VimballRecord
 vim/GetLatest/*
 vim/.netrwhist
 zsh/.zcalc_history
+vim/spell/
+vim/bundle/ttcoach/macros/ttcoach/*/stats.dat
