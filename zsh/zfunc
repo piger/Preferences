@@ -90,6 +90,17 @@ vman() {
     emulate -L zsh
     man $* | col -b | view -c 'set ft=man nomod nolist' -
 }
+mann () {
+    vim -c "runtime ftplugin/man.vim" -c "Man ${1-man}" +"wincmd o"
+}
+
+triman () {
+    if [[ $# -eq 0 ]]; then
+	man
+    elif whatis $* ; then
+	man $* | col -bp | iconv -c | view -c 'set ft=man nomod nolist' -
+    fi
+}
 # END OF GRML - zsh-lovers
 # }}}
 
@@ -341,7 +352,25 @@ function zsh_stats() {
 
 # pulizia file python .pyc senza corrispondente .py
 pulizia_python () {
-    rm -i *.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
+    cat <<'EOF'
+>>> Cancella i file .pyc a cui non corrisponde un file .py
+>>> Nella directory attuale:"
+% rm -i *.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
+>>> Ricorsivo:
+% rm -i **/*.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
+EOF
+}
+
+# Suggerisce come cancellare i vecchi file di backup di Vim.
+delete_vim_backups () {
+    cat <<'EOF'
+Attenzione: non fare affidamento sull'mtime di un file di backup.
+Se edito un file con 'mtime = 12 Nov 16:40' il backup avra'
+lo stesso mtime e verrebbe cancellato da questo comando.
+Provare con -atime ?
+
+% find ~/.vim/backups -mtime +30d -print0 | xargs -0 rm -f'
+EOF
 }
 
 # vim: ft=zsh
