@@ -16,26 +16,33 @@ set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
 " Per ogni dir in &backupdir, controlla se esiste e in caso la crea
-for d in split(&backupdir, ",")
-    let dd = expand(d)
-    if !isdirectory(dd)
-	call mkdir(dd, "p", 0700)
-    endif
-endfor
+" for d in split(&backupdir, ",")
+"     let dd = expand(d)
+"     if !isdirectory(dd)
+" 	call mkdir(dd, "p", 0700)
+"     endif
+" endfor
+if !isdirectory(expand("~/.vim/backups"))
+    call mkdir(expand("~/.vim/backups"))
+endif
 " --
-set bg=dark			" background NERO
+" set bg=dark			" background NERO
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
 " Directory per i file di swap (crea se necessario)
 set directory=~/.vim/swap,.
-if !isdirectory($HOME . "/.vim/swap")
-    call mkdir($HOME . "/.vim/swap", "p", 0700)
+" if !isdirectory($HOME . "/.vim/swap")
+"     call mkdir($HOME . "/.vim/swap", "p", 0700)
+" endif
+
+if !isdirectory(expand("~/.vim/swap"))
+    call mkdir(expand("~/.vim/swap"))
 endif
 
-set history=50			" quante entry di history per comandi e search
+set history=100			" quante entry di history per comandi e search
 
-" ricerca testo
 set noexrc			" NON leggere i file .vimrc .exrc nella dir corrente.
+" ricerca testo
 set ignorecase			" ricerca case insensitive...
 set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
@@ -44,10 +51,11 @@ set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrap
 
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
-set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
+" set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
 				" spazi vuoti alla fine delle righe.
 "set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
+set modeline
 set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
@@ -56,7 +64,8 @@ set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
-set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
 set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
@@ -193,7 +202,8 @@ if has("gui_running")
 else
     " non ha GUI running
     " colorscheme winter
-    colorscheme candycode
+    " colorscheme candycode
+    colorscheme fnaqevan
     " colorscheme molokai
 endif
 " }
@@ -374,6 +384,9 @@ if has("autocmd")
 	autocmd FileType perl set errorformat=%f:%l:%m
 	" autocmd FileType perl set autowrite
 
+	" Mako templates
+	autocmd BufNewFile,BufRead *.mako setl ft=mako
+
 	" Tags automatiche (test)
 	"autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
 	
@@ -496,16 +509,35 @@ nmap <Leader>nt :NERDTreeToggle<CR>
 
 " Fuzzyfinder (dall'esempio nel man):
 nnoremap <silent> <C-n>      :FufBuffer<CR>
+amenu Fuf.Buffer\ <C-n> :FufBuffer<CR>
+
 nnoremap <silent> <C-p>      :FufFileWithCurrentBufferDir<CR>
+amenu Fuf.FileWithCurrentBufferDir\ <C-p> :FufFileWithCurrentBufferDir<CR>
+
 nnoremap <silent> <C-f><C-p> :FufFileWithFullCwd<CR>
+amenu Fuf.FileWithFullCwd\ <C-f><C-p> :FufFileWithFullCwd<CR>
+
 nnoremap <silent> <C-f>p     :FufFile<CR>
+amenu Fuf.File\ <C-f>p :FufFile<CR>
+
 nnoremap <silent> <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
+amenu Fuf.DirWithCurrentBufferDir\ <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
+
 nnoremap <silent> <C-f>d     :FufDirWithFullCwd<CR>
+amenu Fuf.DirWithFullCwd\ <C-f>d :FufDirWithFullCwd<CR>
+
 nnoremap <silent> <C-f>D     :FufDir<CR>
+amenu Fuf.Dir\ <C-f>D :FufDir<CR>
+
 nnoremap <silent> <C-j>      :FufMruFile<CR>
+amenu Fuf.MruFile\ <C-j> :FufMruFile<CR>
+
 nnoremap <silent> <C-k>      :FufMruCmd<CR>
+
 nnoremap <silent> <C-b>      :FufBookmark<CR>
+
 nnoremap <silent> <C-f><C-t> :FufTag<CR>
+
 nnoremap <silent> <C-f>t     :FufTag!<CR>
 noremap  <silent> g]         :FufTagWithCursorWord!<CR>
 nnoremap <silent> <C-f><C-f> :FufTaggedFile<CR>
@@ -569,8 +601,8 @@ let Tlist_Show_One_File = 1
 
 
 " Source local configuration {
-if filereadable($HOME . "/.vimrc.local")
-    source $HOME/.vimrc.local
+if filereadable(expand("~/.vimrc.local"))
+    source ~/.vimrc.local
 endif
 " }
 

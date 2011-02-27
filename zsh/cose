@@ -14,11 +14,14 @@ ls_opts='-F'
 
 # OSTYPE prende il valore da un #define in compilazione,
 # non e' del tutto safe.
-if [[ -e /mach_kernel || -d /Applications ]]; then
+# [27/02/11] Pero'... se compili su osx, usi su osx, mentre se compili su linux
+# usi su linux, quindi evito di accedere al disco inutilmente.
+
+if [[ $OSTYPE == darwin* ]]; then
     # OS X
     source ${ZDOTDIR}/os/darwin
  
-elif [[ -e /etc/debian_version || $OSTYPE = linux* ]]; then
+elif [[ $OSTYPE == linux* ]]; then
     # Ubuntu / GNU/Linux
     source ${ZDOTDIR}/os/linux
 
