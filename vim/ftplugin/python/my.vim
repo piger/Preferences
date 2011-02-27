@@ -23,6 +23,8 @@ inoremap <buffer> # X#
 
 setl foldcolumn=2
 "setl foldmethod=indent
+" Apre di default tutti i fold
+setl foldlevel=100
 
 " line number con la GUI
 if has("gui_running")

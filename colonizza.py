@@ -39,7 +39,6 @@ de backup e se lo leva dar cazzo.>>
 from __future__ import with_statement
 import os
 import sys
-import re
 import filecmp
 from os.path import expanduser, join, exists
 
@@ -140,5 +139,4 @@ def main():
     borg()
 
 if __name__ == '__main__':
-    import sys
     sys.exit(main())
