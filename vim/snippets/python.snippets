@@ -84,3 +84,25 @@ snippet ifmain
 # __magic__
 snippet _
 	__${1:init}__${2}
+
+# setup.py
+snippet setuppy
+	from distutils.core import setup
+	# from setuptools import setup, find_packages
+
+	setup(
+	    name = "",
+	    version = "",
+	    description = "",
+	    packages = [
+		'',
+	    ],
+
+	    scripts = [
+		'',
+	    ],
+	)
+
+# absolute import
+snippet absimport
+	from __future__ import absolute_import
