@@ -113,34 +113,23 @@ done
 
 # ---
 
-colorize_hostname() {
-    local chash crand
-
-    chash=0
-    foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+chash=0
+foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
 	(( chash += #letter ))
-    end
-    crand=$(( $chash % 256 ))
-
-    return crand
-}
-
-#chash=0
-#foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
-#	(( chash += #letter ))
-#end
-#crand=$(( $chash % 9 ))
-#crandname=$colnames[$crand]
-#eval cprompt='%{${fg[$crandname]}%}'
-# PROMPT='[%T] %(1j.|%j.)%3c%# '
+end
+crand=$(( $chash % 9 ))
+crandname=$colnames[$crand]
+eval cprompt='%{${fg[$crandname]}%}'
+PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
+# RPROMPT='${vcs_info_msg_0_}'
 
 # NOTE PER IL PROMPT:
 # - bisogna assegnare una stringa con apici SINGOLI, altrimenti le param. expansion NON funzionano!
 # - come ${(%):-%~} ritorni $PWD a modo del prompt, e' MAGIA parameter expansion :)
-PROMPT='$FG[220][%T] in: $FX[bold]$FG[034]${${(%):-%~}//\//$FG[022]/$FG[034]}$FX[reset]%(0w#$FG[196] -> E DOMENICA! <-$FX[reset] #)
-%(1j.[%j] .)%(!.$FG[196]root .)$FG[245]%#$FX[reset] '
+## PROMPT='$FG[220][%T] in: $FX[bold]$FG[034]${${(%):-%~}//\//$FG[022]/$FG[034]}$FX[reset]%(0w#$FG[196] -> E DOMENICA! <-$FX[reset] #)
+## %(1j.[%j] .)%(!.$FG[196]root .)$FG[245]%#$FX[reset] '
 
-RPROMPT="$FG[208]%n$FG[230]@$FG[075]%m$FX[reset]"
+## RPROMPT="$FG[208]%n$FG[230]@$FG[075]%m$FX[reset]"
 
 # Idee per path nel prompt colorato
 # http://superuser.com/questions/49092/how-to-format-the-path-in-a-zsh-prompt
