@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 # portachiavi.zsh
 # Dialog script for ssh key management.
 # by: Daniel Kertesz <daniel@spatof.org> on 03-03-2008
