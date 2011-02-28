@@ -40,5 +40,28 @@ fi
 # ps: /dev/mem: Permission denied
 # [1]    14269 exit 1     ps -o pid,user,pcpu,pmem,state,command xauw
 
+obsd_cvslist () {
+	if (( ! $+commands[curl] )); then
+		echo "You need 'curl' to run this. pkg_add -i curl"
+		return
+	fi
+	CVSURL="http://www.openbsd.org/anoncvs.html"
+
+	for cvsroot in $(curl -s ${CVSURL} | grep "CVSROOT=" | cut -d">" -f3- | cut -d"<" -f1); do
+		echo "$cvsroot"
+	done
+}
+
+obsd_ftplist () {
+	if (( ! $+commands[curl] )); then
+		echo "You need 'curl' to run this. pkg_add -i curl"
+		return
+	fi
+	MIRRORURL="http://www.openbsd.org/ftp.html"
+
+	for mirror in $(curl -s ${MIRRORURL} | egrep -i "<a.*(http|ftp)://.*openbsd" | cut -d'"' -f2); do
+		echo "$mirror"
+	done
+}
 
 # vim: ft=zsh

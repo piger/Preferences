@@ -1,0 +1,22 @@
+# cambia il titolo del xterm {{{
+xtrename() {
+    emulate -L zsh
+    if [[ $1 != "-f" ]] ; then
+        if [[ -z ${DISPLAY} ]] ; then
+            printf 'xtrename only makes sense in X11.\n'
+            return 1
+        fi
+    else
+        shift
+    fi
+    if [[ -z $1 ]] ; then
+        printf 'usage: xtrename [-f] "title for xterm"\n'
+        printf '  renames the title of xterm from _within_ screen.\n'
+        printf '  also works without screen.\n'
+        printf '  will not work if DISPLAY is unset, use -f to override.\n'
+        return 0
+    fi
+    print -n "\eP\e]0;${1}\C-G\e\\"
+    return 0
+}
+# }}}

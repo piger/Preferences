@@ -11,78 +11,6 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
 fi
 # }}}
 
-# whatwhen: Find history events by search pattern and list them by date. {{{
-whatwhen()  {
-    emulate -L zsh
-    local usage help ident format_l format_s first_char remain first last
-    usage='USAGE: whatwhen [options] <searchstring> <search range>'
-    help="Use 'whatwhen -h' for further explanations."
-    ident=${(l,${#${:-Usage: }},, ,)}
-    format_l="${ident}%s\t\t\t%s\n"
-    format_s="${format_l//(\\t)##/\\t}"
-    # Make the first char of the word to search for case
-    # insensitive; e.g. [aA]
-    first_char=[${(L)1[1]}${(U)1[1]}]
-    remain=${1[2,-1]}
-    # Default search range is `-100'.
-    first=${2:-\-100}
-    # Optional, just used for `<first> <last>' given.
-    last=$3
-    case $1 in
-        ("")
-            printf '%s\n\n' 'ERROR: No search string specified. Aborting.'
-            printf '%s\n%s\n\n' ${usage} ${help} && return 1
-        ;;
-        (-h)
-            printf '%s\n\n' ${usage}
-            print 'OPTIONS:'
-            printf $format_l '-h' 'show help text'
-            print '\f'
-            print 'SEARCH RANGE:'
-            printf $format_l "'0'" 'the whole history,'
-            printf $format_l '-<n>' 'offset to the current history number; (default: -100)'
-            printf $format_s '<[-]first> [<last>]' 'just searching within a give range'
-            printf '\n%s\n' 'EXAMPLES:'
-            printf ${format_l/(\\t)/} 'whatwhen grml' '# Range is set to -100 by default.'
-            printf $format_l 'whatwhen zsh -250'
-            printf $format_l 'whatwhen foo 1 99'
-        ;;
-        (\?)
-            printf '%s\n%s\n\n' ${usage} ${help} && return 1
-        ;;
-        (*)
-            # -l list results on stout rather than invoking $EDITOR.
-            # -i Print dates as in YYYY-MM-DD.
-            # -m Search for a - quoted - pattern within the history.
-            fc -li -m "*${first_char}${remain}*" $first $last
-        ;;
-    esac
-}
-# }}}
-
-# cambia il titolo del xterm {{{
-xtrename() {
-    emulate -L zsh
-    if [[ $1 != "-f" ]] ; then
-        if [[ -z ${DISPLAY} ]] ; then
-            printf 'xtrename only makes sense in X11.\n'
-            return 1
-        fi
-    else
-        shift
-    fi
-    if [[ -z $1 ]] ; then
-        printf 'usage: xtrename [-f] "title for xterm"\n'
-        printf '  renames the title of xterm from _within_ screen.\n'
-        printf '  also works without screen.\n'
-        printf '  will not work if DISPLAY is unset, use -f to override.\n'
-        return 0
-    fi
-    print -n "\eP\e]0;${1}\C-G\e\\"
-    return 0
-}
-# }}}
-
 # vim per leggere le pagine man {{{
 # It's shameless stolen from <http://www.vim.org/tips/tip.php?tip_id=167>
 #f5# Use \kbd{vim} as your manpage reader
@@ -132,15 +60,6 @@ if (( ! $+commands[tree] )); then
 	tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
 fi
 # }}}
-
-restapache () {
-	apachectl stop
-	sleep 3
-	print -l ${(M)${(f)"$(ps xauw)"}:#*(httpd|apache)*}
-	#read -r 'res?Restarto? [yes/no]: '
-	read -r "res?$fg_bold[green]Restarto? [$fg_bold[red]Yes$fg_bold[green]/$fg_bold[red]No$fg_bold[green]]$reset_color"
-	if [[ $res = (#i)"yes" ]]; then apachectl start; fi
-}
 
 # hahahah http://www.strcat.de/dotfiles/zsh/dot.zshfunctions
 dick() { uptime | perl -ne "/(\d+) d/;print 8,q(=)x\$1,\"D\n\"" }
@@ -269,30 +188,6 @@ sfortune () {
 	fi
 }
 
-obsd_cvslist () {
-	if (( ! $+commands[curl] )); then
-		echo "You need 'curl' to run this. pkg_add -i curl"
-		return
-	fi
-	CVSURL="http://www.openbsd.org/anoncvs.html"
-
-	for cvsroot in $(curl -s ${CVSURL} | grep "CVSROOT=" | cut -d">" -f3- | cut -d"<" -f1); do
-		echo "$cvsroot"
-	done
-}
-
-obsd_ftplist () {
-	if (( ! $+commands[curl] )); then
-		echo "You need 'curl' to run this. pkg_add -i curl"
-		return
-	fi
-	MIRRORURL="http://www.openbsd.org/ftp.html"
-
-	for mirror in $(curl -s ${MIRRORURL} | egrep -i "<a.*(http|ftp)://.*openbsd" | cut -d'"' -f2); do
-		echo "$mirror"
-	done
-}
-
 # rigenera le versioni compilate degli script 
 rifaitutto () {
 	# Al contrario di quanto credevo, eseguire questi comandi all'avvio (.zshrc)
@@ -348,29 +243,6 @@ rscreen () {
 # da oh-my-zsh
 function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
-}
-
-# pulizia file python .pyc senza corrispondente .py
-pulizia_python () {
-    cat <<'EOF'
->>> Cancella i file .pyc a cui non corrisponde un file .py
->>> Nella directory attuale:"
-% rm -i *.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
->>> Ricorsivo:
-% rm -i **/*.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
-EOF
-}
-
-# Suggerisce come cancellare i vecchi file di backup di Vim.
-delete_vim_backups () {
-    cat <<'EOF'
-Attenzione: non fare affidamento sull'mtime di un file di backup.
-Se edito un file con 'mtime = 12 Nov 16:40' il backup avra'
-lo stesso mtime e verrebbe cancellato da questo comando.
-Provare con -atime ?
-
-% find ~/.vim/backups -mtime +30d -print0 | xargs -0 rm -f'
-EOF
 }
 
 # vim: ft=zsh
