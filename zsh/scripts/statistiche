@@ -1,0 +1,6 @@
+# vim: ft=zsh
+
+# funziona solo con la history extended
+statistiche () {
+    cat ~/.history | cut -d ';' -f 2- | sort | uniq -c | sort -rn | head
+}
