@@ -91,4 +91,10 @@ umask 022
 # Supporto per SLOW_COMPUTER
 SLOW_COMPUTER="0"
 
+# Alcuni alias vanno qui per averli anche negli script.
+if [[ -e /Applications/MacVim.app ]]; then
+    alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+    alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
+fi
+
 # vim: ft=zsh

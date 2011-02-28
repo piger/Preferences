@@ -3,10 +3,11 @@
 # ---------------------------------------------------------------
 
 # -*- aliases
-if [[ -e /Applications/MacVim.app ]]; then
-    alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
-    alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
-fi
+# Spostato in zshenv per averlo negli script (tipo il mio vimpager)
+# if [[ -e /Applications/MacVim.app ]]; then
+#     alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+#     alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
+# fi
 
 # ls da `homebrew` -> `coreutils`
 if [[ -x /usr/local/bin/gls ]]; then
