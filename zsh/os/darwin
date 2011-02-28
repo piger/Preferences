@@ -21,15 +21,15 @@ export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
 # Mac Ports
 # definisce il path dei ports (e' una variabile mia, non serve
 # ai ports.)
-MACPORTS=/opt/local
-
-if [[ -d $MACPORTS ]]; then
-	path=( $MACPORTS/sbin $MACPORTS/bin $path )
-	# manpath non serve, perche' man sa dove cercare in base a $PATH
-	# manpath=( /opt/local/man /usr/share/man /usr/local/man $manpath )
-
-	# grep colorato
-	[[ -x $MACPORTS/bin/grep ]] && alias grep='grep --color=auto'
-fi
+# MACPORTS=/opt/local
+# 
+# if [[ -d $MACPORTS ]]; then
+# 	path=( $MACPORTS/sbin $MACPORTS/bin $path )
+# 	# manpath non serve, perche' man sa dove cercare in base a $PATH
+# 	# manpath=( /opt/local/man /usr/share/man /usr/local/man $manpath )
+# 
+# 	# grep colorato
+# 	[[ -x $MACPORTS/bin/grep ]] && alias grep='grep --color=auto'
+# fi
 
 # vim: ft=zsh

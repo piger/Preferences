@@ -198,6 +198,11 @@ declare -T LD_LIBRARY_PATH ld_library_path
 declare -T PERL5LIB perl5lib
 declare -T PYTHONPATH pythonpath
 
+# La lingua tra le chiappe: LOCALE
+# E' richiesto da iTerm (con UTF-8) e in generale e' il 2011 e direi che puo'
+# anche diventare il mio cazzo di default.
+export LANG="en_US.UTF-8"
+
 # FTP in passive mode (CPAN)
 export FTP_PASSIVE=1
 
