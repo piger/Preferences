@@ -333,6 +333,9 @@ if has("autocmd")
 	" Mako templates
 	autocmd BufNewFile,BufRead *.mako setl ft=mako
 
+	" Nmap plaintext report
+	autocmd BufRead *.nmap setl ft=nmap
+
 	" Tags automatiche (test)
 	"autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
 	

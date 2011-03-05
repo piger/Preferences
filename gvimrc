@@ -16,7 +16,8 @@ if has("gui_gtk2")
     " set guifont=Terminus\ 10
     " set guifont=ProggyCleanTTSZ\ 12
     " set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
-    set guifont=Monospace\ 9
+    " set guifont=Monospace\ 10
+    set guifont=DejaVu\ Sans\ Mono\ 10
 
     " COLORSCHEME
     " colorscheme habiLight
