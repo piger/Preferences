@@ -1,12 +1,25 @@
-" vimrc [updated: 10-07-2010]
-" Daniel Kertesz <daniel@spatof.org> http://spatof.org
+" Vim - Configurazione generica
 " vim: foldmarker={,} foldlevel=0
+
+"    //   \o FOTTI   |
+"  -oOO __/)  IL     |
+"    '`  (\   FUCO   |
 
 
 " NOTE, SUGGERIMENTI E AVVERTIMENTI {
-"	- lo spazio tra ogni sezione e' di due righe vuote
-"	- :options apre una finestra dove vedere e cambiare le opzioni
-"	- per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
+"   - lo spazio tra ogni sezione e' di due righe vuote
+"   - :options apre una finestra dove vedere e cambiare le opzioni
+"   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
+" }
+
+
+" Directory necessarie {
+if !isdirectory(expand("~/.vim/backups"))
+    call mkdir(expand("~/.vim/backups"), "", 0700)
+endif
+if !isdirectory(expand("~/.vim/swap"))
+    call mkdir(expand("~/.vim/swap"), "", 0700)
+endif
 " }
 
 
@@ -15,29 +28,15 @@ set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
-" Per ogni dir in &backupdir, controlla se esiste e in caso la crea
-" for d in split(&backupdir, ",")
-"     let dd = expand(d)
-"     if !isdirectory(dd)
-" 	call mkdir(dd, "p", 0700)
-"     endif
-" endfor
-if !isdirectory(expand("~/.vim/backups"))
-    call mkdir(expand("~/.vim/backups"))
-endif
-" --
+
 " set bg=dark			" background NERO
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
-" Directory per i file di swap (crea se necessario)
-set directory=~/.vim/swap,.
-" if !isdirectory($HOME . "/.vim/swap")
-"     call mkdir($HOME . "/.vim/swap", "p", 0700)
-" endif
-
-if !isdirectory(expand("~/.vim/swap"))
-    call mkdir(expand("~/.vim/swap"))
-endif
+" Directory per i file di swap ("." indica la stessa directory del file editato)
+" 5-Mar-2011 - I file di swap possono anche essere in ".", non vedo motivo per
+" tenerli tutti in una directory, ed e' comodo per evitare di editare in due
+" lo stesso file.
+" set directory=~/.vim/swap,.
 
 set history=100			" quante entry di history per comandi e search
 
@@ -59,7 +58,7 @@ set modeline
 set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
-set scrolloff=3			" scrolla con un context di 3 righe
+set scrolloff=5			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
@@ -67,26 +66,33 @@ set showmode			" mostra un messaggio se in modalita' insert/visual/replace
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
 set nosmartindent		" NON indentare con saggezza
-set t_Co=256			" 256 colori
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
 				" in visual block
 set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap			" wrappa SEMPRE, e' OK!
+set t_Co=256			" 256 colori in terminale	
+set vb				" meglio la visual bell che l'orrendo SPEAKER
+
+
 " new in vim 7.3: blowfish encryption [NOTA: per cryptare bisogna settare
 " 'key', con il comando :X ]
 if v:version >= 703
     set cryptmethod=blowfish
 endif
 
-" Mouse support XXX {
+" Mouse support {
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
 " if has('mouse')
 "     set mouse=a
 " endif
+set mouse=""
+
+" Questo POTREBBE essere interessante...
 " set clipboard+=unnamed " share windows clipboard
 " }
+
 
 " folding {
 "set foldenable
@@ -100,30 +106,26 @@ set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "set foldtext=SimpleFoldText()
 " }
 
-" il viminfo e' un file dove vengono salvate informazioni di sessione per
-" gli ultimi file editati (es: ricerche, comandi, marks ...
-" '10   =>      ricorda marks per ultimi 10 file editati
-" /10   =>      ricorda le ultime 10 ricerche
-" :10   =>      ricorda ultimi 10 comandi
-" <20   =>      ricorda massimo 20 righe per registro
-" f1    =>      ricorda marks
-" h     =>      disabilita l'highlight della sessione precedente
-" n~/.viminfo => nome del file
-if v:version >= 700
-    "set viminfo='10,/10,:10,<20,f1,h,n~/.viminfo
-    set viminfo='100,f1,<200,/50,:100,h
-endif
-" }
+
+" Ricorda nel viminfo:
+" '100 -- marks per gli ultimi 100 file
+" <50 -- massimo 20 righe per registro
+" s5 -- massimo 5Kb per registro
+" /20 -- ultime 20 ricerche
+" :20 -- ultimi 20 comandi
+set viminfo='100,<50,s5,/20,:20
 
 
 " Lingua e dizionari {
 set spelllang=it,en,en_US
-set dictionary=/usr/share/dict/words
+set dictionary+=/usr/share/dict/words
 
 " thesaurus (sinonimi) italiano:
+" Per usarlo: C-x C-t
 " http://linguistico.sourceforge.net/pages/thesaurus_italiano.html
 " http://www.thegeekstuff.com/2008/12/vi-and-vim-editor-3-steps-to-enable-thesaurus-option/
-set thesaurus+=/Users/sand/Documents/thesaurus/mthesaur.txt
+" ftp://ibiblio.org/pub/docs/books/gutenberg/etext02/mthes10.zip
+" set thesaurus+=/Users/sand/Documents/thesaurus/mthesaur.txt
 " }
 
 
@@ -139,70 +141,12 @@ if &t_Co > 2 || has("gui_running")
     "hi statusline ctermfg=Black ctermbg=Blue
 endif
 
-if has("gui_running")
-    if has("gui_gtk2")
-	" FONTS
-	" Una selezione di possibili font decenti, in ordine di decenza.
-	" NOTA: Alcuni, tipo Proggy, si vedono bene solo a size 12
-	" set guifont=Liberation\ Mono\ 9
-	" set guifont=ProggySquareTT\ 12
-	" set guifont=Terminus\ 10
-	" set guifont=ProggyCleanTTSZ\ 12
-	" set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
-	set guifont=Monospace\ 9
 
-	" COLORSCHEME
-	" colorscheme habiLight
-	colorscheme sienna
-
-    elseif has("x11")
-	" Also for GTK 1
-	:set guifont=-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15
-
-    elseif has("gui_win32")
-	:set guifont=Luxi_Mono:h12:cANSI
-
-    elseif has("gui_macvim")
-	" colorscheme molokai
-	" colorscheme habilight
-	" colorscheme autumnleaf
-	colorscheme sienna
-	" colorscheme eclipse
-	" colorscheme slate
-
-	" I FONTI POMPI
-	" set guifont=Monaco:h12
-	" set guifont=Menlo:h12
-	 "set gfn=Osaka-Mono:h14
-	set guifont=DejaVu\ Sans\ Mono:h12
-
-	" Configurazione finestra (altezza, larghezza, trasparenza)
-	set lines=55
-	set columns=128
-	set transp=1
-
-    else
-	" e' una gui ma non so di che tipo:
-	colorscheme robinhood
-    endif
-
-    set mousehide	" Hide the mouse when typing text
-    set vb		" meglio la visual bell che l'orrendo SPEAKER
-
-    " COLOR SCHEME PER TUTTE LE GUI (NON ATTIVO)
-    " Per utilizzare i colorscheme di gvim usa plugins/CSApprox.vim
-    " E' consigliabile fargli generare il nuovo colorscheme "compatibile"
-    " (vedi help) e disabilitarlo.
-    
-    " colorscheme non male:
-    " oceandeep (su gVim), vividchalk, asu1dark, peachpuff (gui), ron
-    
-    "colorscheme dw_orange-256colors
-    "colorscheme asu1dark-256colors
-else
-    " non ha GUI running
+" Colori e opzioni solo per il terminale 
+if !has("gui_running")
     " colorscheme winter
     " colorscheme candycode
+
     colorscheme fnaqevan
     " colorscheme molokai
 endif
@@ -213,6 +157,8 @@ endif
 " set number
 " set cursorline
 " set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
+
+" Questo dovrebbe essere un "%" evoluto
 source $VIMRUNTIME/macros/matchit.vim
 " }
 
