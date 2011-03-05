@@ -40,6 +40,7 @@ setopt NO_flow_control		# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
 				# risultati, come nella completion con  MENU_COMPLETE
 setopt hist_ignore_dups		# se il comando e' uguale al precedente non metterlo nella history
 setopt hist_no_store		# non salvare nella history i comandi "history"
+setopt hist_verify		# quando si usa la history expansion non esegue direttamente, cosi' vedi che stai per fare.
 setopt NO_hup			# Non manda -HUP ai processi quando la shell muore
 setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
 setopt long_list_jobs		# Elenca i job nel formato esteso
@@ -201,7 +202,9 @@ declare -T PYTHONPATH pythonpath
 # La lingua tra le chiappe: LOCALE
 # E' richiesto da iTerm (con UTF-8) e in generale e' il 2011 e direi che puo'
 # anche diventare il mio cazzo di default.
-export LANG="en_US.UTF-8"
+# export LANG="en_US.UTF-8"
+export LANG="it_IT.UTF-8"
+export LC_MESSAGES="en_US.UTF-8"
 
 # FTP in passive mode (CPAN)
 export FTP_PASSIVE=1
