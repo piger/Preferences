@@ -53,9 +53,9 @@ set laststatus=2		" mostra sempre la riga di status con le info sul file
 " set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
 set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
 				" spazi vuoti alla fine delle righe.
-"set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
-set modeline
-set modelines=5                 " numero di righe valido per le modeline
+set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
+" set modeline
+" set modelines=5                 " numero di righe valido per le modeline
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
 set scrolloff=5			" scrolla con un context di 3 righe
@@ -172,7 +172,11 @@ source $VIMRUNTIME/macros/matchit.vim
 "    will use a mix of tabs and spaces, but typing <Tab> and <BS> will
 "    behave like a tab appears every 4 (or 3) characters.
 
-set tabstop=8                   " numero di spazi per <Tab>
+" 6-Mar-2011 - Cambio 'tabstop' a 4, perche' ha piu' senso che anche i tab
+" altrui occupino 4 caratteri, come quelli che inserisco io (vedi shiftwidth e
+" softtabstop).
+" http://vimcasts.org/episodes/tabs-and-spaces/
+set tabstop=4                   " numero di spazi per <Tab>
 set shiftwidth=4                " numero di spazi per 'step' di indent
 set softtabstop=4
 set noexpandtab
