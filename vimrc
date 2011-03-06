@@ -75,6 +75,9 @@ set wrap			" wrappa SEMPRE, e' OK!
 set t_Co=256			" 256 colori in terminale	
 set vb				" meglio la visual bell che l'orrendo SPEAKER
 
+" Alla TextMate, ma non mi piace.
+" set list
+" set listchars=tab:▸\ ,eol:¬
 
 " new in vim 7.3: blowfish encryption [NOTA: per cryptare bisogna settare
 " 'key', con il comando :X ]
@@ -421,6 +424,8 @@ map Q gq
 " toggle highlight - \th - F4
 nnoremap <Leader>th :set invhls hls?<CR>
 nmap <F2> <Leader>th
+" toglie l'highlight con \<spazio>, piu' comodo.
+nnoremap <Leader><space> :noh<cr>
 
 " toggle autoindent - \th - F3
 nnoremap <Leader>tai :set invautoindent autoindent?<CR>
@@ -455,6 +460,26 @@ imap <C-S-tab> <ESC>:tabprevious<CR>
 " tolgo il bind da CTRL-t che serve a saltellare con le tag.
 "nmap <C-t> :tabnew<CR>
 "imap <C-t> <ESC>:tabnew<CR>
+
+" Questo e' IPER. SUPERIORE.
+" da: http://stevelosh.com/blog/2010/09/coming-home-to-vim/
+" The first two lines fix Vim’s horribly broken default regex “handling” by
+" automatically inserting a \v before any string you search for. This turns
+" off Vim’s crazy default regex characters and makes searches use normal
+" regexes. I already know Perl/Python compatible regex formatting, why would I
+" want to learn another scheme?
+"
+" PRIMA: \w\+
+" DOPO: \w+
+" OVVERO: niente escape MORTALI per ogni cosa!
+nnoremap / /\v
+vnoremap / /\v
+
+" Ardito, ma interessante:
+" Rimappare altri tasti in vece di <ESC>
+" In questo modo, in INSERT MODE, premere jj e' come premere <ESC>
+inoremap jj <ESC>
+
 
 " PLUGINS:
 " NERDTree - \nt
