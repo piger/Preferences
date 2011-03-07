@@ -18,13 +18,18 @@
 ; color-themes
 (require 'color-theme)
 (color-theme-initialize)
+(load "~/Preferences/emacs.d/color-theme-molokai.el")
+(load "~/Preferences/emacs.d/color-theme-blackboard.el")
+(load "~/Preferences/emacs.d/pigerrimitudo.el")
 
-; color-theme per la console
-(color-theme-arjen)
 
-; color-theme per la GUI (si, non so ancora fare gli else in lisp)
-(when window-system
-  (color-theme-blippblopp))
+; Se siamo con un window system usa un tema chiaro, mentre in terminale usa uno scuro.
+(if window-system
+    (color-theme-blippblopp)
+  (color-theme-arjen))
+
+; Decenti per GUI (OSX):
+; Greiner, Infodoc, BlippBlopp, GTK-IDE, 
 
 
 (autoload 'python-mode "python-mode" "Python Mode." t)
@@ -36,3 +41,9 @@
 ; S-C-tab -> previous tab/buffer
 (global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
 (global-set-key (kbd "<S-C-tab>") 'previous-tab-or-buffer)
+
+; cose da installare per python:
+; pymacs -> http://pymacs.progiciels-bpi.ca/ (python)
+; rope -> http://rope.sourceforge.net/index.html (python)
+; ropemode -> http://pypi.python.org/pypi/ropemode (?)
+; ropemacs -> http://rope.sourceforge.net/ropemacs.html (emacs?)
