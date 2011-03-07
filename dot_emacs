@@ -1,0 +1,28 @@
+(setq load-path (append '("~/Preferences/emacs") load-path))
+
+(add-to-list 'load-path "~/Preferences/emacs/color-theme")
+
+; da jaromil:
+
+; IDO lets you  open files  and  switch buffers  with fuzzy  matching,
+; really nice when you have lots of things open.
+; http://www.emacsblog.org/2008/05/19/giving-ido-mode-a-second-chance/
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+
+; color-themes
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-blippblopp)
+
+(autoload 'python-mode "python-mode" "Python Mode." t)
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+
+; Navigazione dei TAB (come un browser web)
+; C-tab -> next tab/buffer
+; S-C-tab -> previous tab/buffer
+(global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
+(global-set-key (kbd "<S-C-tab>") 'previous-tab-or-buffer)
+
