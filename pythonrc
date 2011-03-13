@@ -4,8 +4,23 @@
 
 # questo funziona su Snow Leopard:
 # http://stackoverflow.com/questions/675370/tab-completion-in-python-interpreter-in-os-x-terminal
-import rlcompleter
-import readline
-readline.parse_and_bind ("bind ^I rl_complete")
+# import rlcompleter
+# import readline
+# readline.parse_and_bind ("bind ^I rl_complete")
+
+import sys
+
+try:
+    import readline
+    import rlcompleter
+
+    if sys.platform.startswith('darwin'):
+        readline.parse_and_bind ("bind ^I rl_complete")
+    elif sys.platform.startswith('linux'):
+        readline.parse_and_bind("tab: complete")
+        # readline.parse_and_bind ("bind ^I rl_complete")
+
+except ImportError:
+    pass
 
 # vim: ft=python
