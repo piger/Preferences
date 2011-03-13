@@ -21,7 +21,9 @@ if has("gui_gtk2")
 
     " COLORSCHEME
     " colorscheme habiLight
-    colorscheme sienna
+    " colorscheme sienna
+	colo mustang
+	" colo martin_krischik
 
 elseif has("x11")
     " Also for GTK 1
