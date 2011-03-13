@@ -47,3 +47,6 @@
 ; rope -> http://rope.sourceforge.net/index.html (python)
 ; ropemode -> http://pypi.python.org/pypi/ropemode (?)
 ; ropemacs -> http://rope.sourceforge.net/ropemacs.html (emacs?)
+
+; Text-mode di default:
+(setq default-major-mode 'text-mode)

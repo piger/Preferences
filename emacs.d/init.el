@@ -1,0 +1,118 @@
+;;; init.el --- Where all the magic begins
+;;
+;; Part of the Emacs Starter Kit
+;;
+;; This is the first thing to get loaded.
+;;
+;; "Emacs outshines all other editing software in approximately the
+;; same way that the noonday sun does the stars. It is not just bigger
+;; and brighter; it simply makes everything else vanish."
+;; -Neal Stephenson, "In the Beginning was the Command Line"
+
+;; Turn off mouse interface early in startup to avoid momentary display
+;; You really don't need these; trust me.
+; io invece la menu-bar la voglio!
+;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+;; Load path etc.
+
+(setq dotfiles-dir (file-name-directory
+                    (or (buffer-file-name) load-file-name)))
+
+;; Load up ELPA, the package manager
+
+(add-to-list 'load-path dotfiles-dir)
+
+(add-to-list 'load-path (concat dotfiles-dir "/elpa-to-submit"))
+
+(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
+(setq package-user-dir (concat dotfiles-dir "elpa"))
+(setq custom-file (concat dotfiles-dir "custom.el"))
+
+(require 'package)
+(dolist (source '(("technomancy" . "http://repo.technomancy.us/emacs/")
+                  ("elpa" . "http://tromey.com/elpa/")))
+  (add-to-list 'package-archives source t))
+(package-initialize)
+(require 'starter-kit-elpa)
+
+;; These should be loaded on startup rather than autoloaded on demand
+;; since they are likely to be used in every session
+
+(require 'cl)
+(require 'saveplace)
+(require 'ffap)
+(require 'uniquify)
+(require 'ansi-color)
+(require 'recentf)
+
+;; backport some functionality to Emacs 22 if needed
+(require 'dominating-file)
+
+;; Load up starter kit customizations
+
+(require 'starter-kit-defuns)
+(require 'starter-kit-bindings)
+(require 'starter-kit-misc)
+(require 'starter-kit-registers)
+(require 'starter-kit-eshell)
+(require 'starter-kit-lisp)
+(require 'starter-kit-perl)
+(require 'starter-kit-ruby)
+(require 'starter-kit-js)
+
+(regen-autoloads)
+(load custom-file 'noerror)
+
+;; You can keep system- or user-specific customizations here
+(setq system-specific-config (concat dotfiles-dir system-name ".el")
+      user-specific-config (concat dotfiles-dir user-login-name ".el")
+      user-specific-dir (concat dotfiles-dir user-login-name))
+(add-to-list 'load-path user-specific-dir)
+
+(if (file-exists-p system-specific-config) (load system-specific-config))
+(if (file-exists-p user-specific-config) (load user-specific-config))
+(if (file-exists-p user-specific-dir)
+  (mapc #'load (directory-files user-specific-dir nil ".*el$")))
+
+;;; init.el ends here
+
+;;; Tema fichetto
+(if window-system
+    (load "~/.emacs.d/color-theme-radiance.el")
+  ; commento perche' per ora non installo color-themes
+;  (color-theme-arjen)
+  )
+
+; Navigazione dei TAB (come un browser web)
+; C-tab -> next tab/buffer
+; S-C-tab -> previous tab/buffer
+(global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
+(global-set-key (kbd "<S-C-tab>") 'previous-tab-or-buffer)
+
+; Text-mode di default:
+(setq default-major-mode 'text-mode)
+
+; yasnippet
+(add-to-list 'load-path
+             "~/.emacs.d/plugins/yasnippet-0.6.1c")
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
+
+; python-mode
+(add-to-list 'load-path
+             "~/.emacs.d/plugins/python-mode")
+(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+(setq interpreter-mode-alist (cons '("python" . python-mode)
+                                   interpreter-mode-alist))
+(autoload 'python-mode "python-mode" "Python editing mode." t)
+
+; dimensione frame
+(if (window-system)
+    (set-frame-size (selected-frame) 124 40))
+
+; NOTE
+; Per andare a capo senza indentare a cazzo: C-j
