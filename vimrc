@@ -609,18 +609,19 @@ endif
 " DOCUMENTAZIONE: :help if_pyth.txt
 " Aggiunge al path di ricerca di vim (per i comandi gf, :find, etc) il
 " sys.path di python.
-if has('python')
-    python << EOF
-import os
-import sys
-import vim
-for p in sys.path:
-    if os.path.isdir(p):
-	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-EOF
-
-endif
-" }
+" 13-Mar-2011 - Forse questa cosa rallenta tutto/tanto ?
+""" if has('python')
+"""     python << EOF
+""" import os
+""" import sys
+""" import vim
+""" for p in sys.path:
+"""     if os.path.isdir(p):
+""" 	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+""" EOF
+""" 
+""" endif
+""" " }
 
 
 " In teoria da qui in poi posso attivare 'secure'
