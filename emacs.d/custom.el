@@ -19,13 +19,20 @@
 ;; (load "~/.emacs.d/themes/inkpot.el")
 
 
-;;; fichetto
+; Personalizzazione rozza per GUI vs Terminal
 (if window-system
-    (load "~/.emacs.d/themes/color-theme-radiance.el")
+    (load "~/.emacs.d/themes/color-theme-radiance.el"))
 
-  ; commento perche' per ora non installo color-themes
-;  (color-theme-arjen)
-  )
+(if (and (eq window-system 'ns) (eq system-type 'darwin))
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono 12"))
+
+; dimensione frame
+(if (window-system)
+    (set-frame-size (selected-frame) 124 40))
+
+; Font per linux GUI
+(if (and (eq window-system 'x) (eq system-type 'gnu/linux))
+    (set-face-attribute 'default nil :font "Monospace 9"))
 
 ; Navigazione dei TAB (come un browser web)
 ; C-tab -> next tab/buffer
@@ -50,13 +57,6 @@
 (setq interpreter-mode-alist (cons '("python" . python-mode)
                                    interpreter-mode-alist))
 (autoload 'python-mode "python-mode" "Python editing mode." t)
-
-; default font
-(set-face-attribute 'default nil :font "Monospace 9")
-
-; dimensione frame
-(if (window-system)
-    (set-frame-size (selected-frame) 124 40))
 
 ; NOTE
 ; Per andare a capo senza indentare a cazzo: C-j
