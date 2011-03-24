@@ -50,6 +50,10 @@
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
 
+; python.el
+; (add-to-list 'load-path "~/.emacs.d/plugins")
+; (require 'python)
+
 ; python-mode
 (add-to-list 'load-path
              "~/.emacs.d/plugins/python-mode")
@@ -63,17 +67,17 @@
 
 
 ; Pymacs
-;; (autoload 'pymacs-apply "pymacs")
-;; (autoload 'pymacs-call "pymacs")
-;; (autoload 'pymacs-eval "pymacs" nil t)
-;; (autoload 'pymacs-exec "pymacs" nil t)
-;; (autoload 'pymacs-load "pymacs" nil t)
-;; ;;(eval-after-load "pymacs"
-;; ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+;;(eval-after-load "pymacs"
+;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
 ;; ; ropemacs & soci
-;; ;(require 'pymacs)
-;; (pymacs-load "ropemacs" "rope-")
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
 
 ; python checkers
 
@@ -89,23 +93,23 @@
              '("\\.py\\'" flymake-pyflakes-init)))
 
 ; temi?
-(load "~/.emacs.d/themes/bho1.el")
-(load "~/.emacs.d/themes/bho2.el")
-(load "~/.emacs.d/themes/bho3.el")
-(load "~/.emacs.d/themes/bho4.el")
-(load "~/.emacs.d/themes/bho5.el")
-(load "~/.emacs.d/themes/bho6.el")
-(load "~/.emacs.d/themes/bho7.el")
-(load "~/.emacs.d/themes/bho8.el")
-(load "~/.emacs.d/themes/bho9.el")
-(load "~/.emacs.d/themes/bho10.el")
-(load "~/.emacs.d/themes/color-theme-gruber-darker.el")
-(load "~/.emacs.d/themes/color-theme-less.el")
-(load "~/.emacs.d/themes/color-theme-molokai.el")
-(load "~/.emacs.d/themes/color-theme-blackboard.el")
-(load "~/.emacs.d/themes/color-theme-subdued.el")
-(load "~/.emacs.d/themes/pigerrimitudo.el")
-(load "~/.emacs.d/themes/inkpot.el")
+;; (load "~/.emacs.d/themes/bho1.el")
+;; (load "~/.emacs.d/themes/bho2.el")
+;; (load "~/.emacs.d/themes/bho3.el")
+;; (load "~/.emacs.d/themes/bho4.el")
+;; (load "~/.emacs.d/themes/bho5.el")
+;; (load "~/.emacs.d/themes/bho6.el")
+;; (load "~/.emacs.d/themes/bho7.el")
+;; (load "~/.emacs.d/themes/bho8.el")
+;; (load "~/.emacs.d/themes/bho9.el")
+;; (load "~/.emacs.d/themes/bho10.el")
+;; (load "~/.emacs.d/themes/color-theme-gruber-darker.el")
+;; (load "~/.emacs.d/themes/color-theme-less.el")
+;; (load "~/.emacs.d/themes/color-theme-molokai.el")
+;; (load "~/.emacs.d/themes/color-theme-blackboard.el")
+;; (load "~/.emacs.d/themes/color-theme-subdued.el")
+;; (load "~/.emacs.d/themes/pigerrimitudo.el")
+;; (load "~/.emacs.d/themes/inkpot.el")
 
 ; mostra le combinazioni non bindate
 (require 'unbound)
