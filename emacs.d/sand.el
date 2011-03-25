@@ -1,4 +1,7 @@
-;;; Personalizzazioni
+; sand.el
+; Ispirato da molti e da nessuno.
+;
+; last modified: 2011-03-25 02:56 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -20,8 +23,9 @@
 
 
 ; Personalizzazione rozza per GUI vs Terminal
-(if window-system
-    (load "~/.emacs.d/themes/color-theme-radiance.el"))
+;; (if window-system
+;;     (load "~/.emacs.d/themes/color-theme-radiance.el"))
+;(color-theme-zenburn)
 
 (if (and (eq window-system 'ns) (eq system-type 'darwin))
     (set-face-attribute 'default nil :font "DejaVu Sans Mono 12"))
@@ -50,10 +54,6 @@
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
 
-; python.el
-; (add-to-list 'load-path "~/.emacs.d/plugins")
-; (require 'python)
-
 ; python-mode
 (add-to-list 'load-path
              "~/.emacs.d/plugins/python-mode")
@@ -75,9 +75,9 @@
 ;;(eval-after-load "pymacs"
 ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
-;; ; ropemacs & soci
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+;; ;; ; ropemacs & soci
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
 
 ; python checkers
 
@@ -107,9 +107,10 @@
 ;; (load "~/.emacs.d/themes/color-theme-less.el")
 ;; (load "~/.emacs.d/themes/color-theme-molokai.el")
 ;; (load "~/.emacs.d/themes/color-theme-blackboard.el")
-;; (load "~/.emacs.d/themes/color-theme-subdued.el")
+(load "~/.emacs.d/themes/color-theme-subdued.el")
 ;; (load "~/.emacs.d/themes/pigerrimitudo.el")
 ;; (load "~/.emacs.d/themes/inkpot.el")
+(color-theme-subdued)
 
 ; mostra le combinazioni non bindate
 (require 'unbound)
@@ -120,3 +121,42 @@
 ; undo-tree
 ; http://www.dr-qubit.org/emacs.php#undo-tree
 (require 'undo-tree)
+
+; cedet
+;; (load-file "~/.emacs.d/plugins/cedet-1.0/common/cedet.el")
+;; (global-ede-mode 1)
+;; (semantic-load-enable-code-helpers)
+;; (global-srecode-minor-mode 1)
+
+;; (add-to-list 'load-path
+;;              "~/.emacs.d/plugins/ecb-2.40")
+;; (require 'ecb)
+
+; plugin per switchare finestre
+(require 'windmove)
+(windmove-default-keybindings 'meta)
+
+; elscreen
+; (load "elscreen" "ElScreen" t)
+
+; cua-mode
+;; (cua-mode t)
+;; (setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
+;; (transient-mark-mode 1) ;; No region when it is not highlighted
+;; (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+
+; rst.el
+; (require 'rst)
+
+; encoding
+(prefer-coding-system 'utf-8-unix)
+(set-variable 'default-buffer-file-coding-system 'utf-8-unix)
+
+; time-stamp
+(setq time-stamp-pattern "10/[Ll]ast modified: %:y-%02m-%02d %02H:%02M by %u$")
+(add-hook 'before-save-hook 'time-stamp)
+(add-hook 'before-save-hook 'copyright-update)
+
+; prova solo python
+(add-hook 'python-mode-hook (lambda ()
+                              (add-hook 'before-save-hook 'delete-trailing-whitespace)))
