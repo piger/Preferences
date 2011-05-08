@@ -59,13 +59,13 @@ setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, util
 
 # PROMPT
 # ----------------------------------------....
-#                           )/_            
-#                 _.--..---"-,--c_         
-#            \L..'           ._O__)_       
+#                           )/_
+#                 _.--..---"-,--c_
+#            \L..'           ._O__)_
 #    ,-.     _.+  _  \..--( /           a:f
-#      `\.-''__.-' \ (     \_              
-#        `'''       `\__   /\              
-#                    ')                
+#      `\.-''__.-' \ (     \_
+#        `'''       `\__   /\
+#                    ')
 
 autoload -U colors
 colors
@@ -140,18 +140,18 @@ PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 ###     # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
 ###     autoload -Uz vcs_info
 ###     # il plugin bzr e' lento su linux/arch. - 24/Nov/09
-###     zstyle ':vcs_info:*' enable git svn 
-### 
+###     zstyle ':vcs_info:*' enable git svn
+###
 ###     zstyle ':vcs_info:*' actionformats \
 ###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
 ###     zstyle ':vcs_info:*' formats       \
 ###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
 ###     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 ### fi
-### 
+###
 ### precmd () {
 ###     (( $+functions[vcs_info] )) && vcs_info
-### 
+###
 ###     # adjust title of xterm
 ###     # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
 ###     # case $TERM in
@@ -171,7 +171,7 @@ PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 ### no_preexec () {
 ###     local -a cmd
 ###     cmd=(${(z)1})
-### 
+###
 ###     case $TERM in
 ### 	(xterm*|rxvt*)
 ###             print -Pn "\e]0;%n@%m: $1\a"
@@ -221,11 +221,13 @@ HISTFILE=$HOME/.history
 # -R	: attiva i colori ANSI
 # -x<n> : lunghezza del tab
 # -w	: Temporarily highlights the first "new" line after a forward movement of a full page.
-LESS=-ciMRx4w
+# -J    : Mostra una 'status column' che indica la posizione dei match della ricerca.
+# -z-5  : Scrolling mantenendo 5 righe.
+LESS="-ciMRx4wJ -z-5"
 PAGER=less
 export LESS PAGER
 # man page colorate SENZA usare most! ;-P
-# http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html 
+# http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html
 ## export LESS_TERMCAP_mb=$'\E[01;31m'
 ## export LESS_TERMCAP_md=$'\E[01;31m'
 ## export LESS_TERMCAP_me=$'\E[0m'
@@ -291,6 +293,13 @@ fi
 # AUTOLOAD {{{
 # --------
 zmodload zsh/complist
+# per ${terminfo}
+zmodload zsh/terminfo
+# per 'strftime'
+zmodload zsh/datetime
+# per 'syserorr'
+zmodload zsh/system
+
 autoload -U compinit && compinit
 autoload -U zcalc zmv zargs
 autoload -Uz url-quote-magic
@@ -312,6 +321,9 @@ source $ZDOTDIR/zfunc
 ## #zstyle :mime: mime-types /etc/mime.types
 ## zstyle :mime: mailcap ~/.mailcap /etc/mailcap
 ## zsh-mime-setup
+
+# Colori
+# [[ "${terminfo[colors]}" -ge 255 ]] && echo "256 colori!"
 
 # da /usr/share/doc/zsh
 if [[ -d ~/.zsh/scripts ]]; then
