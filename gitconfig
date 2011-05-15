@@ -19,8 +19,8 @@
     current = magenta reverse
     local = yellow
     remote = green
-[color "diff"]
-    whitespace = red reverse
+#[color "diff"]
+	#whitespace = red reverse
 
 [alias]
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short

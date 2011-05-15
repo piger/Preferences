@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-03-25 02:56 by sand
+; last modified: 2011-04-15 00:10 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -41,8 +41,8 @@
 ; Navigazione dei TAB (come un browser web)
 ; C-tab -> next tab/buffer
 ; S-C-tab -> previous tab/buffer
-(global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
-(global-set-key (kbd "<S-C-tab>") 'previous-tab-or-buffer)
+;(global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
+;(global-set-key (kbd "<S-C-tab>") 'previous-tab-or-buffer)
 
 ; Text-mode di default:
 (setq default-major-mode 'text-mode)
@@ -107,10 +107,13 @@
 ;; (load "~/.emacs.d/themes/color-theme-less.el")
 ;; (load "~/.emacs.d/themes/color-theme-molokai.el")
 ;; (load "~/.emacs.d/themes/color-theme-blackboard.el")
-(load "~/.emacs.d/themes/color-theme-subdued.el")
+;; (load "~/.emacs.d/themes/color-theme-subdued.el")
 ;; (load "~/.emacs.d/themes/pigerrimitudo.el")
 ;; (load "~/.emacs.d/themes/inkpot.el")
-(color-theme-subdued)
+;; (color-theme-subdued)
+;(color-theme-blippblopp)
+(load "~/.emacs.d/themes/color-theme-sanityinc-solarized.el")
+(color-theme-sanityinc-solarized-light)
 
 ; mostra le combinazioni non bindate
 (require 'unbound)
@@ -184,5 +187,24 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 ; go mode
-(add-to-list 'load-path "~/.emacs.d/go-mode-load.el" t)
-(require 'go-mode-load)
+; (add-to-list 'load-path "~/.emacs.d/go-mode-load.el" t)
+; (require 'go-mode-load)
+
+; transparency
+ ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
+;;; (set-frame-parameter (selected-frame) 'alpha '(90 50))
+;;; (add-to-list 'default-frame-alist '(alpha 90 50))
+
+; lua-mode
+; (load "~/.emacs.d/plugins/lua-mode.el")
+; (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+; (add-hook 'lua-mode-hook 'turn-on-font-lock)
+
+; C-z per undo, che di minimizzare me ne fotte il cazzo
+(global-unset-key "\C-z")
+(global-set-key "\C-z" 'undo)
+
+; rainbow mode
+(load "~/.emacs.d/rainbow-mode.el")
