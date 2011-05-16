@@ -245,4 +245,11 @@ function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
 }
 
+# irssi tmux e nicklist
+irssi_tmux () {
+	tmux split-window -h -l 12 'cat ~/.irssi/nicklistfifo'
+	tmux select-pane -t 0
+	irssi $@
+}
+
 # vim: ft=zsh

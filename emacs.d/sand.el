@@ -1,7 +1,11 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
+<<<<<<< HEAD
 ; last modified: 2011-05-16 01:21 by sand
+=======
+; last modified: 2011-05-10 15:43 by sand
+>>>>>>> 2109a9aa0b632f1159c75c779a6cfac4bcdb6df9
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -164,30 +168,22 @@
 (add-hook 'python-mode-hook (lambda ()
                               (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 
-; transparency
- ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
-;;; (set-frame-parameter (selected-frame) 'alpha '(90 50))
-;;; (add-to-list 'default-frame-alist '(alpha 90 50))
+; mostra le combinazioni non bindate
+(require 'unbound)
 
-; lua-mode
-(load "~/.emacs.d/plugins/lua-mode.el")
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-(add-hook 'lua-mode-hook 'turn-on-font-lock)
+; questo fa lisp z0rz0rz
+(require 'pretty-mode)
 
-; C-z per undo, che di minimizzare me ne fotte il cazzo
-(global-unset-key "\C-z")
-(global-set-key "\C-z" 'undo)
+; undo-tree
+; http://www.dr-qubit.org/emacs.php#undo-tree
+(require 'undo-tree)
 
-; rainbow mode
-(load "~/.emacs.d/rainbow-mode.el")
-
-; org-mode !?
+; org-mode nuovo
 (setq load-path (cons "~/.emacs.d/plugins/org-7.5/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/plugins/org-7.5/contrib/lisp" load-path))
 (require 'org-install)
 
+; associo i file .org
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
@@ -198,12 +194,40 @@
 (setq org-log-done t)
 
 ; MobileOrg
-;; Set to the location of your Org files on your local system
+; Set to the location of your Org files on your local system
 (setq org-directory "~/org")
 ;; Set to the name of the file where new notes will be stored
 (setq org-mobile-inbox-for-pull "~/org/flagged.org")
 ;; Set to <your Dropbox root directory>/MobileOrg.
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 
+; go mode
+; (add-to-list 'load-path "~/.emacs.d/go-mode-load.el" t)
+; (require 'go-mode-load)
+
+; transparency
+ ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
+;;; (set-frame-parameter (selected-frame) 'alpha '(90 50))
+;;; (add-to-list 'default-frame-alist '(alpha 90 50))
+
+; lua-mode
+; (load "~/.emacs.d/plugins/lua-mode.el")
+; (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+; (add-hook 'lua-mode-hook 'turn-on-font-lock)
+
+; C-z per undo, che di minimizzare me ne fotte il cazzo
+(global-unset-key "\C-z")
+(global-set-key "\C-z" 'undo)
+
+; rainbow mode
+(load "~/.emacs.d/rainbow-mode.el")
+
 ; GnuPG path
 (setq epg-gpg-program "/usr/local/bin/gpg")
+
+; Definisce "gnome-open" come comando per aprire in modo generico gli
+; URL. La funzione e' "browse-url-generic".
+(setq browse-url-generic-program "gnome-open")
+(global-set-key "\M-o" 'browse-url-generic)

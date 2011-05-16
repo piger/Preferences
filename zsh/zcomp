@@ -91,6 +91,8 @@ zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
 #zstyle ':completion:*' ignore-parents parent pwd
 # meglio?
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
+# Per abilitare la completion di "cd ../"
+# zstyle ':completion:*' special-dirs true
 
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
