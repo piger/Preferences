@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-04-15 00:10 by sand
+; last modified: 2011-05-16 01:21 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -182,3 +182,28 @@
 
 ; rainbow mode
 (load "~/.emacs.d/rainbow-mode.el")
+
+; org-mode !?
+(setq load-path (cons "~/.emacs.d/plugins/org-7.5/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/plugins/org-7.5/contrib/lisp" load-path))
+(require 'org-install)
+
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+; Aggiunge la data quando completi un task.
+(setq org-log-done t)
+
+; MobileOrg
+;; Set to the location of your Org files on your local system
+(setq org-directory "~/org")
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/org/flagged.org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+
+; GnuPG path
+(setq epg-gpg-program "/usr/local/bin/gpg")
