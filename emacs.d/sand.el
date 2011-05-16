@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-04-15 00:10 by sand
+; last modified: 2011-05-10 15:43 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -182,3 +182,8 @@
 
 ; rainbow mode
 (load "~/.emacs.d/rainbow-mode.el")
+
+; Definisce "gnome-open" come comando per aprire in modo generico gli
+; URL. La funzione e' "browse-url-generic".
+(setq browse-url-generic-program "gnome-open")
+(global-set-key "\M-o" 'browse-url-generic)
