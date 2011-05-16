@@ -164,17 +164,51 @@
 (add-hook 'python-mode-hook (lambda ()
                               (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 
+; mostra le combinazioni non bindate
+(require 'unbound)
+
+; questo fa lisp z0rz0rz
+(require 'pretty-mode)
+
+; undo-tree
+; http://www.dr-qubit.org/emacs.php#undo-tree
+(require 'undo-tree)
+
+; org-mode nuovo
+(setq load-path (cons "~/.emacs.d/plugins/org-7.5/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/plugins/org-7.5/contrib/lisp" load-path))
+(require 'org-install)
+
+; associo i file .org
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+; MobileOrg
+; Set to the location of your Org files on your local system
+(setq org-directory "~/org")
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/org/flagged.org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+
+; go mode
+; (add-to-list 'load-path "~/.emacs.d/go-mode-load.el" t)
+; (require 'go-mode-load)
+
 ; transparency
  ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
 ;;; (set-frame-parameter (selected-frame) 'alpha '(90 50))
 ;;; (add-to-list 'default-frame-alist '(alpha 90 50))
 
 ; lua-mode
-(load "~/.emacs.d/plugins/lua-mode.el")
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-(add-hook 'lua-mode-hook 'turn-on-font-lock)
+; (load "~/.emacs.d/plugins/lua-mode.el")
+; (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+; (add-hook 'lua-mode-hook 'turn-on-font-lock)
 
 ; C-z per undo, che di minimizzare me ne fotte il cazzo
 (global-unset-key "\C-z")
