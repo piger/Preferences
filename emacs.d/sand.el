@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-05-17 12:01 by sand
+; last modified: 2011-05-17 12:03 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -180,6 +180,10 @@
 
 ;; (org-agenda-files (quote ("~/org/notes.org" "~/org/flagged.org")))
 
+; Aggiunge la data quando completi un task.
+(setq org-log-done t)
+
+
 ; MobileOrg
 ; Set to the location of your Org files on your local system
 (setq org-directory "~/org")
@@ -211,7 +215,10 @@
 ; rainbow mode
 (load "~/.emacs.d/rainbow-mode.el")
 
-; Definisce il comando per aprire in modo generico gli
+; GnuPG path
+(setq epg-gpg-program "/usr/local/bin/gpg")
+
+; Definisce "gnome-open" come comando per aprire in modo generico gli
 ; URL. La funzione e' "browse-url-generic".
 (global-set-key "\M-o" 'browse-url-generic)
 
