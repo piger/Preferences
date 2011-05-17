@@ -16,3 +16,8 @@ vim/.netrwhist
 zsh/.zcalc_history
 vim/spell/
 vim/bundle/ttcoach/macros/ttcoach/*/stats.dat
+
+irssi/away.log
+irssi/nickserv.*
+
+emacs.d/plugins/org-7.5
