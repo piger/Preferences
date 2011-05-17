@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-05-10 15:43 by sand
+; last modified: 2011-05-17 12:01 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -115,16 +115,6 @@
 (load "~/.emacs.d/themes/color-theme-sanityinc-solarized.el")
 (color-theme-sanityinc-solarized-light)
 
-; mostra le combinazioni non bindate
-(require 'unbound)
-
-; questo fa lisp z0rz0rz
-(require 'pretty-mode)
-
-; undo-tree
-; http://www.dr-qubit.org/emacs.php#undo-tree
-(require 'undo-tree)
-
 ; cedet
 ;; (load-file "~/.emacs.d/plugins/cedet-1.0/common/cedet.el")
 ;; (global-ede-mode 1)
@@ -174,7 +164,7 @@
 ; http://www.dr-qubit.org/emacs.php#undo-tree
 (require 'undo-tree)
 
-; org-mode nuovo
+; org-mode
 (setq load-path (cons "~/.emacs.d/plugins/org-7.5/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/plugins/org-7.5/contrib/lisp" load-path))
 (require 'org-install)
@@ -185,6 +175,10 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+;; (org-agenda-files (quote ("~/org/notes.org" "~/org/flagged.org")))
 
 ; MobileOrg
 ; Set to the location of your Org files on your local system
@@ -217,7 +211,14 @@
 ; rainbow mode
 (load "~/.emacs.d/rainbow-mode.el")
 
-; Definisce "gnome-open" come comando per aprire in modo generico gli
+; Definisce il comando per aprire in modo generico gli
 ; URL. La funzione e' "browse-url-generic".
-(setq browse-url-generic-program "gnome-open")
 (global-set-key "\M-o" 'browse-url-generic)
+
+; Su linux il comando migliore e' "gnome-open"
+(if (and (eq window-system 'x) (eq system-type 'gnu/linux))
+    (setq browse-url-generic-program "gnome-open"))
+
+; Su OSX il comando migliore e' "open"
+(if (and (eq window-system 'ns) (eq system-type 'darwin))
+        (setq browse-url-generic-program "open"))
