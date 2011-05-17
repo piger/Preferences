@@ -1,7 +1,12 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-05-17 12:03 by sand
+; last modified: 2011-05-17 12:56 by sand
+;
+; TIPS & TRICKS
+; C-x r w <registro> - salva i layout (con winner-mode)
+; C-c <LEFT> - winner-mode undo (torna al layout precedente)
+; undo-tree-mode e C-\ e M-_
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -27,6 +32,7 @@
 ;;     (load "~/.emacs.d/themes/color-theme-radiance.el"))
 ;(color-theme-zenburn)
 
+; Font per Darwin/OSX
 (if (and (eq window-system 'ns) (eq system-type 'darwin))
     (set-face-attribute 'default nil :font "DejaVu Sans Mono 12"))
 
@@ -38,7 +44,7 @@
 (if (and (eq window-system 'x) (eq system-type 'gnu/linux))
     (set-face-attribute 'default nil :font "Monospace 9"))
 
-; Navigazione dei TAB (come un browser web)
+; Navigazione dei TAB (come un browser web) [e' per aquamacs?]
 ; C-tab -> next tab/buffer
 ; S-C-tab -> previous tab/buffer
 ;(global-set-key (kbd "<C-tab>") 'next-tab-or-buffer)
@@ -64,7 +70,6 @@
 
 ; NOTE
 ; Per andare a capo senza indentare a cazzo: C-j
-
 
 ; Pymacs
 (autoload 'pymacs-apply "pymacs")
@@ -129,6 +134,9 @@
 (require 'windmove)
 (windmove-default-keybindings 'meta)
 
+; plugin che ricorda i layout
+(winner-mode 1)
+
 ; elscreen
 ; (load "elscreen" "ElScreen" t)
 
@@ -145,12 +153,12 @@
 (prefer-coding-system 'utf-8-unix)
 (set-variable 'default-buffer-file-coding-system 'utf-8-unix)
 
-; time-stamp
+; Aggiorna il timestamp automaticamente (chiedendo conferma)
 (setq time-stamp-pattern "10/[Ll]ast modified: %:y-%02m-%02d %02H:%02M by %u$")
 (add-hook 'before-save-hook 'time-stamp)
 (add-hook 'before-save-hook 'copyright-update)
 
-; prova solo python
+; Cancella i "trailing whitespace" dai file python
 (add-hook 'python-mode-hook (lambda ()
                               (add-hook 'before-save-hook 'delete-trailing-whitespace)))
 
@@ -191,10 +199,6 @@
 (setq org-mobile-inbox-for-pull "~/org/flagged.org")
 ;; Set to <your Dropbox root directory>/MobileOrg.
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
-
-; go mode
-; (add-to-list 'load-path "~/.emacs.d/go-mode-load.el" t)
-; (require 'go-mode-load)
 
 ; transparency
  ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
