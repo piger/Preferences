@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-05-25 23:51 by sand
+;; last modified: 2011-05-26 01:01 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -127,9 +127,9 @@
 ;; (load "~/.emacs.d/themes/inkpot.el")
 ;; (color-theme-subdued)
 ;(color-theme-blippblopp)
-;; (load "~/.emacs.d/themes/color-theme-sanityinc-solarized.el")
-;; (color-theme-sanityinc-solarized-light)
-(zenburn)
+(load "~/.emacs.d/themes/color-theme-sanityinc-solarized.el")
+(color-theme-sanityinc-solarized-light)
+;; (zenburn)
 
 ;; cedet
 ;; (load-file "~/.emacs.d/plugins/cedet-1.0/common/cedet.el")
@@ -212,8 +212,8 @@
 
 ;; transparency
 ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
-(set-frame-parameter (selected-frame) 'alpha '(95 50))
-(add-to-list 'default-frame-alist '(alpha 95 50))
+(set-frame-parameter (selected-frame) 'alpha '(95 95))
+(add-to-list 'default-frame-alist '(alpha 95 95))
 
 ;; lua-mode
 ;; (load "~/.emacs.d/plugins/lua-mode.el")
@@ -249,5 +249,7 @@
 (setq-default ispell-program-name "aspell")
 
 ;; gpg
+;; suggerimento:
+;; --->  ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
 (require 'epa-file)
 (epa-file-enable)

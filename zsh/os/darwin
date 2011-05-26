@@ -11,8 +11,9 @@
 
 # ls da `homebrew` -> `coreutils`
 if [[ -x /usr/local/bin/gls ]]; then
-    alias ls="/usr/local/bin/gls --color=auto"
+    alias ls="gls --color=always -F"
     (( $+commands[gdircolors] )) && eval $(gdircolors -b)
+	alias lss="gls --color=always -F --group-directories-first"
 fi
 
 # -*- environment
