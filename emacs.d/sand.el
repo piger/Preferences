@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-05-26 01:01 by sand
+;; last modified: 2011-05-27 23:18 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -253,3 +253,6 @@
 ;; --->  ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
 (require 'epa-file)
 (epa-file-enable)
+
+;; zsh-mode, ma che cazzo!
+(add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
