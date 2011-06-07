@@ -1,7 +1,7 @@
 ; sand.el
 ; Ispirato da molti e da nessuno.
 ;
-; last modified: 2011-05-10 15:43 by sand
+; last modified: 2011-05-17 16:08 by sand
 
 ; voglio la menu-bar
 (menu-bar-mode 1)
@@ -221,3 +221,8 @@
 ; URL. La funzione e' "browse-url-generic".
 (setq browse-url-generic-program "gnome-open")
 (global-set-key "\M-o" 'browse-url-generic)
+
+
+; php-mode
+(add-to-list 'load-path "~/.emacs.d/plugins/")
+(require 'php-mode)
