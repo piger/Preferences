@@ -237,6 +237,10 @@
 ;; URL. La funzione e' "browse-url-generic".
 (global-set-key "\M-o" 'browse-url-generic)
 
+; php-mode
+(add-to-list 'load-path "~/.emacs.d/plugins/")
+(require 'php-mode)
+
 ;; Su linux il comando migliore e' "gnome-open"
 (if (and (eq window-system 'x) (eq system-type 'gnu/linux))
     (setq browse-url-generic-program "gnome-open"))
