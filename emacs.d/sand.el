@@ -256,3 +256,6 @@
 
 ;; zsh-mode, ma che cazzo!
 (add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
+
+;; renpy mode
+(load "~/.emacs.d/plugins/Renpy.el")
