@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-05-27 23:18 by sand
+;; last modified: 2011-06-21 13:24 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -255,8 +255,11 @@
 ;; gpg
 ;; suggerimento:
 ;; --->  ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
+;; -*- mode: XXX; epa-file-encrypt-to: ("recipient"); epa-armor: t -*-
 (require 'epa-file)
 (epa-file-enable)
+;; abilito sia per i file .gpg che per i file .asc
+(setq 'epa-file-name-regexp "\\.\\(gpg\\|asc\\)")
 
 ;; zsh-mode, ma che cazzo!
 (add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
