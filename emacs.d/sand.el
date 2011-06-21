@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-06-21 13:24 by sand
+;; last modified: 2011-06-21 13:45 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -195,7 +195,10 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;; (org-agenda-files (quote ("~/org/notes.org" "~/org/flagged.org")))
+;; i file di agenda per org:
+(setq org-agenda-files (quote ("~/Documents/appunti/"
+                               "~/org/notes.org"
+                               "~/org/flagged.org")))
 
 ;; Aggiunge la data quando completi un task.
 (setq org-log-done t)
@@ -259,7 +262,7 @@
 (require 'epa-file)
 (epa-file-enable)
 ;; abilito sia per i file .gpg che per i file .asc
-(setq 'epa-file-name-regexp "\\.\\(gpg\\|asc\\)")
+(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)")
 
 ;; zsh-mode, ma che cazzo!
 (add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
