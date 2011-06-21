@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-05-27 23:18 by sand
+;; last modified: 2011-06-09 03:27 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -152,6 +152,7 @@
 ;; (load "elscreen" "ElScreen" t)
 
 ;; cua-mode
+;; Bisogna attivarlo all'avvio, altrimenti non funziona? XXX
 ;; (cua-mode t)
 ;; (setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
 ;; (transient-mark-mode 1) ;; No region when it is not highlighted
@@ -263,3 +264,11 @@
 
 ;; renpy mode
 (load "~/.emacs.d/plugins/Renpy.el")
+
+;; apache-mode
+(autoload 'apache-mode "apache-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
+(add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
+(add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
+(add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
+(add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
