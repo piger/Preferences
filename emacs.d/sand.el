@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-06-21 13:45 by sand
+;; last modified: 2011-06-21 14:16 by sand
 ;;
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -269,3 +269,6 @@
 
 ;; renpy mode
 (load "~/.emacs.d/plugins/Renpy.el")
+
+;; buffer-move
+(load "~/.emacs.d/plugins/buffer-move.el")
