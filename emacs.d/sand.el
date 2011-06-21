@@ -1,8 +1,8 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-06-09 03:27 by sand
-;;
+;; last modified: 2011-06-21 14:16 by sand
+
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
 ;; C-c <LEFT> - winner-mode undo (torna al layout precedente)
@@ -196,7 +196,10 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;; (org-agenda-files (quote ("~/org/notes.org" "~/org/flagged.org")))
+;; i file di agenda per org:
+(setq org-agenda-files (quote ("~/Documents/appunti/"
+                               "~/org/notes.org"
+                               "~/org/flagged.org")))
 
 ;; Aggiunge la data quando completi un task.
 (setq org-log-done t)
@@ -256,8 +259,11 @@
 ;; gpg
 ;; suggerimento:
 ;; --->  ;; -*- epa-file-encrypt-to: ("ueno@unixuser.org") -*-
+;; -*- mode: XXX; epa-file-encrypt-to: ("recipient"); epa-armor: t -*-
 (require 'epa-file)
 (epa-file-enable)
+;; abilito sia per i file .gpg che per i file .asc
+(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)")
 
 ;; zsh-mode, ma che cazzo!
 (add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
@@ -272,3 +278,6 @@
 (add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
 (add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
 (add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+;; buffer-move
+(load "~/.emacs.d/plugins/buffer-move.el")
