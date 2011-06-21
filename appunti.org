@@ -1,0 +1,53 @@
+#+TITLE: Appunti totali globali nucleari
+#+AUTHOR: Daniel Kertesz
+#+EMAIL: daniel@spatof.org
+#+DATE:      2011-06-21 Tue
+#+DESCRIPTION: Appunti riguardanti Linux, UNIX in generale, OSX e altro.
+#+KEYWORDS: appunti, linux, unix, osx, command-line
+#+LANGUAGE:  it
+
+* git
+
+** Ho creato un repository locale e lo voglio uppare in uno remoto
+
+: git remote add origin foo.bar:repo.git=
+: git push origin master:refs/heads/master
+
+Oppure, alla /vecchia/ maniera:
+
+1. Creare repository vuoto sul server
+
+   : mkdir /var/git/myrepo.git && cd /var/git/myrepo.git
+   : git --bare init
+
+2. Aggiungere il repository remoto in locale
+
+   : git remote add origin ssh://myserver.com/var/git/myrepo.git
+   : git push origin master
+
+3. /Track the remote branch/, per abilitare push e pull senza warning
+
+   Editare .git/config:
+
+   #+BEGIN_SRC conf
+     [branch "master"]
+             remote = origin
+             merge = refs/heads/master
+   #+END_SRC
+
+** UNDOing
+
+L'undo di un =git add= e' =git reset=.
+L'undo di un merge e' =git reset --merge=.
+
+* Excel
+
+** Header per le colonne
+
+Questo e' un barbatrucco, ma funziona. La riga *1* servira' per gli
+header delle colonne, percio' converra' formattarla diversamente dalle
+altre. Per poter scrollare il documento mantenendo la view sui nostri
+header bisognera' selezionare la cella *A2* e cliccare dal menu'
+_Window_ la checkbox *Freeze*.
+Assicurarsi che la checkbox nel menu' _View_ *Column and row headers*
+sia attiva.

@@ -1,0 +1,11 @@
+* Suggerimenti e consigli per Excel
+
+** Header per le colonne
+
+Questo e' un barbatrucco, ma funziona. La riga *1* servira' per gli
+header delle colonne, percio' converra' formattarla diversamente dalle
+altre. Per poter scrollare il documento mantenendo la view sui nostri
+header bisognera' selezionare la cella *A2* e cliccare dal menu'
+_Window_ la checkbox *Freeze*.
+Assicurarsi che la checkbox nel menu' _View_ *Column and row headers*
+sia attiva.
