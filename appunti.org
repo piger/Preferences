@@ -6,9 +6,10 @@
 #+KEYWORDS: appunti, linux, unix, osx, command-line
 #+LANGUAGE:  it
 
-* git
+* Version Control
+** git
 
-** Ho creato un repository locale e lo voglio uppare in uno remoto
+*** Ho creato un repository locale e lo voglio uppare in uno remoto
 
 : git remote add origin foo.bar:repo.git=
 : git push origin master:refs/heads/master
@@ -35,10 +36,31 @@ Oppure, alla /vecchia/ maniera:
              merge = refs/heads/master
    #+END_SRC
 
-** UNDOing
+*** UNDOing
 
 L'undo di un =git add= e' =git reset=.
 L'undo di un merge e' =git reset --merge=.
+
+
+** bazaar
+
+*** Branches, Shared Repositories, etc.
+
+Informazioni dal manuale di bzr: [[http://doc.bazaar.canonical.com/latest/en/user-guide/organizing_branches.html][organizing_branches]]
+
+Creazione di uno shared repository:
+#+BEGIN_EXAMPLE
+bzr init-repo PROJECT
+cd PROJECT
+bzr branch bzr+ssh://centralhost/srv/bzr/PROJECT/trunk 
+#+END_EXAMPLE
+
+Creazione di /task branches/:
+#+BEGIN_EXAMPLE
+bzr branch trunk fix-123
+cd fix-123
+(hack, hack, hack)
+#+END_EXAMPLE
 
 * Excel
 
