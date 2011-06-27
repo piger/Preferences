@@ -73,3 +73,12 @@ header bisognera' selezionare la cella *A2* e cliccare dal menu'
 _Window_ la checkbox *Freeze*.
 Assicurarsi che la checkbox nel menu' _View_ *Column and row headers*
 sia attiva.
+
+* Bluetooth
+
+** Tethering con aifone
+
+: sudo /etc/rc.d/rc.bluetooth restart
+*NOTA*: va fatto _dopo_ il boot, perche' c'e' di mezzo dbus e la merda
+ slackware; a quel punto l'applet GNOME trovera' il device bluetooth.
+Altre info su [[http://xn--9bi.net/2009/06/17/tethering-iphone-3-0-to-ubuntu-9-04/][internet]].
