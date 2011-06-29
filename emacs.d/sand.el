@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-06-21 14:16 by sand
+;; last modified: 2011-06-30 01:30 by sand
 
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -44,7 +44,7 @@
 
 ;; Font per Darwin/OSX
 (if (and (eq window-system 'ns) (eq system-type 'darwin))
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono 12"))
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono 11"))
 
 ;; dimensione frame
 (if (window-system)
@@ -278,6 +278,10 @@
 (add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
 (add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
 (add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+;; ssh(d)_config
+(add-to-list 'auto-mode-alist '("sshd?_config" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.ssh/config" . conf-mode))
 
 ;; buffer-move
 (load "~/.emacs.d/plugins/buffer-move.el")
