@@ -26,4 +26,13 @@ do_status() {
         scp://sand@taleggio/backup/hal/
 }
 
-do_backup
+do_gpg() {
+    duplicity \
+        restore \
+        --name home_daily_gpg \
+        -v 6 \
+        scp://sand@taleggio/backup/hal_gpg \
+        ~/oompa
+}
+
+do_gpg
