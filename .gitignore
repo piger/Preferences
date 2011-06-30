@@ -21,3 +21,4 @@ irssi/away.log
 irssi/nickserv.*
 
 emacs.d/plugins/org-7.5
+emacs.d/custom.el
