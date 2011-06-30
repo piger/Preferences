@@ -82,3 +82,32 @@ sia attiva.
 *NOTA*: va fatto _dopo_ il boot, perche' c'e' di mezzo dbus e la merda
  slackware; a quel punto l'applet GNOME trovera' il device bluetooth.
 Altre info su [[http://xn--9bi.net/2009/06/17/tethering-iphone-3-0-to-ubuntu-9-04/][internet]].
+
+* Installazione ubuntu
+
+Aggiornato a /natty/: 11.04.
+
+- Utilizzare la ISO /alternate/ per avere a disposizione LVM + dm-crypt.
+- +staccare il cavo di rete per installare dal cazzo di drive USB+
+  Vuole la rete *per forza*.
+
+** Partizionamento LVM + dm-crypt
+
+1. Selezionare "Manual partitioning".
+2. Creare una partizione *primaria* ext2 per /boot da *260MB*.
+3. Creare una partizione *logica* con il resto del disco per LVM
+   encrypted. Usare per "physical volume for LVM".
+4. Configure encrypted volumes e selezionare la partizione grossa LVM.
+5. Configure the logical volume manager.
+   - Il physical volume e' la partizione grossa.
+   - Un volume group e...
+   - root 10gb
+   - tmp 10gb
+   - var 20gb
+   - usr 50gb
+   - opt 20gb
+   - swap 4gb 
+   - home -- il resto
+6. Assegnare le partizioni (use as ...) ai volumi LVM.
+
+
