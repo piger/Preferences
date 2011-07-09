@@ -52,7 +52,7 @@ Creazione di uno shared repository:
 #+BEGIN_EXAMPLE
 bzr init-repo PROJECT
 cd PROJECT
-bzr branch bzr+ssh://centralhost/srv/bzr/PROJECT/trunk 
+bzr branch bzr+ssh://centralhost/srv/bzr/PROJECT/trunk
 #+END_EXAMPLE
 
 Creazione di /task branches/:
@@ -106,8 +106,22 @@ Aggiornato a /natty/: 11.04.
    - var 20gb
    - usr 50gb
    - opt 20gb
-   - swap 4gb 
+   - swap 4gb
    - home -- il resto
 6. Assegnare le partizioni (use as ...) ai volumi LVM.
 
+* Python
 
+** Python e virtualenv
+
+Assicurarsi *sempre* che gli script contengano
+
+: #!/usr/bin/env python
+
+e non:
+
+: #!/usr/bin/python
+
+Altrimenti /virtualenv/ non funzionera'. Il problema puo' accadere ad
+esempio quando si creano nuovi progetti /Django/, perche' =manage.py=
+contiene =#!/usr/bin/python=.
