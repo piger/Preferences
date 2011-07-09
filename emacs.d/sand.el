@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-06-30 01:30 by sand
+;; last modified: 2011-07-09 02:16 by sand
 
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -82,11 +82,11 @@
 ;; Per andare a capo senza indentare a cazzo: C-j
 
 ;; Pymacs
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
 ;;(eval-after-load "pymacs"
 ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
@@ -220,10 +220,10 @@
 (add-to-list 'default-frame-alist '(alpha 95 95))
 
 ;; lua-mode
-;; (load "~/.emacs.d/plugins/lua-mode.el")
-;; (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-;; (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-;; (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+(load "~/.emacs.d/plugins/lua-mode.el")
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 ;; (add-hook 'lua-mode-hook 'turn-on-font-lock)
 
 ;; C-z per undo, che di minimizzare me ne fotte il cazzo
@@ -285,3 +285,23 @@
 
 ;; buffer-move
 (load "~/.emacs.d/plugins/buffer-move.el")
+
+;; django-mode
+(add-to-list 'load-path "~/.emacs.d/plugins/django-mode")
+(require 'django-html-mode)
+(require 'django-mode)
+(yas/load-directory "~/.emacs.d/plugins/django-mode/snippets")
+(add-to-list 'auto-mode-alist '("\\.djhtml$" . django-html-mode))
+(add-to-list 'auto-mode-alist '("/dev/MonitoringBox/.*\\.html$" . django-html-mode))
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (set (make-local-variable 'sgml-basic-offset) 4)
+            (set indent-tabs-mode t)))
+
+(add-hook 'django-html-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode t)
+            (setq nxml-child-indent 4)
+            (setq tab-width 4)))
+

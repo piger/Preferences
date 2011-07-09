@@ -125,3 +125,9 @@ e non:
 Altrimenti /virtualenv/ non funzionera'. Il problema puo' accadere ad
 esempio quando si creano nuovi progetti /Django/, perche' =manage.py=
 contiene =#!/usr/bin/python=.
+
+* Idee
+
+- tool windows in python, per dumpare etc?
+  - tipo un megapacchettone da uppare con dentro python e le lib
+- output in CSV per alcuni script di nmap, tipo smb-share e nfs
