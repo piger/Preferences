@@ -1,7 +1,7 @@
 ;; sand.el
 ;; Ispirato da molti e da nessuno.
 ;;
-;; last modified: 2011-07-09 02:16 by sand
+;; last modified: 2011-07-09 03:12 by sand
 
 ;; TIPS & TRICKS
 ;; C-x r w <registro> - salva i layout (con winner-mode)
@@ -292,7 +292,7 @@
 (require 'django-mode)
 (yas/load-directory "~/.emacs.d/plugins/django-mode/snippets")
 (add-to-list 'auto-mode-alist '("\\.djhtml$" . django-html-mode))
-(add-to-list 'auto-mode-alist '("/dev/MonitoringBox/.*\\.html$" . django-html-mode))
+(add-to-list 'auto-mode-alist '("/MonitoringBox/.*\\.html$" . django-html-mode))
 
 (add-hook 'html-mode-hook
           (lambda ()
