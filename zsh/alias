@@ -50,4 +50,7 @@ alias suco='sudo'
 alias mortacci=";"
 alias tua=";"
 
+# stampa la penultima riga di un input
+penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
+
 # vim: ft=zsh
