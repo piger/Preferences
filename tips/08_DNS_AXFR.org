@@ -1,0 +1,7 @@
+* DNS e AXFR transfer
+
+** Sintassi
+
+#+BEGIN_EXAMPLE
+dig @dns.server.com target.domain.com axfr
+#+END_EXAMPLE
