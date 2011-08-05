@@ -1,0 +1,21 @@
+DEPRECATED: replaced by http://github.com/eschulte/emacs24-starter-kit
+
+This repository is now deprecated in favor of
+https://github.com/eschulte/emacs24-starter-kit.
+
+While bug fixes will still be applied, no new development will take
+place on this version of the starter kit.
+
+The new starter kit has a number of benefits, including...
+- lighter weight, simpler and with less default settings
+- no usage of git submodules
+- no dependencies which need to be compiled
+  (i.e., you don't have to run make during instillation)
+- more modular, it is easier to load only those parts of the starter
+  kit you anticipate actually using
+
+This repository could still be appropriate if for some reason you are
+not able to install Emacs24 (the development version) on your system.
+Emacs 24 may be easily built from source on linux systems, Mac
+binaries can be downloaded from the "Nightlies" section of
+http://emacsformacosx.com/builds
