@@ -30,6 +30,7 @@ set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
 
 " set bg=dark			" background NERO
+set background=light
 set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO!
 
 " Directory per i file di swap ("." indica la stessa directory del file editato)
@@ -270,6 +271,12 @@ let python_slow_sync = 1
 filetype off 
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
+
+" vundle
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
 " }
 
 " autocommands {
