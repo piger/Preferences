@@ -1,3 +1,6 @@
 [submodule "emacs.d"]
 	path = emacs.d
 	url = http://github.com/eschulte/emacs-starter-kit.git
+[submodule "vim/bundle/vundle"]
+	path = vim/bundle/vundle
+	url = http://github.com/gmarik/vundle.git
