@@ -273,10 +273,15 @@ call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 
 " vundle
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+if isdirectory(expand("~/.vim/bundle/vundle"))
+	set rtp+=~/.vim/bundle/vundle
+	call vundle#rc()
 
-Bundle 'gmarik/vundle'
+	Bundle 'gmarik/vundle'
+
+	" custom vundles
+	Bundle 'Solarized'
+endif
 " }
 
 " autocommands {
