@@ -34,4 +34,21 @@ elif [[ $OSTYPE = openbsd* ]]; then
     source ${ZDOTDIR}/os/openbsd
 fi
 
+# umask per directory
+chpwd() {
+	if [[ $PWD == ~/Work* ]]; then
+		if [[ $(umask) != 007 ]]; then
+			echo "[zsh] Switching to WORK umask: 007"
+			PREVIOUS_UMASK=$(umask)
+			umask 007
+		fi
+	else
+		if [[ ! -z $PREVIOUS_UMASK ]]; then
+			echo "[zsh] Switching to DEFAULT umask: ${PREVIOUS_UMASK}"
+			umask $PREVIOUS_UMASK
+			unset PREVIOUS_UMASK
+		fi
+	fi
+}
+
 # vim: ft=zsh
