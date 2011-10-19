@@ -17,13 +17,14 @@ if has("gui_gtk2")
     " set guifont=ProggyCleanTTSZ\ 12
     " set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
     " set guifont=Monospace\ 10
-    set guifont=DejaVu\ Sans\ Mono\ 10
+    set guifont=DejaVu\ Sans\ Mono\ 9
 
     " COLORSCHEME
     " colorscheme habiLight
     " colorscheme sienna
-	colo mustang
+	" colo mustang
 	" colo martin_krischik
+	colo solarized
 
 elseif has("x11")
     " Also for GTK 1
@@ -66,3 +67,8 @@ endif
 
 "colorscheme dw_orange-256colors
 "colorscheme asu1dark-256colors
+
+" ottobre 2011 prove
+" Evito il seguente bug: quando si crea il primo tab con :tabc o simili, la
+" statusline di vim viene ridimensionata e diventa invisibile.
+set showtabline=2	 " 2 = always

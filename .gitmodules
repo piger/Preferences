@@ -1,3 +1,0 @@
-[submodule "emacs.d"]
-	path = emacs.d
-	url = http://github.com/eschulte/emacs-starter-kit.git

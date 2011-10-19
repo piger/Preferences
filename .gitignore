@@ -1,21 +1,20 @@
+*~
+
 vim/backups
 vim/mru
 vim/swap
 vim/view
 vim/vim-fuf
+vim/.netrwhist
+vim/spell/
+vim/bundle/
+
+*.zwc
 zsh/uname.cache
 zsh/.zcompdump
 zsh/.zcompcache
 zsh/local
-Pref-*.tar.gz
-*~
-*.zwc
-vim/.VimballRecord
-vim/GetLatest/*
-vim/.netrwhist
 zsh/.zcalc_history
-vim/spell/
-vim/bundle/ttcoach/macros/ttcoach/*/stats.dat
 
 irssi/away.log
 irssi/nickserv.*
@@ -23,4 +22,5 @@ irssi/nickserv.*
 emacs.d/plugins/org-7.5
 emacs.d/custom.el
 emacs.d/elpa
+
 muttrc
