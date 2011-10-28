@@ -48,6 +48,8 @@ set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrappare
+set grepprg=~/bin/ack	" usa ack al posto di grep per ':grep'
+set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
 
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
@@ -57,6 +59,7 @@ set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per g
 set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
 " set modeline
 " set modelines=5                 " numero di righe valido per le modeline
+set mousemodel=popup	" tasto destro del mouse mostra un popup, come su windows.
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
 set ruler			" mostra la posizione del cursore in basso a destra
 set scrolloff=5			" scrolla con un context di 3 righe
@@ -163,7 +166,7 @@ endif
 " set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
 
 " Questo dovrebbe essere un "%" evoluto
-source $VIMRUNTIME/macros/matchit.vim
+runtime macros/matchit.vim
 " }
 
 
@@ -189,6 +192,37 @@ set noexpandtab
 " }
 
 
+" pathogen {
+" NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
+filetype off 
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
+" vundle
+if isdirectory(expand("~/.vim/bundle/vundle"))
+	set rtp+=~/.vim/bundle/vundle
+	call vundle#rc()
+
+	Bundle 'gmarik/vundle'
+
+	" custom vundles
+	Bundle 'Solarized'
+	Bundle 'fugitive.vim'
+	Bundle 'Gundo'
+	Bundle 'TTCoach'
+	Bundle 'Conque-Shell'
+	Bundle 'L9'
+	Bundle 'FuzzyFinder'
+	Bundle 'CSApprox'
+	Bundle 'The-NERD-tree'
+	Bundle 'TwitVim'
+	Bundle 'bufexplorer.zip'
+	Bundle 'pydoc.vim'
+	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
+endif
+" }
+
+
 " Opzioni plugin & co {
 let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
@@ -200,9 +234,6 @@ let g:CSApprox_verbose_level = 0
 " NERDTree
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
 let NERDTreeQuitOnOpen = 1		" Esci da NerdTree dopo aver aperto un file
-
-" GetLatestVimScripts
-"let g:GetLatestVimScripts_allowautoinstall=1	" XXX da verificare
 
 " Secure Modelines
 let g:secure_modelines_verbose = 1	" Avvisa quando blocca qualche modeline
@@ -263,25 +294,9 @@ let g:fuf_mrucmd_maxItem = 400
 
 " python syntax (syntax/python.vim)
 let python_slow_sync = 1
-" }
 
-
-" pathogen {
-" NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
-filetype off 
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
-
-" vundle
-if isdirectory(expand("~/.vim/bundle/vundle"))
-	set rtp+=~/.vim/bundle/vundle
-	call vundle#rc()
-
-	Bundle 'gmarik/vundle'
-
-	" custom vundles
-	Bundle 'Solarized'
-endif
+" Pydiction
+let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 " }
 
 " autocommands {

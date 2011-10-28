@@ -24,3 +24,5 @@ emacs.d/custom.el
 emacs.d/elpa
 
 muttrc
+
+*.pyc
