@@ -1,0 +1,11 @@
+# Tips e tricks per Zsh
+
+## File e directory
+
+### Globbing condizionale
+
+Mostrami le directory che non contengono una sottodirectory ".git":
+
+	ls -lad -- *(e:'[[ ! -e $REPLY/.git ]]':)
+
+vim: ft=markdown
