@@ -32,6 +32,11 @@ triman () {
 # END OF GRML - zsh-lovers
 # }}}
 
+# Fetcha una copia della pagina zsh-lovers
+zsh_lovers_fetch() {
+	curl http://grml.org/zsh/zsh-lovers.html
+}
+
 # ZMV {{{
 # rinomina i file sostituendo con '_'
 to_underscore() {
