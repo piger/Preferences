@@ -10,6 +10,7 @@
 "   - lo spazio tra ogni sezione e' di due righe vuote
 "   - :options apre una finestra dove vedere e cambiare le opzioni
 "   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
+"   - OMNI-Completion: C-x, C-o
 " }
 
 
@@ -38,6 +39,9 @@ set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO
 " tenerli tutti in una directory, ed e' comodo per evitare di editare in due
 " lo stesso file.
 " set directory=~/.vim/swap,.
+
+" default encoding
+set encoding=utf-8
 
 set history=100			" quante entry di history per comandi e search
 
@@ -151,11 +155,10 @@ endif
 
 " Colori e opzioni solo per il terminale 
 if !has("gui_running")
-    " colorscheme winter
     " colorscheme candycode
-
-    colorscheme fnaqevan
+    " colorscheme fnaqevan
     " colorscheme molokai
+	colorscheme native
 endif
 " }
 
@@ -253,10 +256,18 @@ let g:secure_modelines_allowed_items = [
 	    \ "fileencoding", "fenc"
 	    \ ]
 
-" TwitVim configuration
-if filereadable($HOME . "/.twitter.vim")
-    source $HOME/.twitter.vim
-endif
+" Twitvim
+" NOTA: TwitVim ora usa OAuth, percio' non serve username o password qui.
+" HTTP proxy
+" let twitvim_proxy = "proxyserver:proxyport"
+" let twitvim_proxy_login = "proxyuser:proxypassword"
+" 'open' o 'gnome-open'
+let twitvim_browser_cmd = 'open'
+" SSL
+let twitvim_api_root = "https://api.twitter.com/1"
+let twitvim_filter_enable = 1
+let twitvim_filter_regex = '@GetGlue\|/youtu\.be/'
+let twitvim_count = 200
 
 " FuzzyFinder
 let g:fuf_infoFile = '~/.vim/vim-fuf'
@@ -300,29 +311,31 @@ let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 " }
 
 " autocommands {
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-    " Enable file type detection.
-    " Use the default filetype settings, so that mail gets 'tw' set to 72,
-    " 'cindent' is on in C files, etc.
-    " Also load indent files, to automatically do language-dependent indenting.
-    filetype plugin indent on
+"
+" Enable file type detection.
+" Use the default filetype settings, so that mail gets 'tw' set to 72,
+" 'cindent' is on in C files, etc.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
 
-    " rimuove tutti gli autocommand per evitare doppioni
-    " autocmd!
-    " NEW: uso questo altro metodo per vedere se ci sono altri autocmd standard
-    if !exists("autocommands_loaded")
+" rimuove tutti gli autocommand per evitare doppioni
+" autocmd!
+" NEW: uso questo metodo (dall'help di autocmd) per evitare autocmd duplicati
+if !exists("autocommands_loaded")
 	let autocommands_loaded = 1
+
+	" My PC is fast enough, do syntax highlight syncing from start
+	autocmd BufEnter * :syntax sync fromstart
 
 	" autocmd BufNewFile,BufRead *.txt set filetype=human
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
-	
+
 	" backup in $PWD e altro (da aggiungere)
 	" autocmd BufRead /home/pentest/*	set backupdir=. nosmartindent noautoindent 
 	augroup PenPen
-	    au!
-	    " backup nella directory corrente
-	    au BufNewFile,BufRead */pentest/* setl backupdir=. paste
+		au!
+		" backup nella directory corrente
+		au BufNewFile,BufRead */pentest/* setl backupdir=. paste
 	augroup END
 
 	" For all text files set 'textwidth' to 78 characters.
@@ -330,10 +343,13 @@ if has("autocmd")
 
 	" Esegue lo script con <Shift> + e:
 	" autocmd FileType python map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
-	
+
 	" sia perl che python
 	""" autocmd FileType python,perl :setl foldcolumn=2
 	""" autocmd FileType python :setl foldmethod=indent
+
+	" da mitshuiko
+	autocmd FileType python setlocal cinwords=in,elif,else,for,while,try,except,finally,def,class,with
 
 	" Per python uso ftplugin/python.vim
 	au BufNewFile *.py setl fileformat=unix
@@ -341,7 +357,7 @@ if has("autocmd")
 
 	" Per i file di Ren'Py
 	au BufNewFile,BufRead *.rpy setl ft=renpy
-	
+
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
 
@@ -350,7 +366,7 @@ if has("autocmd")
 
 	" Il numero di riga con il tema oceanblack sembra OK
 	if has("gui_running")
-	    autocmd FileType perl,shell :setl number
+		autocmd FileType perl,shell :setl number
 	endif
 
 	" ignore le modeline nei commit di git.
@@ -359,7 +375,7 @@ if has("autocmd")
 	" template vuoti!
 	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
 	autocmd BufNewFile *.py 0r ~/.vim/templates/python.py
-	
+
 	autocmd FileType perl set makeprg=perl\ -c\ %\ $*
 	autocmd FileType perl set errorformat=%f:%l:%m
 	" autocmd FileType perl set autowrite
@@ -372,7 +388,7 @@ if has("autocmd")
 
 	" Tags automatiche (test)
 	"autocmd BufWinEnter * silent :let &tags = expand("%:p:h") . "/tags"
-	
+
 	" Views automatiche per i file .rb
 	" autocmd BufWinLeave *.rb mkview
 	" autocmd BufWinEnter *.rb silent loadview
@@ -380,17 +396,17 @@ if has("autocmd")
 	" Per i file HTML di monbox.
 	au BufNewFile,BufRead *monbox*/*.html set ft=htmldjango
 	au BufNewFile,BufRead *MonitoringBox*/*.html set ft=htmldjango
-	
+
 	" vim -b : edit binary using xxd-format!
 	augroup Binary
-	    au!
-	    au BufReadPre  *.hex let &bin=1
-	    au BufReadPost *.hex if &bin | %!xxd
-	    au BufReadPost *.hex set ft=xxd | endif
-	    au BufWritePre *.hex if &bin | %!xxd -r
-	    au BufWritePre *.hex endif
-	    au BufWritePost *.hex if &bin | %!xxd
-	    au BufWritePost *.hex set nomod | endif
+		au!
+		au BufReadPre  *.hex let &bin=1
+		au BufReadPost *.hex if &bin | %!xxd
+		au BufReadPost *.hex set ft=xxd | endif
+		au BufWritePre *.hex if &bin | %!xxd -r
+		au BufWritePre *.hex endif
+		au BufWritePost *.hex if &bin | %!xxd
+		au BufWritePost *.hex set nomod | endif
 	augroup END
 
 	" When editing a file, always jump to the last known cursor position.
@@ -404,20 +420,13 @@ if has("autocmd")
 	" Usa il metodo migliore di omnicompletion
 	" http://vim.runpaint.org/typing/auto-completing-text/
 	if exists("+omnifunc")
-	    au FileType *
+		au FileType *
 			\ if &omnifunc == "" |
 			\ setl omnifunc=syntaxcomplete#Complete |
 			\ endif
 	endif
 
-    endif
-
-else
-
-  set autoindent                " always set autoindenting on
-
-endif " has("autocmd")
-" }
+	endif
 
 
 " Script e funzioni {
