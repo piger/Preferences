@@ -35,19 +35,43 @@ elif [[ $OSTYPE = openbsd* ]]; then
 fi
 
 # umask per directory
+#
+# NOTA: la tabella 'umask_table' e' sequenziale e verra' scelto il primo
+# match valido, percio' se si vuole impostare una umask per una directory e per
+# una sua sotto directory bisognera' impostare prima quella della sottodirectory.
+#
+# INOLTRE: il path della directory deve essere racchiuso tra apici e puo' contenere
+# white-space.
+#
+# Esempio:
+# umask_table=(
+#	'~/Work/FooBar' 022
+#	'~/Work' 011
+# )
+
+typeset -A umask_table
+umask_table=(
+	'~/Work' 007
+	'~/tmp' 027
+	'~/ciao ciao' 011
+)
+
 chpwd() {
-	if [[ $PWD == ~/Work* ]]; then
-		if [[ $(umask) != 007 ]]; then
-			echo "[zsh] Switching to WORK umask: 007"
+	local current_umask=$(umask)
+
+	for dir new_umask in ${(kv)umask_table}; do
+		if [[ "$PWD" == ${~dir}* ]]; then
+			[[ $current_umask == $new_umask ]] && return
+			echo "$fg[green][zsh] Switching to '$fg[red]$dir$fg[green]' umask: $fg[red]$new_umask"
 			PREVIOUS_UMASK=$(umask)
-			umask 007
+			umask $new_umask
+			return
 		fi
-	else
-		if [[ ! -z $PREVIOUS_UMASK ]]; then
-			echo "[zsh] Switching to DEFAULT umask: ${PREVIOUS_UMASK}"
-			umask $PREVIOUS_UMASK
-			unset PREVIOUS_UMASK
-		fi
+	done
+	if [[ ! -z $PREVIOUS_UMASK ]]; then
+		echo "$fg[green][zsh] Switching to '$fg[red]previous$fg[green]' umask: $fg[red]$PREVIOUS_UMASK"
+		umask $PREVIOUS_UMASK
+		unset PREVIOUS_UMASK
 	fi
 }
 
