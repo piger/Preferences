@@ -222,6 +222,7 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 	Bundle 'bufexplorer.zip'
 	Bundle 'pydoc.vim'
 	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
+	Bundle 'Jinja'
 endif
 " }
 
