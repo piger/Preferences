@@ -11,6 +11,13 @@
 # Global Order: zshenv, zprofile, zshrc, zlogin
 ################################################################################
 
+# USAGE
+# If you are using this file as your ~/.zshrc file, please use ~/.zshrc.pre
+# and ~/.zshrc.local for your own customisations. The former file is read
+# before ~/.zshrc, the latter is read after it. Also, consider reading the
+# refcard and the reference manual for this setup, both available from:
+#     <http://grml.org/zsh/>
+
 # Contributing:
 # If you want to help to improve grml's zsh setup, clone the grml-etc-core
 # repository from git.grml.org:
@@ -249,13 +256,6 @@ zrcautoload is-at-least || is-at-least() { return 1 }
 # }}}
 
 # {{{ set some important options (as early as possible)
-# Please update these tags, if you change the umask settings below.
-#o# r_umask     002
-#o# r_umaskstr  rwxrwxr-x
-#o# umask       022
-#o# umaskstr    rwxr-xr-x
-(( EUID != 0 )) && umask 002 || umask 022
-
 setopt append_history       # append history list to the history file (important for multiple parallel zsh sessions!)
 is4 && setopt SHARE_HISTORY # import new commands from the history file also in other zsh-session
 setopt extended_history     # save each command's beginning timestamp and the duration to the history file
@@ -410,14 +410,13 @@ fi
 
 # Check if we can read given files and source those we can.
 xsource() {
-    emulate -L zsh
     if (( ${#argv} < 1 )) ; then
         printf 'usage: xsource FILE(s)...\n' >&2
         return 1
     fi
 
     while (( ${#argv} > 0 )) ; do
-        [[ -r $1 ]] && source $1
+        [[ -r "$1" ]] && source "$1"
         shift
     done
     return 0
@@ -506,7 +505,7 @@ fi
 isdarwin && xsource /sw/bin/init.sh
 
 # load our function and completion directories
-for fdir in /usr/share/grml/zsh/completion /usr/share/grml/functions; do
+for fdir in /usr/share/grml/zsh/completion /usr/share/grml/zsh/functions; do
     fpath=( ${fdir} ${fdir}/**/*(/N) ${fpath} )
     if [[ ${fpath} == '/usr/share/grml/zsh/functions' ]] ; then
         for func in ${fdir}/**/[^_]*[^~](N.) ; do
@@ -564,20 +563,75 @@ bindkey -e
 # use vi style:
 # bindkey -v
 
+## beginning-of-line OR beginning-of-buffer OR beginning of history
+## by: Bart Schaefer <schaefer@brasslantern.com>, Bernhard Tittelbach
+beginning-or-end-of-somewhere() {
+    local hno=$HISTNO
+    if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
+      ( "${RBUFFER[1]}" == $'\n' && "${WIDGET}" == end-of* ) ]]; then
+        zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
+    else
+        zle .${WIDGET:s/somewhere/line-hist/} "$@"
+        if (( HISTNO != hno )); then
+            zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
+        fi
+    fi
+}
+zle -N beginning-of-somewhere beginning-or-end-of-somewhere
+zle -N end-of-somewhere beginning-or-end-of-somewhere
+
+
 #if [[ "$TERM" == screen ]] ; then
-bindkey '\e[1~' beginning-of-line       # home
-bindkey '\e[4~' end-of-line             # end
+
+## with HOME/END, move to beginning/end of line (on multiline) on first keypress
+## to beginning/end of buffer on second keypress
+## and to beginning/end of history on (at most) the third keypress
+# terminator & non-debian xterm
+bindkey '\eOH' beginning-of-somewhere  # home
+bindkey '\eOF' end-of-somewhere        # end
+# freebsd console
+bindkey '\e[H' beginning-of-somewhere   # home
+bindkey '\e[F' end-of-somewhere         # end
+# xterm,gnome-terminal,quake,etc
+bindkey '^[[1~' beginning-of-somewhere  # home
+bindkey '^[[4~' end-of-somewhere        # end
+# if terminal type is set to 'rxvt':
+bindkey '\e[7~' beginning-of-somewhere  # home
+bindkey '\e[8~' end-of-somewhere        # end
+#fi
+
 bindkey '\e[A'  up-line-or-search       # cursor up
 bindkey '\e[B'  down-line-or-search     # <ESC>-
 
-bindkey '^xp'   history-beginning-search-backward
-bindkey '^xP'   history-beginning-search-forward
+## alt-backspace is already the default for backwards-delete-word
+## let's also set alt-delete for deleting current word (right of cursor)
+#k# Kill right-side word
+bindkey "3~" delete-word
+
+## use Ctrl-left-arrow and Ctrl-right-arrow for jumping to word-beginnings on the CL
+bindkey "\e[5C" forward-word
+bindkey "\e[5D" backward-word
+bindkey "\e[1;5C" forward-word
+bindkey "\e[1;5D" backward-word
+## the same for alt-left-arrow and alt-right-arrow
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+
+# Search backward in the history for a line beginning with the current
+# line up to the cursor and move the cursor to the end of the line then
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end  history-search-end
+#k# search history backward for entry beginning with typed text
+bindkey '^xp'   history-beginning-search-backward-end
+#k# search history forward for entry beginning with typed text
+bindkey '^xP'   history-beginning-search-forward-end
+#k# search history backward for entry beginning with typed text
+bindkey "\e[5~" history-beginning-search-backward-end # PageUp
+#k# search history forward for entry beginning with typed text
+bindkey "\e[6~" history-beginning-search-forward-end  # PageDown
+
 # bindkey -s '^L' "|less\n"             # ctrl-L pipes to less
 # bindkey -s '^B' " &\n"                # ctrl-B runs it in the background
-# if terminal type is set to 'rxvt':
-bindkey '\e[7~' beginning-of-line       # home
-bindkey '\e[8~' end-of-line             # end
-#fi
 
 # insert unicode character
 # usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an §
@@ -586,6 +640,13 @@ zrcautoload insert-unicode-char
 zle -N insert-unicode-char
 #k# Insert Unicode character
 bindkey '^Xi' insert-unicode-char
+
+#m# k Shift-tab Perform backwards menu completion
+if [[ -n "$terminfo[kcbt]" ]]; then
+    bindkey "$terminfo[kcbt]" reverse-menu-complete
+elif [[ -n "$terminfo[cbt]" ]]; then # required for GNU screen
+    bindkey "$terminfo[cbt]"  reverse-menu-complete
+fi
 
 ## toggle the ,. abbreviation feature on/off
 # NOABBREVIATION: default abbreviation-state
@@ -620,8 +681,12 @@ slash-backward-kill-word() {
 }
 zle -N slash-backward-kill-word
 
-#k# Kill everything in a word up to its last \kbd{/}
+#k# Kill left-side word or everything up to next slash
 bindkey '\ev' slash-backward-kill-word
+#k# Kill left-side word or everything up to next slash
+bindkey '\e^h' slash-backward-kill-word
+#k# Kill left-side word or everything up to next slash
+bindkey '\e^?' slash-backward-kill-word
 
 # use the new *-pattern-* widgets for incremental history search
 if is439 ; then
@@ -650,10 +715,11 @@ fi
 zstyle ':acceptline:*' rehash true
 
 function Accept-Line() {
-    emulate -L zsh
+    setopt localoptions noksharrays
     local -a subs
     local -xi aldone
     local sub
+    local alcontext=${1:-$alcontext}
 
     zstyle -a ":acceptline:${alcontext}" actions subs
 
@@ -683,9 +749,17 @@ function Accept-Line-getdefault() {
     esac
 }
 
+function Accept-Line-HandleContext() {
+    zle Accept-Line
+
+    default_action=$(Accept-Line-getdefault)
+    zstyle -T ":acceptline:${alcontext}" call_default \
+        && zle ${default_action}
+}
+
 function accept-line() {
-    emulate -L zsh
-    local -a cmdline
+    setopt localoptions noksharrays
+    local -ax cmdline
     local -x alcontext
     local buf com fname format msg default_action
 
@@ -695,11 +769,14 @@ function accept-line() {
     com="${cmdline[1]}"
     fname="_${com}"
 
+    Accept-Line 'preprocess'
+
     zstyle -t ":acceptline:${alcontext}" rehash \
         && [[ -z ${commands[$com]} ]]           \
         && rehash
 
-    if    [[ -n ${reswords[(r)$com]} ]] \
+    if    [[ -n ${com}               ]] \
+       && [[ -n ${reswords[(r)$com]} ]] \
        || [[ -n ${aliases[$com]}     ]] \
        || [[ -n ${functions[$com]}   ]] \
        || [[ -n ${builtins[$com]}    ]] \
@@ -707,11 +784,8 @@ function accept-line() {
 
         # there is something sensible to execute, just do it.
         alcontext='normal'
-        zle Accept-Line
+        Accept-Line-HandleContext
 
-        default_action=$(Accept-Line-getdefault)
-        zstyle -T ":acceptline:${alcontext}" call_default \
-            && zle ${default_action}
         return
     fi
 
@@ -727,49 +801,45 @@ function accept-line() {
             # Okay, we warned the user before, he called us again,
             # so have it his way.
             alcontext='force'
-            zle Accept-Line
+            Accept-Line-HandleContext
 
-            default_action=$(Accept-Line-getdefault)
-            zstyle -T ":acceptline:${alcontext}" call_default \
-                && zle ${default_action}
             return
         fi
 
-        # prepare warning message for the user, configurable via zstyle.
-        zstyle -s ":acceptline:${alcontext}" compwarnfmt msg
+        if zstyle -t ":acceptline:${alcontext}" nocompwarn ; then
+            alcontext='normal'
+            Accept-Line-HandleContext
+        else
+            # prepare warning message for the user, configurable via zstyle.
+            zstyle -s ":acceptline:${alcontext}" compwarnfmt msg
 
-        if [[ -z ${msg} ]] ; then
-            msg="%c will not execute and completion %f exists."
+            if [[ -z ${msg} ]] ; then
+                msg="%c will not execute and completion %f exists."
+            fi
+
+            zformat -f msg "${msg}" "c:${com}" "f:${fname}"
+
+            zle -M -- "${msg}"
         fi
-
-        zformat -f msg "${msg}" "c:${com}" "f:${fname}"
-
-        zle -M -- "${msg}"
         return
     elif [[ -n ${buf//[$' \t\n']##/} ]] ; then
         # If we are here, the commandline contains something that is not
         # executable, which is neither subject to _command_name correction
         # and is not empty. might be a variable assignment
         alcontext='misc'
-        zle Accept-Line
+        Accept-Line-HandleContext
 
-        default_action=$(Accept-Line-getdefault)
-        zstyle -T ":acceptline:${alcontext}" call_default \
-            && zle ${default_action}
         return
     fi
 
     # If we got this far, the commandline only contains whitespace, or is empty.
     alcontext='empty'
-    zle Accept-Line
-
-    default_action=$(Accept-Line-getdefault)
-    zstyle -T ":acceptline:${alcontext}" call_default \
-        && zle ${default_action}
+    Accept-Line-HandleContext
 }
 
 zle -N accept-line
 zle -N Accept-Line
+zle -N Accept-Line-HandleContext
 
 # }}}
 
@@ -860,21 +930,13 @@ done
 
 # autoload zsh modules when they are referenced
 if is4 ; then
-    tmpargs=(
-        a   stat
-        a   zpty
-        ap  mapfile
-    )
-
-    while (( ${#tmpargs} > 0 )) ; do
-        zmodload -${tmpargs[1]} zsh/${tmpargs[2]} ${tmpargs[2]}
-        shift 2 tmpargs
-    done
-    unset tmpargs
+    zmodload -a  zsh/stat    zstat
+    zmodload -a  zsh/zpty    zpty
+    zmodload -ap zsh/mapfile mapfile
 fi
 
 if is4 && zrcautoload insert-files && zle -N insert-files ; then
-    #k# Insert files
+    #k# Insert files and test globbing
     bindkey "^Xf" insert-files # C-x-f
 fi
 
@@ -891,6 +953,9 @@ fi
 if is4 && [[ -n ${(k)modules[zsh/complist]} ]] ; then
     #k# menu selection: pick item but stay in the menu
     bindkey -M menuselect '\e^M' accept-and-menu-complete
+    # also use + and INSERT since it's easier to press repeatedly
+    bindkey -M menuselect "+" accept-and-menu-complete
+    bindkey -M menuselect "^[[2~" accept-and-menu-complete
 
     # accept a completion and try to complete again by using menu
     # completion; very useful with completing directories
@@ -899,11 +964,11 @@ if is4 && [[ -n ${(k)modules[zsh/complist]} ]] ; then
 fi
 
 # press "ctrl-e d" to insert the actual date in the form yyyy-mm-dd
-_bkdate() { BUFFER="$BUFFER$(date '+%F')"; CURSOR=$#BUFFER; }
-zle -N _bkdate
+insert-datestamp() { LBUFFER+=${(%):-'%D{%Y-%m-%d}'}; }
+zle -N insert-datestamp
 
 #k# Insert a timestamp on the command line (yyyy-mm-dd)
-bindkey '^Ed' _bkdate
+bindkey '^Ed' insert-datestamp
 
 # press esc-m for inserting last typed word again (thanks to caphuso!)
 insert-last-typed-word() { zle insert-last-word -- 0 -1 };
@@ -912,17 +977,31 @@ zle -N insert-last-typed-word;
 #k# Insert last typed word
 bindkey "\em" insert-last-typed-word
 
-#k# Shortcut for \kbd{fg<enter>}
-bindkey -s '^z' "fg\n"
+function grml-zsh-fg() {
+  if (( ${#jobstates} )); then
+    zle .push-input
+    [[ -o hist_ignore_space ]] && BUFFER=' ' || BUFFER=''
+    BUFFER="${BUFFER}fg"
+    zle .accept-line
+  else
+    zle -M 'No background jobs. Doing nothing.'
+  fi
+}
+zle -N grml-zsh-fg
+#k# A smart shortcut for \kbd{fg<enter>}
+bindkey '^z' grml-zsh-fg
 
 # run command line as user root via sudo:
 sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
-    [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
+    if [[ $BUFFER != sudo\ * ]]; then
+        BUFFER="sudo $BUFFER"
+        CURSOR=$(( CURSOR+5 ))
+    fi
 }
 zle -N sudo-command-line
 
-#k# Put the current command line into a \kbd{sudo} call
+#k# prepend the current command with "sudo"
 bindkey "^Os" sudo-command-line
 
 ### jump behind the first word on the cmdline.
@@ -938,8 +1017,44 @@ function jump_after_first_word() {
     fi
 }
 zle -N jump_after_first_word
-
+#k# jump to after first word (for adding options)
 bindkey '^x1' jump_after_first_word
+
+# complete word from history with menu (from Book: ZSH, OpenSource-Press)
+zle -C hist-complete complete-word _generic
+zstyle ':completion:hist-complete:*' completer _history
+#k# complete word from history with menu
+bindkey "^X^X" hist-complete
+
+## complete word from currently visible Screen or Tmux buffer.
+if check_com -c screen || check_com -c tmux; then
+    _complete_screen_display() {
+        [[ "$TERM" != "screen" ]] && return 1
+
+        local TMPFILE=$(mktemp)
+        local -U -a _screen_display_wordlist
+        trap "rm -f $TMPFILE" EXIT
+
+        # fill array with contents from screen hardcopy
+        if ((${+TMUX})); then
+            #works, but crashes tmux below version 1.4
+            #luckily tmux -V option to ask for version, was also added in 1.4
+            tmux -V &>/dev/null || return
+            tmux -q capture-pane \; save-buffer -b 0 $TMPFILE \; delete-buffer -b 0
+        else
+            screen -X hardcopy $TMPFILE
+            #screen sucks, it dumps in latin1, apparently always. so recode it to system charset
+            check_com recode && recode latin1 $TMPFILE
+        fi
+        _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
+        # remove PREFIX to be completed from that array
+        _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
+        compadd -a _screen_display_wordlist
+    }
+    #k# complete word from currently visible GNU screen buffer
+    bindkey -r "^XS"
+    compdef -k _complete_screen_display complete-word '^XS'
+fi
 
 # }}}
 
@@ -962,7 +1077,7 @@ DIRSTACKFILE=${DIRSTACKFILE:-${HOME}/.zdirs}
 if [[ -f ${DIRSTACKFILE} ]] && [[ ${#dirstack[*]} -eq 0 ]] ; then
     dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
     # "cd -" won't work after login by just setting $OLDPWD, so
-    [[ -d $dirstack[0] ]] && cd $dirstack[0] && cd $OLDPWD
+    [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
 fi
 
 chpwd() {
@@ -1114,836 +1229,23 @@ fi
 
 # gather version control information for inclusion in a prompt {{{
 
-if ! is41 ; then
-    # Be quiet about version problems in grml's zshrc as the user cannot disable
-    # loading vcs_info() as it is *in* the zshrc - as you can see. :-)
-    # Just unset most probable variables and disable vcs_info altogether.
-    local -i i
-    for i in {0..9} ; do
-        unset VCS_INFO_message_${i}_
-    done
-    zstyle ':vcs_info:*' enable false
+if zrcautoload vcs_info; then
+    # `vcs_info' in zsh versions 4.3.10 and below have a broken `_realpath'
+    # function, which can cause a lot of trouble with our directory-based
+    # profiles. So:
+    if [[ ${ZSH_VERSION} == 4.3.<-10> ]] ; then
+        function VCS_INFO_realpath () {
+            setopt localoptions NO_shwordsplit chaselinks
+            ( builtin cd -q $1 2> /dev/null && pwd; )
+        }
+    fi
+
+    zstyle ':vcs_info:*' max-exports 2
+
+    if [[ -o restricted ]]; then
+        zstyle ':vcs_info:*' enable NONE
+    fi
 fi
-
-# The following code is imported from the file 'zsh/functions/vcs_info'
-# from <http://ft.bewatermyfriend.org/comp/zsh/zsh-dotfiles.tar.bz2>,
-# which distributed under the same terms as zsh itself.
-
-# we will be using two variables, so let the code know now.
-zstyle ':vcs_info:*' max-exports 2
-
-# vcs_info() documentation:
-#{{{
-# REQUIREMENTS:
-#{{{
-#     This functionality requires zsh version >= 4.1.*.
-#}}}
-#
-# LOADING:
-#{{{
-# To load vcs_info(), copy this file to your $fpath[] and do:
-#   % autoload -Uz vcs_info && vcs_info
-#
-# To work, vcs_info() needs 'setopt prompt_subst' in your setup.
-#}}}
-#
-# QUICKSTART:
-#{{{
-# To get vcs_info() working quickly (including colors), you can do the
-# following (assuming, you loaded vcs_info() properly - see above):
-#
-# % RED=$'%{\e[31m%}'
-# % GR=$'%{\e[32m%}'
-# % MA=$'%{\e[35m%}'
-# % YE=$'%{\e[33m%}'
-# % NC=$'%{\e[0m%}'
-#
-# % zstyle ':vcs_info:*' actionformats \
-#       "${MA}(${NC}%s${MA})${YE}-${MA}[${GR}%b${YE}|${RED}%a${MA}]${NC} "
-#
-# % zstyle ':vcs_info:*' formats       \
-#       "${MA}(${NC}%s${MA})${Y}-${MA}[${GR}%b${MA}]${NC}%} "
-#
-# % zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat "%b${RED}:${YE}%r"
-#
-# % precmd () { vcs_info }
-# % PS1='${MA}[${GR}%n${MA}] ${MA}(${RED}%!${MA}) ${YE}%3~ ${VCS_INFO_message_0_}${NC}%# '
-#
-# Obviously, the las two lines are there for demonstration: You need to
-# call vcs_info() from your precmd() function (see 'SPECIAL FUNCTIONS' in
-# 'man zshmisc'). Once that is done you need a *single* quoted
-# '${VCS_INFO_message_0_}' in your prompt.
-#
-# Now call the 'vcs_info_printsys' utility from the command line:
-#
-# % vcs_info_printsys
-# # list of supported version control backends:
-# # disabled systems are prefixed by a hash sign (#)
-# git
-# hg
-# bzr
-# darcs
-# svk
-# mtn
-# svn
-# cvs
-# cdv
-# tla
-# # flavours (cannot be used in the disable style; they
-# # are disabled with their master [git-svn -> git]):
-# git-p4
-# git-svn
-#
-# Ten version control backends as you can see. You may not want all
-# of these. Because there is no point in running the code to detect
-# systems you do not use. ever. So, there is a way to disable some
-# backends altogether:
-#
-# % zstyle ':vcs_info:*' disable bzr cdv darcs mtn svk tla
-#
-# If you rerun 'vcs_info_printsys' now, you will see the backends listed
-# in the 'disable' style marked as diabled by a hash sign. That means the
-# detection of these systems is skipped *completely*. No wasted time there.
-#
-# For more control, read the reference below.
-#}}}
-#
-# CONFIGURATION:
-#{{{
-# The vcs_info() feature can be configured via zstyle.
-#
-# First, the context in which we are working:
-#       :vcs_info:<vcs-string>:<user-context>
-#
-# ...where <vcs-string> is one of:
-#   - git, git-svn, git-p4, hg, darcs, bzr, cdv, mtn, svn, cvs, svk or tla.
-#
-# ...and <user-context> is a freely configurable string, assignable by the
-# user as the first argument to vcs_info() (see its description below).
-#
-# There is are three special values for <vcs-string>: The first is named
-# 'init', that is in effect as long as there was no decision what vcs
-# backend to use. The second is 'preinit; it is used *before* vcs_info()
-# is run, when initializing the data exporting variables. The third
-# special value is 'formats' and is used by the 'vcs_info_lastmsg' for
-# looking up its styles.
-#
-# There are two pre-defined values for <user-context>:
-#   default  - the one used if none is specified
-#   command  - used by vcs_info_lastmsg to lookup its styles.
-#
-# You may *not* use 'print_systems_' as a user-context string, because it
-# is used internally.
-#
-# You can of course use ':vcs_info:*' to match all VCSs in all
-# user-contexts at once.
-#
-# Another special context is 'formats', which is used by the
-# vcs_info_lastmsg() utility function (see below).
-#
-#
-# This is a description of all styles, that are looked up:
-#   formats             - A list of formats, used when actionformats is not
-#                         used (which is most of the time).
-#   actionformats       - A list of formats, used if a there is a special
-#                         action going on in your current repository;
-#                         (like an interactive rebase or a merge conflict)
-#   branchformat        - Some backends replace %b in the formats and
-#                         actionformats styles above, not only by a branch
-#                         name but also by a revision number. This style
-#                         let's you modify how that string should look like.
-#   nvcsformats         - These "formats" are exported, when we didn't detect
-#                         a version control system for the current directory.
-#                         This is useful, if you want vcs_info() to completely
-#                         take over the generation of your prompt.
-#                         You would do something like
-#                           PS1='${VCS_INFO_message_0_}'
-#                         to accomplish that.
-#   max-exports         - Defines the maximum number if VCS_INFO_message_*_
-#                         variables vcs_info() will export.
-#   enable              - Checked in the 'init' context. If set to false,
-#                         vcs_info() will do nothing.
-#   disable             - Provide a list of systems, you don't want
-#                         the vcs_info() to check for repositories
-#                         (checked in the 'init' context, too).
-#   disable-patterns    - A list of patterns that are checked against $PWD.
-#                         If the pattern matches, vcs_info will be disabled.
-#                         Say, ~/.zsh is a directory under version control,
-#                         in which you do not want vcs_info to be active, do:
-#                         zstyle ':vcs_info:*' disable-patterns "$HOME/.zsh+(|/*)"
-#   use-simple          - If there are two different ways of gathering
-#                         information, you can select the simpler one
-#                         by setting this style to true; the default
-#                         is to use the not-that-simple code, which is
-#                         potentially a lot slower but might be more
-#                         accurate in all possible cases.
-#   use-prompt-escapes  - determines if we assume that the assembled
-#                         string from vcs_info() includes prompt escapes.
-#                         (Used by vcs_info_lastmsg().
-#
-# The use-simple style is only available for the bzr backend.
-#
-# The default values for these in all contexts are:
-#   formats             " (%s)-[%b|%a]-"
-#   actionformats       " (%s)-[%b]-"
-#   branchformat        "%b:%r" (for bzr, svn and svk)
-#   nvcsformats         ""
-#   max-exports         2
-#   enable              true
-#   disable             (empty list)
-#   disable-patterns    (empty list)
-#   use-simple          false
-#   use-prompt-escapes  true
-#
-#
-# In normal formats and actionformats, the following replacements
-# are done:
-#   %s  - The vcs in use (git, hg, svn etc.)
-#   %b  - Information about the current branch.
-#   %a  - An identifier, that describes the action.
-#         Only makes sense in actionformats.
-#   %R  - base directory of the repository.
-#   %r  - repository name
-#         If %R is '/foo/bar/repoXY', %r is 'repoXY'.
-#   %S  - subdirectory within a repository. if $PWD is
-#         '/foo/bar/reposXY/beer/tasty', %S is 'beer/tasty'.
-#
-#
-# In branchformat these replacements are done:
-#   %b  - the branch name
-#   %r  - the current revision number
-#
-# Not all vcs backends have to support all replacements.
-# nvcsformat does not perform *any* replacements. It is just a string.
-#}}}
-#
-# ODDITIES:
-#{{{
-# If you want to use the %b (bold off) prompt expansion in 'formats', which
-# expands %b itself, use %%b. That will cause the vcs_info() expansion to
-# replace %%b with %b. So zsh's prompt expansion mechanism can handle it.
-# Similarly, to hand down %b from branchformat, use %%%%b. Sorry for this
-# inconvenience, but it cannot be easily avoided. Luckily we do not clash
-# with a lot of prompt expansions and this only needs to be done for those.
-# See 'man zshmisc' for details about EXPANSION OF PROMPT SEQUENCES.
-#}}}
-#
-# FUNCTION DESCRIPTIONS (public API):
-#{{{
-#   vcs_info()
-#       The main function, that runs all backends and assembles
-#       all data into ${VCS_INFO_message_*_}. This is the function
-#       you want to call from precmd() if you want to include
-#       up-to-date information in your prompt (see VARIABLE
-#       DESCRIPTION below).
-#
-#   vcs_info_printsys()
-#       Prints a list of all supported version control systems.
-#       Useful to find out possible contexts (and which of them are enabled)
-#       or values for the 'disable' style.
-#
-#   vcs_info_lastmsg()
-#       Outputs the last ${VCS_INFO_message_*_} value. Takes into account
-#       the value of the use-prompt-escapes style in ':vcs_info:formats'.
-#       It also only prints max-exports values.
-#
-# All functions named VCS_INFO_* are for internal use only.
-#}}}
-#
-# VARIABLE DESCRIPTION:
-#{{{
-#   ${VCS_INFO_message_N_}    (Note the trailing underscore)
-#       Where 'N' is an integer, eg: VCS_INFO_message_0_
-#       These variables are the storage for the informational message the
-#       last vcs_info() call has assembled. These are strongly connected
-#       to the formats, actionformats and nvcsformats styles described
-#       above. Those styles are lists. the first member of that list gets
-#       expanded into ${VCS_INFO_message_0_}, the second into
-#       ${VCS_INFO_message_1_} and the Nth into ${VCS_INFO_message_N-1_}.
-#       These parameters are exported into the environment.
-#       (See the max-exports style above.)
-#}}}
-#
-# EXAMPLES:
-#{{{
-#   Don't use vcs_info at all (even though it's in your prompt):
-#   % zstyle ':vcs_info:*' enable false
-#
-#   Disable the backends for bzr and svk:
-#   % zstyle ':vcs_info:*' disable bzr svk
-#
-#   Provide a special formats for git:
-#   % zstyle ':vcs_info:git:*' formats       ' GIT, BABY! [%b]'
-#   % zstyle ':vcs_info:git:*' actionformats ' GIT ACTION! [%b|%a]'
-#
-#   Use the quicker bzr backend (if you do, please report if it does
-#   the-right-thing[tm] - thanks):
-#   % zstyle ':vcs_info:bzr:*' use-simple true
-#
-#   Display the revision number in yellow for bzr and svn:
-#   % zstyle ':vcs_info:(svn|bzr):*' branchformat '%b%{'${fg[yellow]}'%}:%r'
-#
-# If you want colors, make sure you enclose the color codes in %{...%},
-# if you want to use the string provided by vcs_info() in prompts.
-#
-# Here is how to print the vcs infomation as a command:
-#   % alias vcsi='vcs_info command; vcs_info_lastmsg'
-#
-#   This way, you can even define different formats for output via
-#   vcs_info_lastmsg() in the ':vcs_info:command:*' namespace.
-#}}}
-#}}}
-# utilities
-VCS_INFO_adjust () { #{{{
-    [[ -n ${vcs_comm[overwrite_name]} ]] && vcs=${vcs_comm[overwrite_name]}
-    return 0
-}
-# }}}
-VCS_INFO_check_com () { #{{{
-    (( ${+commands[$1]} )) && [[ -x ${commands[$1]} ]] && return 0
-    return 1
-}
-# }}}
-VCS_INFO_formats () { # {{{
-    setopt localoptions noksharrays
-    local action=$1 branch=$2 base=$3
-    local msg
-    local -i i
-
-    if [[ -n ${action} ]] ; then
-        zstyle -a ":vcs_info:${vcs}:${usercontext}" actionformats msgs
-        (( ${#msgs} < 1 )) && msgs[1]=' (%s)-[%b|%a]-'
-    else
-        zstyle -a ":vcs_info:${vcs}:${usercontext}" formats msgs
-        (( ${#msgs} < 1 )) && msgs[1]=' (%s)-[%b]-'
-    fi
-
-    (( ${#msgs} > maxexports )) && msgs[$(( maxexports + 1 )),-1]=()
-    for i in {1..${#msgs}} ; do
-        zformat -f msg ${msgs[$i]}                      \
-                        a:${action}                     \
-                        b:${branch}                     \
-                        r:${base:t}                     \
-                        s:${vcs}                        \
-                        R:${base}                       \
-                        S:"$(VCS_INFO_reposub ${base})"
-        msgs[$i]=${msg}
-    done
-    return 0
-}
-# }}}
-VCS_INFO_maxexports () { #{{{
-    zstyle -s ":vcs_info:${vcs}:${usercontext}" "max-exports" maxexports || maxexports=2
-    if [[ ${maxexports} != <-> ]] || (( maxexports < 1 )); then
-        printf 'vcs_info(): expecting numeric arg >= 1 for max-exports (got %s).\n' ${maxexports}
-        printf 'Defaulting to 2.\n'
-        maxexports=2
-    fi
-}
-# }}}
-VCS_INFO_nvcsformats () { #{{{
-    setopt localoptions noksharrays
-    local c v
-
-    if [[ $1 == 'preinit' ]] ; then
-        c=default
-        v=preinit
-    fi
-    zstyle -a ":vcs_info:${v:-$vcs}:${c:-$usercontext}" nvcsformats msgs
-    (( ${#msgs} > maxexports )) && msgs[${maxexports},-1]=()
-}
-# }}}
-VCS_INFO_realpath () { #{{{
-    # a portable 'readlink -f'
-    # forcing a subshell, to ensure chpwd() is not removed
-    # from the calling shell (if VCS_INFO_realpath() is called
-    # manually).
-    (
-        (( ${+functions[chpwd]} )) && unfunction chpwd
-        setopt chaselinks
-        cd $1 2>/dev/null && pwd
-    )
-}
-# }}}
-VCS_INFO_reposub () { #{{{
-    setopt localoptions extendedglob
-    local base=${1%%/##}
-
-    [[ ${PWD} == ${base}/* ]] || {
-        printf '.'
-        return 1
-    }
-    printf '%s' ${PWD#$base/}
-    return 0
-}
-# }}}
-VCS_INFO_set () { #{{{
-    setopt localoptions noksharrays
-    local -i i j
-
-    if [[ $1 == '--clear' ]] ; then
-        for i in {0..9} ; do
-            unset VCS_INFO_message_${i}_
-        done
-    fi
-    if [[ $1 == '--nvcs' ]] ; then
-        [[ $2 == 'preinit' ]] && (( maxexports == 0 )) && (( maxexports = 1 ))
-        for i in {0..$((maxexports - 1))} ; do
-            typeset -gx VCS_INFO_message_${i}_=
-        done
-        VCS_INFO_nvcsformats $2
-    fi
-
-    (( ${#msgs} - 1 < 0 )) && return 0
-    for i in {0..$(( ${#msgs} - 1 ))} ; do
-        (( j = i + 1 ))
-        typeset -gx VCS_INFO_message_${i}_=${msgs[$j]}
-    done
-    return 0
-}
-# }}}
-# information gathering
-VCS_INFO_bzr_get_data () { # {{{
-    setopt localoptions noksharrays
-    local bzrbase bzrbr
-    local -a bzrinfo
-
-    if zstyle -t ":vcs_info:${vcs}:${usercontext}" "use-simple" ; then
-        bzrbase=${vcs_comm[basedir]}
-        bzrinfo[2]=${bzrbase:t}
-        if [[ -f ${bzrbase}/.bzr/branch/last-revision ]] ; then
-            bzrinfo[1]=$(< ${bzrbase}/.bzr/branch/last-revision)
-            bzrinfo[1]=${${bzrinfo[1]}%% *}
-        fi
-    else
-        bzrbase=${${(M)${(f)"$( bzr info )"}:# ##branch\ root:*}/*: ##/}
-        bzrinfo=( ${${${(M)${(f)"$( bzr version-info )"}:#(#s)(revno|branch-nick)*}/*: /}/*\//} )
-        bzrbase="$(VCS_INFO_realpath ${bzrbase})"
-    fi
-
-    zstyle -s ":vcs_info:${vcs}:${usercontext}" branchformat bzrbr || bzrbr="%b:%r"
-    zformat -f bzrbr "${bzrbr}" "b:${bzrinfo[2]}" "r:${bzrinfo[1]}"
-    VCS_INFO_formats '' "${bzrbr}" "${bzrbase}"
-    return 0
-}
-# }}}
-VCS_INFO_cdv_get_data () { # {{{
-    local cdvbase
-
-    cdvbase=${vcs_comm[basedir]}
-    VCS_INFO_formats '' "${cdvbase:t}" "${cdvbase}"
-    return 0
-}
-# }}}
-VCS_INFO_cvs_get_data () { # {{{
-    local cvsbranch cvsbase basename
-
-    cvsbase="."
-    while [[ -d "${cvsbase}/../CVS" ]]; do
-        cvsbase="${cvsbase}/.."
-    done
-    cvsbase="$(VCS_INFO_realpath ${cvsbase})"
-    cvsbranch=$(< ./CVS/Repository)
-    basename=${cvsbase:t}
-    cvsbranch=${cvsbranch##${basename}/}
-    [[ -z ${cvsbranch} ]] && cvsbranch=${basename}
-    VCS_INFO_formats '' "${cvsbranch}" "${cvsbase}"
-    return 0
-}
-# }}}
-VCS_INFO_darcs_get_data () { # {{{
-    local darcsbase
-
-    darcsbase=${vcs_comm[basedir]}
-    VCS_INFO_formats '' "${darcsbase:t}" "${darcsbase}"
-    return 0
-}
-# }}}
-VCS_INFO_git_getaction () { #{{{
-    local gitaction='' gitdir=$1
-    local tmp
-
-    for tmp in "${gitdir}/rebase-apply" \
-               "${gitdir}/rebase"       \
-               "${gitdir}/../.dotest" ; do
-        if [[ -d ${tmp} ]] ; then
-            if   [[ -f "${tmp}/rebasing" ]] ; then
-                gitaction="rebase"
-            elif [[ -f "${tmp}/applying" ]] ; then
-                gitaction="am"
-            else
-                gitaction="am/rebase"
-            fi
-            printf '%s' ${gitaction}
-            return 0
-        fi
-    done
-
-    for tmp in "${gitdir}/rebase-merge/interactive" \
-               "${gitdir}/.dotest-merge/interactive" ; do
-        if [[ -f "${tmp}" ]] ; then
-            printf '%s' "rebase-i"
-            return 0
-        fi
-    done
-
-    for tmp in "${gitdir}/rebase-merge" \
-               "${gitdir}/.dotest-merge" ; do
-        if [[ -d "${tmp}" ]] ; then
-            printf '%s' "rebase-m"
-            return 0
-        fi
-    done
-
-    if [[ -f "${gitdir}/MERGE_HEAD" ]] ; then
-        printf '%s' "merge"
-        return 0
-    fi
-
-    if [[ -f "${gitdir}/BISECT_LOG" ]] ; then
-        printf '%s' "bisect"
-        return 0
-    fi
-    return 1
-}
-# }}}
-VCS_INFO_git_getbranch () { #{{{
-    local gitbranch gitdir=$1
-    local gitsymref='git symbolic-ref HEAD'
-
-    if    [[ -d "${gitdir}/rebase-apply" ]] \
-       || [[ -d "${gitdir}/rebase" ]]       \
-       || [[ -d "${gitdir}/../.dotest" ]]   \
-       || [[ -f "${gitdir}/MERGE_HEAD" ]] ; then
-        gitbranch="$(${(z)gitsymref} 2> /dev/null)"
-        [[ -z ${gitbranch} ]] && [[ -r ${gitdir}/rebase-apply/head-name ]] \
-            && gitbranch="$(< ${gitdir}/rebase-apply/head-name)"
-
-    elif   [[ -f "${gitdir}/rebase-merge/interactive" ]] \
-        || [[ -d "${gitdir}/rebase-merge" ]] ; then
-        gitbranch="$(< ${gitdir}/rebase-merge/head-name)"
-
-    elif   [[ -f "${gitdir}/.dotest-merge/interactive" ]] \
-        || [[ -d "${gitdir}/.dotest-merge" ]] ; then
-        gitbranch="$(< ${gitdir}/.dotest-merge/head-name)"
-
-    else
-        gitbranch="$(${(z)gitsymref} 2> /dev/null)"
-
-        if [[ $? -ne 0 ]] ; then
-            gitbranch="$(git describe --exact-match HEAD 2>/dev/null)"
-
-            if [[ $? -ne 0 ]] ; then
-                gitbranch="${${"$(< $gitdir/HEAD)"}[1,7]}..."
-            fi
-        fi
-    fi
-
-    printf '%s' "${gitbranch##refs/heads/}"
-    return 0
-}
-# }}}
-VCS_INFO_git_get_data () { # {{{
-    setopt localoptions extendedglob
-    local gitdir gitbase gitbranch gitaction
-
-    gitdir=${vcs_comm[gitdir]}
-    gitbranch="$(VCS_INFO_git_getbranch ${gitdir})"
-
-    if [[ -z ${gitdir} ]] || [[ -z ${gitbranch} ]] ; then
-        return 1
-    fi
-
-    VCS_INFO_adjust
-    gitaction="$(VCS_INFO_git_getaction ${gitdir})"
-    gitbase=${PWD%/${$( git rev-parse --show-prefix )%/##}}
-    VCS_INFO_formats "${gitaction}" "${gitbranch}" "${gitbase}"
-    return 0
-}
-# }}}
-VCS_INFO_hg_get_data () { # {{{
-    local hgbranch hgbase file
-
-    hgbase=${vcs_comm[basedir]}
-
-    file="${hgbase}/.hg/branch"
-    if [[ -r ${file} ]] ; then
-        hgbranch=$(< ${file})
-    else
-        hgbranch='default'
-    fi
-
-    VCS_INFO_formats '' "${hgbranch}" "${hgbase}"
-    return 0
-}
-# }}}
-VCS_INFO_mtn_get_data () { # {{{
-    local mtnbranch mtnbase
-
-    mtnbase=${vcs_comm[basedir]}
-    mtnbranch=${${(M)${(f)"$( mtn status )"}:#(#s)Current branch:*}/*: /}
-    VCS_INFO_formats '' "${mtnbranch}" "${mtnbase}"
-    return 0
-}
-# }}}
-VCS_INFO_svk_get_data () { # {{{
-    local svkbranch svkbase
-
-    svkbase=${vcs_comm[basedir]}
-    zstyle -s ":vcs_info:${vcs}:${usercontext}" branchformat svkbranch || svkbranch="%b:%r"
-    zformat -f svkbranch "${svkbranch}" "b:${vcs_comm[branch]}" "r:${vcs_comm[revision]}"
-    VCS_INFO_formats '' "${svkbranch}" "${svkbase}"
-    return 0
-}
-# }}}
-VCS_INFO_svn_get_data () { # {{{
-    setopt localoptions noksharrays
-    local svnbase svnbranch
-    local -a svninfo
-
-    svnbase="."
-    while [[ -d "${svnbase}/../.svn" ]]; do
-        svnbase="${svnbase}/.."
-    done
-    svnbase="$(VCS_INFO_realpath ${svnbase})"
-    svninfo=( ${${${(M)${(f)"$( svn info )"}:#(#s)(URL|Revision)*}/*: /}/*\//} )
-
-    zstyle -s ":vcs_info:${vcs}:${usercontext}" branchformat svnbranch || svnbranch="%b:%r"
-    zformat -f svnbranch "${svnbranch}" "b:${svninfo[1]}" "r:${svninfo[2]}"
-    VCS_INFO_formats '' "${svnbranch}" "${svnbase}"
-    return 0
-}
-# }}}
-VCS_INFO_tla_get_data () { # {{{
-    local tlabase tlabranch
-
-    tlabase="$(VCS_INFO_realpath ${vcs_comm[basedir]})"
-    # tree-id gives us something like 'foo@example.com/demo--1.0--patch-4', so:
-    tlabranch=${${"$( tla tree-id )"}/*\//}
-    VCS_INFO_formats '' "${tlabranch}" "${tlabase}"
-    return 0
-}
-# }}}
-# detection
-VCS_INFO_detect_by_dir() { #{{{
-    local dirname=$1
-    local basedir="." realbasedir
-
-    realbasedir="$(VCS_INFO_realpath ${basedir})"
-    while [[ ${realbasedir} != '/' ]]; do
-        [[ -r ${realbasedir} ]] || return 1
-        if [[ -n ${vcs_comm[detect_need_file]} ]] ; then
-            [[ -d ${basedir}/${dirname} ]] && \
-            [[ -e ${basedir}/${dirname}/${vcs_comm[detect_need_file]} ]] && \
-                break
-        else
-            [[ -d ${basedir}/${dirname} ]] && break
-        fi
-
-        basedir=${basedir}/..
-        realbasedir="$(VCS_INFO_realpath ${basedir})"
-    done
-
-    [[ ${realbasedir} == "/" ]] && return 1
-    vcs_comm[basedir]=${realbasedir}
-    return 0
-}
-# }}}
-VCS_INFO_bzr_detect() { #{{{
-    VCS_INFO_check_com bzr || return 1
-    vcs_comm[detect_need_file]=branch/format
-    VCS_INFO_detect_by_dir '.bzr'
-    return $?
-}
-# }}}
-VCS_INFO_cdv_detect() { #{{{
-    VCS_INFO_check_com cdv || return 1
-    vcs_comm[detect_need_file]=format
-    VCS_INFO_detect_by_dir '.cdv'
-    return $?
-}
-# }}}
-VCS_INFO_cvs_detect() { #{{{
-    VCS_INFO_check_com svn || return 1
-    [[ -d "./CVS" ]] && [[ -r "./CVS/Repository" ]] && return 0
-    return 1
-}
-# }}}
-VCS_INFO_darcs_detect() { #{{{
-    VCS_INFO_check_com darcs || return 1
-    vcs_comm[detect_need_file]=format
-    VCS_INFO_detect_by_dir '_darcs'
-    return $?
-}
-# }}}
-VCS_INFO_git_detect() { #{{{
-    if VCS_INFO_check_com git && git rev-parse --is-inside-work-tree &> /dev/null ; then
-        vcs_comm[gitdir]="$(git rev-parse --git-dir 2> /dev/null)" || return 1
-        if   [[ -d ${vcs_comm[gitdir]}/svn ]]             ; then vcs_comm[overwrite_name]='git-svn'
-        elif [[ -d ${vcs_comm[gitdir]}/refs/remotes/p4 ]] ; then vcs_comm[overwrite_name]='git-p4' ; fi
-        return 0
-    fi
-    return 1
-}
-# }}}
-VCS_INFO_hg_detect() { #{{{
-    VCS_INFO_check_com hg || return 1
-    vcs_comm[detect_need_file]=store
-    VCS_INFO_detect_by_dir '.hg'
-    return $?
-}
-# }}}
-VCS_INFO_mtn_detect() { #{{{
-    VCS_INFO_check_com mtn || return 1
-    vcs_comm[detect_need_file]=revision
-    VCS_INFO_detect_by_dir '_MTN'
-    return $?
-}
-# }}}
-VCS_INFO_svk_detect() { #{{{
-    setopt localoptions noksharrays extendedglob
-    local -a info
-    local -i fhash
-    fhash=0
-
-    VCS_INFO_check_com svk || return 1
-    [[ -f ~/.svk/config ]] || return 1
-
-    # This detection function is a bit different from the others.
-    # We need to read svk's config file to detect a svk repository
-    # in the first place. Therefore, we'll just proceed and read
-    # the other information, too. This is more then any of the
-    # other detections do but this takes only one file open for
-    # svk at most. VCS_INFO_svk_get_data() get simpler, too. :-)
-    while IFS= read -r line ; do
-        if [[ -n ${vcs_comm[basedir]} ]] ; then
-            line=${line## ##}
-            [[ ${line} == depotpath:* ]] && vcs_comm[branch]=${line##*/}
-            [[ ${line} == revision:* ]] && vcs_comm[revision]=${line##*[[:space:]]##}
-            [[ -n ${vcs_comm[branch]} ]] && [[ -n ${vcs_comm[revision]} ]] && break
-            continue
-        fi
-        (( fhash > 0 )) && [[ ${line} == '  '[^[:space:]]*:* ]] && break
-        [[ ${line} == '  hash:'* ]] && fhash=1 && continue
-        (( fhash == 0 )) && continue
-        [[ ${PWD}/ == ${${line## ##}%:*}/* ]] && vcs_comm[basedir]=${${line## ##}%:*}
-    done < ~/.svk/config
-
-    [[ -n ${vcs_comm[basedir]} ]]  && \
-    [[ -n ${vcs_comm[branch]} ]]   && \
-    [[ -n ${vcs_comm[revision]} ]] && return 0
-    return 1
-}
-# }}}
-VCS_INFO_svn_detect() { #{{{
-    VCS_INFO_check_com svn || return 1
-    [[ -d ".svn" ]] && return 0
-    return 1
-}
-# }}}
-VCS_INFO_tla_detect() { #{{{
-    VCS_INFO_check_com tla || return 1
-    vcs_comm[basedir]="$(tla tree-root 2> /dev/null)" && return 0
-    return 1
-}
-# }}}
-# public API
-vcs_info_printsys () { # {{{
-    vcs_info print_systems_
-}
-# }}}
-vcs_info_lastmsg () { # {{{
-    emulate -L zsh
-    local -i i
-
-    VCS_INFO_maxexports
-    for i in {0..$((maxexports - 1))} ; do
-        printf '$VCS_INFO_message_%d_: "' $i
-        if zstyle -T ':vcs_info:formats:command' use-prompt-escapes ; then
-            print -nP ${(P)${:-VCS_INFO_message_${i}_}}
-        else
-            print -n ${(P)${:-VCS_INFO_message_${i}_}}
-        fi
-        printf '"\n'
-    done
-}
-# }}}
-vcs_info () { # {{{
-    emulate -L zsh
-    setopt extendedglob
-
-    [[ -r . ]] || return 1
-
-    local pat
-    local -i found
-    local -a VCSs disabled dps
-    local -x vcs usercontext
-    local -ix maxexports
-    local -ax msgs
-    local -Ax vcs_comm
-
-    vcs="init"
-    VCSs=(git hg bzr darcs svk mtn svn cvs cdv tla)
-    case $1 in
-        (print_systems_)
-            zstyle -a ":vcs_info:${vcs}:${usercontext}" "disable" disabled
-            print -l '# list of supported version control backends:' \
-                     '# disabled systems are prefixed by a hash sign (#)'
-            for vcs in ${VCSs} ; do
-                [[ -n ${(M)disabled:#${vcs}} ]] && printf '#'
-                printf '%s\n' ${vcs}
-            done
-            print -l '# flavours (cannot be used in the disable style; they' \
-                     '# are disabled with their master [git-svn -> git]):'   \
-                     git-{p4,svn}
-            return 0
-            ;;
-        ('')
-            [[ -z ${usercontext} ]] && usercontext=default
-            ;;
-        (*) [[ -z ${usercontext} ]] && usercontext=$1
-            ;;
-    esac
-
-    zstyle -T ":vcs_info:${vcs}:${usercontext}" "enable" || {
-        [[ -n ${VCS_INFO_message_0_} ]] && VCS_INFO_set --clear
-        return 0
-    }
-    zstyle -a ":vcs_info:${vcs}:${usercontext}" "disable" disabled
-
-    zstyle -a ":vcs_info:${vcs}:${usercontext}" "disable-patterns" dps
-    for pat in ${dps} ; do
-        if [[ ${PWD} == ${~pat} ]] ; then
-            [[ -n ${vcs_info_msg_0_} ]] && VCS_INFO_set --clear
-            return 0
-        fi
-    done
-
-    VCS_INFO_maxexports
-
-    (( found = 0 ))
-    for vcs in ${VCSs} ; do
-        [[ -n ${(M)disabled:#${vcs}} ]] && continue
-        vcs_comm=()
-        VCS_INFO_${vcs}_detect && (( found = 1 )) && break
-    done
-
-    (( found == 0 )) && {
-        VCS_INFO_set --nvcs
-        return 0
-    }
-
-    VCS_INFO_${vcs}_get_data || {
-        VCS_INFO_set --nvcs
-        return 1
-    }
-
-    VCS_INFO_set
-    return 0
-}
-
-VCS_INFO_set --nvcs preinit
-# }}}
 
 # Change vcs_info formats for the grml prompt. The 2nd format sets up
 # $vcs_info_msg_1_ to contain "zsh: repo-name" used to set our screen title.
@@ -1961,6 +1263,7 @@ else
                                        "zsh: %r"
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat "%b${RED}:${YELLOW}%r"
 fi
+
 
 # }}}
 
@@ -1989,18 +1292,36 @@ setopt prompt_subst
 # make sure to use right prompt only when not running a command
 is41 && setopt transient_rprompt
 
+
+function ESC_print () {
+    info_print $'\ek' $'\e\\' "$@"
+}
+function set_title () {
+    info_print  $'\e]0;' $'\a' "$@"
+}
+
+function info_print () {
+    local esc_begin esc_end
+    esc_begin="$1"
+    esc_end="$2"
+    shift 2
+    printf '%s' ${esc_begin}
+    printf '%s' "$*"
+    printf '%s' "${esc_end}"
+}
+
 # TODO: revise all these NO* variables and especially their documentation
 #       in zsh-help() below.
 is4 && [[ $NOPRECMD -eq 0 ]] && precmd () {
     [[ $NOPRECMD -gt 0 ]] && return 0
     # update VCS information
-    vcs_info
+    (( ${+functions[vcs_info]} )) && vcs_info
 
     if [[ $TERM == screen* ]] ; then
-        if [[ -n ${VCS_INFO_message_1_} ]] ; then
-            print -nP "\ek${VCS_INFO_message_1_}\e\\"
+        if [[ -n ${vcs_info_msg_1_} ]] ; then
+            ESC_print ${vcs_info_msg_1_}
         else
-            print -nP "\ekzsh\e\\"
+            ESC_print "zsh"
         fi
     fi
     # just use DONTSETRPROMPT=1 to be able to overwrite RPROMPT
@@ -2018,7 +1339,7 @@ is4 && [[ $NOPRECMD -eq 0 ]] && precmd () {
     [[ ${NOTITLE} -gt 0 ]] && return 0
     case $TERM in
         (xterm*|rxvt*)
-            print -Pn "\e]0;%n@%m: %~\a"
+            set_title ${(%):-"%n@%m: %~"}
             ;;
     esac
 }
@@ -2036,13 +1357,13 @@ preexec () {
     if [[ "$TERM" == screen* ]] ; then
         # local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}       # don't use hostname
         local CMD="${1[(wr)^(*=*|sudo|ssh|-*)]}$NAME" # use hostname
-        echo -ne "\ek$CMD\e\\"
+        ESC_print ${CMD}
     fi
 # adjust title of xterm
     [[ ${NOTITLE} -gt 0 ]] && return 0
     case $TERM in
         (xterm*|rxvt*)
-            print -Pn "\e]0;%n@%m: $1\a"
+            set_title "${(%):-"%n@%m:"}" "$1"
             ;;
     esac
 }
@@ -2059,22 +1380,24 @@ fi
 
 # don't use colors on dumb terminals (like emacs):
 if [[ "$TERM" == dumb ]] ; then
-    PROMPT="${EXITCODE}${debian_chroot:+($debian_chroot)}%n@%m %40<...<%B%~%b%<< "'${VCS_INFO_message_0_}'"%# "
+    PROMPT="${EXITCODE}${debian_chroot:+($debian_chroot)}%n@%m %40<...<%B%~%b%<< "
 else
     # only if $GRMLPROMPT is set (e.g. via 'GRMLPROMPT=1 zsh') use the extended prompt
     # set variable identifying the chroot you work in (used in the prompt below)
     if [[ $GRMLPROMPT -gt 0 ]] ; then
         PROMPT="${RED}${EXITCODE}${CYAN}[%j running job(s)] ${GREEN}{history#%!} ${RED}%(3L.+.) ${BLUE}%* %D
-${BLUE}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "'${VCS_INFO_message_0_}'"%# "
+${BLUE}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "
     else
         # This assembles the primary prompt string
         if (( EUID != 0 )); then
-            PROMPT="${RED}${EXITCODE}${WHITE}${debian_chroot:+($debian_chroot)}${BLUE}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "'${VCS_INFO_message_0_}'"%# "
+            PROMPT="${RED}${EXITCODE}${WHITE}${debian_chroot:+($debian_chroot)}${BLUE}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "
         else
-            PROMPT="${BLUE}${EXITCODE}${WHITE}${debian_chroot:+($debian_chroot)}${RED}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "'${VCS_INFO_message_0_}'"%# "
+            PROMPT="${BLUE}${EXITCODE}${WHITE}${debian_chroot:+($debian_chroot)}${RED}%n${NO_COLOUR}@%m %40<...<%B%~%b%<< "
         fi
     fi
 fi
+
+PROMPT="${PROMPT}"'${vcs_info_msg_0_}'"%# "
 
 # if we are inside a grml-chroot set a specific prompt theme
 if [[ -n "$GRML_CHROOT" ]] ; then
@@ -2103,7 +1426,11 @@ if check_com -c screen ; then
     elif [[ -r $HOME/.screenrc ]] ; then
         alias screen="${commands[screen]} -c $HOME/.screenrc"
     else
-        [[ -r /etc/grml/screenrc_grml ]] && alias screen="${commands[screen]} -c /etc/grml/screenrc_grml"
+        if [[ -r /etc/grml/screenrc_grml ]]; then
+            alias screen="${commands[screen]} -c /etc/grml/screenrc_grml"
+        else
+            [[ -r /etc/grml/screenrc ]] && alias screen="${commands[screen]} -c /etc/grml/screenrc"
+        fi
     fi
 fi
 
@@ -2169,28 +1496,6 @@ iso2utf() {
     fi
 }
 
-# set up software synthesizer via speakup
-swspeak() {
-    if [ -x /usr/sbin/swspeak-setup ] ; then
-       setopt singlelinezle
-       unsetopt prompt_cr
-       export PS1="%m%# "
-       /usr/sbin/swspeak-setup $@
-     else # old version:
-        if ! [[ -r /dev/softsynth ]] ; then
-            flite -o play -t "Sorry, software synthesizer not available. Did you boot with swspeak bootoption?"
-            return 1
-        else
-           setopt singlelinezle
-           unsetopt prompt_cr
-           export PS1="%m%# "
-            nice -n -20 speechd-up
-            sleep 2
-            flite -o play -t "Finished setting up software synthesizer"
-        fi
-     fi
-}
-
 # I like clean prompt, so provide simple way to get that
 check_com 0 || alias 0='return 0'
 
@@ -2198,8 +1503,14 @@ check_com 0 || alias 0='return 0'
 check_com S &>/dev/null || alias S='screen'
 check_com s &>/dev/null || alias s='ssh'
 
+# especially for roadwarriors using GNU screen and ssh:
+if ! check_com asc &>/dev/null ; then
+  asc() { autossh -t "$@" 'screen -RdU' }
+  compdef asc=ssh
+fi
+
 # get top 10 shell commands:
-alias top10='print -l ? ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
+alias top10='print -l ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
 # truecrypt; use e.g. via 'truec /dev/ice /mnt/ice' or 'truec -i'
 if check_com -c truecrypt ; then
@@ -2419,8 +1730,8 @@ grmlcomp() {
     # format on completion
     zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
 
-    # complete 'cd -<tab>' with menu
-    zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
+    # automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
+    # zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
 
     # insert all expansions for expand completer
     zstyle ':completion:*:expand:*'        tag-order all-expansions
@@ -2557,28 +1868,6 @@ grmlcomp() {
 # {{{ grmlstuff
 grmlstuff() {
 # people should use 'grml-x'!
-    startx() {
-        if [[ -e /etc/X11/xorg.conf ]] ; then
-            [[ -x /usr/bin/startx ]] && /usr/bin/startx "$@" || /usr/X11R6/bin/startx "$@"
-        else
-            echo "Please use the script \"grml-x\" for starting the X Window System
-because there does not exist /etc/X11/xorg.conf yet.
-If you want to use startx anyway please call \"/usr/bin/startx\"."
-            return -1
-        fi
-    }
-
-    xinit() {
-        if [[ -e /etc/X11/xorg.conf ]] ; then
-            [[ -x /usr/bin/xinit ]] && /usr/bin/xinit || /usr/X11R6/bin/xinit
-        else
-            echo "Please use the script \"grml-x\" for starting the X Window System.
-because there does not exist /etc/X11/xorg.conf yet.
-If you want to use xinit anyway please call \"/usr/bin/xinit\"."
-            return -1
-        fi
-    }
-
     if check_com -c 915resolution; then
         855resolution() {
             echo "Please use 915resolution as resolution modifying tool for Intel \
@@ -2730,7 +2019,7 @@ compdef _aliases edalias
 
 #f1# Edit a function via zle
 edfunc() {
-    [[ -z "$1" ]] && { echo "Usage: edfun <function_to_edit>" ; return 1 } || zed -f "$1" ;
+    [[ -z "$1" ]] && { echo "Usage: edfunc <function_to_edit>" ; return 1 } || zed -f "$1" ;
 }
 compdef _functions edfunc
 
@@ -2765,8 +2054,15 @@ if [[ -d /etc/init.d || -d /etc/service ]] ; then
         fi
     }
 
+    _grmlinitd() {
+        local -a scripts
+        scripts=( /etc/init.d/*(x:t) )
+        _describe "service startup script" scripts
+    }
+
     for i in Start Restart Stop Force-Reload Reload ; do
         eval "$i() { __start_stop $i \"\$1\" \"\$2\" ; }"
+        compdef _grmlinitd $i
     done
 fi
 
@@ -2811,22 +2107,131 @@ H-Glob() {
 }
 alias help-zshglob=H-Glob
 
+#v1# set number of lines to display per page
+HELP_LINES_PER_PAGE=20
+#f1# helper function for help-zle, actually generates the help text
+help_zle_parse_keybindings()
+{
+    emulate -L zsh
+    setopt extendedglob
+    unsetopt ksharrays  #indexing starts at 1
+
+    #v1# choose files that help-zle will parse for keybindings
+    ((${+HELPZLE_KEYBINDING_FILES})) || HELPZLE_KEYBINDING_FILES=( /etc/zsh/zshrc ~/.zshrc.pre ~/.zshrc ~/.zshrc.local )
+
+    #fill with default keybindings, possibly to be overwriten in a file later
+    #Note that due to zsh inconsistency on escaping assoc array keys, we encase the key in '' which we will remove later
+    local -A help_zle_keybindings
+    help_zle_keybindings['<Ctrl>@']="set MARK"
+    help_zle_keybindings['<Ctrl>X<Ctrl>J']="vi-join lines"
+    help_zle_keybindings['<Ctrl>X<Ctrl>B']="jump to matching brace"
+    help_zle_keybindings['<Ctrl>X<Ctrl>U']="undo"
+    help_zle_keybindings['<Ctrl>_']="undo"
+    help_zle_keybindings['<Ctrl>X<Ctrl>F<c>']="find <c> in cmdline"
+    help_zle_keybindings['<Ctrl>A']="goto beginning of line"
+    help_zle_keybindings['<Ctrl>E']="goto end of line"
+    help_zle_keybindings['<Ctrl>t']="transpose charaters"
+    help_zle_keybindings['<Alt>T']="transpose words"
+    help_zle_keybindings['<Alt>s']="spellcheck word"
+    help_zle_keybindings['<Ctrl>K']="backward kill buffer"
+    help_zle_keybindings['<Ctrl>U']="forward kill buffer"
+    help_zle_keybindings['<Ctrl>y']="insert previously killed word/string"
+    help_zle_keybindings["<Alt>'"]="quote line"
+    help_zle_keybindings['<Alt>"']="quote from mark to cursor"
+    help_zle_keybindings['<Alt><arg>']="repeat next cmd/char <arg> times (<Alt>-<Alt>1<Alt>0a -> -10 times 'a')"
+    help_zle_keybindings['<Alt>U']="make next word Uppercase"
+    help_zle_keybindings['<Alt>l']="make next word lowercase"
+    help_zle_keybindings['<Ctrl>Xd']="preview expansion under cursor"
+    help_zle_keybindings['<Alt>q']="push current CL into background, freeing it. Restore on next CL"
+    help_zle_keybindings['<Alt>.']="insert (and interate through) last word from prev CLs"
+    help_zle_keybindings['<Alt>,']="complete word from newer history (consecutive hits)"
+    help_zle_keybindings['<Alt>m']="repeat last typed word on current CL"
+    help_zle_keybindings['<Ctrl>V']="insert next keypress symbol literally (e.g. for bindkey)"
+    help_zle_keybindings['!!:n*<Tab>']="insert last n arguments of last command"
+    help_zle_keybindings['!!:n-<Tab>']="insert arguments n..N-2 of last command (e.g. mv s s d)"
+    help_zle_keybindings['<Alt>H']="run help on current command"
+
+    #init global variables
+    unset help_zle_lines help_zle_sln
+    typeset -g -a help_zle_lines
+    typeset -g help_zle_sln=1
+
+    local k v
+    local lastkeybind_desc contents     #last description starting with #k# that we found
+    local num_lines_elapsed=0            #number of lines between last description and keybinding
+    #search config files in the order they a called (and thus the order in which they overwrite keybindings)
+    for f in $HELPZLE_KEYBINDING_FILES; do
+        [[ -r "$f" ]] || continue   #not readable ? skip it
+        contents="$(<$f)"
+        for cline in "${(f)contents}"; do
+            #zsh pattern: matches lines like: #k# ..............
+            if [[ "$cline" == (#s)[[:space:]]#\#k\#[[:space:]]##(#b)(*)[[:space:]]#(#e) ]]; then
+                lastkeybind_desc="$match[*]"
+                num_lines_elapsed=0
+            #zsh pattern: matches lines that set a keybinding using bindkey or compdef -k
+            #             ignores lines that are commentend out
+            #             grabs first in '' or "" enclosed string with length between 1 and 6 characters
+            elif [[ "$cline" == [^#]#(bindkey|compdef -k)[[:space:]](*)(#b)(\"((?)(#c1,6))\"|\'((?)(#c1,6))\')(#B)(*)  ]]; then
+                #description prevously found ? description not more than 2 lines away ? keybinding not empty ?
+                if [[ -n $lastkeybind_desc && $num_lines_elapsed -lt 2 && -n $match[1] ]]; then
+                    #substitute keybinding string with something readable
+                    k=${${${${${${${match[1]/\\e\^h/<Alt><BS>}/\\e\^\?/<Alt><BS>}/\\e\[5~/<PageUp>}/\\e\[6~/<PageDown>}//(\\e|\^\[)/<Alt>}//\^/<Ctrl>}/3~/<Alt><Del>}
+                    #put keybinding in assoc array, possibly overwriting defaults or stuff found in earlier files
+                    #Note that we are extracting the keybinding-string including the quotes (see Note at beginning)
+                    help_zle_keybindings[${k}]=$lastkeybind_desc
+                fi
+                lastkeybind_desc=""
+            else
+              ((num_lines_elapsed++))
+            fi
+        done
+    done
+    unset contents
+    #calculate length of keybinding column
+    local kstrlen=0
+    for k (${(k)help_zle_keybindings[@]}) ((kstrlen < ${#k})) && kstrlen=${#k}
+    #convert the assoc array into preformated lines, which we are able to sort
+    for k v in ${(kv)help_zle_keybindings[@]}; do
+        #pad keybinding-string to kstrlen chars and remove outermost characters (i.e. the quotes)
+        help_zle_lines+=("${(r:kstrlen:)k[2,-2]}${v}")
+    done
+    #sort lines alphabetically
+    help_zle_lines=("${(i)help_zle_lines[@]}")
+}
+typeset -g help_zle_sln
+typeset -g -a help_zle_lines
+
+#f1# Provides (partially autogenerated) help on keybindings and the zsh line editor
+help-zle()
+{
+    emulate -L zsh
+    unsetopt ksharrays  #indexing starts at 1
+    #help lines already generated ? no ? then do it
+    [[ ${+functions[help_zle_parse_keybindings]} -eq 1 ]] && {help_zle_parse_keybindings && unfunction help_zle_parse_keybindings}
+    #already displayed all lines ? go back to the start
+    [[ $help_zle_sln -gt ${#help_zle_lines} ]] && help_zle_sln=1
+    local sln=$help_zle_sln
+    #note that help_zle_sln is a global var, meaning we remember the last page we viewed
+    help_zle_sln=$((help_zle_sln + HELP_LINES_PER_PAGE))
+    zle -M "${(F)help_zle_lines[sln,help_zle_sln-1]}"
+}
+#k# display help for keybindings and ZLE (cycle pages with consecutive use)
+zle -N help-zle && bindkey '^Xz' help-zle
+
 check_com -c qma && alias ?='qma zshall'
 
 # grep for running process, like: 'any vim'
 any() {
     emulate -L zsh
+    unsetopt KSH_ARRAYS
     if [[ -z "$1" ]] ; then
         echo "any - grep for process(es) by keyword" >&2
         echo "Usage: any <keyword>" >&2 ; return 1
     else
-        local STRING=$1
-        local LENGTH=$(expr length $STRING)
-        local FIRSCHAR=$(echo $(expr substr $STRING 1 1))
-        local REST=$(echo $(expr substr $STRING 2 $LENGTH))
-        ps xauwww| grep "[$FIRSCHAR]$REST"
+        ps xauwww | grep -i --color=auto "[${1[1]}]${1[2,-1]}"
     fi
 }
+
 
 # After resuming from suspend, system is paging heavily, leading to very bad interactivity.
 # taken from $LINUX-KERNELSOURCE/Documentation/power/swsusp.txt
@@ -2850,17 +2255,6 @@ peval() {
     perl -e "print eval($CALC),\"\n\";"
 }
 functions peval &>/dev/null && alias calc=peval
-
-# brltty seems to have problems with utf8 environment and/or font Uni3-Terminus16 under
-# certain circumstances, so work around it, no matter which environment we have
-brltty() {
-    if [[ -z "$DISPLAY" ]] ; then
-        consolechars -f /usr/share/consolefonts/default8x16.psf.gz
-        command brltty "$@"
-    else
-        command brltty "$@"
-    fi
-}
 
 # just press 'asdf' keys to toggle between dvorak and us keyboard layout
 aoeu() {
@@ -2922,12 +2316,20 @@ ipv6-tunnel() {
 
 # run dhclient for wireless device
 iwclient() {
-    salias dhclient "$(wavemon -d | awk '/device/{print $2}')"
+    sudo dhclient "$(wavemon -d | awk '/device/{print $3}')"
 }
 
-# spawn a minimally set up ksh - useful if you want to umount /usr/.
+# spawn a minimally set up mksh - useful if you want to umount /usr/.
 minimal-shell() {
-    exec env -i ENV="/etc/minimal-shellrc" HOME="$HOME" TERM="$TERM" ksh
+    emulate -L zsh
+    local shell="/bin/mksh"
+
+    if [[ ! -x ${shell} ]]; then
+        printf '`%s'\'' not available, giving up.\n' ${shell} >&2
+        return 1
+    fi
+
+    exec env -i ENV="/etc/minimal-shellrc" HOME="$HOME" TERM="$TERM" ${shell}
 }
 
 # a wrapper for vim, that deals with title setting
@@ -3006,14 +2408,14 @@ exit 0;
 ssl_hashes=( sha512 sha256 sha1 md5 )
 
 for sh in ${ssl_hashes}; do
-    ssl-cert-${sh}() {
+    eval 'ssl-cert-'${sh}'() {
         emulate -L zsh
         if [[ -z $1 ]] ; then
-            printf 'usage: %s <file>\n' "ssh-cert-${sh}"
+            printf '\''usage: %s <file>\n'\'' "ssh-cert-'${sh}'"
             return 1
         fi
-        openssl x509 -noout -fingerprint -${sh} -in $1
-    }
+        openssl x509 -noout -fingerprint -'${sh}' -in $1
+    }'
 done; unset sh
 
 ssl-cert-fingerprints() {
@@ -3051,6 +2453,9 @@ if [[ -r ~/.important_commands ]] ; then
 fi
 # }}}
 
+# load the lookup subsystem if it's available on the system
+zrcautoload lookupinit && lookupinit
+
 #:grep:marker:for:mika: :-)
 ### non-root (EUID != 0) code below
 ###
@@ -3059,7 +2464,6 @@ if (( GRML_ALWAYS_LOAD_ALL == 0 )) && (( $EUID == 0 )) ; then
     zrclocal
     return 0
 fi
-
 
 # variables {{{
 
@@ -3134,9 +2538,9 @@ alias lsd='ls -d *(/)'                 # only show directories
 #a2# Only show empty directories
 alias lse='ls -d *(/^F)'               # only show empty directories
 #a2# Display the ten newest files
-alias lsnew="ls -rl *(D.om[1,10])"     # display the newest files
+alias lsnew="ls -rtlh *(D.om[1,10])"   # display the newest files
 #a2# Display the ten oldest files
-alias lsold="ls -rtlh *(D.om[1,10])"   # display the oldest files
+alias lsold="ls -rtlh *(D.Om[1,10])"   # display the oldest files
 #a2# Display the ten smallest files
 alias lssmall="ls -Srl *(.oL[1,10])"   # display the smallest files
 
@@ -3297,7 +2701,7 @@ bk() {
 #f5# Copied diff
 cdiff() {
     emulate -L zsh
-    diff -crd "$*" | egrep -v "^Only in |^Binary files "
+    diff -crd "$@" | egrep -v "^Only in |^Binary files "
 }
 #f5# cd to directoy and list files
 cl() {
@@ -3347,14 +2751,67 @@ fir() {
         firefox -a firefox -remote "openURL($1)" || firefox ${1}&
     fi
 }
+# smart cd function, allows switching to /etc when running 'cd /etc/fstab'
+cd() {
+    if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then
+        [[ ! -e ${1:h} ]] && return 1
+        print "Correcting ${1} to ${1:h}"
+        builtin cd ${1:h}
+    else
+        builtin cd "$@"
+    fi
+}
+
 #f5# Create Directoy and \kbd{cd} to it
 mcd() {
     mkdir -p "$@" && cd "$@"
+}
+#f5# Create temporary directory and \kbd{cd} to it
+cdt() {
+    local t
+    t=$(mktemp -d)
+    echo "$t"
+    builtin cd "$t"
 }
 #f5# Unified diff to timestamped outputfile
 mdiff() {
     diff -udrP "$1" "$2" > diff.`date "+%Y-%m-%d"`."$1"
 }
+
+#f5# Create directory under cursor or the selected area
+# Press ctrl-xM to create the directory under the cursor or the selected area.
+# To select an area press ctrl-@ or ctrl-space and use the cursor.
+# Use case: you type "mv abc ~/testa/testb/testc/" and remember that the
+# directory does not exist yet -> press ctrl-XM and problem solved
+inplaceMkDirs() {
+    local PATHTOMKDIR
+    if ((REGION_ACTIVE==1)); then
+        local F=$MARK T=$CURSOR
+        if [[ $F -gt $T ]]; then
+            F=${CURSOR}
+            T=${MARK}
+        fi
+        # get marked area from buffer and eliminate whitespace
+        PATHTOMKDIR=${BUFFER[F+1,T]%%[[:space:]]##}
+        PATHTOMKDIR=${PATHTOMKDIR##[[:space:]]##}
+    else
+        local bufwords iword
+        bufwords=(${(z)LBUFFER})
+        iword=${#bufwords}
+        bufwords=(${(z)BUFFER})
+        PATHTOMKDIR="$bufwords[iword]"
+    fi
+    [[ -z "${PATHTOMKDIR}" ]] && return 1
+    if [[ -e "${PATHTOMKDIR}" ]]; then
+        zle -M " path already exists, doing nothing"
+    else
+        zle -M "$(mkdir -p -v "${PATHTOMKDIR}")"
+        zle end-of-line
+    fi
+}
+#k# mkdir -p <dir> from string under cursor or marked area
+zle -N inplaceMkDirs && bindkey '^XM' inplaceMkDirs
+
 #f5# Memory overview
 memusage() {
     ps aux | awk '{if (NR > 1) print $5; if (NR > 2) print "+"} END { print "p" }' | dc
@@ -3442,11 +2899,25 @@ regcheck() {
     pcre_match $2 && echo "regex matches" || echo "regex does not match"
 }
 
-#f5# List files which have been modified within the last {\it n} days
-new() {
+#f5# List files which have been accessed within the last {\it n} days, {\it n} defaults to 1
+accessed() {
     emulate -L zsh
-    print -l *(m-$1)
+    print -l -- *(a-${1:-1})
 }
+
+#f5# List files which have been changed within the last {\it n} days, {\it n} defaults to 1
+changed() {
+    emulate -L zsh
+    print -l -- *(c-${1:-1})
+}
+
+#f5# List files which have been modified within the last {\it n} days, {\it n} defaults to 1
+modified() {
+    emulate -L zsh
+    print -l -- *(m-${1:-1})
+}
+# modified() was named new() in earlier versions, add an alias for backwards compatibility
+check_com new || alias new=modified
 
 #f5# Grep in history
 greph() {
@@ -3462,29 +2933,6 @@ alias GREP='grep -i --color=auto'
 #f5# Watch manpages in a stretched style
 man2() { PAGER='dash -c "sed G | /usr/bin/less"' command man "$@" ; }
 
-# d():Copyright 2005 Nikolai Weibull <nikolai@bitwi.se>
-# note: option AUTO_PUSHD has to be set
-#f5# Jump between directories
-d() {
-    emulate -L zsh
-    autoload -U colors
-    local color=$fg_bold[blue]
-    integer i=0
-    dirs -p | while read dir; do
-        local num="${$(printf "%-4d " $i)/ /.}"
-        printf " %s  $color%s$reset_color\n" $num $dir
-        (( i++ ))
-    done
-    integer dir=-1
-    read -r 'dir?Jump to directory: ' || return
-    (( dir == -1 )) && return
-    if (( dir < 0 || dir >= i )); then
-        echo d: no such directory stack entry: $dir
-        return 1
-    fi
-    cd ~$dir
-}
-
 # usage example: 'lcheck strcpy'
 #f5# Find out which libs define a symbol
 lcheck() {
@@ -3497,20 +2945,50 @@ lcheck() {
 
 #f5# Clean up directory - remove well known tempfiles
 purge() {
-    FILES=(*~(N) .*~(N) \#*\#(N) *.o(N) a.out(N) *.core(N) *.cmo(N) *.cmi(N) .*.swp(N))
-    NBFILES=${#FILES}
+    emulate -L zsh
+    setopt HIST_SUBST_PATTERN
+    local -a TEXTEMPFILES GHCTEMPFILES PYTEMPFILES FILES
+    TEXTEMPFILES=(*.tex(N:s/%tex/'(log|toc|aux|nav|snm|out|tex.backup|bbl|blg|bib.backup|vrb|lof|lot|hd|idx)(N)'/))
+    GHCTEMPFILES=(*.(hs|lhs)(N:r:s/%/'.(hi|hc|(p|u|s)_(o|hi))(N)'/))
+    PYTEMPFILES=(*.py(N:s/%py/'(pyc|pyo)(N)'/))
+    LONELY_MOOD_FILES=((*.mood)(NDe:'local -a AF;AF=( ${${REPLY#.}%mood}(mp3|flac|ogg|asf|wmv|aac)(N) ); [[ -z "$AF" ]]':))
+    FILES=(*~(.N) \#*\#(.N) *.o(.N) a.out(.N) (*.|)core(.N) *.cmo(.N) *.cmi(.N) .*.swp(.N) *.(orig|rej)(.DN) *.dpkg-(old|dist|new)(DN) ._(cfg|mrg)[0-9][0-9][0-9][0-9]_*(N) ${~TEXTEMPFILES} ${~GHCTEMPFILES} ${~PYTEMPFILES} ${LONELY_MOOD_FILES})
+    local NBFILES=${#FILES}
+    local CURDIRSUDO=""
+    [[ ! -w ./ ]] && CURDIRSUDO=$SUDO
     if [[ $NBFILES > 0 ]] ; then
-        print $FILES
+        print -l $FILES
         local ans
         echo -n "Remove these files? [y/n] "
         read -q ans
         if [[ $ans == "y" ]] ; then
-            rm ${FILES}
+            $CURDIRSUDO rm ${FILES}
             echo ">> $PWD purged, $NBFILES files removed"
         else
             echo "Ok. .. then not.."
         fi
     fi
+}
+
+#f5# show labels and uuids of disk devices
+if is439 && [[ -d /dev/disk/by-id/ ]]; then
+    lsdisk() {
+        emulate -L zsh
+        setopt extendedglob
+        local -a -U disks
+        disks=( /dev/disk/by-id/*(@:A) )
+        for dev in "$disks[@]"; do
+            print ${fg_bold[red]}${dev}${reset_color} /dev/disk/by-label/*(@e/'[[ ${REPLY:A} == $dev ]] && REPLY=${fg[blue]}LABEL=${REPLY:t}${reset_color}'/N) /dev/disk/by-uuid/*(@e/'[[ ${REPLY:A} == $dev ]] && REPLY=${fg[green]}UUID=${REPLY:t}${reset_color}'/N)
+            print -f "  %s\n" /dev/disk/by-id/*(@e/'[[ ${REPLY:A} == $dev ]]'/N:t)
+        done
+    }
+fi
+
+#f5# run command or function in a list of directories
+rundirs() {
+  local d CMD STARTDIR=$PWD
+  CMD=$1; shift
+  ( for d ($@) {cd -q $d && { print cd $d; ${(z)CMD} ; cd -q $STARTDIR }} )
 }
 
 # Translate DE<=>EN
@@ -3576,29 +3054,158 @@ selhist() {
 }
 
 # Usage: simple-extract <file>
+# Using option -d deletes the original archive file.
 #f5# Smart archive extractor
-simple-extract () {
+simple-extract() {
     emulate -L zsh
-    if [[ -f $1 ]] ; then
-        case $1 in
-            *.tar.bz2)  bzip2 -v -d $1      ;;
-            *.tar.gz)   tar -xvzf $1        ;;
-            *.rar)      unrar $1            ;;
-            *.deb)      ar -x $1            ;;
-            *.bz2)      bzip2 -d $1         ;;
-            *.lzh)      lha x $1            ;;
-            *.gz)       gunzip -d $1        ;;
-            *.tar)      tar -xvf $1         ;;
-            *.tgz)      gunzip -d $1        ;;
-            *.tbz2)     tar -jxvf $1        ;;
-            *.zip)      unzip $1            ;;
-            *.Z)        uncompress $1       ;;
-            *)          echo "'$1' Error. Please go away" ;;
+    setopt extended_glob noclobber
+    local DELETE_ORIGINAL DECOMP_CMD USES_STDIN USES_STDOUT GZTARGET WGET_CMD
+    local RC=0
+    zparseopts -D -E "d=DELETE_ORIGINAL"
+    for ARCHIVE in "${@}"; do
+        case $ARCHIVE in
+            *.(tar.bz2|tbz2|tbz))
+                DECOMP_CMD="tar -xvjf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *.(tar.gz|tgz))
+                DECOMP_CMD="tar -xvzf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *.(tar.xz|txz|tar.lzma))
+                DECOMP_CMD="tar -xvJf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *.tar)
+                DECOMP_CMD="tar -xvf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *.rar)
+                DECOMP_CMD="unrar x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *.lzh)
+                DECOMP_CMD="lha x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *.7z)
+                DECOMP_CMD="7z x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *.(zip|jar))
+                DECOMP_CMD="unzip"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *.deb)
+                DECOMP_CMD="ar -x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *.bz2)
+                DECOMP_CMD="bzip2 -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *.(gz|Z))
+                DECOMP_CMD="gzip -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *.(xz|lzma))
+                DECOMP_CMD="xz -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *)
+                print "ERROR: '$ARCHIVE' has unrecognized archive type." >&2
+                RC=$((RC+1))
+                continue
+                ;;
         esac
-    else
-        echo "'$1' is not a valid file"
-    fi
+
+        if ! check_com ${DECOMP_CMD[(w)1]}; then
+            echo "ERROR: ${DECOMP_CMD[(w)1]} not installed." >&2
+            RC=$((RC+2))
+            continue
+        fi
+
+        GZTARGET="${ARCHIVE:t:r}"
+        if [[ -f $ARCHIVE ]] ; then
+
+            print "Extracting '$ARCHIVE' ..."
+            if $USES_STDIN; then
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} < "$ARCHIVE" > $GZTARGET
+                else
+                    ${=DECOMP_CMD} < "$ARCHIVE"
+                fi
+            else
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} "$ARCHIVE" > $GZTARGET
+                else
+                    ${=DECOMP_CMD} "$ARCHIVE"
+                fi
+            fi
+            [[ $? -eq 0 && -n "$DELETE_ORIGINAL" ]] && rm -f "$ARCHIVE"
+
+        elif [[ "$ARCHIVE" == (#s)(https|http|ftp)://* ]] ; then
+            if check_com curl; then
+                WGET_CMD="curl -k -s -o -"
+            elif check_com wget; then
+                WGET_CMD="wget -q -O - --no-check-certificate"
+            else
+                print "ERROR: neither wget nor curl is installed" >&2
+                RC=$((RC+4))
+                continue
+            fi
+            print "Downloading and Extracting '$ARCHIVE' ..."
+            if $USES_STDIN; then
+                if $USES_STDOUT; then
+                    ${=WGET_CMD} "$ARCHIVE" | ${=DECOMP_CMD} > $GZTARGET
+                    RC=$((RC+$?))
+                else
+                    ${=WGET_CMD} "$ARCHIVE" | ${=DECOMP_CMD}
+                    RC=$((RC+$?))
+                fi
+            else
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} =(${=WGET_CMD} "$ARCHIVE") > $GZTARGET
+                else
+                    ${=DECOMP_CMD} =(${=WGET_CMD} "$ARCHIVE")
+                fi
+            fi
+
+        else
+            print "ERROR: '$ARCHIVE' is neither a valid file nor a supported URI." >&2
+            RC=$((RC+8))
+        fi
+    done
+    return $RC
 }
+
+__archive_or_uri()
+{
+    _alternative \
+        'files:Archives:_files -g "*.(#l)(tar.bz2|tbz2|tbz|tar.gz|tgz|tar.xz|txz|tar.lzma|tar|rar|lzh|7z|zip|jar|deb|bz2|gz|Z|xz|lzma)"' \
+        '_urls:Remote Archives:_urls'
+}
+
+_simple_extract()
+{
+    _arguments \
+        '-d[delete original archivefile after extraction]' \
+        '*:Archive Or Uri:__archive_or_uri'
+}
+compdef _simple_extract simple-extract
+alias se=simple-extract
 
 # Usage: smartcompress <file> (<type>)
 #f5# Smart archive creator
@@ -3644,7 +3251,11 @@ show-archive() {
 #f5# Use \kbd{vim} as your manpage reader
 vman() {
     emulate -L zsh
-    man $* | col -b | view -c 'set ft=man nomod nolist' -
+    if (( ${#argv} == 0 )); then
+        printf 'usage: vman <topic>\n'
+        return 1
+    fi
+    man "$@" | col -b | view -c 'set ft=man nomod nolist' -
 }
 
 # function readme() { $PAGER -- (#ia3)readme* }
@@ -3687,6 +3298,7 @@ refunc() {
         autoload $func
     done
 }
+compdef _functions refunc
 
 # a small check to see which DIR is located on which server/partition.
 # stolen and modified from Sven's zshrc.forall
@@ -3825,11 +3437,52 @@ allulimit() {
     ulimit -t unlimited
 }
 
-# ogg2mp3 with bitrate of 192
-ogg2mp3_192() {
-    emulate -L zsh
-    oggdec -o - $1 | lame -b 192 - ${1:r}.mp3
-}
+# 2mp3 transcodes flac and ogg to mp3 with bitrate of 192 while preserving basic tags
+if check_com lame; then
+    2mp3_192() {
+        emulate -L zsh
+        setopt extendedglob
+        unsetopt ksharrays
+
+        local -a DECODE id3tags
+        local -A tagmap
+        local tagdata
+        local RC=0
+        tagmap=("(#l)title" --tt "(#l)artist" --ta "(#l)tracknumber" --tn "(#l)genre" --tg "(#l)album" --tl)
+
+        if [[ ${@[(i)*.ogg]} -le ${#@} ]] && ! check_com oggdec; then
+            echo "ERROR: please install oggdec" >&2
+            return 1
+        fi
+        if [[ ${@[(i)*.flac]} -le ${#@} ]] && ! check_com flac; then
+            echo "ERROR: please install flac" >&2
+            return 1
+        fi
+
+        for af in "$@"; do
+            id3tags=()
+            case "$af" in
+                (*.flac)
+                    DECODE=(flac -d -c "$af")
+                    tagdata="$(metaflac --export-tags-to=- "$af")"
+                    ;;
+                (*.ogg)
+                    DECODE=(oggdec -Q -o - "$af")
+                    tagdata="$(ogginfo "$af")"
+                    ;;
+                (*) continue ;;
+            esac
+            for line (${(f)tagdata}) \
+                [[ "$line" == (#s)[[:space:]]#(#b)([^=]##)=(*)(#e) && -n $tagmap[(k)$match[1]] ]] && \
+                id3tags+=($tagmap[(k)$match[1]] "$match[2]")
+            [[ ${#id3tags} -gt 0 ]] && id3tags=(--add-id3v2 --ignore-tag-errors $id3tags)
+            $DECODE[*] | lame -b 192 -v -h --replaygain-fast  "${id3tags[@]}" - "${af:r}.mp3" || {RC=$?; print "Error transcoding" "${af}"; }
+        done
+        # return 0 if no error or exit code if at least one error happened
+        return $RC
+    }
+    alias ogg2mp3_192 2mp3_192
+fi
 
 #f5# RFC 2396 URL encoding in Z-Shell
 urlencode() {
@@ -3838,112 +3491,6 @@ urlencode() {
     input=( ${(s::)1} )
     print ${(j::)input/(#b)([^A-Za-z0-9_.!~*\'\(\)-])/%${(l:2::0:)$(([##16]#match))}}
 }
-
-#f5# Install x-lite (VoIP software)
-getxlite() {
-    emulate -L zsh
-    setopt errreturn
-    [[ -d ~/tmp ]] || mkdir ~/tmp
-    cd ~/tmp
-
-    echo "Downloading http://www.counterpath.com/download/X-Lite_Install.tar.gz and storing it in ~/tmp:"
-    if wget http://www.counterpath.com/download/X-Lite_Install.tar.gz ; then
-        unp X-Lite_Install.tar.gz && echo done || echo failed
-    else
-        echo "Error while downloading." ; return 1
-    fi
-
-    if [[ -x xten-xlite/xtensoftphone ]] ; then
-        echo "Execute xten-xlite/xtensoftphone to start xlite."
-    fi
-}
-
-#f5# Install skype
-getskype() {
-    emulate -L zsh
-    setopt errreturn
-    echo "Downloading debian package of skype."
-    echo "Notice: If you want to use a more recent skype version run 'getskypebeta'."
-    wget http://www.skype.com/go/getskype-linux-deb
-    $SUDO dpkg -i skype*.deb && echo "skype installed."
-}
-
-#f5# Install beta-version of skype
-getskypebeta() {
-    emulate -L zsh
-    setopt errreturn
-    echo "Downloading debian package of skype (beta version)."
-    wget http://www.skype.com/go/getskype-linux-beta-deb
-    $SUDO dpkg -i skype-beta*.deb && echo "skype installed."
-}
-
-#f5# Install gizmo (VoIP software)
-getgizmo() {
-    emulate -L zsh
-    setopt errreturn
-    echo "libgtk2.0-0, gconf2, libstdc++6, libasound2 and zlib1g have to be available. Installing."
-    $SUDO apt-get update
-    $SUDO apt-get install libgtk2.0-0 gconf2 libstdc++6 libasound2 zlib1g
-    wget "$(lynx --dump http://gizmo5.com/pc/download/linux/ | awk '/libstdc\+\+6.*\.deb/ {print $2}')"
-    $SUDO dpkg -i gizmo-project*.deb && echo "gizmo installed."
-}
-
-#f5# Get and run AIR (Automated Image and Restore)
-getair() {
-    emulate -L zsh
-    setopt errreturn
-    [[ -w . ]] || { echo 'Error: you do not have write permissions in this directory. Exiting.' ; return 1 }
-    local VER='1.2.8'
-    wget http://puzzle.dl.sourceforge.net/sourceforge/air-imager/air-$VER.tar.gz
-    tar zxf air-$VER.tar.gz
-    cd air-$VER
-    INTERACTIVE=no $SUDO ./install-air-1.2.8
-    [[ -x /usr/local/bin/air ]] && [[ -n "$DISPLAY" ]] && $SUDO air
-}
-
-#f5# Get specific git commitdiff
-git-get-diff() {
-    emulate -L zsh
-    if [[ -z $GITTREE ]] ; then
-        GITTREE='linux/kernel/git/torvalds/linux-2.6.git'
-    fi
-    if ! [[ -z $1 ]] ; then
-        ${=BROWSER} "http://kernel.org/git/?p=$GITTREE;a=commitdiff;h=$1"
-    else
-        echo "Usage: git-get-diff <commit>"
-    fi
-}
-
-#f5# Get specific git commit
-git-get-commit() {
-    emulate -L zsh
-    if [[ -z $GITTREE ]] ; then
-        GITTREE='linux/kernel/git/torvalds/linux-2.6.git'
-    fi
-    if ! [[ -z $1 ]] ; then
-        ${=BROWSER} "http://kernel.org/git/?p=$GITTREE;a=commit;h=$1"
-    else
-        echo "Usage: git-get-commit <commit>"
-    fi
-}
-
-#f5# Get specific git diff
-git-get-plaindiff () {
-    emulate -L zsh
-    if [[ -z $GITTREE ]] ; then
-       GITTREE='linux/kernel/git/torvalds/linux-2.6.git'
-    fi
-    if [[ -z $1 ]] ; then
-       echo 'Usage: git-get-plaindiff '
-    else
-       echo -n "Downloading $1.diff ... "
-       # avoid "generating ..." stuff from kernel.org server:
-       wget --quiet "http://kernel.org/git/?p=$GITTREE;a=commitdiff_plain;h=$1" -O /dev/null
-       wget --quiet "http://kernel.org/git/?p=$GITTREE;a=commitdiff_plain;h=$1" -O $1.diff \
-            && echo done || echo failed
-    fi
-}
-
 
 # http://strcat.de/blog/index.php?/archives/335-Software-sauber-deinstallieren...html
 #f5# Log 'make install' output
@@ -3980,16 +3527,6 @@ exirename() {
             echo 'failed - exiting.'
         fi
     fi
-}
-
-# open file in vim and jump to line
-# http://www.downgra.de/archives/2007/05/08/T19_21_11/
-j2v() {
-    emulate -L zsh
-    local -a params
-    params=(${*//(#m):[0-9]*:/\\n+${MATCH//:/}}) # replace ':23:' to '\n+23'
-    params=(${(s|\n|)${(j|\n|)params}}) # join array using '\n', then split on all '\n'
-    vim ${params}
 }
 
 # get_ic() - queries imap servers for capabilities; real simple. no imaps
@@ -4068,9 +3605,9 @@ if check_com -c highlight ; then
                 lang=${1%:*}
                 [[ ${1} == *:* ]] && [[ -n ${1#*:} ]] && theme=${1#*:}
                 if [[ -n ${theme} ]] ; then
-                    highlight --xterm256 --syntax ${lang} --style ${theme} ${2} | less -SMr
+                    highlight -O xterm256 --syntax ${lang} --style ${theme} ${2} | less -SMr
                 else
-                    highlight --ansi --syntax ${lang} ${2} | less -SMr
+                    highlight -O ansi --syntax ${lang} ${2} | less -SMr
                 fi
                 ;;
         esac
@@ -4097,41 +3634,46 @@ if check_com -c highlight ; then
     compdef _hl_complete hl
 fi
 
+# TODO:
+# Rewrite this by either using tinyurl.com's API
+# or using another shortening service to comply with
+# tinyurl.com's policy.
+#
 # Create small urls via http://tinyurl.com using wget(1).
-function zurl() {
-    emulate -L zsh
-    [[ -z $1 ]] && { print "USAGE: zurl <URL>" ; return 1 }
-
-    local PN url tiny grabber search result preview
-    PN=$0
-    url=$1
-#   Check existence of given URL with the help of ping(1).
-#   N.B. ping(1) only works without an eventual given protocol.
-    ping -c 1 ${${url#(ftp|http)://}%%/*} >& /dev/null || \
-        read -q "?Given host ${${url#http://*/}%/*} is not reachable by pinging. Proceed anyway? [y|n] "
-
-    if (( $? == 0 )) ; then
-#           Prepend 'http://' to given URL where necessary for later output.
-            [[ ${url} != http(s|)://* ]] && url='http://'${url}
-            tiny='http://tinyurl.com/create.php?url='
-            if check_com -c wget ; then
-                grabber='wget -O- -o/dev/null'
-            else
-                print "wget is not available, but mandatory for ${PN}. Aborting."
-            fi
-#           Looking for i.e.`copy('http://tinyurl.com/7efkze')' in TinyURL's HTML code.
-            search='copy\(?http://tinyurl.com/[[:alnum:]]##*'
-            result=${(M)${${${(f)"$(${=grabber} ${tiny}${url})"}[(fr)${search}*]}//[()\';]/}%%http:*}
-#           TinyURL provides the rather new feature preview for more confidence. <http://tinyurl.com/preview.php>
-            preview='http://preview.'${result#http://}
-
-            printf '%s\n\n' "${PN} - Shrinking long URLs via webservice TinyURL <http://tinyurl.com>."
-            printf '%s\t%s\n\n' 'Given URL:' ${url}
-            printf '%s\t%s\n\t\t%s\n' 'TinyURL:' ${result} ${preview}
-    else
-        return 1
-    fi
-}
+#function zurl() {
+#    emulate -L zsh
+#    [[ -z $1 ]] && { print "USAGE: zurl <URL>" ; return 1 }
+#
+#    local PN url tiny grabber search result preview
+#    PN=$0
+#    url=$1
+##   Check existence of given URL with the help of ping(1).
+##   N.B. ping(1) only works without an eventual given protocol.
+#    ping -c 1 ${${url#(ftp|http)://}%%/*} >& /dev/null || \
+#        read -q "?Given host ${${url#http://*/}%/*} is not reachable by pinging. Proceed anyway? [y|n] "
+#
+#    if (( $? == 0 )) ; then
+##           Prepend 'http://' to given URL where necessary for later output.
+#            [[ ${url} != http(s|)://* ]] && url='http://'${url}
+#            tiny='http://tinyurl.com/create.php?url='
+#            if check_com -c wget ; then
+#                grabber='wget -O- -o/dev/null'
+#            else
+#                print "wget is not available, but mandatory for ${PN}. Aborting."
+#            fi
+##           Looking for i.e.`copy('http://tinyurl.com/7efkze')' in TinyURL's HTML code.
+#            search='copy\(?http://tinyurl.com/[[:alnum:]]##*'
+#            result=${(M)${${${(f)"$(${=grabber} ${tiny}${url})"}[(fr)${search}*]}//[()\';]/}%%http:*}
+##           TinyURL provides the rather new feature preview for more confidence. <http://tinyurl.com/preview.php>
+#            preview='http://preview.'${result#http://}
+#
+#            printf '%s\n\n' "${PN} - Shrinking long URLs via webservice TinyURL <http://tinyurl.com>."
+#            printf '%s\t%s\n\n' 'Given URL:' ${url}
+#            printf '%s\t%s\n\t\t%s\n' 'TinyURL:' ${result} ${preview}
+#    else
+#        return 1
+#    fi
+#}
 
 #f2# Print a specific line of file(s).
 linenr () {
@@ -4164,7 +3706,7 @@ whatwhen()  {
     emulate -L zsh
     local usage help ident format_l format_s first_char remain first last
     usage='USAGE: whatwhen [options] <searchstring> <search range>'
-    help='Use' \`'whatwhen -h'\'' for further explanations.'
+    help='Use `whatwhen -h'\'' for further explanations.'
     ident=${(l,${#${:-Usage: }},, ,)}
     format_l="${ident}%s\t\t\t%s\n"
     format_s="${format_l//(\\t)##/\\t}"
@@ -4239,34 +3781,39 @@ weather() {
         return 1
     }
 
-    local PLACE="${1:u}"
-    local FILE="$HOME/.weather/$PLACE"
-    local LOG="$HOME/.weather/log"
+    local VERBOSE="yes"    # TODO: Make this a command line switch
 
-    [[ -d $HOME/.weather ]] || {
-        print -n "Creating $HOME/.weather: "
-        mkdir $HOME/.weather
+    local ODIR=`pwd`
+    local PLACE="${1:u}"
+    local DIR="${HOME}/.weather"
+    local LOG="${DIR}/log"
+
+    [[ -d ${DIR} ]] || {
+        print -n "Creating ${DIR}: "
+        mkdir ${DIR}
         print 'done'
     }
 
     print "Retrieving information for ${PLACE}:"
     print
-    wget -T 10 --no-verbose --output-file=$LOG --output-document=$FILE --timestamping http://weather.noaa.gov/pub/data/observations/metar/decoded/$PLACE.TXT
+    cd ${DIR} && wget -T 10 --no-verbose --output-file=$LOG --timestamping http://weather.noaa.gov/pub/data/observations/metar/decoded/$PLACE.TXT
 
     if [[ $? -eq 0 ]] ; then
         if [[ -n "$VERBOSE" ]] ; then
-            cat $FILE
+            cat ${PLACE}.TXT
         else
-            DATE=$(grep 'UTC' $FILE | sed 's#.* /##')
-            TEMPERATURE=$(awk '/Temperature/ { print $4" degree Celcius / " $2" degree Fahrenheit" }' $FILE| tr -d '(')
+            DATE=$(grep 'UTC' ${PLACE}.TXT | sed 's#.* /##')
+            TEMPERATURE=$(awk '/Temperature/ { print $4" degree Celcius / " $2" degree Fahrenheit" }' ${PLACE}.TXT | tr -d '(')
             echo "date: $DATE"
             echo "temp:  $TEMPERATURE"
         fi
     else
         print "There was an error retrieving the weather information for $PLACE" >&2
         cat $LOG
+        cd $ODIR
         return 1
     fi
+    cd $ODIR
 }
 # }}}
 
@@ -4296,57 +3843,8 @@ if check_com -c hg ; then
         [[ -n "$1" ]] && hg diff -r $1 -r tip | diffstat || hg export tip | diffstat
     }
 
-    #f5# Get current mercurial tip via hg itself
-    gethgclone() {
-        emulate -L zsh
-        setopt errreturn
-        if [[ -f mercurial-tree/.hg ]] ; then
-            cd mercurial-tree
-            echo "Running hg pull for retreiving latest version..."
-            hg pull
-            echo "Finished update. Building mercurial"
-            make local
-            echo "Setting \$PATH to $PWD:\$PATH..."
-            export PATH="$PWD:$PATH"
-        else
-            echo "Downloading mercurial via hg"
-            hg clone http://selenic.com/repo/hg mercurial-tree
-            cd mercurial-tree
-            echo "Building mercurial"
-            make local
-            echo "Setting \$PATH to $PWD:\$PATH..."
-            export PATH="$PWD:$PATH"
-            echo "make sure you set it permanent via ~/.zshrc if you plan to use it permanently."
-            # echo "Setting \$PYTHONPATH to PYTHONPATH=\${HOME}/lib/python,"
-            # export PYTHONPATH=${HOME}/lib/python
-        fi
-    }
-
 fi # end of check whether we have the 'hg'-executable
 
-# get current mercurial snapshot
-#f5# Get current mercurial snapshot
-gethgsnap() {
-    emulate -L zsh
-    setopt errreturn
-    if [[ -f mercurial-snapshot.tar.gz ]] ; then
-         echo "mercurial-snapshot.tar.gz exists already, skipping download."
-    else
-        echo "Downloading mercurial snapshot"
-        wget http://www.selenic.com/mercurial/mercurial-snapshot.tar.gz
-    fi
-    echo "Unpacking mercurial-snapshot.tar.gz"
-    tar zxf mercurial-snapshot.tar.gz
-    cd mercurial-snapshot/
-    echo "Installing required build-dependencies"
-    $SUDO apt-get update
-    $SUDO apt-get install python2.4-dev
-    echo "Building mercurial"
-    make local
-    echo "Setting \$PATH to $PWD:\$PATH..."
-    export PATH="$PWD:$PATH"
-    echo "make sure you set it permanent via ~/.zshrc if you plan to use it permanently."
-}
 # }}}
 
 # some useful commands often hard to remember - let's grep for them {{{
