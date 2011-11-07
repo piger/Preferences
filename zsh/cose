@@ -63,7 +63,7 @@ chpwd() {
 		if [[ "$PWD" == ${~dir}* ]]; then
 			[[ $current_umask == $new_umask ]] && return
 			echo "$fg[green][zsh] Switching to '$fg[red]$dir$fg[green]' umask: $fg[red]$new_umask"
-			PREVIOUS_UMASK=$(umask)
+			PREVIOUS_UMASK=$current_umask
 			umask $new_umask
 			return
 		fi
