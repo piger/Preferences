@@ -11,6 +11,7 @@
 "   - :options apre una finestra dove vedere e cambiare le opzioni
 "   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
 "   - OMNI-Completion: C-x, C-o
+"   - help comandi finestre: :he CTRL-W
 " }
 
 
@@ -51,7 +52,7 @@ set ignorecase			" ricerca case insensitive...
 set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
-set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrappare
+" set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrappare
 set grepprg=~/bin/ack	" usa ack al posto di grep per ':grep'
 set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
 
@@ -231,6 +232,10 @@ endif
 let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
+
+" tolgo l'highlight degli spazi vuoti alla fine delle righe: e' fastidioso.
+" NOTA: per info vedi syntax/python.vim
+let python_highlight_space_errors = 0
 
 " CSApprox
 let g:CSApprox_verbose_level = 0
