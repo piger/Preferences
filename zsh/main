@@ -203,8 +203,9 @@ declare -T PYTHONPATH pythonpath
 # E' richiesto da iTerm (con UTF-8) e in generale e' il 2011 e direi che puo'
 # anche diventare il mio cazzo di default.
 # export LANG="en_US.UTF-8"
-export LANG="it_IT.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
+# !!! - 15 Nov 2011 - C'e' un po' di confusione, disattivo tutti i locale custom.
+## export LANG="it_IT.UTF-8"
+## export LC_MESSAGES="en_US.UTF-8"
 
 # FTP in passive mode (CPAN)
 export FTP_PASSIVE=1

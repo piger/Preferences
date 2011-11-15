@@ -276,4 +276,18 @@ estrai_bz2() {
 	fi
 }
 
+# IDEE
+#
+# Questo setta uno style
+zstyle ":chpwd:profiles:${HOME}/Work(|/|/*)" profile work
+
+# Questo controlla se esiste uno style corrispondente
+function controlla() {
+	local -x profile
+
+	zstyle -s ":chpwd:profiles:${PWD}" profile profile || profile='default'
+	print $profile
+}
+# controlla
+
 # vim: ft=zsh
