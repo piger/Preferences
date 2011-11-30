@@ -285,9 +285,7 @@ WATCHFMT='%n %a %l from %m at %t.'
 
 # PYTHONSTARTUP per python in modalita' interattiva
 # (serve per la completion)
-if [[ -e ~/.pythonrc ]]; then
-    export PYTHONSTARTUP=~/.pythonrc
-fi
+[[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
 # }}}
 
 
