@@ -46,7 +46,7 @@ elseif has("gui_macvim")
     " set guifont=Menlo:h12
      "set gfn=Osaka-Mono:h14
     " set guifont=DejaVu\ Sans\ Mono:h12
-	set guifont=Menlo:h11
+	set guifont=Menlo:h10
 
     " Configurazione finestra (altezza, larghezza, trasparenza)
     set lines=55
