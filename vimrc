@@ -379,10 +379,10 @@ if !exists("autocommands_loaded")
 		au BufNewFile,BufRead */pentest/* setl backupdir=. paste
 	augroup END
 
-	" Cambi colore della status line
+	" Cambia colore della status line in insert mode
 	augroup ft_statuslinecolor
 		au!
-		au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=white guibg=#8090a0
+		au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=yellow guibg=#8090a0
 		au InsertLeave * hi StatusLine term=bold,reverse gui=bold ctermfg=231 ctermbg=103 guifg=white guibg=#8090a0
 	augroup END
 
@@ -585,60 +585,65 @@ inoremap jj <ESC>
 " NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
 
-" Fuzzyfinder (dall'esempio nel man):
+" Fuzzyfinder (bindings presi dall'esempio nel man):
+" You can open a selected item in various ways:
+"         <CR>  (|g:fuf_keyOpen|)        - opens in a previous window.
+"         <C-j> (|g:fuf_keyOpenSplit|)   - opens in a split window.
+"         <C-k> (|g:fuf_keyOpenVsplit|)  - opens in a vertical-split window.
+"         <C-l> (|g:fuf_keyOpenTabpage|) - opens in a new tab page.
 " Browsa i buffer
-nnoremap <silent> <C-n>      :FufBuffer<CR>
-amenu Fuf.Buffer\ <C-n> :FufBuffer<CR>
+nnoremap <silent> <C-n>			:FufBuffer<CR>
+amenu Fuf.Buffer\ <C-n>			:FufBuffer<CR>
 
 " browsa i file nella dir del buffer attuale (utile!)
-nnoremap <silent> <C-p>      :FufFileWithCurrentBufferDir<CR>
+nnoremap <silent> <C-p> :FufFileWithCurrentBufferDir<CR>
 amenu Fuf.FileWithCurrentBufferDir\ <C-p> :FufFileWithCurrentBufferDir<CR>
 
 " browsa i file nella dir del buffer attuale con full path
-nnoremap <silent> <C-f><C-p> :FufFileWithFullCwd<CR>
+nnoremap <silent> <C-f><C-p>	:FufFileWithFullCwd<CR>
 amenu Fuf.FileWithFullCwd\ <C-f><C-p> :FufFileWithFullCwd<CR>
 
 " browsa i file nella dir attuale
-nnoremap <silent> <C-f>p     :FufFile<CR>
-amenu Fuf.File\ <C-f>p :FufFile<CR>
+nnoremap <silent> <C-f>p		:FufFile<CR>
+amenu Fuf.File\ <C-f>p			:FufFile<CR>
 
 " cambia dir dalla dir del buffer attuale
-nnoremap <silent> <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
+nnoremap <silent> <C-f><C-d>	:FufDirWithCurrentBufferDir<CR>
 amenu Fuf.DirWithCurrentBufferDir\ <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
 
 " cambia dir con full path
-nnoremap <silent> <C-f>d     :FufDirWithFullCwd<CR>
+nnoremap <silent> <C-f>d		:FufDirWithFullCwd<CR>
 amenu Fuf.DirWithFullCwd\ <C-f>d :FufDirWithFullCwd<CR>
 
-nnoremap <silent> <C-f>D     :FufDir<CR>
-amenu Fuf.Dir\ <C-f>D :FufDir<CR>
+nnoremap <silent> <C-f>D		:FufDir<CR>
+amenu Fuf.Dir\ <C-f>D			:FufDir<CR>
 
 " browsa i file usati di recente (utile!)
-nnoremap <silent> <C-j>      :FufMruFile<CR>
-amenu Fuf.MruFile\ <C-j> :FufMruFile<CR>
+nnoremap <silent> <C-j>			:FufMruFile<CR>
+amenu Fuf.MruFile\ <C-j>		:FufMruFile<CR>
 
 " browsa gli ultimi comandi dati (utile!)
-nnoremap <silent> <C-k>      :FufMruCmd<CR>
+nnoremap <silent> <C-k>			:FufMruCmd<CR>
 
 " ?
-nnoremap <silent> <C-b>      :FufBookmark<CR>
+nnoremap <silent> <C-b>			:FufBookmark<CR>
 
-nnoremap <silent> <C-f><C-t> :FufTag<CR>
+nnoremap <silent> <C-f><C-t>	:FufTag<CR>
 
-nnoremap <silent> <C-f>t     :FufTag!<CR>
-noremap  <silent> g]         :FufTagWithCursorWord!<CR>
-nnoremap <silent> <C-f><C-f> :FufTaggedFile<CR>
-nnoremap <silent> <C-f><C-j> :FufJumpList<CR>
-nnoremap <silent> <C-f><C-g> :FufChangeList<CR>
-nnoremap <silent> <C-f><C-q> :FufQuickfix<CR>
-nnoremap <silent> <C-f><C-l> :FufLine<CR>
-nnoremap <silent> <C-f><C-h> :FufHelp<CR>
-nnoremap <silent> <C-f><C-b> :FufAddBookmark<CR>
-vnoremap <silent> <C-f><C-b> :FufAddBookmarkAsSelectedText<CR>
-" nnoremap <silent> <C-f><C-e> :FufEditInfo<CR>
+nnoremap <silent> <C-f>t		:FufTag!<CR>
+noremap  <silent> g]			:FufTagWithCursorWord!<CR>
+nnoremap <silent> <C-f><C-f> 	:FufTaggedFile<CR>
+nnoremap <silent> <C-f><C-j> 	:FufJumpList<CR>
+nnoremap <silent> <C-f><C-g> 	:FufChangeList<CR>
+nnoremap <silent> <C-f><C-q> 	:FufQuickfix<CR>
+nnoremap <silent> <C-f><C-l> 	:FufLine<CR>
+nnoremap <silent> <C-f><C-h> 	:FufHelp<CR>
+nnoremap <silent> <C-f><C-b> 	:FufAddBookmark<CR>
+vnoremap <silent> <C-f><C-b> 	:FufAddBookmarkAsSelectedText<CR>
+" nnoremap <silent> <C-f><C-e>	:FufEditInfo<CR>
 
 " refresha la cache di file e dir (utile!)
-nnoremap <silent> <C-f><C-r> :FufRenewCache<CR>
+nnoremap <silent> <C-f><C-r>	:FufRenewCache<CR>
 
 "   * bufexplorer
 "   <Leader>be  - Opens BufExplorer
@@ -654,19 +659,6 @@ nnoremap <silent> <C-f><C-r> :FufRenewCache<CR>
 "   * Align (lettera maiuscola (T=, T@, T<, etc...) allineano a dx, lettera
 "   minuscola (t#, ts, t:, etc...) a sx.
 "   HIGHLIGHT: \t=, \t:
-" if !hasmapto('<Plug>AM_T|')|map <unique> <Leader>T|		<Plug>AM_T||endif
-" if !hasmapto('<Plug>AM_T#')	 |map <unique> <Leader>T#		<Plug>AM_T#|endif
-" if !hasmapto('<Plug>AM_T,')	 |map <unique> <Leader>T,		<Plug>AM_T,o|endif
-" if !hasmapto('<Plug>AM_Ts,') |map <unique> <Leader>Ts,		<Plug>AM_Ts,|endif
-" if !hasmapto('<Plug>AM_T:')	 |map <unique> <Leader>T:		<Plug>AM_T:|endif
-" if !hasmapto('<Plug>AM_T;')	 |map <unique> <Leader>T;		<Plug>AM_T;|endif
-" if !hasmapto('<Plug>AM_T<')	 |map <unique> <Leader>T<		<Plug>AM_T<|endif
-" if !hasmapto('<Plug>AM_T=')	 |map <unique> <Leader>T=		<Plug>AM_T=|endif
-" if !hasmapto('<Plug>AM_T?')	 |map <unique> <Leader>T?		<Plug>AM_T?|endif
-" if !hasmapto('<Plug>AM_T@')	 |map <unique> <Leader>T@		<Plug>AM_T@|endif
-" if !hasmapto('<Plug>AM_Tab') |map <unique> <Leader>Tab		<Plug>AM_Tab|endif
-" if !hasmapto('<Plug>AM_Tsp') |map <unique> <Leader>Tsp		<Plug>AM_Tsp|endif
-" if !hasmapto('<Plug>AM_T~')	 |map <unique> <Leader>T~		<Plug>AM_T~|endif
 
 " taglist (il plugin)
 map <Leader>P :TlistToggle<CR>
@@ -726,10 +718,6 @@ endif
 """ " }
 
 
-" In teoria da qui in poi posso attivare 'secure'
-set secure
-
-
 " perlism {
 " WARNING: vim must be compiled with +perl support!
 "
@@ -738,13 +726,9 @@ set secure
 " time.
 " ------------------------------------------------------------------------
 
-" WARNING: Skip to the end of vimrc if +perl support wasn't found.
-if !has('perl')
-    finish
-endif
-
-perl << EOF
-    sub strip_var {
+if has('perl')
+	perl << EOF
+sub strip_var {
 	my $var = shift;
 
 	# skip empty lines
@@ -758,9 +742,9 @@ perl << EOF
 		$ret =~ s/^no//;
 	}
 	return $ret;
-    }
+}
 
-    sub sort_vars {
+sub sort_vars {
 	my ($firstline, $lastline) = @_;
 
 	# Le variabili di Vim ovviamente NON arrivano al perl, bisogna usare
@@ -772,8 +756,9 @@ perl << EOF
 	@lines = $curbuf->Get($firstline .. $lastline);
 	@sorted = sort { strip_var($a) cmp strip_var($b) } @lines;
 	$curbuf->Set($firstline, @sorted)
-    }
+}
 EOF
+endif
 
 " x,y call SortVars()
 " Esegue un sort alfabetico su un range di linee nel formato "set var=value"
@@ -786,8 +771,15 @@ endfunction
 " in :perldo il comando viene eseguito per ogni riga, mettendo la riga
 " in $_ senza <EOL>
 " perldo $_ = reverse($_);1
-"
-"
-" WARNING: LA PARTE DI QUESTO FILE E' IGNORATA SE VIM E' COMPILATO
-" SENZA IL SUPPORTO PERL!
 " }
+
+
+" 'secure'
+" When on, ":autocmd", shell and write commands are not allowed in
+" ".vimrc" and ".exrc" in the current directory and map commands are
+" displayed.  Switch it off only if you know that you will not run into
+" problems, or when the 'exrc' option is off.  On Unix this option is only
+" used if the ".vimrc" or ".exrc" is not owned by you.  This can be
+" dangerous if the systems allows users to do a "chown".  You better set
+" 'secure' at the end of your ~/.vimrc then.
+set secure
