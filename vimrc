@@ -199,8 +199,11 @@ set noexpandtab
 " pathogen {
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+
+" Pathogen e' inutile se si utilizza Vundle
+" git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+"" call pathogen#helptags()
+"" call pathogen#runtime_append_all_bundles()
 
 " vundle
 if isdirectory(expand("~/.vim/bundle/vundle"))
@@ -221,8 +224,12 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 	Bundle 'The-NERD-tree'
 	Bundle 'TwitVim'
 	Bundle 'bufexplorer.zip'
+
+	" Python
 	Bundle 'pydoc.vim'
+	Bundle 'pyflakes.vim'
 	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
+
 	Bundle 'Jinja'
 endif
 " }
@@ -721,6 +728,44 @@ EOF
 " Utile anche per CAPIRE come funziona il perl dentro Vim...
 function! SortVars() range
     exec "perl sort_vars " . a:firstline . ", " a:lastline
+endfunction
+
+" QuickFixDo
+" Esegue un comando su tutti i buffer 'quickfix':
+"	- open all files mentioned in the QuickFix list by the following command:
+" :Qfixdo tab sp
+"	- In addition, it is possible to repeat the substitution itself the same
+"	way.
+" :Qfixdo %s/pattern/string/
+" http://stackoverflow.com/questions/1830839/how-to-open-multiple-files-in-vim-after-vimgrep
+command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
+function! QuickFixDo(cmd)
+	" let bufnam = {}
+	" for q in getqflist()
+	" 	" let bufnam[q.bufnr] = bufname(q.bufnr)
+	" 	" 1) Usa il dict per salvare la RIGA del quickfix; l'implementazione
+	" 	" originale usa un dict senza motivo, io almeno gli do un senso.
+	" 	let bufnam[q.bufnr] = q.lnum
+	" endfor
+	" for n in keys(bufnam)
+	" 	exe 'buffer' n
+	" 	" 2) Salto alla riga del quickfix, altrimenti e' TUTTO INUTILE.
+	" 	exe ':' + bufnam[n]
+	" 	exe a:cmd
+	" 	update
+	" endfor
+
+	for q in getqflist()
+		exe 'buffer' q.bufnr
+		" XXX assurdamente (non conosco lo scripting di Vim) posso saltare
+		" alla riga giusta ma non alla colonna giusta: se tolgo i commenti e
+		" chiamo tipo `:Qfixdo tab sp` il cursore me lo ritrovo all'inizio di
+		" ogni documento e non alla posizione giusta :(
+		exe ':' + q.lnum
+		" exe q.vcol + '|'
+		" exe cursor(q.lnum, q.vcol)
+		exe a:cmd
+	endfor
 endfunction
 
 " in :perldo il comando viene eseguito per ogni riga, mettendo la riga
