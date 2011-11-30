@@ -1,2 +1,15 @@
-git con certificato SSL non valido:
-GIT_SSL_NO_VERIFY=true git clone ...
+# tips per git
+
+## Troubleshooting
+
+- git con certificato SSL non valido:
+
+	$ GIT_SSL_NO_VERIFY=true git clone ...
+
+## Alias e righe di comando comode
+
+- Per fare una release
+
+	$ git archive --prefix=git-1.4.0/ -o git-1.4.0.tar.gz v1.4.0
+
+vim: ft=markdown

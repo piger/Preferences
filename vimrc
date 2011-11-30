@@ -12,6 +12,9 @@
 "   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
 "   - OMNI-Completion: C-x, C-o
 "   - help comandi finestre: :he CTRL-W
+"
+" IDEE, TODO
+" - tasto per toggle di 'relativenumber', comodo per i comandi su piu' righe
 " }
 
 
@@ -73,11 +76,39 @@ set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci 
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
-set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
+"" set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
+set statusline=%f
+set stl+=\ 
+set stl+=%h
+set stl+=%m
+set stl+=%r
+set stl+=%w
+set stl+=\ 
+set stl+=%{fugitive#statusline()}
+set stl+=%=		" right align
+set stl+=\ 
+
+" File format, encoding and type.  Ex: "(unix/utf-8/python)"
+set statusline+=(
+set statusline+=%n
+set statusline+=\ 
+set statusline+=%{&ff}                        " Format (unix/DOS).
+set statusline+=\ 
+set statusline+=%{strlen(&fenc)?&fenc:&enc}   " Encoding (utf-8).
+set statusline+=\ 
+set statusline+=%{&ft}                        " Type (python).
+set statusline+=)
+
+" Line and column position and counts.
+set statusline+=\ (line\ %l\/%L,\ col\ %03c)
+
+
 set nosmartindent		" NON indentare con saggezza
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
 				" in visual block
 set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
+set wig+=*.DS_Store
+
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
 set wrap			" wrappa SEMPRE, e' OK!
@@ -340,6 +371,10 @@ if !exists("autocommands_loaded")
 	" My PC is fast enough, do syntax highlight syncing from start
 	autocmd BufEnter * :syntax sync fromstart
 
+	" Resize splits when the window is resized
+	" src: https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
+	au VimResized * exe "normal! \<c-w>="
+
 	" autocmd BufNewFile,BufRead *.txt set filetype=human
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
 
@@ -349,6 +384,13 @@ if !exists("autocommands_loaded")
 		au!
 		" backup nella directory corrente
 		au BufNewFile,BufRead */pentest/* setl backupdir=. paste
+	augroup END
+
+	" Cambia colore della status line in insert mode
+	augroup ft_statuslinecolor
+		au!
+		au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=yellow guibg=#8090a0
+		au InsertLeave * hi StatusLine term=bold,reverse gui=bold ctermfg=231 ctermbg=103 guifg=white guibg=#8090a0
 	augroup END
 
 	" For all text files set 'textwidth' to 78 characters.
@@ -446,7 +488,6 @@ if !exists("autocommands_loaded")
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
-" WARNING: FA UN MACELLO !
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 	 \ | wincmd p | diffthis
@@ -458,6 +499,23 @@ endif
 abbreviate teh the
 abbreviate subent subnet
 abbreviate directort directory
+
+
+iabbrev sl@ steve@stevelosh.com
+iabbrev vrcf `~/.vimrc` file
+
+" Copyright, Trademark, etc...
+iabbrev (c) ©
+iabbrev (r) ®
+iabbrev (tm) ™
+iabbrev (euro) €
+" }
+
+
+" Match e affini {
+" Highlight VCS conflict markers
+" src: https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 " }
 
 
@@ -534,49 +592,65 @@ inoremap jj <ESC>
 " NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
 
-" Fuzzyfinder (dall'esempio nel man):
-nnoremap <silent> <C-n>      :FufBuffer<CR>
-amenu Fuf.Buffer\ <C-n> :FufBuffer<CR>
+" Fuzzyfinder (bindings presi dall'esempio nel man):
+" You can open a selected item in various ways:
+"         <CR>  (|g:fuf_keyOpen|)        - opens in a previous window.
+"         <C-j> (|g:fuf_keyOpenSplit|)   - opens in a split window.
+"         <C-k> (|g:fuf_keyOpenVsplit|)  - opens in a vertical-split window.
+"         <C-l> (|g:fuf_keyOpenTabpage|) - opens in a new tab page.
+" Browsa i buffer
+nnoremap <silent> <C-n>			:FufBuffer<CR>
+amenu Fuf.Buffer\ <C-n>			:FufBuffer<CR>
 
-nnoremap <silent> <C-p>      :FufFileWithCurrentBufferDir<CR>
+" browsa i file nella dir del buffer attuale (utile!)
+nnoremap <silent> <C-p> :FufFileWithCurrentBufferDir<CR>
 amenu Fuf.FileWithCurrentBufferDir\ <C-p> :FufFileWithCurrentBufferDir<CR>
 
-nnoremap <silent> <C-f><C-p> :FufFileWithFullCwd<CR>
+" browsa i file nella dir del buffer attuale con full path
+nnoremap <silent> <C-f><C-p>	:FufFileWithFullCwd<CR>
 amenu Fuf.FileWithFullCwd\ <C-f><C-p> :FufFileWithFullCwd<CR>
 
-nnoremap <silent> <C-f>p     :FufFile<CR>
-amenu Fuf.File\ <C-f>p :FufFile<CR>
+" browsa i file nella dir attuale
+nnoremap <silent> <C-f>p		:FufFile<CR>
+amenu Fuf.File\ <C-f>p			:FufFile<CR>
 
-nnoremap <silent> <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
+" cambia dir dalla dir del buffer attuale
+nnoremap <silent> <C-f><C-d>	:FufDirWithCurrentBufferDir<CR>
 amenu Fuf.DirWithCurrentBufferDir\ <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
 
-nnoremap <silent> <C-f>d     :FufDirWithFullCwd<CR>
+" cambia dir con full path
+nnoremap <silent> <C-f>d		:FufDirWithFullCwd<CR>
 amenu Fuf.DirWithFullCwd\ <C-f>d :FufDirWithFullCwd<CR>
 
-nnoremap <silent> <C-f>D     :FufDir<CR>
-amenu Fuf.Dir\ <C-f>D :FufDir<CR>
+nnoremap <silent> <C-f>D		:FufDir<CR>
+amenu Fuf.Dir\ <C-f>D			:FufDir<CR>
 
-nnoremap <silent> <C-j>      :FufMruFile<CR>
-amenu Fuf.MruFile\ <C-j> :FufMruFile<CR>
+" browsa i file usati di recente (utile!)
+nnoremap <silent> <C-j>			:FufMruFile<CR>
+amenu Fuf.MruFile\ <C-j>		:FufMruFile<CR>
 
-nnoremap <silent> <C-k>      :FufMruCmd<CR>
+" browsa gli ultimi comandi dati (utile!)
+nnoremap <silent> <C-k>			:FufMruCmd<CR>
 
-nnoremap <silent> <C-b>      :FufBookmark<CR>
+" ?
+nnoremap <silent> <C-b>			:FufBookmark<CR>
 
-nnoremap <silent> <C-f><C-t> :FufTag<CR>
+nnoremap <silent> <C-f><C-t>	:FufTag<CR>
 
-nnoremap <silent> <C-f>t     :FufTag!<CR>
-noremap  <silent> g]         :FufTagWithCursorWord!<CR>
-nnoremap <silent> <C-f><C-f> :FufTaggedFile<CR>
-nnoremap <silent> <C-f><C-j> :FufJumpList<CR>
-nnoremap <silent> <C-f><C-g> :FufChangeList<CR>
-nnoremap <silent> <C-f><C-q> :FufQuickfix<CR>
-nnoremap <silent> <C-f><C-l> :FufLine<CR>
-nnoremap <silent> <C-f><C-h> :FufHelp<CR>
-nnoremap <silent> <C-f><C-b> :FufAddBookmark<CR>
-vnoremap <silent> <C-f><C-b> :FufAddBookmarkAsSelectedText<CR>
-nnoremap <silent> <C-f><C-e> :FufEditInfo<CR>
-nnoremap <silent> <C-f><C-r> :FufRenewCache<CR>
+nnoremap <silent> <C-f>t		:FufTag!<CR>
+noremap  <silent> g]			:FufTagWithCursorWord!<CR>
+nnoremap <silent> <C-f><C-f> 	:FufTaggedFile<CR>
+nnoremap <silent> <C-f><C-j> 	:FufJumpList<CR>
+nnoremap <silent> <C-f><C-g> 	:FufChangeList<CR>
+nnoremap <silent> <C-f><C-q> 	:FufQuickfix<CR>
+nnoremap <silent> <C-f><C-l> 	:FufLine<CR>
+nnoremap <silent> <C-f><C-h> 	:FufHelp<CR>
+nnoremap <silent> <C-f><C-b> 	:FufAddBookmark<CR>
+vnoremap <silent> <C-f><C-b> 	:FufAddBookmarkAsSelectedText<CR>
+" nnoremap <silent> <C-f><C-e>	:FufEditInfo<CR>
+
+" refresha la cache di file e dir (utile!)
+nnoremap <silent> <C-f><C-r>	:FufRenewCache<CR>
 
 "   * bufexplorer
 "   <Leader>be  - Opens BufExplorer
@@ -589,32 +663,9 @@ nnoremap <silent> <C-f><C-r> :FufRenewCache<CR>
 "   * DirDiff
 "   :DirDiff /path/1 /path/2
 "
-"   * fuzzyfinder
-"       :FuzzyFinderBuffer      - launchs buffer-mode Fuzzyfinder.
-"       :FuzzyFinderFile        - launchs file-mode Fuzzyfinder.
-"       :FuzzyFinderDir         - launchs directory-mode Fuzzyfinder.
-"       :FuzzyFinderMruFile     - launchs MRU-file-mode Fuzzyfinder.
-"       :FuzzyFinderMruCmd      - launchs MRU-command-mode Fuzzyfinder.
-"       :FuzzyFinderFavFile     - launchs favorite-file-mode Fuzzyfinder.
-"       :FuzzyFinderTag         - launchs tag-mode Fuzzyfinder.
-"       :FuzzyFinderTaggedFile  - launchs tagged-file-mode Fuzzyfinder.
-"
 "   * Align (lettera maiuscola (T=, T@, T<, etc...) allineano a dx, lettera
 "   minuscola (t#, ts, t:, etc...) a sx.
 "   HIGHLIGHT: \t=, \t:
-" if !hasmapto('<Plug>AM_T|')|map <unique> <Leader>T|		<Plug>AM_T||endif
-" if !hasmapto('<Plug>AM_T#')	 |map <unique> <Leader>T#		<Plug>AM_T#|endif
-" if !hasmapto('<Plug>AM_T,')	 |map <unique> <Leader>T,		<Plug>AM_T,o|endif
-" if !hasmapto('<Plug>AM_Ts,') |map <unique> <Leader>Ts,		<Plug>AM_Ts,|endif
-" if !hasmapto('<Plug>AM_T:')	 |map <unique> <Leader>T:		<Plug>AM_T:|endif
-" if !hasmapto('<Plug>AM_T;')	 |map <unique> <Leader>T;		<Plug>AM_T;|endif
-" if !hasmapto('<Plug>AM_T<')	 |map <unique> <Leader>T<		<Plug>AM_T<|endif
-" if !hasmapto('<Plug>AM_T=')	 |map <unique> <Leader>T=		<Plug>AM_T=|endif
-" if !hasmapto('<Plug>AM_T?')	 |map <unique> <Leader>T?		<Plug>AM_T?|endif
-" if !hasmapto('<Plug>AM_T@')	 |map <unique> <Leader>T@		<Plug>AM_T@|endif
-" if !hasmapto('<Plug>AM_Tab') |map <unique> <Leader>Tab		<Plug>AM_Tab|endif
-" if !hasmapto('<Plug>AM_Tsp') |map <unique> <Leader>Tsp		<Plug>AM_Tsp|endif
-" if !hasmapto('<Plug>AM_T~')	 |map <unique> <Leader>T~		<Plug>AM_T~|endif
 
 " taglist (il plugin)
 map <Leader>P :TlistToggle<CR>
@@ -659,22 +710,19 @@ endif
 " Aggiunge al path di ricerca di vim (per i comandi gf, :find, etc) il
 " sys.path di python.
 " 13-Mar-2011 - Forse questa cosa rallenta tutto/tanto ?
-""" if has('python')
-"""     python << EOF
-""" import os
-""" import sys
-""" import vim
-""" for p in sys.path:
-"""     if os.path.isdir(p):
-""" 	vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-""" EOF
-""" 
-""" endif
+" 30/11/2011 - piu' che altro non l'ho mai usato.
+"" if has('python')
+""     python << EOF
+"" import os
+"" import sys
+"" import vim
+"" for p in sys.path:
+"" 	if os.path.isdir(p):
+"" 		vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+"" EOF
+"" 
+"" endif
 """ " }
-
-
-" In teoria da qui in poi posso attivare 'secure'
-set secure
 
 
 " perlism {
@@ -685,13 +733,9 @@ set secure
 " time.
 " ------------------------------------------------------------------------
 
-" WARNING: Skip to the end of vimrc if +perl support wasn't found.
-if !has('perl')
-    finish
-endif
-
-perl << EOF
-    sub strip_var {
+if has('perl')
+	perl << EOF
+sub strip_var {
 	my $var = shift;
 
 	# skip empty lines
@@ -705,9 +749,9 @@ perl << EOF
 		$ret =~ s/^no//;
 	}
 	return $ret;
-    }
+}
 
-    sub sort_vars {
+sub sort_vars {
 	my ($firstline, $lastline) = @_;
 
 	# Le variabili di Vim ovviamente NON arrivano al perl, bisogna usare
@@ -719,8 +763,9 @@ perl << EOF
 	@lines = $curbuf->Get($firstline .. $lastline);
 	@sorted = sort { strip_var($a) cmp strip_var($b) } @lines;
 	$curbuf->Set($firstline, @sorted)
-    }
+}
 EOF
+endif
 
 " x,y call SortVars()
 " Esegue un sort alfabetico su un range di linee nel formato "set var=value"
@@ -771,8 +816,15 @@ endfunction
 " in :perldo il comando viene eseguito per ogni riga, mettendo la riga
 " in $_ senza <EOL>
 " perldo $_ = reverse($_);1
-"
-"
-" WARNING: LA PARTE DI QUESTO FILE E' IGNORATA SE VIM E' COMPILATO
-" SENZA IL SUPPORTO PERL!
 " }
+
+
+" 'secure'
+" When on, ":autocmd", shell and write commands are not allowed in
+" ".vimrc" and ".exrc" in the current directory and map commands are
+" displayed.  Switch it off only if you know that you will not run into
+" problems, or when the 'exrc' option is off.  On Unix this option is only
+" used if the ".vimrc" or ".exrc" is not owned by you.  This can be
+" dangerous if the systems allows users to do a "chown".  You better set
+" 'secure' at the end of your ~/.vimrc then.
+set secure

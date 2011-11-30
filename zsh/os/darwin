@@ -14,11 +14,15 @@ if [[ -x /usr/local/bin/gls ]]; then
     alias ls="gls --color=always -F"
     (( $+commands[gdircolors] )) && eval $(gdircolors -b)
 	alias lss="gls --color=always -F --group-directories-first"
+	alias reals="command ls"
 fi
 
 # -*- environment
 export CLICOLOR=1
 export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
+
+# per Homebrew:
+export PATH="/usr/local/bin:${PATH}"
 
 # Mac Ports
 # definisce il path dei ports (e' una variabile mia, non serve
@@ -33,5 +37,10 @@ export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
 # 	# grep colorato
 # 	[[ -x $MACPORTS/bin/grep ]] && alias grep='grep --color=auto'
 # fi
+
+# Questo e' un fix per i default sballati di OSX (Lion?)
+if [[ $LC_CTYPE == "UTF-8" ]]; then
+	export LC_CTYPE="en_US.UTF-8"
+fi
 
 # vim: ft=zsh

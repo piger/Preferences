@@ -21,12 +21,12 @@ inoremap <buffer> # X#
 " (<buffer> e' per renderlo valido solo per il file python aperto e non per
 " gli altri)
 
-setl foldcolumn=2
+" setl foldcolumn=2
 "setl foldmethod=indent
 " Apre di default tutti i fold
 setl foldlevel=100
 
 " line number con la GUI
-if has("gui_running")
-    setl number
-endif
+"" if has("gui_running")
+""     setl number
+"" endif
