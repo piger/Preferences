@@ -386,6 +386,12 @@ if !exists("autocommands_loaded")
 		au BufNewFile,BufRead */pentest/* setl backupdir=. paste
 	augroup END
 
+	" I file in ~/Documents/appunti sono tutti in formato Markdown
+	augroup Appunti
+		au!
+		au BufNewFile,BufRead ~/Documents/appunti/* setl ft=markdown tw=80
+	augroup END
+
 	" Cambia colore della status line in insert mode
 	augroup ft_statuslinecolor
 		au!
