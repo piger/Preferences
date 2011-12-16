@@ -1,12 +1,12 @@
 " Vim - Configurazione generica
-" vim: foldmarker={,} foldlevel=0
+" vim: foldmarker={{{,}}} foldlevel=0 foldmethod=marker
 
 "    //   \o FOTTI   |
 "  -oOO __/)  IL     |
 "    '`  (\   FUCO   |
 
 
-" NOTE, SUGGERIMENTI E AVVERTIMENTI {
+" NOTE, SUGGERIMENTI E AVVERTIMENTI {{{
 "   - lo spazio tra ogni sezione e' di due righe vuote
 "   - :options apre una finestra dove vedere e cambiare le opzioni
 "   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
@@ -20,20 +20,20 @@
 " LIGHT:
 " - autumn
 "
-" }
+" }}}
 
 
-" Directory necessarie {
+" Creazione delle directory necessarie (all'avvio di vim) {{{
 if !isdirectory(expand("~/.vim/backups"))
     call mkdir(expand("~/.vim/backups"), "", 0700)
 endif
 if !isdirectory(expand("~/.vim/swap"))
     call mkdir(expand("~/.vim/swap"), "", 0700)
 endif
-" }
+" }}}
 
 
-" Configurazione di base {
+" Configurazione di base {{{
 set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
@@ -120,6 +120,14 @@ set wrap			" wrappa SEMPRE, e' OK!
 set t_Co=256			" 256 colori in terminale	
 set vb				" meglio la visual bell che l'orrendo SPEAKER
 
+" Ricorda nel viminfo:
+" '100 -- marks per gli ultimi 100 file
+" <50 -- massimo 20 righe per registro
+" s5 -- massimo 5Kb per registro
+" /20 -- ultime 20 ricerche
+" :20 -- ultimi 20 comandi
+set viminfo='100,<50,s5,/20,:20
+
 " Alla TextMate, ma non mi piace.
 " set list
 " set listchars=tab:▸\ ,eol:¬
@@ -129,8 +137,10 @@ set vb				" meglio la visual bell che l'orrendo SPEAKER
 if v:version >= 703
     set cryptmethod=blowfish
 endif
+" }}}
 
-" Mouse support {
+
+" Mouse support {{{
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
 " if has('mouse')
 "     set mouse=a
@@ -139,10 +149,10 @@ set mouse=""
 
 " Questo POTREBBE essere interessante...
 " set clipboard+=unnamed " share windows clipboard
-" }
+" }}}
 
 
-" folding {
+" folding {{{
 "set foldenable
 "set foldmethod=marker
 "set foldlevel=100		" trick per non foldare automaticamente
@@ -152,19 +162,10 @@ set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 "    return getline(v:foldstart).' '
 "endfunction " }
 "set foldtext=SimpleFoldText()
-" }
+" }}}
 
 
-" Ricorda nel viminfo:
-" '100 -- marks per gli ultimi 100 file
-" <50 -- massimo 20 righe per registro
-" s5 -- massimo 5Kb per registro
-" /20 -- ultime 20 ricerche
-" :20 -- ultimi 20 comandi
-set viminfo='100,<50,s5,/20,:20
-
-
-" Lingua e dizionari {
+" Lingua e dizionari {{{
 set spelllang=it,en,en_US
 set dictionary+=/usr/share/dict/words
 
@@ -174,10 +175,10 @@ set dictionary+=/usr/share/dict/words
 " http://www.thegeekstuff.com/2008/12/vi-and-vim-editor-3-steps-to-enable-thesaurus-option/
 " ftp://ibiblio.org/pub/docs/books/gutenberg/etext02/mthes10.zip
 " set thesaurus+=/Users/sand/Documents/thesaurus/mthesaur.txt
-" }
+" }}}
 
 
-" GUI e colori {
+" GUI e colori {{{
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
 if &t_Co > 2 || has("gui_running")
@@ -197,20 +198,20 @@ if !has("gui_running")
     " colorscheme molokai
 	colorscheme native
 endif
-" }
+" }}}
 
 
-" Settaggi utili quando si usa vim come IDE {
+" Settaggi utili quando si usa vim come IDE {{{
 " set number
 " set cursorline
 " set statusline=%<%f\%h%m%r%=%-20.(line=%l\ \ col=%c%V\ \ totlin=%L%)\ \ \%h%m%r%=%-40(bytval=0x%B,%n%Y%)\%P
 
 " Questo dovrebbe essere un "%" evoluto
 runtime macros/matchit.vim
-" }
+" }}}
 
 
-" formattazione {
+" formattazione {{{
 " :he 'tabstop'
 
 " There are four main ways to use tabs in Vim:
@@ -229,10 +230,10 @@ set softtabstop=4
 set noexpandtab
 "set shiftround                  " indenta per multipli di shiftwidth
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
-" }
+" }}}
 
 
-" pathogen {
+" pathogen^H^H^H^H^H^H^H^HVundle e plugins {{{
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
 
@@ -268,10 +269,10 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 
 	Bundle 'Jinja'
 endif
-" }
+" }}}
 
 
-" Opzioni plugin & co {
+" Opzioni plugin & co {{{
 let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
 let perl_extended_vars=1 		" highlight advanced perl vars inside strings
 let perl_include_pod=1	    		" highlight POD correclty, dicono
@@ -357,9 +358,10 @@ let python_slow_sync = 1
 
 " Pydiction
 let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
-" }
+" }}}
 
-" autocommands {
+
+" autocommands {{{
 "
 " Enable file type detection.
 " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -389,6 +391,12 @@ if !exists("autocommands_loaded")
 		au!
 		" backup nella directory corrente
 		au BufNewFile,BufRead */pentest/* setl backupdir=. paste
+	augroup END
+
+	" I file in ~/Documents/appunti sono tutti in formato Markdown
+	augroup Appunti
+		au!
+		au BufNewFile,BufRead ~/Documents/appunti/* setl ft=markdown tw=80
 	augroup END
 
 	" Cambia colore della status line in insert mode
@@ -488,8 +496,10 @@ if !exists("autocommands_loaded")
 
 	endif
 
+" }}}
 
-" Script e funzioni {
+
+" Script e funzioni {{{
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
@@ -497,10 +507,48 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 	 \ | wincmd p | diffthis
 endif
-" }
+
+" QuickFixDo
+" Esegue un comando su tutti i buffer 'quickfix':
+"	- open all files mentioned in the QuickFix list by the following command:
+" :Qfixdo tab sp
+"	- In addition, it is possible to repeat the substitution itself the same
+"	way.
+" :Qfixdo %s/pattern/string/
+" http://stackoverflow.com/questions/1830839/how-to-open-multiple-files-in-vim-after-vimgrep
+command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
+function! QuickFixDo(cmd)
+	" let bufnam = {}
+	" for q in getqflist()
+	" 	" let bufnam[q.bufnr] = bufname(q.bufnr)
+	" 	" 1) Usa il dict per salvare la RIGA del quickfix; l'implementazione
+	" 	" originale usa un dict senza motivo, io almeno gli do un senso.
+	" 	let bufnam[q.bufnr] = q.lnum
+	" endfor
+	" for n in keys(bufnam)
+	" 	exe 'buffer' n
+	" 	" 2) Salto alla riga del quickfix, altrimenti e' TUTTO INUTILE.
+	" 	exe ':' + bufnam[n]
+	" 	exe a:cmd
+	" 	update
+	" endfor
+
+	for q in getqflist()
+		exe 'buffer' q.bufnr
+		" XXX assurdamente (non conosco lo scripting di Vim) posso saltare
+		" alla riga giusta ma non alla colonna giusta: se tolgo i commenti e
+		" chiamo tipo `:Qfixdo tab sp` il cursore me lo ritrovo all'inizio di
+		" ogni documento e non alla posizione giusta :(
+		exe ':' + q.lnum
+		" exe q.vcol + '|'
+		" exe cursor(q.lnum, q.vcol)
+		exe a:cmd
+	endfor
+endfunction
+" }}}
 
 
-" Abbreviazioni {
+" Abbreviazioni {{{
 abbreviate teh the
 abbreviate subent subnet
 abbreviate directort directory
@@ -514,17 +562,17 @@ iabbrev (c) ©
 iabbrev (r) ®
 iabbrev (tm) ™
 iabbrev (euro) €
-" }
+" }}}
 
 
-" Match e affini {
+" Match e affini {{{
 " Highlight VCS conflict markers
 " src: https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-" }
+" }}}
 
 
-" Mappings, Shortcuts & Bindings {
+" Mappings, Shortcuts & Bindings {{{
 " WARNING: <Leaders> defaults to "\"
 " F2	- toggle highlight
 " F3	- toggle autoindent
@@ -685,17 +733,17 @@ map <Leader>P :TlistToggle<CR>
 " active buffer, set the 'Tlist_Show_One_File' variable to 1.
 let Tlist_Show_One_File = 1
 
-" }
+" }}}
 
 
-" Source local configuration {
+" Source local configuration {{{
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local
 endif
-" }
+" }}}
 
 
-" APPUNTI {
+" APPUNTI {{{
 " ------------------------------------------------------------------------
 " Other functions
 " ------------------------------------------------------------------------
@@ -712,10 +760,10 @@ endif
 " qa2f/ly$:.!host CTRL-r"<c-r>jq
 "
 " HAI CAPITO? CTRL-r INCOLLA NELLA COMMAND LINE! e -> " <- e' l'unnamed register
-" }
+" }}}
 
 
-" python {
+" python {{{
 " DOCUMENTAZIONE: :help if_pyth.txt
 " Aggiunge al path di ricerca di vim (per i comandi gf, :find, etc) il
 " sys.path di python.
@@ -732,10 +780,10 @@ endif
 "" EOF
 "" 
 "" endif
-""" " }
+""" " }}}
 
 
-" perlism {
+" perlism {{{
 " WARNING: vim must be compiled with +perl support!
 "
 " WARNING: never embed complex perl command in the body of a Vim function
@@ -785,51 +833,14 @@ function! SortVars() range
     exec "perl sort_vars " . a:firstline . ", " a:lastline
 endfunction
 
-" QuickFixDo
-" Esegue un comando su tutti i buffer 'quickfix':
-"	- open all files mentioned in the QuickFix list by the following command:
-" :Qfixdo tab sp
-"	- In addition, it is possible to repeat the substitution itself the same
-"	way.
-" :Qfixdo %s/pattern/string/
-" http://stackoverflow.com/questions/1830839/how-to-open-multiple-files-in-vim-after-vimgrep
-command! -nargs=+ Qfixdo call QuickFixDo(<q-args>)
-function! QuickFixDo(cmd)
-	" let bufnam = {}
-	" for q in getqflist()
-	" 	" let bufnam[q.bufnr] = bufname(q.bufnr)
-	" 	" 1) Usa il dict per salvare la RIGA del quickfix; l'implementazione
-	" 	" originale usa un dict senza motivo, io almeno gli do un senso.
-	" 	let bufnam[q.bufnr] = q.lnum
-	" endfor
-	" for n in keys(bufnam)
-	" 	exe 'buffer' n
-	" 	" 2) Salto alla riga del quickfix, altrimenti e' TUTTO INUTILE.
-	" 	exe ':' + bufnam[n]
-	" 	exe a:cmd
-	" 	update
-	" endfor
-
-	for q in getqflist()
-		exe 'buffer' q.bufnr
-		" XXX assurdamente (non conosco lo scripting di Vim) posso saltare
-		" alla riga giusta ma non alla colonna giusta: se tolgo i commenti e
-		" chiamo tipo `:Qfixdo tab sp` il cursore me lo ritrovo all'inizio di
-		" ogni documento e non alla posizione giusta :(
-		exe ':' + q.lnum
-		" exe q.vcol + '|'
-		" exe cursor(q.lnum, q.vcol)
-		exe a:cmd
-	endfor
-endfunction
 
 " in :perldo il comando viene eseguito per ogni riga, mettendo la riga
 " in $_ senza <EOL>
 " perldo $_ = reverse($_);1
-" }
+" }}}
 
 
-" 'secure'
+" 'secure' {{{
 " When on, ":autocmd", shell and write commands are not allowed in
 " ".vimrc" and ".exrc" in the current directory and map commands are
 " displayed.  Switch it off only if you know that you will not run into
@@ -838,3 +849,4 @@ endfunction
 " dangerous if the systems allows users to do a "chown".  You better set
 " 'secure' at the end of your ~/.vimrc then.
 set secure
+" }}}

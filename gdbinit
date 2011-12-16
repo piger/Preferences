@@ -2,15 +2,15 @@
 #
 # DESCRIPTION: A user-friendly gdb configuration file.
 #
-# REVISION : 7.3 (16/04/2010)
+# REVISION : 7.4.3 (04/11/2011)
 #
 # CONTRIBUTORS: mammon_, elaine, pusillus, mong, zhang le, l0kit,
 #               truthix the cyberpunk, fG!, gln
 #
-# FEEDBACK: https://www.reverse-engineering.net
+# FEEDBACK: http://reverse.put.as - reverser@put.as
+#			https://www.reverse-engineering.net
 #           The Linux Area
 #           Topic: "+HCU's .gdbinit Version 7.1 -- humble announce"
-#           http://reverse.put.as
 #
 # NOTES: 'help user' in gdb will list the commands/descriptions in this file
 #        'context on' now enables auto-display of context screen
@@ -20,147 +20,72 @@
 #                 If you load the binary from the command line, like $gdb binary-name, this will not work as it should
 #                 For more information, read it here http://reverse.put.as/2008/11/28/apples-gdb-bug/
 #
-#				  UPDATE: This bug can be fixed in gdb source. Refer to http://reverse.put.as/2009/08/10/fix-for-apples-gdb-bug-or-why-apple-forks-are-bad/
-#						  and http://reverse.put.as/2009/08/26/gdb-patches/ (if you want the fixed binary for i386)
+#  UPDATE: This bug can be fixed in gdb source. Refer to http://reverse.put.as/2009/08/10/fix-for-apples-gdb-bug-or-why-apple-forks-are-bad/
+#          and http://reverse.put.as/2009/08/26/gdb-patches/ (if you want the fixed binary for i386)
 #
-# CHANGELOG:
+#          An updated version of the patch and binary is available at http://reverse.put.as/2011/02/21/update-to-gdb-patches-fix-a-new-bug/
 #
-#	Version 7.3 (16/04/2010)
-#	  Support for 64bits targets. Default is 32bits, you should modify the variable or use the 32bits or 64bits to choose the mode.
-#		I couldn't find another way to recognize the type of binary… Testing the register doesn't work that well.
-#	  TODO: fix objectivec messages and stepo for 64bits
+# CHANGELOG: (older changes at the end of the file)
 #
-#   Version 7.2.1 (24/11/2009)
-#	  Another fix to stepo (0xFF92 missing)
+#	Version 7.4.3 (04/11/2011)
+#	  - Modified "hexdump" command to support a variable number of lines (optional parameter)
+#	  - Removed restrictions on type of addresses in the "dd" command - Thanks to Plouj for the warning :-)
+#	   I don't know what was the original thinking behind those :-)
+#	  - Modified the assemble command to support 64bits - You will need to recompile nasm since the version shipped with OS X doesn't supports 64bits (www.nasm.us).
+#	   Assumes that the new binary is installed at /usr/local/bin - modify the variable at the top if you need so. 
+#	   It will assemble based on the target arch being debugged. If you want to use gdb for a quick asm just use the 32bits or 64bits commands to set your target.
+#      Thanks to snare for the warning and original patch :-)
+#	  - Added "asm" command - it's a shortcut to the "assemble" command.
 #
-#   Version 7.2 (11/10/2009)
-#	  Added the smallregisters function to create 16 and 8 bit versions from the registers EAX, EBX, ECX, EDX
-#	  Revised and fixed all the dumpjump stuff, following Intel manuals. There were some errors (thx to rev who pointed the jle problem).
-#	  Small fix to stepo command (missed a few call types)
+#   Version 7.4.2 (11/08/2011)
+#    Small fix to a weird bug happening on FreeBSD 8.2. It doesn't like a "if(" instruction, needs to be "if (". Weird!
+#     Many thanks to Evan for reporting and sending the patch :-)
+#    Added the ptraceme/rptraceme commands to bypass PTRACE_TRACME anti-debugging technique.
+#     Grabbed this from http://falken.tuxfamily.org/?p=171
+#	  It's commented out due to a gdb problem in OS X (refer to http://reverse.put.as/2011/08/20/another-patch-for-apples-gdb-the-definecommands-problem/ )
+#	  Just uncomment it if you want to use in ptrace enabled systems.
 #
-#   Version 7.1.7
-#     Added the possibility to modify what's displayed with the context window. You can change default options at the gdb options part. For example, kernel debugging is much slower if the stack display is enabled...
-#     New commands enableobjectivec, enablecpuregisters, enablestack, enabledatawin and their disable equivalents (to support realtime change of default options)
-#     Fixed problem with the assemble command. I was calling /bin/echo which doesn't support the -e option ! DUH ! Should have used bash internal version.
-#     Small fixes to colours...
-#     New commands enablesolib and disablesolib . Just shortcuts for the stop-on-solib-events fantastic trick ! Hey... I'm lazy ;)
-#     Fixed this: Possible removal of "u" command, info udot is missing in gdb 6.8-debian . Doesn't exist on OS X so bye bye !!!
-#     Displays affected flags in jump decisions
+#   Version 7.4.1 (21/06/2011) - fG!
+#    Added patch sent by sbz, more than 1 year ago, which I forgot to add :-/
+#     This will allow to search for a given pattern between start and end address.
+#     On sbz words: "It's usefull to find call, ret or everything like that." :-)
+#    New command is "search"
 #
-#   Version 7.1.6
-#     Added modified assemble command from Tavis Ormandy (further modified to work with Mac OS X) (shell commands used use full path name, working for Leopard, modify for others if necessary)
-#     Renamed thread command to threads because thread is an internal gdb command that allows to move between program threads
-#
-#   Version 7.1.5 (04/01/2009)
-#     Fixed crash on Leopard ! There was a If Else condition where the else had no code and that made gdb crash on Leopard (CRAZY!!!!)
-#     Better code indention
-#
-#   Version 7.1.4 (02/01/2009)
-#     Bug in show objective c messages with Leopard ???
-#     Nop routine support for single address or range (contribution from gln [ghalen at hack.se])
-#     Used the same code from nop to null routine
-#
-#   Version 7.1.3 (31/12/2008)
-#     Added a new command 'stepo'. This command will step a temporary breakpoint on next instruction after the call, so you can skip over
-#     the call. Did this because normal commands not always skip over (mainly with objc_msgSend)
-#
-#   Version 7.1.2 (31/12/2008)
-#     Support for the jump decision (will display if a conditional jump will be taken or not)
-#
-#   Version 7.1.1 (29/12/2008)
-#     Moved gdb options to the beginning (makes more sense)
-#     Added support to dump message being sent to msgSend (easier to understand what's going on)
-#
-#   Version 7.1
-#     Fixed serious (and old) bug in dd and datawin, causing dereference of
-#     obviously invalid address. See below:
-#     gdb$ dd 0xffffffff
-#     FFFFFFFF : Cannot access memory at address 0xffffffff
-#
-#   Version 7.0
-#     Added cls command.
-#     Improved documentation of many commands.
-#     Removed bp_alloc, was neither portable nor usefull.
-#     Checking of passed argument(s) in these commands:
-#       contextsize-stack, contextsize-data, contextsize-code
-#       bp, bpc, bpe, bpd, bpt, bpm, bhb,...
-#     Fixed bp and bhb inconsistencies, look at * signs in Version 6.2
-#     Bugfix in bhb command, changed "break" to "hb" command body
-#     Removed $SHOW_CONTEXT=1 from several commands, this variable
-#     should only be controlled globally with context-on and context-off
-#     Improved stack, func, var and sig, dis, n, go,...
-#     they take optional argument(s) now
-#     Fixed wrong $SHOW_CONTEXT assignment in context-off
-#     Fixed serious bug in cft command, forgotten ~ sign
-#     Fixed these bugs in step_to_call:
-#       1) the correct logging sequence is:
-#          set logging file > set logging redirect > set logging on
-#       2) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
-#     Fixed these bugs in trace_calls:
-#       1) the correct logging sequence is:
-#          set logging file > set logging overwrite >
-#          set logging redirect > set logging on
-#       2) removed the "clean up trace file" part, which is not needed now,
-#          stepi output is properly redirected to /dev/null
-#       3) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
-#     Fixed bug in trace_run:
-#       1) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
-#     Fixed print_insn_type -- removed invalid semicolons!, wrong value checking,
-#     Added TODO entry regarding the "u" command
-#     Changed name from gas_assemble to assemble_gas due to consistency
-#     Output from assemble and assemble_gas is now similar, because i made
-#     both of them to use objdump, with respect to output format (AT&T|Intel).
-#     Whole code was checked and made more consistent, readable/maintainable.
-#
-#   Version 6.2
-#     Add global variables to allow user to control stack, data and code window sizes
-#     Increase readability for registers
-#     Some corrections (hexdump, ddump, context, cfp, assemble, gas_asm, tips, prompt)
-#   
-#   Version 6.1-color-user
-#     Took the Gentoo route and ran sed s/user/user/g
-#
-#   Version 6.1-color
-#     Added color fixes from
-#       http://gnurbs.blogsome.com/2006/12/22/colorizing-mamons-gdbinit/
-#
-#   Version 6.1
-#     Fixed filename in step_to_call so it points to /dev/null
-#     Changed location of logfiles from /tmp  to ~
-#
-#   Version 6
-#     Added print_insn_type, get_insn_type, context-on, context-off commands
-#     Added trace_calls, trace_run, step_to_call commands
-#     Changed hook-stop so it checks $SHOW_CONTEXT variable
-#
-#   Version 5
-#     Added bpm, dump_bin, dump_hex, bp_alloc commands
-#     Added 'assemble' by elaine, 'gas_asm' by mong
-#     Added Tip Topics for aspiring users ;)
-#
-#   Version 4
-#     Added eflags-changing insns by pusillus
-#     Added bp, nop, null, and int3 patch commands, also hook-stop
-#
-#   Version 3
-#     Incorporated elaine's if/else goodness into the hex/ascii dump
-#
-#   Version 2
-#     Radix bugfix by elaine
+#   Version 7.4 (20/06/2011) - fG!
+#    When registers change between instructions the colour will change to red (like it happens in OllyDBG)
+#     This is the default behavior, if you don't like it, modify the variable SHOWREGCHANGES
+#    Added patch sent by Philippe Langlois
+#     Colour the first disassembly line - change the setting below on SETCOLOUR1STLINE - by default it's disabled
 #
 #   TODO:
-#     Add dump, append, set write, etc commands
-#     Add more tips !
-
+#
 
 # __________________gdb options_________________
 
-# set to 1 to enable 64bits target by default (32bit is the default)
+# set to 1 to enable 64bits target by default (32bits is the default)
 set $64BITS = 0
+# set to 0 if you have problems with the colorized prompt - reported by Plouj with Ubuntu gdb 7.2
+set $COLOUREDPROMPT = 1
+# Colour the first line of the disassembly - default is green, if you want to change it search for
+# SETCOLOUR1STLINE and modify it :-)
+set $SETCOLOUR1STLINE = 0
+# set to 0 to remove display of objectivec messages (default is 1)
+set $SHOWOBJECTIVEC = 1
+# set to 0 to remove display of cpu registers (default is 1)
+set $SHOWCPUREGISTERS = 1
+# set to 1 to enable display of stack (default is 0)
+set $SHOWSTACK = 0
+# set to 1 to enable display of data window (default is 0)
+set $SHOWDATAWIN = 0
+# set to 0 to disable coloured display of changed registers
+set $SHOWREGCHANGES = 1
 
 set confirm off
 set verbose off
-set prompt \033[31mgdb$ \033[0m
+
+if $COLOUREDPROMPT == 1
+	set prompt \033[31mgdb$ \033[0m
+end
 
 set output-radix 0x10
 set input-radix 0x10
@@ -169,7 +94,7 @@ set input-radix 0x10
 set height 0
 set width 0
 
-# Display instructions in Intel format
+# Display instructions in Intel format - change to "att" if you prefer AT&T format
 set disassembly-flavor intel
 
 set $SHOW_CONTEXT = 1
@@ -179,17 +104,37 @@ set $CONTEXTSIZE_STACK = 6
 set $CONTEXTSIZE_DATA  = 8
 set $CONTEXTSIZE_CODE  = 8
 
-# set to 0 to remove display of objectivec messages (default is 1)
-set $SHOWOBJECTIVEC = 1
-# set to 0 to remove display of cpu registers (default is 1)
-set $SHOWCPUREGISTERS = 1
-# set to 1 to enable display of stack (default is 0)
-set $SHOWSTACK = 0
-# set to 1 to enable display of data window (default is 0)
-set $SHOWDATAWIN = 0
-
-
 # __________________end gdb options_________________
+
+# Initialize these variables else comparisons will fail for colouring
+# we must initialize all of them at once, 32 and 64 bits.
+set $oldrax = 0
+set $oldrbx = 0
+set $oldrcx = 0
+set $oldrdx = 0
+set $oldrsi = 0
+set $oldrdi = 0
+set $oldrbp = 0
+set $oldrsp = 0
+set $oldr8  = 0
+set $oldr9  = 0
+set $oldr10 = 0
+set $oldr11 = 0
+set $oldr12 = 0
+set $oldr13 = 0
+set $oldr14 = 0
+set $oldr15 = 0
+set $oldeax = 0
+set $oldebx = 0
+set $oldecx = 0
+set $oldedx = 0
+set $oldesi = 0
+set $oldedi = 0
+set $oldebp = 0
+set $oldesp = 0
+
+# used by ptraceme/rptraceme
+set $ptrace_bpnum = 0
 
 # ______________window size control___________
 define contextsize-stack
@@ -309,11 +254,10 @@ define bpt
 end
 document bpt
 Set a temporary breakpoint.
-Will be deleted when hit!
+This breakpoint will be automatically deleted when hit!
 Usage: bpt LOCATION
 LOCATION may be a line number, function name, or "*" and an address.
 end
-
 
 define bpm
     if $argc != 1
@@ -326,7 +270,6 @@ document bpm
 Set a read/write breakpoint on EXPRESSION, e.g. *address.
 Usage: bpm EXPRESSION
 end
-
 
 define bhb
     if $argc != 1
@@ -341,7 +284,19 @@ Usage: bhb LOCATION
 LOCATION may be a line number, function name, or "*" and an address.
 end
 
-
+define bht
+    if $argc != 1
+        help bht
+    else
+        thbreak $arg0
+    end
+end
+document bht
+Set a temporary hardware breakpoint.
+This breakpoint will be automatically deleted when hit!
+Usage: bht LOCATION
+LOCATION may be a line number, function name, or "*" and an address.
+end
 
 
 # ______________process information____________
@@ -471,79 +426,207 @@ define reg
  if ($64BITS == 1)
 # 64bits stuff
     printf "  "
-    echo \033[32m
-    printf "RAX:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rax
-    echo \033[32m
-    printf "RBX:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rbx
-    echo \033[32m
-    printf "RCX:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rcx
-    echo \033[32m
-    printf "RDX:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rdx
-    echo \033[1m\033[4m\033[31m
+    # RAX
+    if ($rax != $oldrax && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "RAX:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rax
+	else
+	    echo \033[32m
+	    printf "RAX:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rax
+	end
+	# RBX
+	if ($rbx != $oldrbx && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "RBX:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rbx
+	else
+		echo \033[32m
+	    printf "RBX:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rbx
+    end
+    # RCX
+    if ($rcx != $oldrcx && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "RCX:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rcx
+	else
+	    echo \033[32m
+	    printf "RCX:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rcx
+	end
+	# RDX
+    if ($rdx != $oldrdx && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "RDX:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rdx
+	else
+	    echo \033[32m
+	    printf "RDX:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rdx
+	end
+	echo \033[1m\033[4m\033[31m
     flags
     echo \033[0m
     printf "  "
-    echo \033[32m
-    printf "RSI:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rsi
-    echo \033[32m
-    printf "RDI:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rdi
-    echo \033[32m
-    printf "RBP:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rbp
-    echo \033[32m
-    printf "RSP:"
-    echo \033[0m
-    printf " 0x%016lX  ", $rsp
+    # RSI
+    if ($rsi != $oldrsi && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "RSI:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rsi
+	else
+	    echo \033[32m
+	    printf "RSI:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rsi
+	end
+	# RDI
+	if ($rdi != $oldrdi && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "RDI:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rdi
+	else
+	    echo \033[32m
+    	printf "RDI:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rdi	
+	end
+	# RBP
+	if ($rbp != $oldrbp && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "RBP:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rbp
+	else
+	    echo \033[32m
+    	printf "RBP:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rbp
+	end
+	# RSP
+	if ($rsp != $oldrsp && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "RSP:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $rsp
+	else
+	    echo \033[32m
+    	printf "RSP:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $rsp	
+    end
     echo \033[32m
     printf "RIP:"
     echo \033[0m
     printf " 0x%016lX\n  ", $rip
-    echo \033[32m
-    printf "R8 :"
-    echo \033[0m
-    printf " 0x%016lX  ", $r8
-    echo \033[32m
-    printf "R9 :"
-    echo \033[0m
-    printf " 0x%016lX  ", $r9
-    echo \033[32m
-    printf "R10:"
-    echo \033[0m
-    printf " 0x%016lX  ", $r10
-    echo \033[32m
-    printf "R11:"
-    echo \033[0m
-    printf " 0x%016lX  ", $r11
-    echo \033[32m
-    printf "R12:"
-    echo \033[0m
-    printf " 0x%016lX\n  ", $r12
-    echo \033[32m
-    printf "R13:"
-    echo \033[0m
-    printf " 0x%016lX  ", $r13
-    echo \033[32m
-    printf "R14:"
-    echo \033[0m
-    printf " 0x%016lX  ", $r14
-    echo \033[32m
-    printf "R15:"
-    echo \033[0m
-    printf " 0x%016lX\n  ", $r15
-    echo \033[32m
+    # R8
+	if ($r8 != $oldr8 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "R8 :"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r8
+	else
+	    echo \033[32m
+    	printf "R8 :"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r8
+    end
+    # R9
+    if ($r9 != $oldr9 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "R9 :"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r9
+	else
+	    echo \033[32m
+    	printf "R9 :"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r9
+    end
+    # R10
+    if ($r10 != $oldr10 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "R10:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r10
+	else
+	    echo \033[32m
+    	printf "R10:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r10
+    end
+    # R11
+	if ($r11 != $oldr11 && $SHOWREGCHANGES == 1)
+    	echo \033[32m
+	    printf "R11:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r11
+	else
+    	echo \033[32m
+	    printf "R11:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r11
+    end
+    # R12
+    if ($r12 != $oldr12 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+   		printf "R12:"
+	    echo \033[31m
+	    printf " 0x%016lX\n  ", $r12
+	else
+	    echo \033[32m
+   		printf "R12:"
+	    echo \033[0m
+	    printf " 0x%016lX\n  ", $r12
+    end
+    # R13
+    if ($r13 != $oldr13 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "R13:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r13
+	else
+	    echo \033[32m
+    	printf "R13:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r13
+    end
+    # R14
+    if ($r14 != $oldr14 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "R14:"
+	    echo \033[31m
+	    printf " 0x%016lX  ", $r14
+	else
+	    echo \033[32m
+	    printf "R14:"
+	    echo \033[0m
+	    printf " 0x%016lX  ", $r14
+    end
+    # R15
+    if ($r15 != $oldr15 && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "R15:"
+	    echo \033[31m
+	    printf " 0x%016lX\n  ", $r15
+	else
+	    echo \033[32m
+    	printf "R15:"
+	    echo \033[0m
+	    printf " 0x%016lX\n  ", $r15
+    end
+  	echo \033[32m
     printf "CS:"
     echo \033[0m
     printf " %04X  ", $cs
@@ -571,42 +654,106 @@ define reg
 # 32bits stuff
  else
     printf "  "
-    echo \033[32m
-    printf "EAX:"
-    echo \033[0m
-    printf " 0x%08X  ", $eax
-    echo \033[32m
-    printf "EBX:"
-    echo \033[0m
-    printf " 0x%08X  ", $ebx
-    echo \033[32m
-    printf "ECX:"
-    echo \033[0m
-    printf " 0x%08X  ", $ecx
-    echo \033[32m
-    printf "EDX:"
-    echo \033[0m
-    printf " 0x%08X  ", $edx
+    # EAX
+    if ($eax != $oldeax && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+   		printf "EAX:"
+   	 	echo \033[31m
+   	 	printf " 0x%08X  ", $eax
+   	else
+	    echo \033[32m
+   		printf "EAX:"
+   	 	echo \033[0m
+   	 	printf " 0x%08X  ", $eax
+   	end
+   	# EBX
+   	if ($ebx != $oldebx && $SHOWREGCHANGES == 1) 
+	    echo \033[32m
+    	printf "EBX:"
+	    echo \033[31m
+   		printf " 0x%08X  ", $ebx
+   	else
+	    echo \033[32m
+    	printf "EBX:"
+	    echo \033[0m
+   		printf " 0x%08X  ", $ebx   	
+   	end
+   	# ECX
+   	if ($ecx != $oldecx && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "ECX:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $ecx
+	else
+	    echo \033[32m
+    	printf "ECX:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $ecx
+	end
+	# EDX
+	if ($edx != $oldedx && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "EDX:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $edx
+	else
+	    echo \033[32m
+    	printf "EDX:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $edx
+	end
     echo \033[1m\033[4m\033[31m
     flags
     echo \033[0m
     printf "  "
-    echo \033[32m
-    printf "ESI:"
-    echo \033[0m
-    printf " 0x%08X  ", $esi
-    echo \033[32m
-    printf "EDI:"
-    echo \033[0m
-    printf " 0x%08X  ", $edi
-    echo \033[32m
-    printf "EBP:"
-    echo \033[0m
-    printf " 0x%08X  ", $ebp
-    echo \033[32m
-    printf "ESP:"
-    echo \033[0m
-    printf " 0x%08X  ", $esp
+    # ESI
+    if ($esi != $oldesi && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "ESI:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $esi
+	else
+	    echo \033[32m
+    	printf "ESI:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $esi
+	end
+	# EDI
+	if ($edi != $oldedi && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "EDI:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $edi
+	else
+	    echo \033[32m
+    	printf "EDI:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $edi
+	end
+	# EBP
+	if ($ebp != $oldebp && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+	    printf "EBP:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $ebp
+	else
+	    echo \033[32m
+	    printf "EBP:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $ebp
+	end
+	# ESP
+	if ($esp != $oldesp && $SHOWREGCHANGES == 1)
+	    echo \033[32m
+    	printf "ESP:"
+	    echo \033[31m
+	    printf " 0x%08X  ", $esp
+	else
+	    echo \033[32m
+    	printf "ESP:"
+	    echo \033[0m
+	    printf " 0x%08X  ", $esp
+    end
     echo \033[32m
     printf "EIP:"
     echo \033[0m
@@ -645,6 +792,36 @@ define reg
 	end
     dumpjump
     printf "\n"
+    if ($SHOWREGCHANGES == 1)
+    	if ($64BITS == 1)
+	    	set $oldrax = $rax
+			set $oldrbx = $rbx
+			set $oldrcx = $rcx
+			set $oldrdx = $rdx
+			set $oldrsi = $rsi
+			set $oldrdi = $rdi
+			set $oldrbp = $rbp
+			set $oldrsp = $rsp
+			set $oldr8 = $r8
+			set $oldr9 = $r9
+			set $oldr10 = $r10
+			set $oldr11 = $r11
+			set $oldr12 = $r12
+			set $oldr13 = $r13
+			set $oldr14 = $r14
+			set $oldr15 = $r15
+		else
+	    	set $oldeax = $eax
+			set $oldebx = $ebx
+			set $oldecx = $ecx
+			set $oldedx = $edx
+			set $oldesi = $esi
+			set $oldedi = $edi
+			set $oldebp = $ebp
+			set $oldesp = $esp
+		end
+	end
+
 end
 document reg
 Print CPU registers.
@@ -793,8 +970,9 @@ end
 document dis
 Disassemble a specified section of memory.
 Default is to disassemble the function surrounding the PC (program counter)
-of selected frame. With one argument, ADDR1, the function surrounding this
-address is dumped. Two arguments are taken as a range of memory to dump.
+of selected frame. 
+With one argument, ADDR1, the function surrounding this address is dumped.
+Two arguments are taken as a range of memory to dump.
 Usage: dis <ADDR1> <ADDR2>
 end
 
@@ -839,8 +1017,30 @@ Usage: hex_quad ADDR
 end
 
 define hexdump
+    if $argc == 1
+        hexdump_aux $arg0
+	else
+		if $argc == 2
+			set $_count = 0
+			while ($_count < $arg1)
+				set $_i = ($_count * 0x10)
+				hexdump_aux $data_addr+$_i
+				set $_count++
+			end
+		else
+			help hexdump
+		end
+    end
+end
+document hexdump
+Display a 16-byte hex/ASCII dump of memory starting at address ADDR.
+Optional parameter is the number of lines to display if you want more than one. 
+Usage: hexdump ADDR [nr lines]
+end
+
+define hexdump_aux
     if $argc != 1
-        help hexdump
+        help hexdump_aux
     else
         echo \033[1m
         if ($64BITS == 1)
@@ -876,9 +1076,9 @@ define hexdump
         printf "\n"
     end
 end
-document hexdump
+document hexdump_aux
 Display a 16-byte hex/ASCII dump of memory at address ADDR.
-Usage: hexdump ADDR
+Usage: hexdump_aux ADDR
 end
 
 
@@ -921,12 +1121,8 @@ define dd
     if $argc != 1
         help dd
     else
-        if ((($arg0 >> 0x18) == 0x40) || (($arg0 >> 0x18) == 0x08) || (($arg0 >> 0x18) == 0xBF))
             set $data_addr = $arg0
             ddump 0x10
-        else
-            printf "Invalid address: %08X\n", $arg0
-        end
     end
 end
 document dd
@@ -1334,8 +1530,14 @@ define context
     printf "[code]\n"
     echo \033[0m
     set $context_i = $CONTEXTSIZE_CODE
-    if($context_i > 0)
-        x /i $pc
+    if ($context_i > 0)
+    	if ($SETCOLOUR1STLINE == 1)	
+	    	echo \033[32m
+    	    x /i $pc
+	        echo \033[0m
+	    else
+	    	x /i $pc
+	    end
         set $context_i--
     end
     while ($context_i > 0)
@@ -1468,7 +1670,7 @@ end
 #### WARNING ! WARNING !!
 #### More more messy stuff starting !!!
 #### I was thinking about how to do this and then it ocurred me that it could be as simple as this ! :)
-define stepo
+define stepoframework
 ## we know that an opcode starting by 0xE8 has a fixed length
 ## for the 0xFF opcodes, we can enumerate what is possible to have
 # first we grab the first 3 bytes from the current program counter
@@ -1486,8 +1688,8 @@ define stepo
    # just other cases we might be interested in... maybe this should be removed since the 0xE8 opcode is the one we will use more
    # this is a big fucking mess and can be improved for sure :) I don't like the way it is ehehehe
    if ($_byte1 == 0xFF)
-    # call *%eax (0xFFD0) || call *%edx (0xFFD2) || call *(%ecx) (0xFFD1) || call (%eax) (0xFF10) || call *%esi (0xFFD6) || call *%ebx (0xFFD3)
-    if ($_byte2 == 0xD0 || $_byte2 == 0xD1 || $_byte2 == 0xD2 || $_byte2 == 0xD3 || $_byte2 == 0xD6 || $_byte2 == 0x10 )
+    # call *%eax (0xFFD0) || call *%edx (0xFFD2) || call *(%ecx) (0xFFD1) || call (%eax) (0xFF10) || call *%esi (0xFFD6) || call *%ebx (0xFFD3) || call   DWORD PTR [edx] (0xFF12)
+    if ($_byte2 == 0xD0 || $_byte2 == 0xD1 || $_byte2 == 0xD2 || $_byte2 == 0xD3 || $_byte2 == 0xD6 || $_byte2 == 0x10 || $_byte2 == 0x11 || $_byte2 == 0xD7 || $_byte2 == 0x12)
      set $_nextaddress = $pc + 0x2
     end
     # call *0x??(%ebp) (0xFF55??) || call *0x??(%esi) (0xFF56??) || call *0x??(%edi) (0xFF5F??) || call *0x??(%ebx)
@@ -1507,7 +1709,11 @@ define stepo
  end
 # if we have found a call to bypass we set a temporary breakpoint on next instruction and continue 
  if ($_nextaddress != 0)
-  tbreak *$_nextaddress
+  if ($arg0 == 1)
+   thbreak *$_nextaddress
+  else
+   tbreak *$_nextaddress
+  end
   continue
 # else we just single step
  else
@@ -1515,13 +1721,22 @@ define stepo
  end
 # end of stepo function
 end
+
+define stepo
+ stepoframework 0
+end
 document stepo
 Step over calls (interesting to bypass the ones to msgSend)
 This function will set a temporary breakpoint on next instruction after the call so the call will be bypassed
 You can safely use it instead nexti or n since it will single step code if it's not a call instruction (unless you want to go into the call function)
 end
 
-
+define stepoh
+ stepoframework 1 
+end
+document stepoh
+Same as stepo command but uses temporary hardware breakpoints
+end
 
 # _______________eflags commands______________
 define cfc
@@ -1654,7 +1869,6 @@ end
 document nop
 Usage: nop ADDR1 [ADDR2]
 Patch a single byte at address ADDR1, or a series of bytes between ADDR1 and ADDR2 to a NOP (0x90) instruction.
-
 end
 
 
@@ -1679,11 +1893,15 @@ Patch a single byte at address ADDR1 to NULL (0x00), or a series of bytes betwee
 
 end
 
-
 define int3
     if $argc != 1
         help int3
     else
+# save original bytes and address
+        set $ORIGINAL_INT3BYTE = *(unsigned char *)$arg0
+# patch
+        set $ORIGINAL_INT3ADDRESS = $arg0
+
         set *(unsigned char *)$arg0 = 0xCC
     end
 end
@@ -1692,6 +1910,13 @@ Patch byte at address ADDR to an INT3 (0xCC) instruction.
 Usage: int3 ADDR
 end
 
+define rint3
+	set *(unsigned char *)$ORIGINAL_INT3ADDRESS = $ORIGINAL_INT3BYTE
+	set $eip = $ORIGINAL_INT3ADDRESS
+end
+document rint3
+Restore the original byte previous to 0xCC patch issued with "int3" command
+end
 
 
 
@@ -1942,7 +2167,36 @@ Create a runtime trace of target.
 Log overwrites(!) the file ~/gdb_trace_run.txt.
 end
 
+#define ptraceme
+#    catch syscall ptrace
+#    commands
+#        if ($64BITS == 0)
+#            if ($ebx == 0)
+#	        set $eax = 0
+#                continue
+#            end
+#        else
+#            if ($rdi == 0)
+#                set $rax = 0
+#                continue
+#            end
+#        end
+#    end
+#    set $ptrace_bpnum = $bpnum
+#end
+#document ptraceme
+#Hook ptrace to bypass PTRACE_TRACEME anti debugging technique
+#end
 
+define rptraceme
+    if ($ptrace_bpnum != 0)
+        delete $ptrace_bpnum
+        set $ptrace_bpnum = 0
+    end
+end
+document rptraceme
+Remove ptrace hook
+end
 
 
 # ____________________misc____________________
@@ -1986,16 +2240,34 @@ define assemble
  echo \033[0m
  printf "End with a line saying just \"end\".\n"
  if ($argc)
-  # argument specified, assemble instructions into memory at address specified.
-  shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; FILENAME=$RANDOM; \
-   echo -e "BITS 32\n$ASMOPCODE" >/tmp/$FILENAME ; /usr/bin/nasm -f bin -o /dev/stdout /tmp/$FILENAME | /usr/bin/hexdump -ve '1/1 "set *((unsigned char *) $arg0 + %#2_ax) = %#02x\n"' >/tmp/gdbassemble ; /bin/rm -f /tmp/$FILENAME
-  source /tmp/gdbassemble
-  # all done. clean the temporary file
-  shell /bin/rm -f /tmp/gdbassemble
+	if ($64BITS == 1)
+		# argument specified, assemble instructions into memory at address specified.
+		shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; GDBASMFILENAME=$RANDOM; \
+		echo -e "BITS 64\n$ASMOPCODE" >/tmp/$GDBASMFILENAME ; /usr/local/bin/nasm -f bin -o /dev/stdout /tmp/$GDBASMFILENAME | /usr/bin/hexdump -ve '1/1 "set *((unsigned char *) $arg0 + %#2_ax) = %#02x\n"' >/tmp/gdbassemble ; /bin/rm -f /tmp/$GDBASMFILENAME
+		source /tmp/gdbassemble
+		# all done. clean the temporary file
+		shell /bin/rm -f /tmp/gdbassemble
+	else
+		# argument specified, assemble instructions into memory at address specified.
+		shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; GDBASMFILENAME=$RANDOM; \
+		echo -e "BITS 32\n$ASMOPCODE" >/tmp/$GDBASMFILENAME ; /usr/bin/nasm -f bin -o /dev/stdout /tmp/$GDBASMFILENAME | /usr/bin/hexdump -ve '1/1 "set *((unsigned char *) $arg0 + %#2_ax) = %#02x\n"' >/tmp/gdbassemble ; /bin/rm -f /tmp/$GDBASMFILENAME
+		source /tmp/gdbassemble
+		# all done. clean the temporary file
+		shell /bin/rm -f /tmp/gdbassemble
+	end
  else
-  # no argument, assemble instructions to stdout
-  shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; FILENAME=$RANDOM; \
-   echo -e "BITS 32\n$ASMOPCODE" >/tmp/$FILENAME ; /usr/bin/nasm -f bin -o /dev/stdout /tmp/$FILENAME | /usr/bin/ndisasm -i -b32 /dev/stdin ; /bin/rm -f /tmp/$FILENAME
+	if ($64BITS == 1)
+		# no argument, assemble instructions to stdout
+		shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; GDBASMFILENAME=$RANDOM; \
+		echo -e "BITS 64\n$ASMOPCODE" >/tmp/$GDBASMFILENAME ; /usr/local/bin/nasm -f bin -o /dev/stdout /tmp/$GDBASMFILENAME | /usr/local/bin/ndisasm -i -b64 /dev/stdin ; \
+		/bin/rm -f /tmp/$GDBASMFILENAME
+
+	else
+		# no argument, assemble instructions to stdout
+		shell ASMOPCODE="$(while read -ep '>' r && test "$r" != end ; do echo -E "$r"; done)" ; GDBASMFILENAME=$RANDOM; \
+		echo -e "BITS 32\n$ASMOPCODE" >/tmp/$GDBASMFILENAME ; /usr/bin/nasm -f bin -o /dev/stdout /tmp/$GDBASMFILENAME | /usr/bin/ndisasm -i -b32 /dev/stdin ; \
+		/bin/rm -f /tmp/$GDBASMFILENAME
+	end
  end
 end
 document assemble
@@ -2004,6 +2276,17 @@ Type a line containing "end" to indicate the end.
 If an address is specified, insert/modify instructions at that address.
 If no address is specified, assembled instructions are printed to stdout.
 Use the pseudo instruction "org ADDR" to set the base address.
+end
+
+define asm
+	if $argc == 1
+		assemble $arg0
+	else
+		assemble
+	end
+end
+document asm
+Shortcut to the asssemble command
 end
 
 define assemble_gas
@@ -2051,6 +2334,23 @@ define cls
 end
 document cls
 Clear screen.
+end
+
+define search
+ set $start = (char *) $arg0
+ set $end = (char *) $arg1
+ set $pattern = (short) $arg2
+ set $p = $start
+ while $p < $end
+   if (*(short *) $p) == $pattern
+     printf "pattern 0x%hx found at 0x%x\n", $pattern, $p
+   end
+   set $p++
+ end
+end
+document search
+Search for the given pattern beetween $start and $end address
+Usage: search <start> <end> <pattern>
 end
 
 # _________________user tips_________________
@@ -2159,6 +2459,7 @@ end
 # enable and disable shortcuts for stop-on-solib-events fantastic trick!
 define enablesolib
 	set stop-on-solib-events 1
+	printf "Stop-on-solib-events is enabled!\n"
 end
 document enablesolib
 Shortcut to enable stop-on-solib-events trick!
@@ -2166,6 +2467,7 @@ end
 
 define disablesolib
 	set stop-on-solib-events 0
+	printf "Stop-on-solib-events is disabled!\n"
 end
 document disablesolib
 Shortcut to disable stop-on-solib-events trick!
@@ -2243,5 +2545,150 @@ document 64bits
 Set gdb to work with 64bits binaries
 end
 
+define enablelib
+	set stop-on-solib-events 1
+end
+document enablelib
+Activate stop-on-solib-events
+end
+
+define disablelib
+	set stop-on-solib-events 0
+end
+document disablelib
+Deactivate stop-on-solib-events
+end
+
 #EOF
 
+# Older change logs:
+#
+#	Version 7.3.2 (21/02/2011) - fG!
+#	  Added the command rint3 and modified the int3 command. The new command will restore the byte in previous int3 patch.
+#
+# 	Version 7.3.1 (29/06/2010) - fG!
+#	  Added enablelib/disablelib command to quickly set the stop-on-solib-events trick
+#	  Implemented the stepoh command equivalent to the stepo but using hardware breakpoints 
+#	  More fixes to stepo
+#
+#	Version 7.3 (16/04/2010) - fG!
+#	  Support for 64bits targets. Default is 32bits, you should modify the variable or use the 32bits or 64bits to choose the mode.
+#     	  I couldn't find another way to recognize the type of binary… Testing the register doesn't work that well.
+#	  TODO: fix objectivec messages and stepo for 64bits
+#   Version 7.2.1 (24/11/2009) - fG!
+#	  Another fix to stepo (0xFF92 missing)
+#
+#   Version 7.2 (11/10/2009) - fG!
+#	  Added the smallregisters function to create 16 and 8 bit versions from the registers EAX, EBX, ECX, EDX
+#	  Revised and fixed all the dumpjump stuff, following Intel manuals. There were some errors (thx to rev who pointed the jle problem).
+#	  Small fix to stepo command (missed a few call types)
+#
+#   Version 7.1.7 - fG!
+#     Added the possibility to modify what's displayed with the context window. You can change default options at the gdb options part. For example, kernel debugging is much slower if the stack display is enabled...
+#     New commands enableobjectivec, enablecpuregisters, enablestack, enabledatawin and their disable equivalents (to support realtime change of default options)
+#     Fixed problem with the assemble command. I was calling /bin/echo which doesn't support the -e option ! DUH ! Should have used bash internal version.
+#     Small fixes to colours...
+#     New commands enablesolib and disablesolib . Just shortcuts for the stop-on-solib-events fantastic trick ! Hey... I'm lazy ;)
+#     Fixed this: Possible removal of "u" command, info udot is missing in gdb 6.8-debian . Doesn't exist on OS X so bye bye !!!
+#     Displays affected flags in jump decisions
+#
+#   Version 7.1.6 - fG!
+#     Added modified assemble command from Tavis Ormandy (further modified to work with Mac OS X) (shell commands used use full path name, working for Leopard, modify for others if necessary)
+#     Renamed thread command to threads because thread is an internal gdb command that allows to move between program threads
+#
+#   Version 7.1.5 (04/01/2009) - fG!
+#     Fixed crash on Leopard ! There was a If Else condition where the else had no code and that made gdb crash on Leopard (CRAZY!!!!)
+#     Better code indention
+#
+#   Version 7.1.4 (02/01/2009) - fG!
+#     Bug in show objective c messages with Leopard ???
+#     Nop routine support for single address or range (contribution from gln [ghalen at hack.se])
+#     Used the same code from nop to null routine
+#
+#   Version 7.1.3 (31/12/2008) - fG!
+#     Added a new command 'stepo'. This command will step a temporary breakpoint on next instruction after the call, so you can skip over
+#     the call. Did this because normal commands not always skip over (mainly with objc_msgSend)
+#
+#   Version 7.1.2 (31/12/2008) - fG!
+#     Support for the jump decision (will display if a conditional jump will be taken or not)
+#
+#   Version 7.1.1 (29/12/2008) - fG!
+#     Moved gdb options to the beginning (makes more sense)
+#     Added support to dump message being sent to msgSend (easier to understand what's going on)
+#
+#   Version 7.1
+#     Fixed serious (and old) bug in dd and datawin, causing dereference of
+#     obviously invalid address. See below:
+#     gdb$ dd 0xffffffff
+#     FFFFFFFF : Cannot access memory at address 0xffffffff
+#
+#   Version 7.0
+#     Added cls command.
+#     Improved documentation of many commands.
+#     Removed bp_alloc, was neither portable nor usefull.
+#     Checking of passed argument(s) in these commands:
+#       contextsize-stack, contextsize-data, contextsize-code
+#       bp, bpc, bpe, bpd, bpt, bpm, bhb,...
+#     Fixed bp and bhb inconsistencies, look at * signs in Version 6.2
+#     Bugfix in bhb command, changed "break" to "hb" command body
+#     Removed $SHOW_CONTEXT=1 from several commands, this variable
+#     should only be controlled globally with context-on and context-off
+#     Improved stack, func, var and sig, dis, n, go,...
+#     they take optional argument(s) now
+#     Fixed wrong $SHOW_CONTEXT assignment in context-off
+#     Fixed serious bug in cft command, forgotten ~ sign
+#     Fixed these bugs in step_to_call:
+#       1) the correct logging sequence is:
+#          set logging file > set logging redirect > set logging on
+#       2) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
+#     Fixed these bugs in trace_calls:
+#       1) the correct logging sequence is:
+#          set logging file > set logging overwrite >
+#          set logging redirect > set logging on
+#       2) removed the "clean up trace file" part, which is not needed now,
+#          stepi output is properly redirected to /dev/null
+#       3) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
+#     Fixed bug in trace_run:
+#       1) $SHOW_CONTEXT is now correctly restored from $_saved_ctx
+#     Fixed print_insn_type -- removed invalid semicolons!, wrong value checking,
+#     Added TODO entry regarding the "u" command
+#     Changed name from gas_assemble to assemble_gas due to consistency
+#     Output from assemble and assemble_gas is now similar, because i made
+#     both of them to use objdump, with respect to output format (AT&T|Intel).
+#     Whole code was checked and made more consistent, readable/maintainable.
+#
+#   Version 6.2
+#     Add global variables to allow user to control stack, data and code window sizes
+#     Increase readability for registers
+#     Some corrections (hexdump, ddump, context, cfp, assemble, gas_asm, tips, prompt)
+#   
+#   Version 6.1-color-user
+#     Took the Gentoo route and ran sed s/user/user/g
+#
+#   Version 6.1-color
+#     Added color fixes from
+#       http://gnurbs.blogsome.com/2006/12/22/colorizing-mamons-gdbinit/
+#
+#   Version 6.1
+#     Fixed filename in step_to_call so it points to /dev/null
+#     Changed location of logfiles from /tmp  to ~
+#
+#   Version 6
+#     Added print_insn_type, get_insn_type, context-on, context-off commands
+#     Added trace_calls, trace_run, step_to_call commands
+#     Changed hook-stop so it checks $SHOW_CONTEXT variable
+#
+#   Version 5
+#     Added bpm, dump_bin, dump_hex, bp_alloc commands
+#     Added 'assemble' by elaine, 'gas_asm' by mong
+#     Added Tip Topics for aspiring users ;)
+#
+#   Version 4
+#     Added eflags-changing insns by pusillus
+#     Added bp, nop, null, and int3 patch commands, also hook-stop
+#
+#   Version 3
+#     Incorporated elaine's if/else goodness into the hex/ascii dump
+#
+#   Version 2
+#     Radix bugfix by elaine

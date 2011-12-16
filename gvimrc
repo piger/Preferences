@@ -17,15 +17,14 @@ if has("gui_gtk2")
     " set guifont=ProggyCleanTTSZ\ 12
     " set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
     " set guifont=Monospace\ 10
-    " set guifont=DejaVu\ Sans\ Mono\ 9
-	set guifont=Menlo\ Regular:h10
+    set guifont=DejaVu\ Sans\ Mono\ 9
 
     " COLORSCHEME
     " colorscheme habiLight
     " colorscheme sienna
 	" colo mustang
 	" colo martin_krischik
-	colo solarized
+	colo autumn
 
 elseif has("x11")
     " Also for GTK 1
@@ -38,7 +37,7 @@ elseif has("gui_macvim")
     " colorscheme molokai
     " colorscheme habilight
     " colorscheme autumnleaf
-    colorscheme sienna
+    colorscheme autumn
     " colorscheme eclipse
     " colorscheme slate
 
