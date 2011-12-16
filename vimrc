@@ -15,6 +15,11 @@
 "
 " IDEE, TODO
 " - tasto per toggle di 'relativenumber', comodo per i comandi su piu' righe
+"
+" Colorscheme interessanti
+" LIGHT:
+" - autumn
+"
 " }
 
 
@@ -556,6 +561,11 @@ imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
 
 " rot13 fun - \rot
 nmap <Leader>rot ggVGg?
+
+" salva con sudo
+" http://stackoverflow.com/questions/95072/what-are-your-favorite-vim-tricks/96492#96492
+cmap w!! %!sudo tee > /dev/null %
+
 
 " Tab Navigation (ala Firefox): ctrl-tab, ctrl-shift-tab, ctrl-t
 nmap <C-tab> :tabnext<CR>
