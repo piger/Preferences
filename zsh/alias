@@ -53,4 +53,7 @@ alias tua=";"
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
 
+# supporto FORZATO dei 256 colori per tmux
+alias tmux='tmux -2'
+
 # vim: ft=zsh
