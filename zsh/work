@@ -6,3 +6,8 @@ alias nessus_watch="tail -f $NESSUS_LOG | egrep '(: testing|Finished )'"
 
 # nessus-rotate-log
 alias nessus_rotate_log="mv $NESSUS_LOG ${NESSUS_LOG}.old"
+
+function nessus_logcat() {
+	# [Wed Apr  6 13:05:40 2011][15850.34851] Finished testing localhost.localdomain. Time : 2638.04 secs
+	tail -f $NESSUS_LOG | egrep "(: testing|Finished )"
+}

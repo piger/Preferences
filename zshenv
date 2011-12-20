@@ -64,9 +64,9 @@ export ZPREFS=~/Preferences
 
 # This settings are valid only for remote sessions {{{
 if [[ ! -z $SSH_CONNECTION ]]; then
-    # we are on a remote system
-    # alias screen to screenf (screen with ^F binding instead of ^A)
-    alias screen='screen -e "^Ff"'
+	# Se sono loggato con ssh su un server remoto crea un alias di screen,
+	# screenf, che usa ^F come keybind.
+	alias screenf='screen -e "^Ff"'
 fi
 # }}}
 

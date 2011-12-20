@@ -310,6 +310,7 @@ source $ZDOTDIR/cose
 source $ZDOTDIR/alias
 source $ZDOTDIR/zcomp
 source $ZDOTDIR/zfunc
+source $ZDOTDIR/work
 # solo shell interattive
 [[ $- = *i* ]] && source $ZDOTDIR/welcome
 [[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
