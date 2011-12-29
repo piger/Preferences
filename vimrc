@@ -185,7 +185,8 @@ if &t_Co > 2 || has("gui_running")
     " impostare il modo di syncare la sintassi?
     " syntax sync fromstart
     syntax on
-    set hlsearch
+	" Forse ODIO hlsearch.
+    set nohlsearch
     
     "hi statusline ctermfg=Black ctermbg=Blue
 endif
@@ -233,7 +234,7 @@ set noexpandtab
 " }}}
 
 
-" pathogen^H^H^H^H^H^H^H^HVundle e plugins {{{
+" Plugins, con Bundle (prima si usava Pathogen). {{{
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
 
@@ -253,11 +254,12 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 	Bundle 'Solarized'
 	Bundle 'fugitive.vim'
 	Bundle 'Gundo'
-	Bundle 'TTCoach'
-	Bundle 'Conque-Shell'
+	" Bundle 'TTCoach'
+	" Bundle 'Conque-Shell'
+	Bundle 'git://github.com/acx0/Conque-Shell.git'
 	Bundle 'L9'
 	Bundle 'FuzzyFinder'
-	Bundle 'CSApprox'
+	" Bundle 'CSApprox'
 	Bundle 'The-NERD-tree'
 	Bundle 'TwitVim'
 	Bundle 'bufexplorer.zip'
