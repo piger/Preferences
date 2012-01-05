@@ -299,10 +299,28 @@ zmodload zsh/datetime
 # per 'syserorr'
 zmodload zsh/system
 
-autoload -U compinit && compinit
+# Completion per task warrior
+# NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
+[[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
+[[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
+
+# autoload mini-help
+# -U also causes alias expansion to be suppressed  when  the  function is loaded
+# The -k and -z flags make the function be loaded using  ksh-style  or
+# zsh-style autoloading  respectively
+autoload -Uz compinit
+compinit
 autoload -U zcalc zmv zargs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+
+# supporto bash completion (da chiamare DOPO 'compinit')
+autoload -Uz bashcompinit
+bashcompinit
+
+[[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
+# linux only :/
+# [[ -e /usr/local/etc/bash_completion.d/ack.bash_completion.sh ]] && source /usr/local/etc/bash_completion.d/ack.bash_completion.sh
 
 # Other files
 source $ZDOTDIR/bind

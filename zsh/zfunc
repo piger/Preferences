@@ -179,6 +179,9 @@ copiatar () {
 	echo "tar cvf - . | ( cd /altrove; tar xvf - )"
 }
 
+# copia pv
+# % (tar cf - files.* | pv -n -s $(gdu -csb files.* | tail -1 | awk '{print $1}') | (cd /Volumes/Expansion\ Drive; tar xf - )) 2>&1 | dialog --gauge 'Progress' 7 70
+
 # sfortune cerca prima i miei fortune e poi quelli
 # di sistema
 sfortune () {
