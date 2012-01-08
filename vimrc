@@ -266,8 +266,13 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 	Bundle 'pydoc.vim'
 	Bundle 'pyflakes.vim'
 	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
-
 	Bundle 'Jinja'
+
+	" Web
+	Bundle 'JSON.vim'
+
+	" TeX
+	" Bundle 'LaTeX-Suite-aka-Vim-LaTeX'
 endif
 " }}}
 
@@ -475,6 +480,17 @@ if !exists("autocommands_loaded")
 		au BufWritePre *.hex endif
 		au BufWritePost *.hex if &bin | %!xxd
 		au BufWritePost *.hex set nomod | endif
+	augroup END
+
+	" file .json
+	au! BufRead,BufNewFile *.json set filetype=json
+
+	augroup json_autocmd
+		autocmd!
+		autocmd FileType json setl autoindent formatoptions=tcq2l
+		autocmd FileType json setl textwidth=78 shiftwidth=2
+		autocmd FileType json setl softtabstop=2 tabstop=8
+		autocmd FileType json setl expandtab foldmethod=syntax
 	augroup END
 
 	" When editing a file, always jump to the last known cursor position.
