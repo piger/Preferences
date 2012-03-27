@@ -39,10 +39,8 @@ alias tsyslog="tail -f /var/log/syslog"
 alias pwgen_strong='pwgen -y1 15 20'
 alias vnc_colori='vncviewer -FullColor'
 alias screenf='screen -e "^Ff"'
-# todo.sh -> t
-alias t='todo.sh -d ~/.todo.cfg'
-# todo.sh aggiunge data attuale al todo
-alias tt='t -t'
+# Taskwarrior
+alias t=task
 
 # alias simpatici
 alias suco='sudo'

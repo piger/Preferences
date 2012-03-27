@@ -293,4 +293,9 @@ function controlla() {
 }
 # controlla
 
+# setta il titolo su tmux
+settitle() {
+	printf "\033k$1\033\\"
+}
+
 # vim: ft=zsh
