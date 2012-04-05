@@ -75,4 +75,11 @@ chpwd() {
 	fi
 }
 
+# virtualenvwrapper per python
+if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
+	[[ ! -d ~/tmp/virtualenvs ]] && mkdir -p ~/tmp/virtualenvs
+	export WORKON_HOME=~/tmp/virtualenvs
+	source /usr/local/bin/virtualenvwrapper.sh
+fi
+
 # vim: ft=zsh
