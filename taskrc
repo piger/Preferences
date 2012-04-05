@@ -11,20 +11,48 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Files
-#data.location=/Users/sand/.task
+# data.location=/Users/sand/.task
 # data.location=/Users/sand/Dropbox/task
 data.location=~/Dropbox/task
+
+color=on
+regex=on
+dateformat=d/m/Y
+dateformat.report=d/m/Y
+dateformat.holiday=YMD
+dateformat.annotation=d/m/Y
+report.X.dateformat=d/m/Y
+weekstart=Monday
 
 # Color theme (uncomment one to use)
 #include /usr/local/share/doc/task/rc/light-16.theme
 #include /usr/local/share/doc/task/rc/light-256.theme
 #include /usr/local/share/doc/task/rc/dark-16.theme
-include /usr/local/share/doc/task/rc/dark-256.theme
+### DEBIAN!!! include /usr/local/share/doc/task/rc/dark-256.theme
+##### ATTUALE ##### include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/local/share/doc/task/rc/dark-red-256.theme
 #include /usr/local/share/doc/task/rc/dark-green-256.theme
 #include /usr/local/share/doc/task/rc/dark-blue-256.theme
 #include /usr/local/share/doc/task/rc/dark-violets-256.theme
 #include /usr/local/share/doc/task/rc/dark-yellow-green.theme
 
+# include /usr/share/doc/task/rc/dark-16.theme
+# include /usr/share/doc/task/rc/dark-256.theme
+# include /usr/share/doc/task/rc/dark-blue-256.theme
+# include /usr/share/doc/task/rc/dark-gray-256.theme
+# include /usr/share/doc/task/rc/dark-green-256.theme
+# include /usr/share/doc/task/rc/dark-red-256.theme
+# include /usr/share/doc/task/rc/dark-violets-256.theme
+# include /usr/share/doc/task/rc/dark-yellow-green.theme
+# include /usr/share/doc/task/rc/light-16.theme
+# include /usr/share/doc/task/rc/light-256.theme
+# include /usr/share/doc/task/rc/solarized-light-256.theme
+### include /usr/share/doc/task/rc/solarized-dark-256.theme
 
-color=on
+# NOTA INCLUDE
+# Siccome il mondo e' DIVERSO e i PATH pure, devo specificare gli include per colori e file holiday in un include locale :(
+# Esempio di file include:
+# include /usr/share/doc/task/rc/solarized-dark-256.theme
+# include /usr/share/doc/task/rc/holidays.it-IT.rc
+
+include ~/.taskrc.local
