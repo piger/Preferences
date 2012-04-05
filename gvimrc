@@ -78,3 +78,7 @@ endif
 " Evito il seguente bug: quando si crea il primo tab con :tabc o simili, la
 " statusline di vim viene ridimensionata e diventa invisibile.
 set showtabline=2	 " 2 = always
+
+" mouse clipboard
+" in questo modo di default usare il buffer "ctrl-c/ctrl-v"
+set clipboard=unnamedplus
