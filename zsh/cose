@@ -52,11 +52,10 @@ fi
 typeset -A umask_table
 umask_table=(
 	'~/Work' 007
-	'~/tmp' 027
 	'~/ciao ciao' 011
 )
 
-chpwd() {
+umask_chpwd() {
 	local current_umask=$(umask)
 
 	for dir new_umask in ${(kv)umask_table}; do
@@ -74,5 +73,8 @@ chpwd() {
 		unset PREVIOUS_UMASK
 	fi
 }
+
+export -a chpwd_functions
+chpwd_functions=( "${chpwd_functions[@]}" umask_chpwd )
 
 # vim: ft=zsh
