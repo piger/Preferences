@@ -505,12 +505,14 @@ if !exists("autocommands_loaded")
 
 	" Usa il metodo migliore di omnicompletion
 	" http://vim.runpaint.org/typing/auto-completing-text/
-	if exists("+omnifunc")
-		au FileType *
-			\ if &omnifunc == "" |
-			\ setl omnifunc=syntaxcomplete#Complete |
-			\ endif
-	endif
+	" 5/Aprile/2012 - Lo commento perche' mi sa che blocca la completion
+	" python.
+	""" if exists("+omnifunc")
+	""" 	au FileType *
+	""" 		\ if &omnifunc == "" |
+	""" 		\ setl omnifunc=syntaxcomplete#Complete |
+	""" 		\ endif
+	""" endif
 
 	endif
 
