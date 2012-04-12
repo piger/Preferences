@@ -264,9 +264,12 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 	Bundle 'TwitVim'
 	Bundle 'bufexplorer.zip'
 
+	" Color schemes
+	Bundle 'xoria256.vim'
+
 	" Python
 	Bundle 'pydoc.vim'
-	Bundle 'pyflakes.vim'
+	" Bundle 'pyflakes.vim'
 	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
 	Bundle 'Jinja'
 
