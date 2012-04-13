@@ -78,7 +78,8 @@ export -a chpwd_functions
 chpwd_functions=( "${chpwd_functions[@]}" umask_chpwd )
 
 # virtualenvwrapper per python
-if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
+# uso il test -z per evitare di caricare tutto il carrozzone python per ogni nuova shell.
+if [[ -e /usr/local/bin/virtualenvwrapper.sh && -z $VIRTUALENVWRAPPER_PYTHON ]]; then
 	[[ ! -d ~/tmp/virtualenvs ]] && mkdir -p ~/tmp/virtualenvs
 	export WORKON_HOME=~/tmp/virtualenvs
 	source /usr/local/bin/virtualenvwrapper.sh
