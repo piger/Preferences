@@ -81,4 +81,12 @@ set showtabline=2	 " 2 = always
 
 " mouse clipboard
 " in questo modo di default usare il buffer "ctrl-c/ctrl-v"
-set clipboard=unnamedplus
+" NOTA: unnamedplus e' disponibile solo su X11 -- if has('unnamedplus')
+if has('unnamedplus')
+	set clipboard=unnamedplus
+else
+	set clipboard=unnamed
+endif
+
+" il colore dei numeri in caso di opzione 'number'
+highlight LineNr guifg=blue
