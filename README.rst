@@ -1,6 +1,13 @@
 Informazioni e Problemi
 =======================
 
+Altri repositories
+------------------
+
+git://github.com/zsh-users/zsh-syntax-highlighting.git
+https://github.com/seebi/tmux-colors-solarized.git
+https://github.com/seebi/dircolors-solarized.git
+
 Vim
 ---
 
