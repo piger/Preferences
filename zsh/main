@@ -271,8 +271,10 @@ else
 fi
 export EDITOR VISUAL
 
-# grep colors (highlight verde)
-export GREP_OPTIONS='--color=auto'
+# `grep` options
+# - grep colors (highlight verde)
+# - skippa i file device, FIFO e socket.
+export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # ssh-askpass, utility grafica
@@ -288,20 +290,6 @@ WATCHFMT='%n %a %l from %m at %t.'
 [[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
 # }}}
 
-# da /usr/share/doc/zsh
-if [[ -d ~/.zsh/scripts ]]; then
-    fpath=($fpath ~/.zsh/scripts)
-
-    # *(N-.x:t) e' un Glob Qualifier
-    # .      plain files
-    # -      toggles between making the qualifiers work on symbolic links (the default) and the files they point to
-    # N      sets the NULL_GLOB option for the current pattern
-    # x      owner-executable files (0100)
-    # :t -> basename
-    #for func in $^fpath/*(N-.x:t); autoload $func
-    for func in ~/.zsh/scripts/*(:t); autoload $func
-fi
-
 # AUTOLOAD {{{
 # --------
 zmodload zsh/complist
@@ -311,6 +299,12 @@ zmodload zsh/terminfo
 zmodload zsh/datetime
 # per 'syserorr'
 zmodload zsh/system
+
+# Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
+if [[ -d ~/.zsh/scripts ]]; then
+	fpath=(~/.zsh/scripts $fpath)
+	autoload -U ~/.zsh/scripts/*(:t)
+fi
 
 # Completion per task warrior
 # NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
