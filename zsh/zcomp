@@ -15,22 +15,25 @@
 # commentare lo zstyle precedente (quello con completer _complete _prefix...) e
 # scommentare le 5 righe che seguono.
 
-if [[ $SLOW_COMPUTER == 0 ]]; then
-    _force_rehash() {
-      (( CURRENT == 1 )) && rehash
-      return 1	# Because we didn't really complete anything
-    }
-
-    zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
-else
-    zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
-fi
+# Nuova gestione del rehash, ovvero IN AUTOMATICO! -- PROVA [17/4/2012]
+## if [[ $SLOW_COMPUTER == 0 ]]; then
+##     _force_rehash() {
+##       (( CURRENT == 1 )) && rehash
+##       return 1	# Because we didn't really complete anything
+##     }
+## 
+##     zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+## else
+##     zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+## fi
+zstyle ':completion:*' rehash true
 
 # Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
 # e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
 zstyle ':completion:*:messages' format %d
 zstyle ':completion:*:warnings' format '%BNo matches%b: %d'
 zstyle ':completion:*:descriptions' format '%B%d%b'
+# raggrouppa l'output
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '-->'
 # Non completare i nomi delle funzioni che iniziano per '_'
@@ -59,8 +62,7 @@ bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
 
 # Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-#zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) )'
-# che sia giusto cosi' ? con numeric?
+zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Completa cose tipo: gzip _-d -> gzip --decompress
 zstyle ':completion::approximate*:*' prefix-needed false
@@ -73,6 +75,15 @@ zstyle ':completion::approximate*:*' prefix-needed false
 # '/'
 zstyle ':completion:*:(^approximate):*' matcher-list \
 	'r:|[/]=* r:|=* m:{a-z}={A-Z}'
+
+# titoli [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
+
+# statusline for many hits [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M %P -- \e[00;00m'
 
 # Prefix Completion: se il cursore e' nel mezzo di una word, zsh completa come se il
 # cursore si trovasse a fine word; l'opposto si ottiene abilitando complete_in_word.
@@ -92,7 +103,7 @@ zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
 # meglio?
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 # Per abilitare la completion di "cd ../"
-# zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' special-dirs true
 
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
@@ -101,10 +112,17 @@ zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
 LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
 PERL5LIB:scalar
 
-# Comando usato per la completion dei processi
-#zstyle ':completion:*:processes' command 'ps -xa'
-# meglio?
-zstyle ':completion:*:processes' command 'ps x -o pid,pcpu,tt,args'
+# Completion per `kill`: mostra una lista di processi con la percentuale di CPU
+# utilizzata, e su linux come bonus mostra i processi come un albero
+# gerarchico.
+if [[ $OSTYPE == linux* ]]; then
+	zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,%mem,cmd'
+else
+	# -r -- sort by CPU usage
+	zstyle ':completion:*:processes' command 'ps x -U $USER -r -o pid,%cpu,%mem,tt,args'
+fi
+# ... e ovviamente i colori. [from: https://github.com/seebi/zshrc]
+zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 
 # cache
 zstyle ':completion:*' use-cache on
@@ -112,13 +130,6 @@ zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 
 # Completion con i colori di ls
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# Completion per altri comandi
-# ############################
-# per avere la comletion di ssh su autossh basta questo !?
-compdef autossh=ssh
-compdef nssh=ssh
-compdef t=todo.sh
 
 # completion per pip
 function _pip_completion {
@@ -130,5 +141,21 @@ function _pip_completion {
              PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
+
+# compinstall, dilemma TODO
+zstyle :compinstall filename '~/.zsh/main'
+
+# questo va qui, alla fine delle definizioni ? TODO
+autoload -Uz compinit && compinit
+
+# supporto bash completion (da chiamare DOPO 'compinit')
+autoload -Uz bashcompinit && bashcompinit
+
+# completion bash per tmux
+[[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
+# la completion di ack e' linux only :(
+if [[ $OSTYPE == linux* ]]; then
+	[[ -e /usr/local/etc/bash_completion.d/ack.bash_completion.sh ]] && source /usr/local/etc/bash_completion.d/ack.bash_completion.sh
+fi
 
 # vim: ft=zsh

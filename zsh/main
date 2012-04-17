@@ -288,6 +288,19 @@ WATCHFMT='%n %a %l from %m at %t.'
 [[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
 # }}}
 
+# da /usr/share/doc/zsh
+if [[ -d ~/.zsh/scripts ]]; then
+    fpath=($fpath ~/.zsh/scripts)
+
+    # *(N-.x:t) e' un Glob Qualifier
+    # .      plain files
+    # -      toggles between making the qualifiers work on symbolic links (the default) and the files they point to
+    # N      sets the NULL_GLOB option for the current pattern
+    # x      owner-executable files (0100)
+    # :t -> basename
+    #for func in $^fpath/*(N-.x:t); autoload $func
+    for func in ~/.zsh/scripts/*(:t); autoload $func
+fi
 
 # AUTOLOAD {{{
 # --------
@@ -308,28 +321,21 @@ zmodload zsh/system
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
 # The -k and -z flags make the function be loaded using  ksh-style  or
 # zsh-style autoloading  respectively
-autoload -Uz compinit
-compinit
+### autoload -Uz compinit
+### compinit
 autoload -U zcalc zmv zargs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
-
-# supporto bash completion (da chiamare DOPO 'compinit')
-autoload -Uz bashcompinit
-bashcompinit
-
-[[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
-# linux only :/
-# [[ -e /usr/local/etc/bash_completion.d/ack.bash_completion.sh ]] && source /usr/local/etc/bash_completion.d/ack.bash_completion.sh
 
 # Other files
 source $ZDOTDIR/bind
 source $ZDOTDIR/cose
 source $ZDOTDIR/alias
-source $ZDOTDIR/zcomp
 source $ZDOTDIR/zfunc
 source $ZDOTDIR/help
 source $ZDOTDIR/work
+# zcomp chiama compinit, percio' $fpath a questo punto deve essere quello DEFINITIVO
+source $ZDOTDIR/zcomp
 # solo shell interattive
 [[ $- = *i* ]] && source $ZDOTDIR/welcome
 [[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
@@ -344,20 +350,13 @@ source $ZDOTDIR/work
 # Colori
 # [[ "${terminfo[colors]}" -ge 255 ]] && echo "256 colori!"
 
-# da /usr/share/doc/zsh
-if [[ -d ~/.zsh/scripts ]]; then
-    fpath=($fpath ~/.zsh/scripts)
-
-    # *(N-.x:t) e' un Glob Qualifier
-    # .      plain files
-    # -      toggles between making the qualifiers work on symbolic links (the default) and the files they point to
-    # N      sets the NULL_GLOB option for the current pattern
-    # x      owner-executable files (0100)
-    # :t -> basename
-    #for func in $^fpath/*(N-.x:t); autoload $func
-    for func in ~/.zsh/scripts/*(:t); autoload $func
-fi
 # }}}
+
+# prompt zsh-git
+# setopt promptsubst
+# autoload -U promptinit
+# promptinit
+# prompt wunjo
 
 # help online, ma serve lo script che genera i file txt...
 # unalias run-help > /dev/null 2>&1
