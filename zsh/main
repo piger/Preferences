@@ -124,6 +124,13 @@ eval cprompt='%{${fg[$crandname]}%}'
 PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
 # RPROMPT='${vcs_info_msg_0_}'
 
+# Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
+RPROMPT=$'%(?..%B${fred}✘${fdefault} %?%b)'
+
+# Il prompt per lo spelling
+# default: correct 'mano' to 'nano' [nyae]?
+SPROMPT="zsh: correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+
 # NOTE PER IL PROMPT:
 # - bisogna assegnare una stringa con apici SINGOLI, altrimenti le param. expansion NON funzionano!
 # - come ${(%):-%~} ritorni $PWD a modo del prompt, e' MAGIA parameter expansion :)
