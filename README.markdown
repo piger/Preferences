@@ -7,6 +7,7 @@
 - [dircolors-solarized](https://github.com/seebi/dircolors-solarized.git)
 - [cliweather](https://github.com/AaronFoltz/cliweather.git) - per il clima in
   command line.
+- # gem install lolcat
 
 ## Note
 

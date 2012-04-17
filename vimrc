@@ -197,7 +197,7 @@ if !has("gui_running")
     " colorscheme candycode
     " colorscheme fnaqevan
     " colorscheme molokai
-	colorscheme native
+	colorscheme xoria256
 endif
 " }}}
 

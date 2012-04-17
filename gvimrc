@@ -43,7 +43,8 @@ elseif has("gui_macvim")
 	" 'native' e' OK.
 	" colorscheme native 
 	" colorscheme navajo-night
-	colorscheme mustang
+	" colorscheme mustang
+	colorscheme xoria256
 
     " I FONTI POMPI
     " set guifont=Monaco:h12

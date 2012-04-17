@@ -10,23 +10,13 @@
 # _ignored completa file/dir che per altre impostazioni verrebbero ignorati
 #zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
 
-# Da: http://zshwiki.org/home/examples/compquickstart?s=rehash
-# Forza il rehash per ogni uso della completion (ie: premi tab); per attivare,
-# commentare lo zstyle precedente (quello con completer _complete _prefix...) e
-# scommentare le 5 righe che seguono.
-
-# Nuova gestione del rehash, ovvero IN AUTOMATICO! -- PROVA [17/4/2012]
-## if [[ $SLOW_COMPUTER == 0 ]]; then
-##     _force_rehash() {
-##       (( CURRENT == 1 )) && rehash
-##       return 1	# Because we didn't really complete anything
-##     }
-## 
-##     zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
-## else
-##     zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
-## fi
-zstyle ':completion:*' rehash true
+# Forza il rehash per ogni uso della completion (ie: premi tab).
+# http://zshwiki.org/home/examples/compquickstart?s=rehash
+_force_rehash() {
+	(( CURRENT == 1 )) && rehash
+	return 1	# Because we didn't really complete anything.
+}
+zstyle ':completion:*' rehash true	# rehash automatico, ma non sembra funzionare... TODO
 
 # Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
 # e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
@@ -62,7 +52,7 @@ bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
 
 # Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Completa cose tipo: gzip _-d -> gzip --decompress
 zstyle ':completion::approximate*:*' prefix-needed false
