@@ -79,34 +79,9 @@ set scrolloff=5			" scrolla con un context di 3 righe
 set showcmd			" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
-"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
-"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
-"" set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
-set statusline=%f
-set stl+=\ 
-set stl+=%h
-set stl+=%m
-set stl+=%r
-set stl+=%w
-set stl+=\ 
-set stl+=%{fugitive#statusline()}
-set stl+=%=		" right align
-set stl+=\ 
-
-" File format, encoding and type.  Ex: "(unix/utf-8/python)"
-set statusline+=(
-set statusline+=%n
-set statusline+=\ 
-set statusline+=%{&ff}                        " Format (unix/DOS).
-set statusline+=\ 
-set statusline+=%{strlen(&fenc)?&fenc:&enc}   " Encoding (utf-8).
-set statusline+=\ 
-set statusline+=%{&ft}                        " Type (python).
-set statusline+=)
-
-" Line and column position and counts.
-set statusline+=\ (line\ %l\/%L,\ col\ %03c)
-
+" NOTA: Siccome la statusline include una funzione di fugitive (plugin vim) che
+" puo' NON essere installato, sposto la definizione della statusline piu' in
+" basso, dopo i Bundle, e ci metto un if.
 
 set nosmartindent		" NON indentare con saggezza
 set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
@@ -281,6 +256,37 @@ if isdirectory(expand("~/.vim/bundle/vundle"))
 endif
 " }}}
 
+" Statusline {{{
+"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+"set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
+"" set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
+set statusline=%f
+set stl+=\ 
+set stl+=%h
+set stl+=%m
+set stl+=%r
+set stl+=%w
+set stl+=\ 
+if exists('g:loaded_fugitive')
+	set stl+=%{fugitive#statusline()}
+endif
+set stl+=%=		" right align
+set stl+=\ 
+
+" File format, encoding and type.  Ex: "(unix/utf-8/python)"
+set statusline+=(
+set statusline+=%n
+set statusline+=\ 
+set statusline+=%{&ff}                        " Format (unix/DOS).
+set statusline+=\ 
+set statusline+=%{strlen(&fenc)?&fenc:&enc}   " Encoding (utf-8).
+set statusline+=\ 
+set statusline+=%{&ft}                        " Type (python).
+set statusline+=)
+
+" Line and column position and counts.
+set statusline+=\ (line\ %l\/%L,\ col\ %03c)
+" }}}
 
 " Opzioni plugin & co {{{
 let python_highlight_all=1		" :he ft-python-syntax; abilita l'highlight per tutto
@@ -435,6 +441,9 @@ if !exists("autocommands_loaded")
 
 	" Per i file di Ren'Py
 	au BufNewFile,BufRead *.rpy setl ft=renpy
+
+	" La directory di Apache, cazzo!
+	au BufNewFile,BufRead /etc/apache2/{sites-available,sites-enabled}/* setl ft=apache
 
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
