@@ -445,6 +445,9 @@ if !exists("autocommands_loaded")
 	" La directory di Apache, cazzo!
 	au BufNewFile,BufRead /etc/apache2/{sites-available,sites-enabled}/* setl ft=apache
 
+	" ... e quella di Nginx.
+	au BufNewFile,BufRead /etc/nginx/{sites-available,sites-enabled}/* setl ft=nginx
+
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
 
