@@ -487,6 +487,10 @@ if !exists("autocommands_loaded")
 	au BufNewFile,BufRead *monbox*/*.html set ft=htmldjango
 	au BufNewFile,BufRead *MonitoringBox*/*.html set ft=htmldjango
 
+	" Visto che non credo scrivero' mai in Modula2 dico a vim che '.md' e'
+	" Markdown e non Modula2:
+	au BufNewFile,BufRead *.md setl ft=markdown
+
 	" vim -b : edit binary using xxd-format!
 	augroup Binary
 		au!
