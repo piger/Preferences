@@ -28,7 +28,7 @@ elif [ -e /etc/debian_version ]; then
 fi
 
 # LS_COLORS
-(( $+commands[dircolors] )) && eval $(dircolors -b)
+(( $+commands[dircolors] )) && eval $(dircolors -b ~/Preferences/dircolors.256dark)
 
 # -*- environment
 

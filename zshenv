@@ -81,8 +81,9 @@ TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 #	umask 022
 #fi
 
-# -rw-r--r--
-umask 022
+# umask 022
+umask u=rwx,g=rx,o=rx
+
 # -rw-rw----
 # umask 007
 
@@ -101,3 +102,8 @@ elif [[ -e ~/Applications/MacVim.app ]]; then
 fi
 
 # vim: ft=zsh
+
+# Ruby RVM path
+if [[ -d $HOME/.rvm/bin ]]; then
+	PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+fi
