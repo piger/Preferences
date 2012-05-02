@@ -95,6 +95,9 @@ SLOW_COMPUTER="0"
 if [[ -e /Applications/MacVim.app ]]; then
     alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
     alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
+elif [[ -e ~/Applications/MacVim.app ]]; then
+    alias vim="~/Applications/MacVim.app/Contents/MacOS/Vim"
+    alias gvim="~/Applications/MacVim.app/Contents/MacOS/MacVim"
 fi
 
 # vim: ft=zsh
