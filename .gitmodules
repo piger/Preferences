@@ -4,3 +4,6 @@
 [submodule "vim/bundle/xoria256.vim"]
 	path = vim/bundle/xoria256.vim
 	url = https://github.com/vim-scripts/xoria256.vim.git
+[submodule "vim/bundle/Gundo"]
+	path = vim/bundle/Gundo
+	url = http://github.com/sjl/gundo.vim.git

@@ -7,7 +7,6 @@ vim/view
 vim/vim-fuf
 vim/.netrwhist
 vim/spell/
-vim/bundle/
 *.zwc
 zsh/uname.cache
 zsh/.zcompdump
