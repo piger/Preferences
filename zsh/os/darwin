@@ -43,4 +43,7 @@ if [[ $LC_CTYPE == "UTF-8" ]]; then
 	export LC_CTYPE="en_US.UTF-8"
 fi
 
+# Supporto per la struttura di directory "local" (il --user di setup.py) su OSX
+[[ -e ~/Library/Python/2.7/bin ]] && PATH=~/Library/Python/2.7/bin:$PATH
+
 # vim: ft=zsh
