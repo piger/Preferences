@@ -1,9 +1,9 @@
 " Vim - Configurazione generica
 " vim: foldmarker={{{,}}} foldlevel=0 foldmethod=marker
-
-"    //   \o FOTTI   |
-"  -oOO __/)  IL     |
-"    '`  (\   FUCO   |
+"
+"    //   \o FOTTI
+"  -oOO __/)  IL
+"    '`  (\   FUCO
 
 
 " NOTE, SUGGERIMENTI E AVVERTIMENTI {{{
@@ -209,51 +209,11 @@ set noexpandtab
 " }}}
 
 
-" Plugins, con Bundle (prima si usava Pathogen). {{{
+" Plugin Vim - Pathogen {{{
+" https://github.com/tpope/vim-pathogen.git
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
-
-" Pathogen e' inutile se si utilizza Vundle
-" git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-"" call pathogen#helptags()
-"" call pathogen#runtime_append_all_bundles()
-
-" vundle
-if isdirectory(expand("~/.vim/bundle/vundle"))
-	set rtp+=~/.vim/bundle/vundle
-	call vundle#rc()
-
-	Bundle 'gmarik/vundle'
-
-	" custom vundles
-	Bundle 'Solarized'
-	Bundle 'fugitive.vim'
-	Bundle 'Gundo'
-	" Bundle 'TTCoach'
-	" Bundle 'Conque-Shell'
-	Bundle 'git://github.com/acx0/Conque-Shell.git'
-	Bundle 'L9'
-	Bundle 'FuzzyFinder'
-	" Bundle 'CSApprox'
-	Bundle 'The-NERD-tree'
-	Bundle 'TwitVim'
-	Bundle 'bufexplorer.zip'
-
-	" Color schemes
-	Bundle 'xoria256.vim'
-
-	" Python
-	Bundle 'pydoc.vim'
-	" Bundle 'pyflakes.vim'
-	" Bundle 'pyflakes' o 'pyflakes.vim' ??? XXX
-	Bundle 'Jinja'
-
-	" Web
-	Bundle 'JSON.vim'
-
-	" TeX
-	" Bundle 'LaTeX-Suite-aka-Vim-LaTeX'
-endif
+call pathogen#infect()
 " }}}
 
 " Statusline {{{
@@ -296,9 +256,6 @@ let perl_include_pod=1	    		" highlight POD correclty, dicono
 " tolgo l'highlight degli spazi vuoti alla fine delle righe: e' fastidioso.
 " NOTA: per info vedi syntax/python.vim
 let python_highlight_space_errors = 0
-
-" CSApprox
-let g:CSApprox_verbose_level = 0
 
 " NERDTree
 let NERDTreeShowBookmarks = 1		" Mostra i bookmarks
@@ -374,6 +331,9 @@ let python_slow_sync = 1
 
 " Pydiction
 let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
+
+" virtualenv.vim
+let g:virtualenv_directory = '~/tmp/virtualenvs/'
 " }}}
 
 
@@ -634,6 +594,7 @@ set pastetoggle=<F4>
 
 " GUNDO
 nnoremap <F5> :GundoToggle<CR>
+map <Leader>g :GundoToggle<CR>
 
 " toggle list - \tl
 nnoremap <Leader>tl :set invlist list?<CR>

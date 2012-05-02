@@ -14,6 +14,7 @@ setl omnifunc=pythoncomplete#Complete
 setl completeopt=menuone,longest,preview
 setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+setl cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " I commenti in python, con "smartindent", vanno sempre a inizio riga;
 " questo fixa 'sto behaviour
