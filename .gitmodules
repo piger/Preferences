@@ -7,3 +7,6 @@
 [submodule "vim/bundle/Gundo"]
 	path = vim/bundle/Gundo
 	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/bundle/vim-less"]
+	path = vim/bundle/vim-less
+	url = https://github.com/groenewege/vim-less.git
