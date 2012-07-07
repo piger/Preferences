@@ -13,6 +13,10 @@ repo fare:
 
 	$ git submodule update --init
 
+Per poi aggiornare tutti i submodule in un colpo solo:
+
+	$ git submodule foreach git pull origin master
+
 ## Vim
 
 Lista di plugin che potrebbero essere interessanti ma non mi servono e/o non
@@ -20,6 +24,13 @@ utilizzo mai:
 
 - CSApprox (supporto temi 256 colori per vecchi vim/term)
 - TTCoach (il training per scrivere)
+
+## Git
+
+Su questo articolo di github dicono che le versioni recenti (> 1.6) di git
+includono un helper per integrarsi con keychains di OS X; per abilitarlo:
+
+	$ git config --global credential.helper osxkeychain
 
 ## Repository e utility
 
