@@ -1,0 +1,1 @@
+Installare privoxy con `homebrew`, copiare poi il seguente file `plist` in `/Library/LaunchAgents/`.

@@ -36,3 +36,5 @@
     storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
     pushone = push origin master:refs/heads/master
     pullone = pull origin master:refs/heads/master
+[credential]
+	helper = osxkeychain
