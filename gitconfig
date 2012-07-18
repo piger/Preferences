@@ -36,5 +36,7 @@
     storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
     pushone = push origin master:refs/heads/master
     pullone = pull origin master:refs/heads/master
+
+# Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
 	helper = osxkeychain
