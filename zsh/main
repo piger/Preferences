@@ -219,7 +219,12 @@ export FTP_PASSIVE=1
 
 # History
 HISTSIZE=2000
-SAVEHIST=10000
+# 18-07-2012 - Scopro che forse e' questa history IMMENSA che mi causa uno
+# startup molto lento per le nuove shell. Molti lo tengono uguale a HISTSIZE,
+# ma questo significa che a conti fatti nel file history ci sara' solo la
+# history dell'ultima shell chiusa, se e' stata molto utilizzata.
+# SAVEHIST=10000
+SAVEHIST=2000
 HISTFILE=$HOME/.history
 
 # Opzioni per less
