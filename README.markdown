@@ -1,5 +1,7 @@
 # Preferences.git -- i miei file di configurazione per la command line.
 
+## Submodules
+
 Installazione submodules git:
 
 	$ git submodule add <URL> <path>
@@ -16,6 +18,36 @@ repo fare:
 Per poi aggiornare tutti i submodule in un colpo solo:
 
 	$ git submodule foreach git pull origin master
+
+Puo' capitare che `git status` mostri output tipo:
+
+	#       modified:   vim/bundle/FuzzyFinder (untracked content)
+	#       modified:   vim/bundle/L9 (untracked content)
+
+Il motivo e' che la funzione `Helptags()` di `pathogen` crea i file di help per
+vim dentro le directory dei singoli bundle, percio' git segnala che ci sono
+cambiamenti non tracciati; entrando infatti nella directory `vim/bundle/L9` ed
+eseguendo `git status` vedremmo come i file non tracciati sarebbero:
+
+	# On branch master
+	# Untracked files:
+	#   (use "git add <file>..." to include in what will be committed)
+	#
+	#       doc/tags
+	#       doc/tags-ja
+
+L'unica soluzione **sporca** al momento e' quella di dire a git di **ignorare**
+gli *untracked content*:
+
+	[submodule "vim/bundle/nerdcommenter"]
+		path = vim/bundle/nerdcommenter
+		url = http://github.com/scrooloose/nerdcommenter.git
+		ignore = untracked 
+
+Oppure con un one-liner:
+
+	for s in `git submodule  --quiet foreach 'echo $name'` ; do git config submodule.$s.ignore untracked ; done
+
 
 ## Vim
 
