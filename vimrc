@@ -214,6 +214,7 @@ set noexpandtab
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 filetype off 
 call pathogen#infect()
+" call pathogen#helptags()
 " }}}
 
 " Statusline {{{
