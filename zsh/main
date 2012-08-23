@@ -24,35 +24,35 @@
 
 # Opzioni di zsh globali {{{
 # -------
-setopt NO_beep			# Spegne il beep in ZLE
+setopt NO_beep				# Spegne il beep in ZLE
 setopt append_history		# Appende al file $HISTORY, invece di sovrascrivere
-setopt auto_cd			# Entra nelle directory senza usare 'cd'
-setopt auto_pushd		# Ficca $OLDPWD (dir precedente) nello stack delle dir
-setopt check_jobs		# Avverte dei processi in background prima di killare la shell
+setopt auto_cd				# Entra nelle directory senza usare 'cd'
+setopt auto_pushd			# Ficca $OLDPWD (dir precedente) nello stack delle dir
+setopt check_jobs			# Avverte dei processi in background prima di killare la shell
 setopt complete_in_word		# Completa nel mezzo delle word (altrimenti parte dalla fine)
-setopt correct			# Corregge lo spelling dei comandi
-setopt equals			# Permette =command al posto di `which command`
+setopt correct				# Corregge lo spelling dei comandi
+setopt equals				# Permette =command al posto di `which command`
 setopt extended_glob		# Usa '~', '^' e '#' per i pattern
 setopt extended_history		# Salva i timestamp nella history
 setopt NO_flow_control		# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
 #setopt glob_complete		# Quando la word da completare contiene un glob pattern,
-				# invece di inserire il risultato del glob, cicla tra i
-				# risultati, come nella completion con  MENU_COMPLETE
+							# invece di inserire il risultato del glob, cicla tra i
+							# risultati, come nella completion con  MENU_COMPLETE
 setopt hist_ignore_dups		# se il comando e' uguale al precedente non metterlo nella history
 setopt hist_no_store		# non salvare nella history i comandi "history"
-setopt hist_verify		# quando si usa la history expansion non esegue direttamente, cosi' vedi che stai per fare.
-setopt NO_hup			# Non manda -HUP ai processi quando la shell muore
-setopt list_packed		# Completion list piu' piccola, con colonne di varia larghezza
+setopt hist_verify			# quando si usa la history expansion non esegue direttamente, cosi' vedi che stai per fare.
+setopt NO_hup				# Non manda -HUP ai processi quando la shell muore
+setopt list_packed			# Completion list piu' piccola, con colonne di varia larghezza
 setopt long_list_jobs		# Elenca i job nel formato esteso
-setopt notify			# Avvisa subito dello status dei job in background, invece di
-						# aspettare un nuovo prompt
+setopt notify				# Avvisa subito dello status dei job in background, invece di
+							# aspettare un nuovo prompt
 setopt numeric_glob_sort	# Sort numerico per file contenenti numeri (a_00, a_01, ...)
 setopt print_exit_value		# Printa l'exit value quando e' diverso da zero
-setopt prompt_subst		# Esegue le varie expansion nel prompt (param expansions, command subst etc)
+setopt prompt_subst			# Esegue le varie expansion nel prompt (param expansions, command subst etc)
 setopt pushd_ignore_dups	# Purga i duplicati dallo stack delle directory
 #setopt pushd_silent		# Non printa lo stack delle dir dopo pushd o popd
 setopt NO_rm_star_silent	# Chiede conferma per: 'rm *' o 'rm /path/*'
-setopt short_loops		# Permette le forme abbreviate di for, if, function, etc...
+setopt short_loops			# Permette le forme abbreviate di for, if, function, etc...
 setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, utile con 'script'
 # }}}
 
@@ -89,11 +89,6 @@ for color in $colnames; do
 	eval b$color='%{${bg[$color]}%}'
 done
 
-for COLOR in RED GREEN YELLOW BLUE WHITE BLACK; do
-    eval PR_$COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
-    eval PR_BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
-done
-
 # zsh/spectrum
 # http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
 typeset -Ag FX FG BG
@@ -122,7 +117,9 @@ crand=$(( $chash % 9 ))
 crandname=$colnames[$crand]
 eval cprompt='%{${fg[$crandname]}%}'
 PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
-# RPROMPT='${vcs_info_msg_0_}'
+unset chash
+unset crand
+unset crandname
 
 # Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
 RPROMPT=$'%(?..%B${fred}✘${fdefault} %?%b)'
@@ -142,61 +139,6 @@ SPROMPT="zsh: correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
 # Idee per path nel prompt colorato
 # http://superuser.com/questions/49092/how-to-format-the-path-in-a-zsh-prompt
 
-# vcs_info {{{
-### if [[ $ZSH_VERSION = (4.3.10|4.4*) ]]; then
-###     # per help, cerca -> /GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
-###     autoload -Uz vcs_info
-###     # il plugin bzr e' lento su linux/arch. - 24/Nov/09
-###     zstyle ':vcs_info:*' enable git svn
-###
-###     zstyle ':vcs_info:*' actionformats \
-###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-###     zstyle ':vcs_info:*' formats       \
-###     '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-###     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-### fi
-###
-### precmd () {
-###     (( $+functions[vcs_info] )) && vcs_info
-###
-###     # adjust title of xterm
-###     # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
-###     # case $TERM in
-###     #     (xterm*|rxvt*)
-###     #         print -Pn "\e]0;%n@%m: %~\a"
-###     #         ;;
-###     #     (screen*)
-###     #         # print -Pn "\033k\033\134\033k%m[%1d]\033\134"
-###     #         print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
-###     #         ;;
-###     # esac
-### }
-
-### Cambia il titolo della finestra di screen con il nome
-### dell'host verso cui si fa ssh.
-### $1 e' TUTTA la string del comando, argomenti compresi.
-### no_preexec () {
-###     local -a cmd
-###     cmd=(${(z)1})
-###
-###     case $TERM in
-### 	(xterm*|rxvt*)
-###             print -Pn "\e]0;%n@%m: $1\a"
-###             ;;
-### 	(screen*)
-### 	    # Se il comando e' "ssh" imposta l'ultimo argomento (l'hostname) come
-### 	    # titolo
-### 	    if [[ $cmd[1] == ssh && ! -z $cmd[-1] ]]; then
-### 		echo -ne "\ek${cmd[-1]##*@}\e\\"
-### 		#else
-### 		#    echo -ne "\ek${1%% *}\e\\"
-### 	    fi
-### 	    # print -Pn "\033k\033\134\033k%m[$1]\033\134"
-### 	    print -Pn "\eP\e]0;%n@%m: %~\C-G\e\\"
-### 	    ;;
-###     esac
-### }
-### }}}
 
 # ENVIRONMENT {{{
 # -----------

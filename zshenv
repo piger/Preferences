@@ -59,9 +59,6 @@ export RSYNC_RSH="ssh"
 # This should be on os/linux ?
 export BROWSER="firefox"
 
-# My Preferences repository (XXX a che serve ?)
-export ZPREFS=~/Preferences
-
 # This settings are valid only for remote sessions {{{
 if [[ ! -z $SSH_CONNECTION ]]; then
 	# Se sono loggato con ssh su un server remoto crea un alias di screen,
@@ -84,14 +81,6 @@ TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 # umask 022
 umask u=rwx,g=rx,o=rx
 
-# -rw-rw----
-# umask 007
-
-# ulimit ?
-
-# Supporto per SLOW_COMPUTER
-SLOW_COMPUTER="0"
-
 # Alcuni alias vanno qui per averli anche negli script.
 if [[ -e /Applications/MacVim.app ]]; then
     alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
@@ -101,9 +90,9 @@ elif [[ -e ~/Applications/MacVim.app ]]; then
     alias gvim="~/Applications/MacVim.app/Contents/MacOS/MacVim"
 fi
 
-# vim: ft=zsh
-
 # Ruby RVM path
 if [[ -d $HOME/.rvm/bin ]]; then
 	PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 fi
+
+# vim: ft=zsh
