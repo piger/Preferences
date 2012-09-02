@@ -379,8 +379,10 @@ if !exists("autocommands_loaded")
 	" Cambia colore della status line in insert mode
 	augroup ft_statuslinecolor
 		au!
-		au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=yellow guibg=#8090a0
-		au InsertLeave * hi StatusLine term=bold,reverse gui=bold ctermfg=231 ctermbg=103 guifg=white guibg=#8090a0
+		" au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=#ffffff guibg=#ce8e4e
+		" au InsertLeave * hi StatusLine term=bold,reverse gui=bold ctermfg=231 ctermbg=103 guifg=#303030 guibg=#d0a060
+		au InsertEnter * hi StatusLine term=bold,reverse gui=bold ctermfg=196 ctermbg=103 guifg=#ffffff guibg=#ce4e4e
+		au InsertLeave * hi StatusLine term=bold,reverse gui=bold ctermfg=231 ctermbg=103 guifg=#ffffcd guibg=#306d30
 	augroup END
 
 	" For all text files set 'textwidth' to 78 characters.
@@ -393,15 +395,16 @@ if !exists("autocommands_loaded")
 	""" autocmd FileType python,perl :setl foldcolumn=2
 	""" autocmd FileType python :setl foldmethod=indent
 
-	" da mitshuiko
-	autocmd FileType python setlocal cinwords=in,elif,else,for,while,try,except,finally,def,class,with
-
 	" Per python uso ftplugin/python.vim
-	au BufNewFile *.py setl fileformat=unix
-	au BufNewFile *.py setl encoding=utf-8
+	augroup Python
+		au!
+		autocmd FileType python setlocal cinwords=in,elif,else,for,while,try,except,finally,def,class,with
+		autocmd FileType python setl fileformat=unix
+		autocmd FileType python setl encoding=utf-8
 
-	" Per i file di Ren'Py
-	au BufNewFile,BufRead *.rpy setl ft=renpy
+		" Per i file di Ren'Py
+		au BufNewFile,BufRead *.rpy setl ft=renpy
+	augroup END
 
 	" La directory di Apache, cazzo!
 	au BufNewFile,BufRead /etc/apache2/{sites-available,sites-enabled}/* setl ft=apache
@@ -494,7 +497,7 @@ if !exists("autocommands_loaded")
 	""" 		\ endif
 	""" endif
 
-	endif
+endif
 
 " }}}
 
@@ -552,10 +555,6 @@ endfunction
 abbreviate teh the
 abbreviate subent subnet
 abbreviate directort directory
-
-
-iabbrev sl@ steve@stevelosh.com
-iabbrev vrcf `~/.vimrc` file
 
 " Copyright, Trademark, etc...
 iabbrev (c) ©
@@ -644,7 +643,7 @@ vnoremap / /\v
 " Ardito, ma interessante:
 " Rimappare altri tasti in vece di <ESC>
 " In questo modo, in INSERT MODE, premere jj e' come premere <ESC>
-inoremap jj <ESC>
+" inoremap jj <ESC>
 
 
 " PLUGINS:
