@@ -27,9 +27,9 @@
 if !isdirectory(expand("~/.vim/backups"))
     call mkdir(expand("~/.vim/backups"), "", 0700)
 endif
-if !isdirectory(expand("~/.vim/swap"))
-    call mkdir(expand("~/.vim/swap"), "", 0700)
-endif
+" if !isdirectory(expand("~/.vim/swap"))
+"     call mkdir(expand("~/.vim/swap"), "", 0700)
+" endif
 " }}}
 
 
@@ -48,6 +48,15 @@ set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO
 " tenerli tutti in una directory, ed e' comodo per evitare di editare in due
 " lo stesso file.
 " set directory=~/.vim/swap,.
+
+" persistent undo (vim 7.3)
+if v:version >= 703
+	if !isdirectory(expand("~/.vim/undo"))
+		call mkdir(expand("~/.vim/undo"), "", 0700)
+	endif
+	set undodir=~/.vim/undo,.
+	set undofile
+endif
 
 " default encoding
 set encoding=utf-8
@@ -161,7 +170,8 @@ if &t_Co > 2 || has("gui_running")
     " syntax sync fromstart
     syntax on
 	" Forse ODIO hlsearch.
-    set nohlsearch
+    " set nohlsearch
+    set hlsearch
     
     "hi statusline ctermfg=Black ctermbg=Blue
 endif

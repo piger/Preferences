@@ -82,6 +82,7 @@ set guioptions-=T		" Disattiva la toolbar
 " set toolbar=icons,tooltips
 
 set mousehide			" Hide the mouse when typing text
+set mouse=a				" Usa il mouse per tutti i Mode
 " set vb				" meglio la visual bell che l'orrendo SPEAKER
 " set ghr=2
 
