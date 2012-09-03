@@ -20,6 +20,11 @@
 " LIGHT:
 " - autumn
 "
+" DARK:
+" - inkpot
+" - xoria256
+" - badwolf
+"
 " }}}
 
 
@@ -58,43 +63,46 @@ if v:version >= 703
 	set undofile
 endif
 
-" default encoding
-set encoding=utf-8
+set encoding=utf-8		" default encoding
+set history=200			" quante entry di history per comandi e search
+set completeopt=longest,menuone,preview	" Completion piu' dettagliata e comoda
+set noexrc				" NON leggere i file .vimrc .exrc nella dir corrente.
 
-set history=100			" quante entry di history per comandi e search
-
-set noexrc			" NON leggere i file .vimrc .exrc nella dir corrente.
-" ricerca testo
 set ignorecase			" ricerca case insensitive...
 set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
-" set wrapscan			" la ricerca di testo NON si ferma alla fine del file, senza wrappare
+set nowrapscan			" la ricerca di testo si ferma alla fine del file
 set grepprg=~/bin/ack	" usa ack al posto di grep per ':grep'
 set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
 
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
-" set lazyredraw			" non fare il redraw dello schermo mentre runna le macro
-set listchars=tab:>-,trail:-	" In 'list', mostra ">----" per i tab e "---" per gli
-				" spazi vuoti alla fine delle righe.
+" set lazyredraw		" non fare il redraw dello schermo mentre runna le macro
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮	" I caratteri da usare in `list` mode
+set showbreak=↪			" Il carattere da mostrare alla fine delle righe wrappate
 set nomodeline			" NON uso le modlines, ma le securemodlines tramite plugin
 " set modeline
 " set modelines=5                 " numero di righe valido per le modeline
 set mousemodel=popup	" tasto destro del mouse mostra un popup, come su windows.
 set report=0			" Mostra sempre il numero di righe modificate da un comando   
-set ruler			" mostra la posizione del cursore in basso a destra
+set ruler				" mostra la posizione del cursore in basso a destra
 set scrolloff=5			" scrolla con un context di 3 righe
-set showcmd			" mostra comandi parziali mentre vengono digitati
+set sidescroll=3		" scrolla lateralmente con un context di 3 righe
+set showcmd				" mostra comandi parziali mentre vengono digitati
 set noshowmatch			" NON mostrare la parentesi corrispettiva quando ne inserisci una
 set showmode			" mostra un messaggio se in modalita' insert/visual/replace
 " NOTA: Siccome la statusline include una funzione di fugitive (plugin vim) che
 " puo' NON essere installato, sposto la definizione della statusline piu' in
 " basso, dopo i Bundle, e ci metto un if.
+set splitbelow			" Splitta aprendo sempre una finestra sotto quella attuale
+set splitright			" Splitta aprendo sempre una finestra a destra di quella attuale
+set title				" Permette di modificare il titolo della finestra/term
+set synmaxcol=800		" Non fare l'highlight di righe piu' lunghe di 800 colonne (file XML abnormi & co)
 
 set nosmartindent		" NON indentare con saggezza
-set virtualedit=block		" permette di posizionare il cursore dove NON ci sono caratteri,
-				" in visual block
+set virtualedit=block	" permette di posizionare il cursore dove NON ci sono caratteri,
+						" in visual block
 set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
 set wig+=*.DS_Store
 
@@ -103,6 +111,13 @@ set wildmode=list:longest,full	" Complete longest common string, then each full 
 set wrap			" wrappa SEMPRE, e' OK!
 set t_Co=256			" 256 colori in terminale	
 set vb				" meglio la visual bell che l'orrendo SPEAKER
+
+" Da verificare (3/9/2012)
+""" " Time out on key codes but not mappings.
+""" " Basically this makes terminal Vim work sanely.
+""" set notimeout
+""" set ttimeout
+""" set ttimeoutlen=10
 
 " Ricorda nel viminfo:
 " '100 -- marks per gli ultimi 100 file
@@ -367,7 +382,8 @@ if !exists("autocommands_loaded")
 
 	" Resize splits when the window is resized
 	" src: https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
-	au VimResized * exe "normal! \<c-w>="
+	" au VimResized * exe "normal! \<c-w>="
+	au VimResized * :wincmd =
 
 	" autocmd BufNewFile,BufRead *.txt set filetype=human
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
@@ -654,6 +670,10 @@ vnoremap / /\v
 " Rimappare altri tasti in vece di <ESC>
 " In questo modo, in INSERT MODE, premere jj e' come premere <ESC>
 " inoremap jj <ESC>
+
+" Emacs bindings in command line mode
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
 
 
 " PLUGINS:
