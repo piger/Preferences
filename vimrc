@@ -481,6 +481,9 @@ if !exists("autocommands_loaded")
 	" Markdown e non Modula2:
 	au BufNewFile,BufRead *.md setl ft=markdown
 
+	" rtorrent
+	au BufNewFile,BufRead *rtorrent.rc* setf rtorrent
+
 	" vim -b : edit binary using xxd-format!
 	augroup Binary
 		au!

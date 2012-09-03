@@ -4,6 +4,7 @@ vim/backups
 vim/mru
 vim/swap
 vim/view
+vim/undo
 vim/vim-fuf
 vim/.netrwhist
 vim/spell/
