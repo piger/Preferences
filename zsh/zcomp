@@ -121,6 +121,11 @@ zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 # Completion con i colori di ls
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# completion from history [ https://github.com/seebi/zshrc/blob/master/options.zsh ]
+zle -C hist-complete complete-word _generic
+zstyle ':completion:hist-complete:*' completer _history
+bindkey '^X^X' hist-complete
+
 # completion per pip
 function _pip_completion {
   local words cword

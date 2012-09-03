@@ -298,4 +298,14 @@ settitle() {
 	printf "\033k$1\033\\"
 }
 
+# anti tar bomb
+sbomba() {
+	l=$(tar tf $1)
+	if [[ ${#${(f)l}} -eq $(echo "$l" | grep ${${(f)l}[1]} | wc -l) ]]; then
+		tar xf $1
+	else
+		mkdir ${1%.t(ar.gz||ar.bz2||gz||bz||ar)} && tar xvf $1 -C ${1%.t(ar.gz||ar.bz2||gz||bz||ar)}
+	fi
+}
+
 # vim: ft=zsh

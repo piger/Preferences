@@ -34,6 +34,9 @@ alias -g M='|more'
 alias -g H='|head'
 alias -g T='|tail'
 
+# suffix aliases
+alias -s asc='gpg'
+
 alias tmessages="tail -f /var/log/messages"
 alias tsyslog="tail -f /var/log/syslog"
 alias pwgen_strong='pwgen -y1 15 20'

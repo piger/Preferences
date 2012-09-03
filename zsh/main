@@ -54,6 +54,8 @@ setopt pushd_ignore_dups	# Purga i duplicati dallo stack delle directory
 setopt NO_rm_star_silent	# Chiede conferma per: 'rm *' o 'rm /path/*'
 setopt short_loops			# Permette le forme abbreviate di for, if, function, etc...
 setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, utile con 'script'
+setopt TRANSIENT_RPROMPT	# Remove any right prompt from display when accepting a command line. This may be useful with terminals with other cut/paste methods.
+
 # }}}
 
 
@@ -270,6 +272,11 @@ fi
 # NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
 [[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
 [[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
+
+# brew - zsh-completions
+if [[ -d /usr/local/share/zsh-completions/ ]]; then
+	fpath=(/usr/local/share/zsh-completions $fpath)
+fi
 
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded

@@ -9,6 +9,15 @@
 #     alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
 # fi
 
+# suffix aliases
+# Esempio:
+# ~/Pictures $ *.jpeg
+#	-> Eseguira': open *.jpeg
+alias -s pdf='open'
+alias -s avi='open'
+alias -s jpeg='open'
+alias -s jpg='open'
+
 # ls da `homebrew` -> `coreutils`
 if [[ -x /usr/local/bin/gls ]]; then
     alias ls="gls --color=always -F"
