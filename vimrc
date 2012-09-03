@@ -72,7 +72,7 @@ set ignorecase			" ricerca case insensitive...
 set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
-set nowrapscan			" la ricerca di testo si ferma alla fine del file
+set wrapscan			" la ricerca di testo NON si ferma alla fine del file
 set grepprg=~/bin/ack	" usa ack al posto di grep per ':grep'
 set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
 
