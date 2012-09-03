@@ -279,9 +279,7 @@ fi
 [[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
 
 # brew - zsh-completions
-if [[ -d /usr/local/share/zsh-completions/ ]]; then
-	fpath=(/usr/local/share/zsh-completions $fpath)
-fi
+[[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
@@ -292,6 +290,7 @@ fi
 autoload -U zcalc zmv zargs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+
 
 # Other files
 source $ZDOTDIR/bind
@@ -328,6 +327,18 @@ source $ZDOTDIR/zcomp
 # unalias run-help > /dev/null 2>&1
 # autoload run-help
 # HELPDIR=/usr/share/zsh/help
+
+# Plugins
+# NOTA: Alcuni tipo `zsh-syntax-highlight` vanno caricati alla *fine* del zshrc.
+# zsh syntax highlight
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
+
+# zsh Fish-style history search (va caricato DOPO zsh-syntax-highlight)
+source $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh
+
+# zaw (dubbia utilita')
+source $ZDOTDIR/plugins/zaw.git/zaw.zsh
 
 # Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
 return 0

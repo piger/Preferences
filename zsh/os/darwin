@@ -9,6 +9,8 @@
 #     alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
 # fi
 
+alias dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox'
+
 # suffix aliases
 # Esempio:
 # ~/Pictures $ *.jpeg
@@ -32,7 +34,7 @@ export CLICOLOR=1
 export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
 
 # per Homebrew:
-export PATH="/usr/local/bin:${PATH}"
+[[ -d /usr/local/bin ]] && export PATH="/usr/local/bin:${PATH}"
 
 # Questo e' un fix per i default sballati di OSX (Lion?)
 if [[ $LC_CTYPE == "UTF-8" ]]; then
@@ -40,7 +42,7 @@ if [[ $LC_CTYPE == "UTF-8" ]]; then
 fi
 
 # Supporto per la struttura di directory "local" (il --user di setup.py) su OSX
-[[ -e ~/Library/Python/2.7/bin ]] && PATH=~/Library/Python/2.7/bin:$PATH
+[[ -e ~/Library/Python/2.7/bin ]] && export PATH=~/Library/Python/2.7/bin:$PATH
 
 # Aggiunge /usr/local/lib/python a PYTHONPATH per PyQt4 (installato tramite brew)
 # export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
