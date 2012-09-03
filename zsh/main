@@ -56,6 +56,11 @@ setopt short_loops			# Permette le forme abbreviate di for, if, function, etc...
 setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, utile con 'script'
 setopt TRANSIENT_RPROMPT	# Remove any right prompt from display when accepting a command line. This may be useful with terminals with other cut/paste methods.
 
+# zsh 5.x utf-8
+if [[ $ZSH_VERSION == <5->.* ]]; then
+	setopt COMBINING_CHARS
+fi
+
 # }}}
 
 

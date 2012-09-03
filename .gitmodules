@@ -19,3 +19,12 @@
 [submodule "vim/bundle/surround"]
 	path = vim/bundle/surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule "/Users/sand/Preferences/zsh/plugins/zsh-synyax-highlighting.git"]
+	path = /Users/sand/Preferences/zsh/plugins/zsh-synyax-highlighting.git
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "/Users/sand/Preferences/zsh/plugins/zsh-history-substring-search.git"]
+	path = /Users/sand/Preferences/zsh/plugins/zsh-history-substring-search.git
+	url = https://github.com/zsh-users/zsh-history-substring-search.git
+[submodule "/Users/sand/Preferences/zsh/plugins/zaw.git"]
+	path = /Users/sand/Preferences/zsh/plugins/zaw.git
+	url = https://github.com/zsh-users/zaw.git
