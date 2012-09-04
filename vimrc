@@ -811,6 +811,16 @@ endif
 "" EOF
 "" 
 "" endif
+
+" python-mode
+let g:pymode_doc = 1
+let g:pymode_rope = 1
+let g:pymode_rope_auto_project = 0
+let g:pymode_folding = 0
+let g:pymode_motion = 1
+let g:pymode_virtualenv = 0
+let g:pymode_syntax_space_errors = 0
+
 """ " }}}
 
 
