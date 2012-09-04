@@ -6,7 +6,7 @@
 "    '`  (\   FUCO
 
 
-" NOTE, SUGGERIMENTI E AVVERTIMENTI {{{
+" NOTE, SUGGERIMENTI E AVVERTIMENTI ---------------------------------------- {{{
 "   - lo spazio tra ogni sezione e' di due righe vuote
 "   - :options apre una finestra dove vedere e cambiare le opzioni
 "   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
@@ -28,7 +28,7 @@
 " }}}
 
 
-" Creazione delle directory necessarie (all'avvio di vim) {{{
+" Creazione delle directory necessarie (all'avvio di vim) ------------------ {{{
 if !isdirectory(expand("~/.vim/backups"))
     call mkdir(expand("~/.vim/backups"), "", 0700)
 endif
@@ -38,7 +38,7 @@ endif
 " }}}
 
 
-" Configurazione di base {{{
+" Configurazione di base --------------------------------------------------- {{{
 set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
@@ -139,7 +139,7 @@ endif
 " }}}
 
 
-" Mouse support {{{
+" Mouse support ------------------------------------------------------------ {{{
 " Se il terminal emulator supporta il mouse, usalo... ma anche no
 " if has('mouse')
 "     set mouse=a
@@ -151,16 +151,12 @@ set mouse=""
 " }}}
 
 
-" folding {{{
-"set foldenable
-"set foldmethod=marker
-"set foldlevel=100		" trick per non foldare automaticamente
+" Folding ------------------------------------------------------------------ {{{
+" set foldenable
+" set foldmethod=marker
+" set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
-"function SimpleFoldText() " {
-"    return getline(v:foldstart).' '
-"endfunction " }
-"set foldtext=SimpleFoldText()
 " }}}
 
 
