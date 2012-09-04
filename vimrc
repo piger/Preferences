@@ -165,7 +165,7 @@ set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 
 
 " Lingua e dizionari {{{
-set spelllang=it,en
+set spelllang=it,en,en_us
 set dictionary+=/usr/share/dict/words
 
 " thesaurus (sinonimi) italiano:
@@ -383,9 +383,7 @@ if !exists("autocommands_loaded")
 	" au VimResized * exe "normal! \<c-w>="
 	au VimResized * :wincmd =
 
-	" spell checking per i file txt
-	autocmd BufNewFile,BufRead *.txt setl spell
-	" e per i commit di git
+	" spell check per i commit di git
 	autocmd FileType gitcommit setl spell
 	" e per i file Markdown
 	autocmd FileType markdown setl spell
