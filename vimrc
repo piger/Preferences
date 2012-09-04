@@ -165,7 +165,7 @@ set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 
 
 " Lingua e dizionari {{{
-set spelllang=it,en,en_US
+set spelllang=it,en
 set dictionary+=/usr/share/dict/words
 
 " thesaurus (sinonimi) italiano:
@@ -253,9 +253,7 @@ set stl+=%m
 set stl+=%r
 set stl+=%w
 set stl+=\ 
-if exists('g:loaded_fugitive')
-	set stl+=%{fugitive#statusline()}
-endif
+set stl+=%{fugitive#statusline()}
 set stl+=%=		" right align
 set stl+=\ 
 
@@ -385,7 +383,13 @@ if !exists("autocommands_loaded")
 	" au VimResized * exe "normal! \<c-w>="
 	au VimResized * :wincmd =
 
-	" autocmd BufNewFile,BufRead *.txt set filetype=human
+	" spell checking per i file txt
+	autocmd BufNewFile,BufRead *.txt setl spell
+	" e per i commit di git
+	autocmd FileType gitcommit setl spell
+	" e per i file Markdown
+	autocmd FileType markdown setl spell
+
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
 
 	" backup in $PWD e altro (da aggiungere)
