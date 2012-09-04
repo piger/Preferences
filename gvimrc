@@ -79,12 +79,13 @@ endif
 " }}}
 
 " Opzioni generiche {{{
-set guioptions-=T		" Disattiva la toolbar
+set guioptions-=T			" Disattiva la toolbar
+set guicursor=a:blinkon0	" Cursore che non blinka
 " set toolbar=icons,tooltips
 
-set mousehide			" Hide the mouse when typing text
-set mouse=a				" Usa il mouse per tutti i Mode
-" set vb				" meglio la visual bell che l'orrendo SPEAKER
+set mousehide				" Hide the mouse when typing text
+set mouse=a					" Usa il mouse per tutti i Mode
+" set vb					" meglio la visual bell che l'orrendo SPEAKER
 " set ghr=2
 
 " Evito il seguente bug: quando si crea il primo tab con :tabc o simili, la
