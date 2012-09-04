@@ -14,7 +14,13 @@ setl omnifunc=pythoncomplete#Complete
 setl completeopt=menuone,longest,preview
 setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-setl cinwords=if,elif,else,for,while,try,except,finally,def,class
+setl cinwords=in,elif,else,for,while,try,except,finally,def,class,with
+setl encoding=utf-8
+setl fileformat=unix
+
+" grazie a compiler/nose.vim e il plugin `makegreen` posso lanciare facilmente
+" i test dentro vim. Il keybind di makegreen e' '<Leader>t'.
+compiler nose
 
 " I commenti in python, con "smartindent", vanno sempre a inizio riga;
 " questo fixa 'sto behaviour
@@ -32,3 +38,22 @@ setl foldlevel=100
 "" if has("gui_running")
 ""     setl number
 "" endif
+
+" More syntax highlighting.
+let python_highlight_all = 1
+
+" exuberant-ctags
+" ctags -R -f ~/.vim/tags/python-2.7 $(python -c 'import sys; print " ".join(sys.path)')
+if filereadable(expand("~/.vim/tags/python-2.7"))
+	set tags+=$HOME/.vim/tags/python-2.7
+endif
+
+" Execute a selection of code (very cool!)
+" Use VISUAL to select a range and then hit ctrl-h to execute it.
+" https://dev.launchpad.net/UltimateVimPythonSetup
+python << EOL
+import vim
+def EvaluateCurrentRange():
+    eval(compile('\n'.join(vim.current.range),'','exec'),globals())
+EOL
+map <C-h> :py EvaluateCurrentRange()

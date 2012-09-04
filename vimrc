@@ -103,8 +103,8 @@ set synmaxcol=800		" Non fare l'highlight di righe piu' lunghe di 800 colonne (f
 set nosmartindent		" NON indentare con saggezza
 set virtualedit=block	" permette di posizionare il cursore dove NON ci sono caratteri,
 						" in visual block
-set wildignore=*.o,*.obj,*.exe,*.pyc,*.jpg,*.gif,*.bmp,*.png
-set wig+=*.DS_Store
+set wildignore=*.o,*.obj,*.exe,*.jpg,*.gif,*.bmp,*.png
+set wildignore+=*.py[co],*.DS_Store
 
 set wildmenu			" Abilita il menu carino per la completion
 set wildmode=list:longest,full	" Complete longest common string, then each full match
@@ -421,13 +421,9 @@ if !exists("autocommands_loaded")
 	""" autocmd FileType python,perl :setl foldcolumn=2
 	""" autocmd FileType python :setl foldmethod=indent
 
-	" Per python uso ftplugin/python.vim
 	augroup Python
 		au!
-		autocmd FileType python setlocal cinwords=in,elif,else,for,while,try,except,finally,def,class,with
-		autocmd FileType python setl fileformat=unix
-		autocmd FileType python setl encoding=utf-8
-
+		" Per python uso ftplugin/python.vim !
 		" Per i file di Ren'Py
 		au BufNewFile,BufRead *.rpy setl ft=renpy
 	augroup END

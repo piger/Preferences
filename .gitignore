@@ -2,6 +2,7 @@
 *.swp
 vim/backups
 vim/mru
+vim/tags
 vim/swap
 vim/view
 vim/undo
