@@ -25,7 +25,7 @@ if has("gui_gtk2")
     " colorscheme sienna
 	" colo mustang
 	" colo martin_krischik
-	colo autumn
+	colorscheme inkpot
 " }}}
 
 " X11 (Linux?) {{{
@@ -51,7 +51,8 @@ elseif has("gui_macvim")
 	" colorscheme native 
 	" colorscheme navajo-night
 	" colorscheme mustang
-	colorscheme xoria256
+	" colorscheme xoria256
+	colorscheme inkpot
 
     " I FONTI POMPI
     " set guifont=Monaco:h12
