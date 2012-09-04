@@ -97,10 +97,10 @@ zstyle ':completion:*' special-dirs true
 
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
-# XXX non penso che PERL5LIB sia scalar...
 zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
-LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
-PERL5LIB:scalar
+    LD_LIBRARY_PATH:scalar COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
+    PERL5LIB:scalar PYTHONPATH:scalar DJANGO_SETTINGS_MODULE:scalar \
+    SSH_AUTH_SOCK:scalar
 
 # Completion per `kill`: mostra una lista di processi con la percentuale di CPU
 # utilizzata, e su linux come bonus mostra i processi come un albero
