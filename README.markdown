@@ -64,6 +64,12 @@ includono un helper per integrarsi con keychains di OS X; per abilitarlo:
 
 	$ git config --global credential.helper osxkeychain
 
+### Esportare Preferences
+
+Per esportare tutto il repository in formato tar.gz:
+
+	$ git archive --format=tar.gz --prefix=Preferences/ --output=Preferences_$(date +"%d-%b-%Y").tar.gz HEAD
+
 ## Repository e utility
 
 - [zsh-syntax-highlighting](git://github.com/zsh-users/zsh-syntax-highlighting.git)
