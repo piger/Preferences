@@ -1,0 +1,8 @@
+--type-set
+django=.py,.html
+--type-set
+less=.less
+--type-set
+web=.html,.js,.less,.css
+--smart-case
+--sort-files
