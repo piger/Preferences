@@ -7,11 +7,14 @@
 
 
 " NOTE, SUGGERIMENTI E AVVERTIMENTI ---------------------------------------- {{{
-"   - lo spazio tra ogni sezione e' di due righe vuote
-"   - :options apre una finestra dove vedere e cambiare le opzioni
-"   - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
-"   - OMNI-Completion: C-x, C-o
-"   - help comandi finestre: :he CTRL-W
+" - lo spazio tra ogni sezione e' di due righe vuote
+" - :options apre una finestra dove vedere e cambiare le opzioni
+" - per l'help delle opzioni utilizzare la sintassi: help 'nome opzione'
+" - OMNI-Completion: C-x, C-o
+" - help comandi finestre: :he CTRL-W
+" - inserire lettere accentate: CTRL-K + lettera + ' o !
+"   Ad esempio per inserire á: C-k + a + '
+" - apre una tag in una nuova finestra: C-w + ]
 "
 " IDEE, TODO
 " - tasto per toggle di 'relativenumber', comodo per i comandi su piu' righe
@@ -73,7 +76,8 @@ set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set wrapscan			" la ricerca di testo NON si ferma alla fine del file
-set grepprg=~/bin/ack	" usa ack al posto di grep per ':grep'
+set grepprg=ack			" usa ack al posto di grep per ':grep'
+set grepformat=%f:%l:%m " per usare ack
 set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
 
 "set formatoptions=rq ?		" XXX
@@ -354,6 +358,7 @@ let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 
 " virtualenv.vim
 let g:virtualenv_directory = '~/tmp/virtualenvs/'
+
 " }}}
 
 
@@ -509,16 +514,10 @@ if !exists("autocommands_loaded")
 	  \   exe "normal g`\"" |
 	  \ endif
 
-	" Usa il metodo migliore di omnicompletion
-	" http://vim.runpaint.org/typing/auto-completing-text/
-	" 5/Aprile/2012 - Lo commento perche' mi sa che blocca la completion
-	" python.
-	""" if exists("+omnifunc")
-	""" 	au FileType *
-	""" 		\ if &omnifunc == "" |
-	""" 		\ setl omnifunc=syntaxcomplete#Complete |
-	""" 		\ endif
-	""" endif
+	" Utilizza la `syntax completion` se non esite una omnicompletion apposita
+	" per questo tipo di file; questo trucco, suggerito dall'help di
+	" `compl-omni`, va posto dopo tutti gli autocommand FileType.
+	autocmd FileType * if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
 
 endif
 
@@ -571,6 +570,26 @@ function! QuickFixDo(cmd)
 		exe a:cmd
 	endfor
 endfunction
+
+" fill rest of line with characters
+" http://stackoverflow.com/questions/3364102/how-to-fill-a-line-with-character-x-up-to-column-y-using-vim
+function! FillLine( str )
+    " set tw to the desired total length
+    let tw = &textwidth
+    if tw==0 | let tw = 80 | endif
+    " strip trailing spaces first
+    .s/[[:space:]]*$//
+    " calculate total number of 'str's to insert
+    let reps = (tw - col("$")) / len(a:str)
+    " insert them, if there's room, removing trailing spaces (though forcing
+    " there to be one)
+    if reps > 0
+        .s/$/\=(' '.repeat(a:str, reps))/
+    endif
+endfunction
+
+" \f per fillare una riga con il carattere sotto il cursore
+nnoremap <Leader>f :call FillLine(getline(".")[col(".") - 1])
 " }}}
 
 
