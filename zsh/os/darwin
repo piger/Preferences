@@ -11,6 +11,11 @@
 
 alias dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox'
 
+# da https://github.com/sjl/dotfiles/blob/master/fish/config.fish e da VERIFICARE (e convertire in zsh)
+alias spotlight-info='sudo fs_usage -w -f filesys mdworker | grep "open"'
+# alias spotlight-off 'sudo mdutil -a -i off ; and sudo mv /System/Library/CoreServices/Search.bundle/ /System/Library/CoreServices/SearchOff.bundle/ ; and killall SystemUIServer'
+# alias spotlight-on 'sudo mdutil -a -i on ; and sudo mv /System/Library/CoreServices/SearchOff.bundle/ /System/Library/CoreServices/Search.bundle/ ; and killall SystemUIServer'
+
 # suffix aliases
 # Esempio:
 # ~/Pictures $ *.jpeg
