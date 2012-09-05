@@ -79,3 +79,18 @@ else
 	set clipboard=unnamed
 endif
 " }}}
+
+" Balloon Tooltips --------------------------------------------------------- {{{
+set ballooneval
+set balloondelay=400
+
+" da "Hacking Vim"
+" Se lo spell check e' attivo e il cursore del mouse e' sopra una parola
+" sbagliata verranno mostrati in un popup i suggerimenti per la correzione.
+function! SpellBalloon()
+	let lines = spellsuggest(spellbadword(v:beval_text)[0], 5, 0)
+	return join(lines, has("balloon_multiline") ? "\n" : " ")
+endfunction
+
+set balloonexpr=SpellBalloon()
+" }}}

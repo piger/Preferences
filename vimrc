@@ -209,6 +209,9 @@ endif
 
 " Questo dovrebbe essere un "%" evoluto
 runtime macros/matchit.vim
+
+" signs
+sign define information text=!> linehl=Warning texthl=Error
 " }}}
 
 
@@ -590,6 +593,24 @@ endfunction
 
 " \f per fillare una riga con il carattere sotto il cursore
 nnoremap <Leader>f :call FillLine(getline(".")[col(".") - 1])
+
+
+" Lista numerata (da Hacking Vim)
+function! NumberList() range 
+	let beginning = line("'<")
+	let ending = line("'>")
+	let difsize = ending - beginning + 1
+	let pre = ' '
+	while (beginning <= ending)
+		if match(difsize, '^9*$') == 0
+			let pre = pre . ' '
+		endif
+		call setline(ending, pre . difsize . "\t" . getline(ending))
+		let ending = ending - 1
+		let difsize = difsize - 1
+	endwhile
+endfunction
+
 " }}}
 
 

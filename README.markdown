@@ -72,6 +72,7 @@ includono un helper per integrarsi con keychains di OS X; per abilitarlo:
 - [cliweather](https://github.com/AaronFoltz/cliweather.git) - per il clima in
   command line.
 - # gem install lolcat
+- [python-mode](https://github.com/klen/python-mode.git)
 
 ## Note
 
