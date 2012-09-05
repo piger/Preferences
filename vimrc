@@ -18,15 +18,12 @@
 "
 " IDEE, TODO
 " - tasto per toggle di 'relativenumber', comodo per i comandi su piu' righe
+" - cscope?
+" - ctags? per python?
 "
 " Colorscheme interessanti
-" LIGHT:
-" - autumn
-"
-" DARK:
-" - inkpot
-" - xoria256
-" - badwolf
+" LIGHT: autumn
+" DARK: inkpot, xoria256, badwolf
 "
 " }}}
 
@@ -76,10 +73,10 @@ set incsearch			" ricerca incrementale
 set infercase			" ...anche nella completion
 set smartcase			" ...MA se la ricerca contiene caratteri uppercase, annulla ignorecase
 set wrapscan			" la ricerca di testo NON si ferma alla fine del file
-set grepprg=ack			" usa ack al posto di grep per ':grep'
+set grepprg=ack\ -a		" usa ack al posto di grep per ':grep' (-a per cercare in tutti i file!)
 set grepformat=%f:%l:%m " per usare ack
 set path=./**,**		" i path per il comando :find, :tabfind, etc (comodo!)
-
+set fillchars=diff:⣿,vert:\|,fold:-
 "set formatoptions=rq ?		" XXX
 set laststatus=2		" mostra sempre la riga di status con le info sul file
 " set lazyredraw		" non fare il redraw dello schermo mentre runna le macro
@@ -156,7 +153,7 @@ set mouse=""
 
 
 " Folding ------------------------------------------------------------------ {{{
-" set foldenable
+set foldenable
 " set foldmethod=marker
 " set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
@@ -361,6 +358,22 @@ let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 
 " virtualenv.vim
 let g:virtualenv_directory = '~/tmp/virtualenvs/'
+
+" python-mode
+let g:pymode_doc = 1
+let g:pymode_rope = 1
+let g:pymode_rope_auto_project = 0	" preferisco aprirli a mano
+let g:pymode_folding = 1
+let g:pymode_motion = 1
+let g:pymode_run = 0		" eseguire python da dentro l'editor e' sempre goffo
+let g:pymode_virtualenv = 0	" non mi fido, per ora
+let g:pymode_syntax_space_errors = 0	" che due palle
+let g:pymode_utils_whitespaces = 0	" fatti i cazzi tuoi (auto-remove 'unused' whitespaces)
+
+let g:pymode_rope_vim_completion = 1
+let g:pymode_rope_extended_complete = 1
+let g:pymode_rope_global_prefix = "<localleader>R"
+let g:pymode_rope_local_prefix = "<localleader>r"
 
 " }}}
 
@@ -847,15 +860,6 @@ endif
 "" EOF
 "" 
 "" endif
-
-" python-mode
-let g:pymode_doc = 1
-let g:pymode_rope = 1
-let g:pymode_rope_auto_project = 0
-let g:pymode_folding = 0
-let g:pymode_motion = 1
-let g:pymode_virtualenv = 0
-let g:pymode_syntax_space_errors = 0
 
 """ " }}}
 
