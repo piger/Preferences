@@ -489,8 +489,8 @@ if !exists("autocommands_loaded")
 	" autocmd BufWinEnter *.rb silent loadview
 
 	" Per i file HTML di monbox.
-	au BufNewFile,BufRead *monbox*/*.html set ft=htmldjango
-	au BufNewFile,BufRead *MonitoringBox*/*.html set ft=htmldjango
+	au BufNewFile,BufRead *monbox*/*.html setl ft=htmldjango
+	au BufNewFile,BufRead *MonitoringBox*/*.html setl ft=htmldjango
 
 	" Visto che non credo scrivero' mai in Modula2 dico a vim che '.md' e'
 	" Markdown e non Modula2:
@@ -504,7 +504,7 @@ if !exists("autocommands_loaded")
 		au!
 		au BufReadPre  *.hex let &bin=1
 		au BufReadPost *.hex if &bin | %!xxd
-		au BufReadPost *.hex set ft=xxd | endif
+		au BufReadPost *.hex setl ft=xxd | endif
 		au BufWritePre *.hex if &bin | %!xxd -r
 		au BufWritePre *.hex endif
 		au BufWritePost *.hex if &bin | %!xxd
