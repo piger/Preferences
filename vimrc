@@ -369,6 +369,7 @@ let g:pymode_run = 0		" eseguire python da dentro l'editor e' sempre goffo
 let g:pymode_virtualenv = 0	" non mi fido, per ora
 let g:pymode_syntax_space_errors = 0	" che due palle
 let g:pymode_utils_whitespaces = 0	" fatti i cazzi tuoi (auto-remove 'unused' whitespaces)
+let g:pymode_lint = 0		" disattivo per colpa del BUG di <c-w>!
 
 let g:pymode_rope_vim_completion = 1
 let g:pymode_rope_extended_complete = 1
