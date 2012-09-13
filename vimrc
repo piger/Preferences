@@ -472,9 +472,9 @@ if !exists("autocommands_loaded")
 	autocmd BufNewFile *.pl 0r ~/.vim/templates/perl.pl
 	autocmd BufNewFile *.py 0r ~/.vim/templates/python.py
 
-	autocmd FileType perl set makeprg=perl\ -c\ %\ $*
-	autocmd FileType perl set errorformat=%f:%l:%m
-	" autocmd FileType perl set autowrite
+	autocmd FileType perl setl makeprg=perl\ -c\ %\ $*
+	autocmd FileType perl setl errorformat=%f:%l:%m
+	" autocmd FileType perl setl autowrite
 
 	" Mako templates
 	autocmd BufNewFile,BufRead *.mako setl ft=mako
@@ -509,11 +509,11 @@ if !exists("autocommands_loaded")
 		au BufWritePre *.hex if &bin | %!xxd -r
 		au BufWritePre *.hex endif
 		au BufWritePost *.hex if &bin | %!xxd
-		au BufWritePost *.hex set nomod | endif
+		au BufWritePost *.hex setl nomod | endif
 	augroup END
 
 	" file .json
-	au! BufRead,BufNewFile *.json set filetype=json
+	au! BufRead,BufNewFile *.json setl filetype=json
 
 	augroup json_autocmd
 		autocmd!
