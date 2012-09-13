@@ -57,4 +57,7 @@ penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
 # supporto FORZATO dei 256 colori per tmux
 alias tmux='tmux -2'
 
+# oggi
+alias oggi='date "+%d-%m-%Y"'
+
 # vim: ft=zsh
