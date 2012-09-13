@@ -54,7 +54,6 @@ endif
 " Opzioni generiche {{{
 set guioptions-=T			" Disattiva la toolbar
 set guicursor=a:blinkon0	" Cursore che non blinka
-set toolbar=''				" disattiva la toolbar grafica
 set visualbell				" visual bell al posto del *BEEP*
 
 " Evito il seguente bug: quando si crea il primo tab con :tabc o simili, la
