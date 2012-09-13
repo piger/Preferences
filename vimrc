@@ -254,6 +254,10 @@ set stl+=%r
 set stl+=%w
 set stl+=\ 
 set stl+=%{fugitive#statusline()}
+set stl+=\ 
+set stl+=%#warningmsg#
+set stl+=%{SyntasticStatuslineFlag()}
+set stl+=%*
 set stl+=%=		" right align
 set stl+=\ 
 
@@ -375,6 +379,10 @@ let g:pymode_rope_vim_completion = 1
 let g:pymode_rope_extended_complete = 1
 let g:pymode_rope_global_prefix = "<localleader>R"
 let g:pymode_rope_local_prefix = "<localleader>r"
+
+" syntastic
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
 
 " }}}
 
