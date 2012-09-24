@@ -5,6 +5,10 @@
 # -*- aliases
 alias ls="ls --color=auto $ls_opts"
 
+if (( ! $+commands[gnome-open] )); then
+	alias gnome-open='echo quei rottinculo di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
+fi
+
 # locate/updatedb solo per la $HOME
 if (( $+commands[updatedb] )); then
     alias my_updatedb='updatedb -l 0 -o ~/.updatedb -U $HOME -e /,~/.cpan'
