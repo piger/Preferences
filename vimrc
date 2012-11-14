@@ -409,10 +409,12 @@ if !exists("autocommands_loaded")
 	" au VimResized * exe "normal! \<c-w>="
 	au VimResized * :wincmd =
 
+	" 14/11/12 Disattivo lo spell check perchè causa problemi di encoding
+	" e altre stronzate; non e' affatto comodo.
 	" spell check per i commit di git
-	autocmd FileType gitcommit setl spell
+	" autocmd FileType gitcommit setl spell
 	" e per i file Markdown
-	autocmd FileType markdown setl spell
+	" autocmd FileType markdown setl spell
 
 	" autocmd FileType mail,human set formatoptions+=t textwidth=72 nosmartindent
 
