@@ -40,3 +40,5 @@
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
 	helper = osxkeychain
+[push]
+	default = simple
