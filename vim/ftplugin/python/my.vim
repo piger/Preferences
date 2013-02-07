@@ -5,7 +5,7 @@
 setl tabstop=8
 setl shiftwidth=4
 setl softtabstop=4
-setl textwidth=80
+setl textwidth=79
 setl expandtab
 setl smarttab
 setl autoindent
@@ -19,10 +19,18 @@ setl makeprg=flake8\ %
 setl cinwords=in,elif,else,for,while,try,except,finally,def,class,with
 setl encoding=utf-8
 setl fileformat=unix
+setl wildignore+=*.py[co]
 
 " grazie a compiler/nose.vim e il plugin `makegreen` posso lanciare facilmente
 " i test dentro vim. Il keybind di makegreen e' '<Leader>t'.
 " compiler nose
+
+" Auto completion with C-<space>
+if has("gui_running")
+	inoremap <C-space> <C-x><C-o>
+else
+	inoremap <Nul> <C-x><C-o> 
+endif
 
 " I commenti in python, con "smartindent", vanno sempre a inizio riga;
 " questo fixa 'sto behaviour
