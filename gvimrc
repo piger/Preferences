@@ -36,7 +36,8 @@ elseif has("gui_win32")
 " Mac OS X (MacVim) {{{
 elseif has("gui_macvim")
 	colorscheme inkpot
-	set guifont=Monaco:h10
+	"set guifont=Monaco:h10
+	set guifont=Cousine:h12
 
     " Configurazione finestra (altezza, larghezza, trasparenza)
     "set lines=55

@@ -100,6 +100,7 @@ set splitbelow			" Splitta aprendo sempre una finestra sotto quella attuale
 set splitright			" Splitta aprendo sempre una finestra a destra di quella attuale
 set title				" Permette di modificare il titolo della finestra/term
 set synmaxcol=800		" Non fare l'highlight di righe piu' lunghe di 800 colonne (file XML abnormi & co)
+set switchbuf=useopen,usetab " Quando switcha buffer vede prima se è aperto in un'altra finestra o tab.
 
 set nosmartindent		" NON indentare con saggezza
 set virtualedit=block	" permette di posizionare il cursore dove NON ci sono caratteri,
