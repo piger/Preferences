@@ -547,6 +547,13 @@ if !exists("autocommands_loaded")
 	" `compl-omni`, va posto dopo tutti gli autocommand FileType.
 	autocmd FileType * if &omnifunc == "" | setl omnifunc=syntaxcomplete#Complete | endif
 
+	augroup rainbow_paretheses
+		au VimEnter * RainbowParenthesesToggle
+		au Syntax * RainbowParenthesesLoadRound
+		au Syntax * RainbowParenthesesLoadSquare
+		au Syntax * RainbowParenthesesLoadBraces
+	augroup END
+
 endif
 
 " }}}
