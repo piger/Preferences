@@ -14,8 +14,15 @@ setl omnifunc=pythoncomplete#Complete
 setl completeopt=menuone,longest,preview
 "setl makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 "setl efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+
+" Supporto flake8 - http://pypi.python.org/pypi/flake8
+" - prima vede se la error line riporta il numero di colonna
+setl errorformat+=%f:%l:%c:\ %m
+" - poi prova a matchare senza numero di colonna
 setl errorformat+=%f:%l:\ %m
+" imposta flake8 come comando per :make
 setl makeprg=flake8\ %
+
 setl cinwords=in,elif,else,for,while,try,except,finally,def,class,with
 setl encoding=utf-8
 setl fileformat=unix
