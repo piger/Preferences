@@ -78,8 +78,12 @@ TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 #	umask 022
 #fi
 
-# umask 022
-umask u=rwx,g=rx,o=rx
+# Set the umask
+if [[ $UID == 0 ]]; then
+    umask 0700
+else
+    umask u=rwx,g=rx,o=
+fi
 
 # Alcuni alias vanno qui per averli anche negli script.
 if [[ -e /Applications/MacVim.app ]]; then
