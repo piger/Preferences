@@ -23,7 +23,7 @@
 "
 " Colorscheme interessanti
 " LIGHT: autumn
-" DARK: inkpot, xoria256, badwolf
+" DARK: inkpot, xoria256, badwolf, moria
 "
 " }}}
 
@@ -244,6 +244,7 @@ call pathogen#infect()
 " }}}
 
 " Statusline {{{
+" Questi setting vengono ignorati se il plugin Powerline è installato.
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 "" set statusline=%<%f\ %h%m%r%w\ %{fugitive#statusline()}%=\ buf:%n\ %y\ line:%l/%L\ –\ col:%v\ [%p%%]
@@ -257,7 +258,7 @@ set stl+=\
 set stl+=%{fugitive#statusline()}
 set stl+=\ 
 set stl+=%#warningmsg#
-set stl+=%{SyntasticStatuslineFlag()}
+"set stl+=%{SyntasticStatuslineFlag()}
 set stl+=%*
 set stl+=%=		" right align
 set stl+=\ 
@@ -832,6 +833,10 @@ map <Leader>P :TlistToggle<CR>
 " active buffer, set the 'Tlist_Show_One_File' variable to 1.
 let Tlist_Show_One_File = 1
 
+
+" CtrlP
+let g:ctrlp_extensions = ['dir']
+let g:ctrlp_user_command = 'find %s -type f'       " MacOSX/Linux
 " }}}
 
 
