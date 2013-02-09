@@ -68,9 +68,11 @@ endif
 " Execute a selection of code (very cool!)
 " Use VISUAL to select a range and then hit ctrl-h to execute it.
 " https://dev.launchpad.net/UltimateVimPythonSetup
-python << EOL
+if has('python')
+	python << EOL
 import vim
 def EvaluateCurrentRange():
-    eval(compile('\n'.join(vim.current.range),'','exec'),globals())
+	eval(compile('\n'.join(vim.current.range),'','exec'),globals())
 EOL
-map <C-h> :py EvaluateCurrentRange()
+	map <C-h> :py EvaluateCurrentRange()
+endif
