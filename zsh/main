@@ -252,9 +252,16 @@ watch=(notme)
 LOGCHECK=300		# check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
-# PYTHONSTARTUP per python in modalita' interattiva
-# (serve per la completion)
-[[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
+# PYTHONSTARTUP è uno script che viene eseguito (a detta della man page) prima
+# di avviare la modalità interattiva; mi è però successo di essere root con
+# questa variabile settata, e il file a cui puntava era leggibile solo da root,
+# e facendo `su www-data -c "trac-admin ..."` (trac è python) mi tornava errore
+# perchè non riusciva a leggere il file PYTHONSTARTUP, che ereditato da root
+# puntava ancora a un file non leggibile da www-data.
+# [[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
+#
+# Questa variabile dice all'interprete python di non scrivere file .py[co]
+# PYTHONDONTWRITEBYTECODE="foo"
 # }}}
 
 # AUTOLOAD {{{
