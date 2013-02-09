@@ -25,7 +25,7 @@
 [alias]
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
-    st = status
+	st = status
     changes = log --oneline --reverse
     ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
@@ -36,6 +36,11 @@
     storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
     pushone = push origin master:refs/heads/master
     pullone = pull origin master:refs/heads/master
+	co = checkout
+	br = branch
+	ci = commit
+	unstage = reset HEAD --
+	last = log -1 HEAD
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
