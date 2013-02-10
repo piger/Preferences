@@ -80,7 +80,7 @@ TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
 
 # Set the umask
 if [[ $UID == 0 ]]; then
-    umask 0700
+    umask 077
 else
     umask u=rwx,g=rx,o=
 fi
