@@ -702,6 +702,9 @@ nnoremap <Leader>tl :set invlist list?<CR>
 " inserisce la data (imap = in modalita' insert) - \dd - \dmy
 nmap <Leader>dd :.!date +"\%H:\%M -  "<CR>$
 imap <Leader>dmy <C-R>=strftime("%d-%m-%y")<CR>
+" inserire la data nel formato inglese: Month Day, Year (non so su cosa
+" basi la localizzazione).
+imap <Leader>ddd <C-R>=strftime("%B %d, %Y")<CR>
 
 " rot13 fun - \rot
 nmap <Leader>rot ggVGg?
@@ -836,7 +839,26 @@ let Tlist_Show_One_File = 1
 
 " CtrlP
 let g:ctrlp_extensions = ['dir']
-let g:ctrlp_user_command = 'find %s -type f'       " MacOSX/Linux
+" Disattivo `find` come comando per ctrlp perchè usare `globpath()` di vim è
+" radicalmente più veloce su OS X, e immagino anche altrove. Oltretutto con
+" `globpath()` posso limitare il numero di file e directory percorsi.
+"let g:ctrlp_user_command = 'find %s -type f'       " MacOSX/Linux
+let g:ctrlp_max_files = 300
+let g:ctrlp_max_depth = 20
+" Tolgo 'r' che dice a ctrlp di cercare una directory '.git' parent del file
+" attualmente aperto.
+let g:ctrlp_working_path_mode = 'a'
+
+
+" Multiple VCS's
+" supporto git per ottenere una lista di file dove possibile; altrove utilizza
+" il fallback, che di default è `globpath()`.
+let g:ctrlp_user_command = {
+\ 'types': {
+  \ 1: ['.git', 'cd %s && git ls-files'],
+  \ }
+\ }
+
 " }}}
 
 
