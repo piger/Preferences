@@ -43,6 +43,7 @@ set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
 set backup			" crea una copia di backup prima di sovrascrivere
 set backupdir=~/.vim/backups,.	" directory per i file di backup
+set backupskip=/tmp/*,/private/tmp/*	" Fixa il problema di vim e i file crontab (anche su OSX)
 
 " set bg=dark			" background NERO
 set background=light
@@ -461,10 +462,16 @@ if !exists("autocommands_loaded")
 	augroup END
 
 	" La directory di Apache, cazzo!
-	au BufNewFile,BufRead /etc/apache2/{sites-available,sites-enabled}/* setl ft=apache
+	augroup ft_apache
+		au BufNewFile,BufRead /etc/apache2/{sites-available,sites-enabled}/* set ft=apache
+		au BufNewFile,BufRead /etc/apache2/*.conf set ft=apache
+	augroup END
 
 	" ... e quella di Nginx.
-	au BufNewFile,BufRead /etc/nginx/{sites-available,sites-enabled}/* setl ft=nginx
+	augroup ft_nginx
+		au BufNewFile,BufRead /etc/nginx/{sites-available,sites-enabled}/* setl ft=nginx
+		au BufNewFile,BufRead /etc/nginx/*.conf set ft=nginx
+	augroup END
 
 	" txt2tags
 	au BufNewFile,BufRead *.t2t setl ft=txt2tags
@@ -653,8 +660,8 @@ abbreviate subent subnet
 abbreviate directort directory
 
 " Copyright, Trademark, etc...
-iabbrev (c) ©
-iabbrev (r) ®
+"iabbrev (c) ©
+"iabbrev (r) ®
 iabbrev (tm) ™
 iabbrev (euro) €
 " }}}
@@ -849,7 +856,6 @@ let g:ctrlp_max_depth = 20
 " attualmente aperto.
 let g:ctrlp_working_path_mode = 'a'
 
-
 " Multiple VCS's
 " supporto git per ottenere una lista di file dove possibile; altrove utilizza
 " il fallback, che di default è `globpath()`.
@@ -858,6 +864,29 @@ let g:ctrlp_user_command = {
   \ 1: ['.git', 'cd %s && git ls-files'],
   \ }
 \ }
+
+
+" Rainbow Parenthesis
+nnoremap <leader>R :RainbowParenthesesToggle<cr>
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
 
 " }}}
 
