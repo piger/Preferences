@@ -15,6 +15,7 @@
 " - inserire lettere accentate: CTRL-K + lettera + ' o !
 "   Ad esempio per inserire á: C-k + a + '
 " - apre una tag in una nuova finestra: C-w + ]
+" - chiude "l'altra" finestra, come emacs: C-w C-o
 "
 " IDEE, TODO
 " - tasto per toggle di 'relativenumber', comodo per i comandi su piu' righe
