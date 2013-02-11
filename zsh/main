@@ -120,25 +120,29 @@ function spectrum_ls() {
 	done
 }
 
-# ---
 
-chash=0
-foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
-	(( chash += #letter ))
-end
-crand=$(( $chash % 9 ))
-crandname=$colnames[$crand]
-eval cprompt='%{${fg[$crandname]}%}'
-PS1='[%T] ${cprompt}%m${fdefault}%(1j.|%j.):%3c%# '
-unset chash
-unset crand
-unset crandname
+# Hash the hostname and return a fixed "random" color
+function hostname_color() {
+	local chash=0
+	foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+		(( chash += #letter ))
+	end
+	local crand=$(( $chash % 9 ))
+	local crandname=$colnames[$crand]
+	echo "%{${fg[$crandname]}%}"
+}
+
+
+#PROMPT='[%T] $(hostname_color)%m${fdefault}%(1j.|%j.):%3c%# '
+PROMPT='${fblue}[%T] ${fyellow}%3~ ${vcs_info_msg_0_}
+$(hostname_color)%n${fdefault}@$(hostname_color)%m${fdefault}%(1j.|%j.) %# '
 
 # Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
-#RPROMPT=$'%(?..%B${fred}✘${fdefault} %?%b)'
+RPROMPT=$'%(?..%B${fred}✘${fdefault} %?%b)'
 # ci metto le info di git
-RPROMPT='${vcs_info_msg_0_}'
+#RPROMPT='${vcs_info_msg_0_}'
 
+# Questo serve per costruire RPROMPT con le info di git
 precmd () { vcs_info }
 
 # Il prompt per lo spelling
@@ -272,11 +276,11 @@ WATCHFMT='%n %a %l from %m at %t.'
 # --------
 zmodload zsh/complist
 # per ${terminfo}
-zmodload zsh/terminfo
+# zmodload zsh/terminfo
 # per 'strftime'
-zmodload zsh/datetime
+# zmodload zsh/datetime
 # per 'syserorr'
-zmodload zsh/system
+# zmodload zsh/system
 
 # Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
 if [[ -d ~/.zsh/scripts ]]; then
@@ -336,12 +340,6 @@ source $ZDOTDIR/zcomp
 # [[ "${terminfo[colors]}" -ge 255 ]] && echo "256 colori!"
 
 # }}}
-
-# prompt zsh-git
-# setopt promptsubst
-# autoload -U promptinit
-# promptinit
-# prompt wunjo
 
 # help online, ma serve lo script che genera i file txt...
 # unalias run-help > /dev/null 2>&1

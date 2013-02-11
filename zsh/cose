@@ -86,9 +86,4 @@ chpwd_functions=( "${chpwd_functions[@]}" umask_chpwd )
 ### 	source /usr/local/bin/virtualenvwrapper.sh
 ### fi
 
-# zsh-syntax-highlighting
-if [[ -e ~/dev/others/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-	source ~/dev/others/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
 # vim: ft=zsh
