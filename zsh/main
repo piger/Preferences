@@ -25,7 +25,6 @@
 # Opzioni di zsh globali {{{
 # -------
 setopt NO_beep				# Spegne il beep in ZLE
-setopt append_history		# Appende al file $HISTORY, invece di sovrascrivere
 setopt auto_cd				# Entra nelle directory senza usare 'cd'
 setopt auto_pushd			# Ficca $OLDPWD (dir precedente) nello stack delle dir
 setopt check_jobs			# Avverte dei processi in background prima di killare la shell
@@ -33,14 +32,10 @@ setopt complete_in_word		# Completa nel mezzo delle word (altrimenti parte dalla
 setopt correct				# Corregge lo spelling dei comandi
 setopt equals				# Permette =command al posto di `which command`
 setopt extended_glob		# Usa '~', '^' e '#' per i pattern
-setopt extended_history		# Salva i timestamp nella history
-setopt NO_flow_control		# Disabilita il flow control (^S e ^Q), MAI usato e BDAC
+setopt NO_flow_control		# Disabilita Ctrl-S e Ctrl-Q, ovvero il flow control, ovvero "ODDIO IL TERM È FREEZATO!"
 #setopt glob_complete		# Quando la word da completare contiene un glob pattern,
 							# invece di inserire il risultato del glob, cicla tra i
 							# risultati, come nella completion con  MENU_COMPLETE
-setopt hist_ignore_dups		# se il comando e' uguale al precedente non metterlo nella history
-setopt hist_no_store		# non salvare nella history i comandi "history"
-setopt hist_verify			# quando si usa la history expansion non esegue direttamente, cosi' vedi che stai per fare.
 setopt NO_hup				# Non manda -HUP ai processi quando la shell muore
 setopt list_packed			# Completion list piu' piccola, con colonne di varia larghezza
 setopt long_list_jobs		# Elenca i job nel formato esteso
@@ -55,6 +50,12 @@ setopt NO_rm_star_silent	# Chiede conferma per: 'rm *' o 'rm /path/*'
 setopt short_loops			# Permette le forme abbreviate di for, if, function, etc...
 setopt interactive_comments	# Permette di lasciare commenti sulla cmd line, utile con 'script'
 setopt TRANSIENT_RPROMPT	# Remove any right prompt from display when accepting a command line. This may be useful with terminals with other cut/paste methods.
+setopt REMATCH_PCRE			# Se possibile usa le PCRE per l'operatore =~
+
+# Da valutare
+# setop NO_clobber - il redirect '>' e '>>' fallisce se il file esiste già,
+# bisognerebbe usare '>!' e '>>!'; è interessante ma occhio che non sia attivo
+# negli script!
 
 # zsh 5.x utf-8
 if [[ $ZSH_VERSION == <5->.* ]]; then
@@ -181,13 +182,25 @@ declare -T PYTHONPATH pythonpath
 export FTP_PASSIVE=1
 
 # History
-HISTSIZE=2000
+setopt append_history		# Appende al file $HISTORY, invece di sovrascrivere
+setopt extended_history		# Salva i timestamp nella history
+setopt hist_ignore_dups		# se il comando e' uguale al precedente non metterlo nella history
+setopt hist_no_store		# non salvare nella history i comandi "history"
+setopt hist_verify			# quando si usa la history expansion non esegue direttamente, cosi' vedi che stai per fare.
+setopt hist_ignore_space	# non salva nella history le command line che iniziano con uno spazio (utile quando si inseriscono pw)
+setopt hist_expire_dups_first	# cerca di cancellare dalla history i duplicati prima degli eventi unici
+# February 21, 2013 - 2000 di history è troppo poco, proviamo 12000 e vediamo
+# che accade (che tra l'altro è più di prima :-)
+SAVEHIST=10000
+HISTSIZE=12000
+
+#HISTSIZE=2000
 # 18-07-2012 - Scopro che forse e' questa history IMMENSA che mi causa uno
 # startup molto lento per le nuove shell. Molti lo tengono uguale a HISTSIZE,
 # ma questo significa che a conti fatti nel file history ci sara' solo la
 # history dell'ultima shell chiusa, se e' stata molto utilizzata.
 # SAVEHIST=10000
-SAVEHIST=2000
+#SAVEHIST=2000
 HISTFILE=$HOME/.history
 
 # Opzioni per less
@@ -275,6 +288,7 @@ WATCHFMT='%n %a %l from %m at %t.'
 # AUTOLOAD {{{
 # --------
 zmodload zsh/complist
+zmodload zsh/pcre
 # per ${terminfo}
 # zmodload zsh/terminfo
 # per 'strftime'
@@ -288,6 +302,10 @@ if [[ -d ~/.zsh/scripts ]]; then
 	autoload -U ~/.zsh/scripts/*(:t)
 fi
 
+if [[ -d ~/.zsh/func ]]; then
+	fpath=(~/.zsh/func $fpath)
+fi
+
 # Completion per task warrior
 # NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
 [[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
@@ -295,6 +313,9 @@ fi
 
 # brew - zsh-completions
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+
+# elimina i duplicati da fpath
+typeset -U fpath
 
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
@@ -341,23 +362,41 @@ source $ZDOTDIR/zcomp
 
 # }}}
 
-# help online, ma serve lo script che genera i file txt...
-# unalias run-help > /dev/null 2>&1
-# autoload run-help
-# HELPDIR=/usr/share/zsh/help
+# On-Line Help (accessibile con ESC+h in zle dopo aver digitato un comando,
+# prima di premere return).
+# Scaricare dal mirror gitweb di zsh lo script perl Utils/helpfiles, poi:
+# mkdir ~/.zsh/help && cd ~/.zsh/help
+# man zshall | colcrt -  | perl /path/to/helpfiles
+# mirror: http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Util/helpfiles;hb=HEAD
+if [[ -d ~/.zsh/help ]]; then
+	# ???
+	# unalias run-help > /dev/null 2>&1
+	unalias run-help
+	autoload run-help
+	HELPDIR=~/.zsh/help
+fi
 
 # Plugins
 # NOTA: Alcuni tipo `zsh-syntax-highlight` vanno caricati alla *fine* del zshrc.
 # zsh syntax highlight
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
+if [[ -e $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh ]]; then
+	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+	source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
+fi
 
 # zsh Fish-style history search (va caricato DOPO zsh-syntax-highlight)
-source $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh
+if [[ -e $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh ]]; then
+	source $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh
+fi
 
 # zaw (dubbia utilita')
-source $ZDOTDIR/plugins/zaw.git/zaw.zsh
+if [[ -e $ZDOTDIR/plugins/zaw.git/zaw.zsh ]]; then
+	source $ZDOTDIR/plugins/zaw.git/zaw.zsh
+fi
 
+# Invece di `return 0` alla fine del file ci metto questo assignment, che
+# dovrebbe essere equivalente in termini di "return OK".
+FOO="grosso peto che esce dalle chiappe roboanti"
 # Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
-return 0
+# return 0
 # vim: ft=zsh

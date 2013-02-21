@@ -13,6 +13,7 @@ vim/spell/
 zsh/uname.cache
 zsh/.zcompdump
 zsh/.zcompcache
+zsh/help
 zsh/local
 zsh/.zcalc_history
 irssi/away.log

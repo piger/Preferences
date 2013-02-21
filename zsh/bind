@@ -43,6 +43,9 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
 
+# Alt+m copia la parola precedente, comodo per i file rename.
+bindkey "^[m" copy-prev-shell-word
+
 # autoload -U zkbd
 # Eseguire zkbd per compilare una lista di variabili associate ai tasti
 #source ~/.zkbd/$TERM-$VENDOR-$OSTYPE
