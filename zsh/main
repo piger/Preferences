@@ -342,7 +342,6 @@ source $ZDOTDIR/bind
 source $ZDOTDIR/cose
 source $ZDOTDIR/alias
 source $ZDOTDIR/zfunc
-source $ZDOTDIR/help
 source $ZDOTDIR/work
 # zcomp chiama compinit, percio' $fpath a questo punto deve essere quello DEFINITIVO
 source $ZDOTDIR/zcomp

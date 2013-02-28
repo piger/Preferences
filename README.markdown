@@ -85,3 +85,7 @@ Per esportare tutto il repository in formato tar.gz:
 Il plugin `css.vim` rende lentissima l'apertura di file html, css, e simili in
 console; vedi anche [qui](http://markhansen.co.nz/vim-slow-html/); il problema
 si risolve caricando lo script solo con la GUI.
+
+Per la completion di brew su OSX, linkare:
+
+	/usr/local/Library/Contributions/brew_zsh_completion.zsh in ~/.zsh/func/_brew
