@@ -65,6 +65,11 @@ set showtabline=2			" 2 = always
 highlight LineNr guifg=blue
 " }}}
 
+" Menu --------------------------------------------------------------------- {{{
+" Menu con shell functions
+runtime macros/shellmenu.vim
+" }}}
+
 " Mouse -------------------------------------------------------------------- {{{
 set mousehide				" Hide the mouse when typing text
 set mouse=a					" Usa il mouse per tutti i Mode

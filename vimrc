@@ -210,6 +210,9 @@ endif
 " Questo dovrebbe essere un "%" evoluto
 runtime macros/matchit.vim
 
+" Text justification (:Justify)
+runtime macros/justify.vim
+
 " signs
 sign define information text=!> linehl=Warning texthl=Error
 " }}}
@@ -500,9 +503,12 @@ if !exists("autocommands_loaded")
 	" autocmd BufWinLeave *.rb mkview
 	" autocmd BufWinEnter *.rb silent loadview
 
-	" Per i file HTML di monbox.
-	au BufNewFile,BufRead *monbox*/*.html setl ft=htmldjango
-	au BufNewFile,BufRead *MonitoringBox*/*.html setl ft=htmldjango
+	" File HTML
+	augroup HTML
+		au!
+		" Evita di indentare anche la riga precedente quando si preme invio
+		au FileType html setl indentkeys-=*<Return>
+	augroup END
 
 	" Visto che non credo scrivero' mai in Modula2 dico a vim che '.md' e'
 	" Markdown e non Modula2:
