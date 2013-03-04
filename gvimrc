@@ -65,11 +65,6 @@ set showtabline=2			" 2 = always
 highlight LineNr guifg=blue
 " }}}
 
-" Menu --------------------------------------------------------------------- {{{
-" Menu con shell functions
-runtime macros/shellmenu.vim
-" }}}
-
 " Mouse -------------------------------------------------------------------- {{{
 set mousehide				" Hide the mouse when typing text
 set mouse=a					" Usa il mouse per tutti i Mode
@@ -98,4 +93,15 @@ function! SpellBalloon()
 endfunction
 
 set balloonexpr=SpellBalloon()
+" }}}
+
+" Auto commands ---------------------------------------------------------- {{{
+if !exists("gui_autocommands_loaded")
+	let gui_autocommands_loaded = 1
+
+	augroup ShellScript
+		" Menu utili per editare shell script
+		autocmd BufNewFile,BufRead *.sh runtime macros/shellmenu.vim
+	augroup END
+endif
 " }}}
