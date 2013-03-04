@@ -324,9 +324,6 @@ let twitvim_filter_enable = 1
 let twitvim_filter_regex = '@GetGlue\|/youtu\.be/'
 let twitvim_count = 200
 
-" FuzzyFinder
-let g:fuf_infoFile = '~/.vim/vim-fuf'
-
 " MiniBufExplorer
 let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1
@@ -337,12 +334,6 @@ let g:miniBufExplModSelTarget = 1
 " their highlighting. The following setting will cause MBE to
 " try and turn highlighting back on (introduced in 6.3.1):
 let g:miniBufExplForceSyntaxEnable = 1
-
-" FuzzyFinder
-let g:fuf_ignoreCase = 1
-let g:fuf_modesDisable = []
-let g:fuf_mrufile_maxItem = 300
-let g:fuf_mrucmd_maxItem = 400
 
 " python complete
 " VALUTARE pydiction:
@@ -760,66 +751,6 @@ cnoremap <c-e> <end>
 " PLUGINS:
 " NERDTree - \nt
 nmap <Leader>nt :NERDTreeToggle<CR>
-
-" Fuzzyfinder (bindings presi dall'esempio nel man):
-" You can open a selected item in various ways:
-"         <CR>  (|g:fuf_keyOpen|)        - opens in a previous window.
-"         <C-j> (|g:fuf_keyOpenSplit|)   - opens in a split window.
-"         <C-k> (|g:fuf_keyOpenVsplit|)  - opens in a vertical-split window.
-"         <C-l> (|g:fuf_keyOpenTabpage|) - opens in a new tab page.
-" Browsa i buffer
-nnoremap <silent> <C-n>			:FufBuffer<CR>
-amenu Fuf.Buffer\ <C-n>			:FufBuffer<CR>
-
-" browsa i file nella dir del buffer attuale (utile!)
-nnoremap <silent> <C-p> :FufFileWithCurrentBufferDir<CR>
-amenu Fuf.FileWithCurrentBufferDir\ <C-p> :FufFileWithCurrentBufferDir<CR>
-
-" browsa i file nella dir del buffer attuale con full path
-nnoremap <silent> <C-f><C-p>	:FufFileWithFullCwd<CR>
-amenu Fuf.FileWithFullCwd\ <C-f><C-p> :FufFileWithFullCwd<CR>
-
-" browsa i file nella dir attuale
-nnoremap <silent> <C-f>p		:FufFile<CR>
-amenu Fuf.File\ <C-f>p			:FufFile<CR>
-
-" cambia dir dalla dir del buffer attuale
-nnoremap <silent> <C-f><C-d>	:FufDirWithCurrentBufferDir<CR>
-amenu Fuf.DirWithCurrentBufferDir\ <C-f><C-d> :FufDirWithCurrentBufferDir<CR>
-
-" cambia dir con full path
-nnoremap <silent> <C-f>d		:FufDirWithFullCwd<CR>
-amenu Fuf.DirWithFullCwd\ <C-f>d :FufDirWithFullCwd<CR>
-
-nnoremap <silent> <C-f>D		:FufDir<CR>
-amenu Fuf.Dir\ <C-f>D			:FufDir<CR>
-
-" browsa i file usati di recente (utile!)
-nnoremap <silent> <C-j>			:FufMruFile<CR>
-amenu Fuf.MruFile\ <C-j>		:FufMruFile<CR>
-
-" browsa gli ultimi comandi dati (utile!)
-nnoremap <silent> <C-k>			:FufMruCmd<CR>
-
-" ?
-nnoremap <silent> <C-b>			:FufBookmark<CR>
-
-nnoremap <silent> <C-f><C-t>	:FufTag<CR>
-
-nnoremap <silent> <C-f>t		:FufTag!<CR>
-noremap  <silent> g]			:FufTagWithCursorWord!<CR>
-nnoremap <silent> <C-f><C-f> 	:FufTaggedFile<CR>
-nnoremap <silent> <C-f><C-j> 	:FufJumpList<CR>
-nnoremap <silent> <C-f><C-g> 	:FufChangeList<CR>
-nnoremap <silent> <C-f><C-q> 	:FufQuickfix<CR>
-nnoremap <silent> <C-f><C-l> 	:FufLine<CR>
-nnoremap <silent> <C-f><C-h> 	:FufHelp<CR>
-nnoremap <silent> <C-f><C-b> 	:FufAddBookmark<CR>
-vnoremap <silent> <C-f><C-b> 	:FufAddBookmarkAsSelectedText<CR>
-" nnoremap <silent> <C-f><C-e>	:FufEditInfo<CR>
-
-" refresha la cache di file e dir (utile!)
-nnoremap <silent> <C-f><C-r>	:FufRenewCache<CR>
 
 "   * bufexplorer
 "   <Leader>be  - Opens BufExplorer
