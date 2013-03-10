@@ -1,3 +1,5 @@
 #!/bin/sh
 
-git archive --format=tar --prefix=Preferences/ HEAD | gzip -c > Pref-$(date "+%F").tar.gz
+TODAY=$(date +"%F")
+
+git archive --format=tar --prefix=Preferences-${TODAY}/ HEAD | gzip -c > Preferences-${TODAY}.tar.gz
