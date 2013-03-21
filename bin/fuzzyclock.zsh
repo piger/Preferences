@@ -81,63 +81,63 @@ parse_options() {
 
     zparseopts -K -- f:=o_fuzzyness h=o_help
     if [[ $? != 0 || "$o_help" != "" ]]; then
-	echo Usage: $(basename "$0") "[-f fuzzyness level] [-h]"
-	exit 1
+		echo Usage: $(basename "$0") "[-f fuzzyness level] [-h]"
+		exit 1
     fi
 
     fuzzyness=${o_fuzzyness[1]}
 }
 
 fuzzyClock() {
-    if (( $fuzzyness == 1 || $fuzzyness == 2 )); then
-	if (( $fuzzyness == 1 )); then
-	    if (( $minuti > 2 )); then
-		((sector = (minuti - 3 ) / 5 + 1))
-	    fi
+	if (( $fuzzyness == 1 || $fuzzyness == 2 )); then
+		if (( $fuzzyness == 1 )); then
+			if (( $minuti > 2 )); then
+				((sector = (minuti - 3 ) / 5 + 1))
+			fi
+		else
+			if (( $minuti > 6 )); then
+				((sector = ((minuti - 7) / 15 + 1) * 3))
+			fi
+		fi
+
+		if [[ ${nomiMinuti[$sector]} = *%(#b)([0-9])* ]]; then
+			delta=${match[0]}
+		else
+			print "Missing time delta (%0 or %1) in time string \"${nomiMinuti[$sector]}\""
+			exit 1
+		fi
+
+		if (( (($ore + $delta) % 12 ) > 0 )); then
+			((realhour = (ore + delta) % 12 - 1))
+		else
+			((realhour = 12 - ((ore + delta) % 12 + 1)))
+		fi
+
+		# WORKAROUNDS
+		# "l'una spaccate" -> "l'una precisa"
+		if (( $realhour == 0 )); then
+			nomiMinuti[0]="%0 precisa"
+		fi
+
+		sub="%[0-9]"
+		fuzzyTime=${${nomiMinuti[$sector]}/${~sub}/${nomiOre[$realhour]}}
+
+	elif (( $fuzzyness == 3 )); then
+		fuzzyTime=${giornata[(($ore / 3))]}
+
 	else
-	    if (( $minuti > 6 )); then
-		((sector = ((minuti - 7) / 15 + 1) * 3))
-	    fi
+		if (( $giorno == 1 )); then
+			fuzzyTime=${settimana[0]}
+		elif (( $giorno >= 2 && $giorno <= 4 )); then
+			fuzzyTime=${settimana[1]}
+		elif [[ $giorno == 5 ]]; then
+			fuzzyTime=${settimana[2]}
+		else
+			fuzzyTime=${settimana[3]}
+		fi
 	fi
 
-	if [[ ${nomiMinuti[$sector]} = *%(#b)([0-9])* ]]; then
-	    delta=${match[0]}
-	else
-	    print "Missing time delta (%0 or %1) in time string \"${nomiMinuti[$sector]}\""
-	    exit 1
-	fi
-
-	if (( (($ore + $delta) % 12 ) > 0 )); then
-	    ((realhour = (ore + delta) % 12 - 1))
-	else
-	    ((realhour = 12 - ((ore + delta) % 12 + 1)))
-	fi
-
-	# WORKAROUNDS
-	# "l'una spaccate" -> "l'una precisa"
-	if (( $realhour == 0 )); then
-	    nomiMinuti[0]="%0 precisa"
-	fi
-
-	sub="%[0-9]"
-	fuzzyTime=${${nomiMinuti[$sector]}/${~sub}/${nomiOre[$realhour]}}
-
-    elif (( $fuzzyness == 3 )); then
-	fuzzyTime=${giornata[(($ore / 3))]}
-
-    else
-	if (( $giorno == 1 )); then
-	    fuzzyTime=${settimana[0]}
-	elif (( $giorno >= 2 && $giorno <= 4 )); then
-	    fuzzyTime=${settimana[1]}
-	elif [[ $giorno == 5 ]]; then
-	    fuzzyTime=${settimana[2]}
-	else
-	    fuzzyTime=${settimana[3]}
-	fi
-    fi
-
-    print $fuzzyTime
+	print $fuzzyTime
 }
 
 parse_options $*
