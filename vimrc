@@ -243,9 +243,13 @@ set noexpandtab
 " Plugin Vim - Pathogen {{{
 " https://github.com/tpope/vim-pathogen.git
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
-filetype off 
-call pathogen#infect()
+" filetype off 
+" call pathogen#infect()
 " call pathogen#helptags()
+" 13/03/2013
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
 " }}}
 
 " Statusline {{{
@@ -400,7 +404,7 @@ if !exists("autocommands_loaded")
 	let autocommands_loaded = 1
 
 	" My PC is fast enough, do syntax highlight syncing from start
-	autocmd BufEnter * :syntax sync fromstart
+	"autocmd BufEnter * :syntax sync fromstart
 
 	" Resize splits when the window is resized
 	" src: https://bitbucket.org/sjl/dotfiles/src/tip/vim/.vimrc
