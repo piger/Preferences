@@ -3,12 +3,16 @@
 # Cose che succedono all'apertura di una shell interattiva, come fortune e il todo
 # --------------------------------------------------------------------------------
 
-if (( $+commands[fortune] )); then
-    if [[ -d ~/.fortune ]]; then
-	print; fortune -e ~/.fortune; print
-    else
-	print; fortune -o; print
-    fi
+FORTUNE_GREETING="0"
+
+if [[ $FORTUNE_GREETING == 1 ]]; then
+	if (( $+commands[fortune] )); then
+		if [[ -d ~/.fortune ]]; then
+		print; fortune -e ~/.fortune; print
+		else
+		print; fortune -o; print
+		fi
+	fi
 fi
 
 # vim: ft=zsh
