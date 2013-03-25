@@ -158,7 +158,7 @@ set mouse=""
 " Folding ------------------------------------------------------------------ {{{
 set foldenable
 " set foldmethod=marker
-" set foldlevel=100		" trick per non foldare automaticamente
+set foldlevel=100		" trick per non foldare automaticamente
 " set foldcolumn=2
 set foldopen=block,hor,mark,percent,quickfix,tag    " what movements open folds
 " }}}
