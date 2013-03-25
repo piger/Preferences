@@ -305,6 +305,7 @@ settitle() {
 }
 
 # anti tar bomb
+# NOTA: deprecated, meglio usare `atool` (aunpack, als, etc.)
 sbomba() {
 	l=$(tar tf $1)
 	if [[ ${#${(f)l}} -eq $(echo "$l" | grep ${${(f)l}[1]} | wc -l) ]]; then
@@ -312,6 +313,25 @@ sbomba() {
 	else
 		mkdir ${1%.t(ar.gz||ar.bz2||gz||bz||ar)} && tar xvf $1 -C ${1%.t(ar.gz||ar.bz2||gz||bz||ar)}
 	fi
+}
+
+# ssh wrapper that rename current tmux window to the hostname of the
+# remote host.
+ssh() {
+	# Do nothing if we are not inside tmux
+	if [[ -z $TMUX ]]; then
+		command ssh $@
+		return
+	fi
+	# The hostname is the last parameter (i.e. ${(P)#})
+	local hostname=${${(P)#}%.*}
+	# Save the current name
+	local old_name="$(tmux display-message -p '#W')"
+	if [[ $hostname != -* ]]; then
+		tmux rename-window $hostname
+	fi
+	command ssh $@
+	tmux rename-window "$old_name"
 }
 
 # vim: ft=zsh
