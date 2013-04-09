@@ -33,7 +33,7 @@ alias -s mp4='open'		# video -> quicktime o vlc
 # ls da `homebrew` -> `coreutils`
 if [[ -x /usr/local/bin/gls ]]; then
     alias ls="gls --color=always -F"
-	(( $+commands[gdircolors] )) && eval $(gdircolors -b ~/Preferences/dircolors.256dark)
+	(( $+commands[gdircolors] )) && eval $(gdircolors -b ~/Preferences/dircolors/dircolors.256dark)
 	alias lss="gls --color=always -F --group-directories-first"
 	alias reals="command ls"
 fi
