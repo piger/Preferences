@@ -53,6 +53,11 @@ bindkey "^[m" copy-prev-shell-word
 #    [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
 #    # etc.
 
+# idea from: zsh-lovers
+insert-datestamp() { LBUFFER+=${(%):-'%D{%d-%m-%Y}'}; }
+zle -N insert-datestamp
+# C-e d -- insert current date dd-mm-YYYY
+bindkey '^Ed' insert-datestamp
 
 # PANORAMICA DEI TASTINI {{{
 # ----------------------

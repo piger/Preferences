@@ -2,8 +2,17 @@
 # ~/.zsh/zcomp
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
-
+#
 # :completion:function:completer:command:argument:tag
+
+# compinstall, dilemma TODO
+zstyle :compinstall filename '~/.zsh/main'
+
+# questo va all'inizio, altrimenti poi non ho `compdef` o altri comandi.
+autoload -Uz compinit && compinit
+
+# supporto bash completion (da chiamare DOPO 'compinit')
+autoload -Uz bashcompinit && bashcompinit
 
 # Lista di completers
 # _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
@@ -126,6 +135,34 @@ zle -C hist-complete complete-word _generic
 zstyle ':completion:hist-complete:*' completer _history
 bindkey '^X^X' hist-complete
 
+# Ctrl-X - SHIFT+S
+# Completa usando le parole della schermata attuale di tmux.
+# da zsh-lovers.
+_complete_screen_display() {
+	#[[ "$TERM" != screen* ]] && return 1
+
+	if (( $+commands[gmktemp] )); then
+		local TMPFILE=$(gmktemp)
+	else
+		local TMPFILE=$(mktemp)
+	fi
+	local -U -a _screen_display_wordlist
+	trap "rm -f $TMPFILE" EXIT
+
+	if ((${+TMUX})); then
+		tmux -V &>/dev/null || return
+		tmux -q capture-pane \; save-buffer -b 0 $TMPFILE \; delete-buffer -b 0
+	else
+		echo "eh no"
+		return
+	fi
+	_screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
+	_screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
+	compadd -a _screen_display_wordlist
+}
+bindkey -r "^XS"
+compdef -k _complete_screen_display complete-word '^XS'
+
 # completion per pip
 function _pip_completion {
   local words cword
@@ -136,15 +173,6 @@ function _pip_completion {
              PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
-
-# compinstall, dilemma TODO
-zstyle :compinstall filename '~/.zsh/main'
-
-# questo va qui, alla fine delle definizioni ? TODO
-autoload -Uz compinit && compinit
-
-# supporto bash completion (da chiamare DOPO 'compinit')
-autoload -Uz bashcompinit && bashcompinit
 
 # completion bash per tmux
 [[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
