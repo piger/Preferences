@@ -60,4 +60,7 @@ alias tmux='tmux -2'
 # oggi
 alias oggi='date "+%d-%m-%Y"'
 
+# aria2c - torrent
+alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
+
 # vim: ft=zsh
