@@ -58,7 +58,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes (quote ("4dacec7215677e4a258e4529fac06e0231f7cdd54e981d013d0d0ae0af63b0c8" "9f42bccce1e13fa5017eb8718574db099e85358b9f424db78e7318f86d1be08f" default)))
- '(org-agenda-files (quote ("~/Dropbox/org/bookmarks.org" "~/Dropbox/org/todo.org" "~/Dropbox/org/personal.org")))
+ '(org-agenda-files (quote ("~/Dropbox/org/diario.org" "~/Dropbox/org/bookmarks.org" "~/Dropbox/org/todo.org" "~/Dropbox/org/personal.org")))
  '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60)))
  '(tool-bar-mode nil))
 (custom-set-faces
