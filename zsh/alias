@@ -50,6 +50,7 @@ alias suco='sudo'
 # per poter fare 'mortacci tua kill -9 31337'
 alias mortacci=";"
 alias tua=";"
+alias shitdown="shutdown"
 
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
