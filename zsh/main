@@ -383,10 +383,11 @@ if [[ -e $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zs
 	source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
 fi
 
-# zsh Fish-style history search (va caricato DOPO zsh-syntax-highlight)
-if [[ -e $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh ]]; then
-	source $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh
-fi
+# 3/6/2013 - decido che non mi piace
+#### zsh Fish-style history search (va caricato DOPO zsh-syntax-highlight)
+###if [[ -e $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh ]]; then
+###	source $ZDOTDIR/plugins/zsh-history-substring-search.git/zsh-history-substring-search.zsh
+###fi
 
 # zaw (dubbia utilita')
 if [[ -e $ZDOTDIR/plugins/zaw.git/zaw.zsh ]]; then
