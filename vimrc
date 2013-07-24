@@ -483,6 +483,11 @@ if !exists("autocommands_loaded")
 		autocmd FileType perl,shell :setl number
 	endif
 
+	" SELinux TE files
+	augroup selinux
+		au BufNewfile,BufRead *.te setl ft=te
+	augroup END
+
 	" ignore le modeline nei commit di git.
 	autocmd BufNewFile,BufRead COMMIT_EDITMSG :let g:secure_modelines_modelines=0
 
@@ -792,8 +797,8 @@ let g:ctrlp_extensions = ['dir']
 " radicalmente più veloce su OS X, e immagino anche altrove. Oltretutto con
 " `globpath()` posso limitare il numero di file e directory percorsi.
 "let g:ctrlp_user_command = 'find %s -type f'       " MacOSX/Linux
-let g:ctrlp_max_files = 300
-let g:ctrlp_max_depth = 20
+"let g:ctrlp_max_files = 300
+"let g:ctrlp_max_depth = 20
 " Tolgo 'r' che dice a ctrlp di cercare una directory '.git' parent del file
 " attualmente aperto.
 let g:ctrlp_working_path_mode = 'a'
