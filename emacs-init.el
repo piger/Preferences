@@ -30,8 +30,22 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ; nasconde la scroll bar (perchè mai?)
 ; (scroll-bar-mode -1)
 
+
+;;; Packages
+;;; (anti-zenburn-theme apache-mode bbdb cyberpunk-theme go-mode google-translate jinja2-mode js2-mode json json-mode less-css-mode markdown-mode mediawiki nginx-mode nzenburn-theme org osx-plist php-mode twilight-theme zenburn-theme)
+(package-initialize)
+;; check if a package is installed; if not, install it.
+(mapc
+ (lambda (package)
+   (or (package-installed-p package)
+       (if (y-or-n-p (format "Package %s is missing. Install it? " package))
+	   (package-install package))))
+ '(anti-zenburn-theme apache-mode cyberpunk-theme go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode nzenburn-theme osx-plist php-mode twilight-theme zenburn-theme))
+
+;;; THEME
 ;;; Setta il color-theme (nuovo stile, emacs 24+)
 (load-theme 'adwaita)
+;(load-theme 'zenburn)
 
 ;; font
 ; (add-to-list 'default-frame-alist
