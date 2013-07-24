@@ -33,7 +33,23 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
 ;;; Packages
 ;;; (anti-zenburn-theme apache-mode bbdb cyberpunk-theme go-mode google-translate jinja2-mode js2-mode json json-mode less-css-mode markdown-mode mediawiki nginx-mode nzenburn-theme org osx-plist php-mode twilight-theme zenburn-theme)
+
+;; repositories
+(require 'package)
+;;; XXX questo setq sarebbe meglio trasformarlo in un add-to-list.
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+			 ("marmelade" . "http://marmalade-repo.org/packages/")
+			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+
 (package-initialize)
+
+; fetch the list of packages available
+;; QUESTO E' SBAGLIATO. Non viene chiamato automaticamente e quindi l'installazione fallisce
+;; perche' non ha refreshato la lista di pacchetti disponibili (tenendo in considerazione i
+;; repository aggiunti qui sopra)
+;;(when (not package-archive-contents)
+;;  (package-refresh-contents))
+
 ;; check if a package is installed; if not, install it.
 (mapc
  (lambda (package)
@@ -68,11 +84,6 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (setq org-mobile-directory "~/Dropbox/org/mobile")
 (setq org-mobile-inbox-for-pull (concat org-directory "/index.org"))
 
-;; repositories
-(require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("marmelade" . "http://marmalade-repo.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; file mode
 ;; (add-to-list 'auto-mode-alist `(,(expand-file-name "~/Documents/appunti/") . markdown-mode))
