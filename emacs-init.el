@@ -11,6 +11,10 @@
 ;;; OS X?
 (setq is-mac (equal system-type 'darwin))
 
+;;; emacs custom settings
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
+
 ;;; Enable ido-mode
 (ido-mode 1)
 ; ???
@@ -64,11 +68,6 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 	   (package-install package))))
  '(anti-zenburn-theme apache-mode cyberpunk-theme go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode nzenburn-theme osx-plist php-mode twilight-theme zenburn-theme))
 
-;;; THEME
-;;; Setta il color-theme (nuovo stile, emacs 24+)
-(load-theme 'adwaita)
-;(load-theme 'zenburn)
-
 ;; font
 ; (add-to-list 'default-frame-alist
 ; 	     '(font . "DejaVu Sans Mono-13"))
@@ -97,6 +96,19 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
 ;; miei script
 (add-to-list 'load-path "~/elisp")
+
+;;; themes
+(add-to-list 'load-path "~/elisp/themes/tomorrow-theme")
+(add-to-list 'custom-theme-load-path "~/elisp/themes/base16-theme")
+(add-to-list 'custom-theme-load-path "~/elisp/themes/tomorrow-theme")
+
+;;; THEME
+;;; Setta il color-theme (nuovo stile, emacs 24+)
+;(load-theme 'adwaita)
+;(load-theme 'zenburn)
+;(load-theme 'base16-default)
+(load-theme 'tomorrow-night)
+
 
 ;; po-mode
 (setq auto-mode-alist
@@ -139,21 +151,3 @@ Including indent-buffer, which should not be called automatically on save."
   (untabify-buffer)
   (delete-trailing-whitespace)
   (indent-buffer))
-
-;;; Opzioni di (customize)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("1f4e6cf4cb3bdba8afdb9244e037698238080eeecb209084602f7d717225f102" "1f3304214265481c56341bcee387ef1abb684e4efbccebca0e120be7b1a13589" "4dacec7215677e4a258e4529fac06e0231f7cdd54e981d013d0d0ae0af63b0c8" "9f42bccce1e13fa5017eb8718574db099e85358b9f424db78e7318f86d1be08f" default)))
- '(org-agenda-files (quote ("~/Dropbox/org/diario.org" "~/Dropbox/org/bookmarks.org" "~/Dropbox/org/todo.org" "~/Dropbox/org/personal.org")))
- '(safe-local-variable-values (quote ((encoding . utf-8))))
- '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60)))
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
