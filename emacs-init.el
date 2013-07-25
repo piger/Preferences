@@ -1,4 +1,15 @@
-; emacs.d/init.el
+;;; emacs.d/init.el
+;;;
+;;; - https://github.com/magnars/.emacs.d/blob/master/init.el
+;;; - http://www.emacswiki.org/emacs/ImenuMode
+
+;;; nasconde la toolbar; e' bene farlo all'inizio per evitare che venga mostrata brevemente
+(tool-bar-mode -1)
+;;; nasconde la scroll bar (perchè mai?)
+; (scroll-bar-mode -1)
+ 
+;;; OS X?
+(setq is-mac (equal system-type 'darwin))
 
 ;;; Enable ido-mode
 (ido-mode 1)
@@ -24,11 +35,6 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ; (ricorda che un tab si inserisce con M-i)
 (setq-default indent-tab-mode nil)
 ;; (setq-default tab-width 4)
-
-; nasconde la toolbar
-(tool-bar-mode -1)
-; nasconde la scroll bar (perchè mai?)
-; (scroll-bar-mode -1)
 
 
 ;;; Packages
@@ -111,6 +117,28 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 	     '(nil "\\`root\\'" "/ssh:%h:"))
 (add-to-list 'tramp-default-proxies-alist
 	     '((regexp-quote (system-name)) nil nil))
+
+;;; HTML & co
+;; auto-start zencoding with SGML modes
+(add-hook 'sgml-mode-hook 'zencoding-mode)
+
+;;; funzioni
+;;; https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(defun cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer.
+Including indent-buffer, which should not be called automatically on save."
+  (interactive)
+  (untabify-buffer)
+  (delete-trailing-whitespace)
+  (indent-buffer))
 
 ;;; Opzioni di (customize)
 (custom-set-variables
