@@ -68,9 +68,15 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 	   (package-install package))))
  '(anti-zenburn-theme apache-mode cyberpunk-theme go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode nzenburn-theme osx-plist php-mode twilight-theme zenburn-theme))
 
-;; font
+;;; Fonts
+;;; questo non saprei cosa fa:
 ; (add-to-list 'default-frame-alist
 ; 	     '(font . "DejaVu Sans Mono-13"))
+
+;;; Per i font bisogna personalizzare custom.el
+;;; (custom-set-faces
+;;;  '(default ((t (:height 120 :family "Cousine"))))
+;;; )
 
 ;;; org-mode
 ; general setup
