@@ -1,0 +1,9 @@
+# Notifiche di irssi remoto in Growl o Notification Center (OSX)
+# - per growl usare growl-notify.
+# irssi_growl() {
+if [[ -z $1 ]]; then
+    echo "Usage: irssi_growl <remote server>"
+    exit 1
+fi
+ssh $1 'echo -n "" > ~/.irssi/fnotify; tail -f ~/.irssi/fnotify' | while read heading message; do ~/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier -title \"$heading\" -message \"$message\"; done
+# }

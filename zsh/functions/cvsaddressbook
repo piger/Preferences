@@ -1,0 +1,17 @@
+# Questa fantastica funzione cerca un file chiamato ~/.cvs_addrbook e se esiste,
+# lo legge e crea funzioni zsh con i parametri letti:
+# myhost :ext:cvs@host.net:/home/cvsroot
+# creera' la funzione "cvs_myhost"
+# _cvsaddrbook () {
+[[ -e ~/.cvs_addrbook ]] || return
+lista=( ${(f)"$( < ~/.cvs_addrbook )"} )
+
+for i in $lista
+do
+    eval "function cvs_${${(z)i}[1]} () {
+		export CVSROOT=${${(z)i}[2]}
+		echo export CVSROOT=${${(z)i}[2]}
+	}
+	"
+done
+# }

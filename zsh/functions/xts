@@ -1,0 +1,5 @@
+# xts() {
+[[ "$TERM" = 'screen' ]] && return;
+export TERM=screen
+echo "TERM changed to 'screen'"
+# }

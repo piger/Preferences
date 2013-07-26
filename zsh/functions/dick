@@ -1,0 +1,4 @@
+# hahahah http://www.strcat.de/dotfiles/zsh/dot.zshfunctions
+# dick() {
+uptime | perl -ne "/(\d+) d/;print 8,q(=)x\$1,\"D\n\""
+# }

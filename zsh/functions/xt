@@ -1,0 +1,5 @@
+# xt() {
+[[ "$TERM" = 'xterm' ]] && return;
+export TERM=xterm
+echo "TERM changed to 'xterm'"
+# }

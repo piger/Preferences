@@ -1,0 +1,4 @@
+# rinomina i file sostituendo con '_'
+# to_underscore() {
+zmv '(*) (*)' '$f:gs/ /_'
+# }

@@ -1,0 +1,7 @@
+# triman () {
+if [[ $# -eq 0 ]]; then
+    man
+elif whatis $* ; then
+    man $* | col -bp | iconv -c | view -c 'set ft=man nomod nolist' -
+fi
+# }

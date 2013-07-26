@@ -95,4 +95,7 @@ function pfs() {
 EOF
 }
 
+# Flush DNS cache
+alias flush_dns_cache='dscacheutil -flushcache'
+
 # vim: ft=zsh

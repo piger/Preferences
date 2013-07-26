@@ -1,0 +1,4 @@
+# Fetcha una copia della pagina zsh-lovers
+#zsh_lovers_fetch() {
+curl http://grml.org/zsh/zsh-lovers.html
+# }
