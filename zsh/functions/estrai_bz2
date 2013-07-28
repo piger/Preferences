@@ -1,0 +1,19 @@
+# NOTA: è meglio usare atool!
+# estrai_bz2() {
+if [[ -z $1 ]]; then
+    echo "Usage: estrai_bz2 <filename.bz2>"
+    return
+fi
+if [[ ! $1 == *.bz2 ]]; then
+    echo "ERRORE: il filename deve avere l'estensione .bz2"
+    return
+fi
+
+out=${1/.bz2/}
+if (( $+commands[apv] )); then
+    pv $1 | bzip2 -d > $out
+else
+    echo "Running without the awesome 'pv' utility :-("
+    bzip2 -cd $1 > $out
+fi
+# }

@@ -1,0 +1,3 @@
+# piugrandi () {
+echo ls -fldh ./**/*(d`stat +device .`OL[1,10])
+# }

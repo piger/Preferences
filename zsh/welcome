@@ -3,16 +3,20 @@
 # Cose che succedono all'apertura di una shell interattiva, come fortune e il todo
 # --------------------------------------------------------------------------------
 
-FORTUNE_GREETING="0"
+local FORTUNE_GREETING=1
 
+# fortune -e serve per scegliere equamente tra tutti i fortune file
+# presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]]; then
-	if (( $+commands[fortune] )); then
-		if [[ -d ~/.fortune ]]; then
-		print; fortune -e ~/.fortune; print
-		else
-		print; fortune -o; print
-		fi
+    if (( $+commands[fortune] )); then
+	if [[ -d ~/.fortune ]]; then
+	    print; fortune -e ~/.fortune; print
+	else
+	    print; fortune -o; print
 	fi
+    fi
 fi
+
+unset FORTUNE_GREETING
 
 # vim: ft=zsh

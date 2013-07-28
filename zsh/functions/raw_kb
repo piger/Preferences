@@ -1,0 +1,4 @@
+# raw_kb () {
+echo "Type your keys, then ^D to quit"
+tput smkx && cat; tput rmkx && echo "done"
+# }

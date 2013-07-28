@@ -1,0 +1,4 @@
+# dovessi mai usare tar per copiare...
+# copiatar () {
+echo "tar cvf - . | ( cd /altrove; tar xvf - )"
+# }

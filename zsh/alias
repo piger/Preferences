@@ -64,4 +64,7 @@ alias oggi='date "+%d-%m-%Y"'
 # aria2c - torrent
 alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
 
+# i miei fortune
+alias myfortune='fortune ~/.fortune'
+
 # vim: ft=zsh

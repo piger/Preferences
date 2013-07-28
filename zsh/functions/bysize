@@ -1,0 +1,8 @@
+# lista i file in ordine di grandezza
+# bysize () {
+if [[ -z $1 ]]; then
+    ls -flh *(.oL)
+else
+    ls -flh $1/*(.oL)
+fi
+# }

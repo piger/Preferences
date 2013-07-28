@@ -1,0 +1,7 @@
+# chiavi() {
+if [[ ! -z "$SSH_ASKPASS" ]]; then
+    ssh-add ~/.ssh/*.pub(:r) < /dev/null
+else
+    ssh-add ~/.ssh/*.pub(:r)
+fi
+# }
