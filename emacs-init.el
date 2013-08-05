@@ -116,7 +116,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
 
 ;; Assign a specific mode for certain directories
+;; note: you can't chain multiple paths in a single add-to-list call :(
 (add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("/Preferences/zsh/" . shell-script-mode))
 
 ;; web-mode
 ;; http://web-mode.org/
@@ -125,6 +127,14 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (setq web-mode-engines-alist
 	  '(("django"		. "/templates/.*\\.html\\'"))
 )
+
+;; js2-mode
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+;; handlebars
+(require 'handelbars-sgml-mode)
+(handlebars-use-mode 'minor)
 
 ;; po-mode
 (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
