@@ -1,0 +1,50 @@
+#! /bin/sh  
+#
+# ssh-askpass-osx.sh
+# /usr/libexec/ssh-askpass
+#
+# Interactively approve each ssh-agent request for keys added via ssh-add -c
+#
+# Enable in ~/.MacOSX/environment.plist with:
+#
+# <?xml version="1.0" encoding="UTF-8"?>
+# <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+# <plist version="1.0">
+# <dict>
+#	<key>SSH_ASKPASS</key>
+#	<string>/Users/dugsong/bin/ssh-askpass</string>
+# </dict>
+# </plist>
+#
+# dugsong@monkey.org
+  
+PINPASS=""  
+
+TITLE=${MACOS_ASKPASS_TITLE:-"SSH"}  
+DIALOG="display dialog \"$@\" default answer \"\" with title \"$TITLE\""  
+DIALOG="$DIALOG with icon caution with hidden answer"  
+
+# Pop dialog
+result=`osascript <<EOF
+tell application "Finder"
+activate
+$DIALOG
+end tell
+EOF`
+
+status=$?
+input=`echo "$result" | sed -e 's/^text returned://' -e 's/, button returned:.*$//'`
+
+if [ "$input" != "$PINPASS" ]; then
+    status=1
+fi
+
+# Return focus to last app (Terminal?)
+osascript <<EOF
+tell application "System Events"
+keystroke tab using (command down)
+end tell
+EOF
+
+exit $status
+

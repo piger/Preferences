@@ -38,6 +38,12 @@ if [[ -x /usr/local/bin/gls ]]; then
 	alias reals="command ls"
 fi
 
+# ssh-askpass
+
+if [[ -x /usr/libexec/ssh-askpass ]]; then
+	export SSH_ASKPASS=/usr/libexec/ssh-askpass
+fi
+
 # -*- environment
 export CLICOLOR=1
 #export PERL5LIB=$PERL5LIB:~/perl/lib/perl5/site_perl
