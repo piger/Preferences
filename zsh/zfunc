@@ -41,4 +41,20 @@ function controlla() {
 }
 # controlla
 
+# https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
+rot13() {
+	echo $1 | tr "A-Za-z" "N-ZA-Mn-za-m"
+}
+
+latrus() {
+	echo $1 | tr "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+}
+
+ruslat() {
+	echo $1 | tr "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM"
+}
+
+urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $1 }
+urldecode() { python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" $1 }
+
 # vim: ft=zsh

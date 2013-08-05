@@ -346,6 +346,10 @@ if [[ -e $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zs
 	source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
 fi
 
+# composure
+# https://github.com/erichs/composure
+[[ -e $ZDOTDIR/plugins/composure.sh ]] && source $ZDOTDIR/plugins/composure.sh
+
 # Invece di `return 0` alla fine del file ci metto questo assignment, che
 # dovrebbe essere equivalente in termini di "return OK".
 FOO="grosso peto che esce dalle chiappe roboanti"

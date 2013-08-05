@@ -9,11 +9,11 @@ local FORTUNE_GREETING=1
 # presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]]; then
     if (( $+commands[fortune] )); then
-	if [[ -d ~/.fortune ]]; then
-	    print; fortune -e ~/.fortune; print
-	else
-	    print; fortune -o; print
-	fi
+		if [[ -d ~/.fortune ]]; then
+			print; fortune -e ~/.fortune; print
+		else
+			print; fortune -o; print
+		fi
     fi
 fi
 

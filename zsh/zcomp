@@ -109,7 +109,7 @@ zstyle ':completion:*' special-dirs true
 zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
     LD_LIBRARY_PATH:array COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
     PERL5LIB:array PYTHONPATH:array DJANGO_SETTINGS_MODULE:scalar \
-    SSH_AUTH_SOCK:scalar
+    SSH_AUTH_SOCK:scalar DYLD_LIBRARY_PATH:array DYLD_FALLBACK_LIBRARY_PATH:array
 
 # Completion per `kill`: mostra una lista di processi con la percentuale di CPU
 # utilizzata, e su linux come bonus mostra i processi come un albero

@@ -95,6 +95,20 @@ function pfs() {
 EOF
 }
 
+# cli volume control
+vol() {
+	if [[ -n $1 ]]; then
+		osascript -e "set volume output volume $1"
+	else
+		osascript -e "output volume of (get volume settings)"
+	fi
+}
+		
+# locate with Spotlight
+locatemd() {
+	mdfind "kMDItemDisplayName == '$@'wc"
+}
+
 # Flush DNS cache
 alias flush_dns_cache='dscacheutil -flushcache'
 
