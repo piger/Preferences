@@ -15,9 +15,15 @@ repo fare:
 
 	$ git submodule update --init
 
-Per poi aggiornare tutti i submodule in un colpo solo:
+Quando si vuole aggiornare i repository dei submodule si può usare il comando:
 
 	$ git submodule foreach git pull origin master
+
+Se questo comando fetcha nuove versioni dei submodule, `git status`
+mostrerà `(new commits)` accanto ai loro nomi; questi cambiamenti
+possono essere committati. Gli altri utenti di questo repository
+dovranno aggiornare eseguendo prima un `git pull` e poi il `git
+submodule foreach` descritto qui sopra, altrimenti saranno fuori sync.
 
 Puo' capitare che `git status` mostri output tipo:
 
