@@ -20,3 +20,4 @@ irssi/away.log
 irssi/nickserv.*
 muttrc
 *.pyc
+.DS_Store
