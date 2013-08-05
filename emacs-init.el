@@ -37,9 +37,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ; 29.3 Tabs vs. Spaces
 ; per disattivare l'inserimento di <TAB> settare `indent-tabs-mode` a `nil`.
 ; (ricorda che un tab si inserisce con M-i)
-(setq-default indent-tab-mode nil)
-;; (setq-default tab-width 4)
-
+;(setq-default indent-tab-mode nil)
+(setq-default tab-width 4)
+(setq-default c-basic-offset 4)
+(setq-default cperl-indent-level 4)
 
 ;;; Packages
 ;;; (anti-zenburn-theme apache-mode bbdb cyberpunk-theme go-mode google-translate jinja2-mode js2-mode json json-mode less-css-mode markdown-mode mediawiki nginx-mode nzenburn-theme org osx-plist php-mode twilight-theme zenburn-theme)
@@ -68,6 +69,23 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 	   (package-install package))))
  '(anti-zenburn-theme apache-mode cyberpunk-theme go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode nzenburn-theme osx-plist php-mode twilight-theme zenburn-theme))
 
+
+;; miei script
+(add-to-list 'load-path "~/elisp")
+
+;;; themes
+(add-to-list 'load-path "~/elisp/themes/tomorrow-theme")
+(add-to-list 'custom-theme-load-path "~/elisp/themes/base16-theme")
+(add-to-list 'custom-theme-load-path "~/elisp/themes/tomorrow-theme")
+
+;;; THEME
+;;; Setta il color-theme (nuovo stile, emacs 24+)
+;(load-theme 'adwaita)
+;(load-theme 'zenburn)
+;(load-theme 'base16-default)
+(load-theme 'tomorrow-night)
+
+
 ;;; Fonts
 ;;; questo non saprei cosa fa:
 ; (add-to-list 'default-frame-alist
@@ -77,6 +95,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;; (custom-set-faces
 ;;;  '(default ((t (:height 120 :family "Cousine"))))
 ;;; )
+
 
 ;;; org-mode
 ; general setup
@@ -96,29 +115,19 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (setq org-mobile-inbox-for-pull (concat org-directory "/index.org"))
 
 
-;; file mode
-;; (add-to-list 'auto-mode-alist `(,(expand-file-name "~/Documents/appunti/") . markdown-mode))
-(add-to-list 'auto-mode-alist '("/Users/sand/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
+;; Assign a specific mode for certain directories
+(add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
 
-;; miei script
-(add-to-list 'load-path "~/elisp")
-
-;;; themes
-(add-to-list 'load-path "~/elisp/themes/tomorrow-theme")
-(add-to-list 'custom-theme-load-path "~/elisp/themes/base16-theme")
-(add-to-list 'custom-theme-load-path "~/elisp/themes/tomorrow-theme")
-
-;;; THEME
-;;; Setta il color-theme (nuovo stile, emacs 24+)
-;(load-theme 'adwaita)
-;(load-theme 'zenburn)
-;(load-theme 'base16-default)
-(load-theme 'tomorrow-night)
-
+;; web-mode
+;; http://web-mode.org/
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-engines-alist
+	  '(("django"		. "/templates/.*\\.html\\'"))
+)
 
 ;; po-mode
-(setq auto-mode-alist
-      (cons '("\\.po\\'\\|\\.po\\." . po-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
 (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
 
 ;; golang
@@ -138,7 +147,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
 ;;; HTML & co
 ;; auto-start zencoding with SGML modes
-(add-hook 'sgml-mode-hook 'zencoding-mode)
+;; (non e' comodissimo...)
+;;; (add-hook 'sgml-mode-hook 'zencoding-mode)
+;;; (add-hook 'web-mode-hook 'zencoding-mode)
 
 ;;; funzioni
 ;;; https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el
