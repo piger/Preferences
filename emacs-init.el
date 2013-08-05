@@ -133,7 +133,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; handlebars
-(require 'handelbars-sgml-mode)
+(require 'handlebars-sgml-mode)
 (handlebars-use-mode 'minor)
 
 ;; po-mode
