@@ -3,6 +3,8 @@
 # Dialog script for ssh key management.
 # by: Daniel Kertesz <daniel@spatof.org> on 03-03-2008
 
+SSHOPTS="-c"
+
 : ${DIALOG=dialog}
 setopt extendedglob
 
@@ -22,21 +24,24 @@ the_dialog () {
 		exit
 	fi
 
-	$DIALOG --clear --title "Camomilla" \
-		--menu "Choose the key you want to load on the agent\n" 20 51 4 \
-		$keys[@] 2> $tempfile
+	$DIALOG --title "Portachiavi" --cancel-label "Quit" \
+		--menu "Choose the key you want to load on the agent\n" \
+		20 51 4 $keys[@] 2> $tempfile
 
 	retval=$?
 	choice=`cat $tempfile`
 
 	case $retval in
 		0)
-			ssh-add $HOME/.ssh/$choice
+			clear
+			ssh-add $SSHOPTS $HOME/.ssh/$choice
 			the_dialog
 			;;
 		1)
+			clear
 			echo "Goodbye!";;
 		255)
+			clear
 			echo "Goodbye!";;
 	esac
 }
