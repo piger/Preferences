@@ -124,8 +124,10 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;; http://web-mode.org/
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.hbs?\\'" . web-mode))
 (setq web-mode-engines-alist
-	  '(("django"		. "/templates/.*\\.html\\'"))
+	  '(("django"		. "/templates/.*\\.html\\'")
+		("ctemplate"	. "/webui/index\\.html\\'"))
 )
 
 ;; js2-mode
