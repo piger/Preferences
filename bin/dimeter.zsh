@@ -16,7 +16,10 @@ echo "$lines" > /tmp/meter.txt
 			(( ii = i + 1 ))
 			a=${${(f)lines}[$i]}
 			b=${${(f)lines}[$ii]}
+			if [[ -z $a || -z $b ]]; then
+				break
+			fi
 			echo -n $(echo "$b - $a" | bc)
 			(( ii < 10 )) && echo -n "," || echo
 	done
-} | ~/dev/others/spark/spark
+} | spark
