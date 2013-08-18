@@ -3,6 +3,6 @@ django=.py,.html
 --type-set
 less=.less
 --type-set
-web=.html,.js,.less,.css
+web=.html,.js,.less,.css,.hbs
 --smart-case
 --sort-files
