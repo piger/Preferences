@@ -40,6 +40,10 @@ function colonizza() {
 	[[ -h "$HOME/$2" ]] || ln -s "$HOME/Preferences/$1" "$HOME/$2"
 }
 
+function need_dir() {
+	[[ -d "$HOME/$1" ]] || mkdir "$HOME/$1"
+}
+
 colonizza "vim"			".vim"
 colonizza "vimrc"		".vimrc"
 colonizza "gvimrc"		".gvimrc"
@@ -52,3 +56,5 @@ colonizza "tmux.conf"	".tmux.conf"
 colonizza "lftprc"		".lftprc"
 colonizza "taskrc"		".taskrc"
 colonizza "pdbrc"		".pdbrc"
+need_dir ".emacs.d"
+colonizza "emacs-init.el" ".emacs.d/init.el"
