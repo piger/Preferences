@@ -120,6 +120,9 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("/Preferences/zsh/" . shell-script-mode))
 
+;; auto-fill per rst-mode
+(add-hook 'rst-mode-hook 'turn-on-auto-fill)
+
 ;; web-mode
 ;; http://web-mode.org/
 (require 'web-mode)
