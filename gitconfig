@@ -41,6 +41,8 @@
 	ci = commit
 	unstage = reset HEAD --
 	last = log -1 HEAD
+	unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	undo = reset --hard HEAD~1
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
