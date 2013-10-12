@@ -67,4 +67,7 @@ alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
 # i miei fortune
 alias myfortune='fortune ~/.fortune'
 
+# rsync verso un filesystem FAT32
+alias rsync_fat32='rsync --modify-window=1'
+
 # vim: ft=zsh

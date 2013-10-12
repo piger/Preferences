@@ -36,23 +36,14 @@ fi
 
 # umask per directory
 #
-# NOTA: la tabella 'umask_table' e' sequenziale e verra' scelto il primo
-# match valido, percio' se si vuole impostare una umask per una directory e per
-# una sua sotto directory bisognera' impostare prima quella della sottodirectory.
+# NOTA: non funziona con directory nested e in generale e' una porcata.
 #
 # INOLTRE: il path della directory deve essere racchiuso tra apici e puo' contenere
 # white-space.
-#
-# Esempio:
-# umask_table=(
-#	'~/Work/FooBar' 022
-#	'~/Work' 011
-# )
 
 typeset -A umask_table
 umask_table=(
 	'~/Work' 007
-	'~/ciao ciao' 011
 )
 
 umask_chpwd() {
