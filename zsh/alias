@@ -67,4 +67,7 @@ alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
 # i miei fortune
 alias myfortune='fortune ~/.fortune'
 
+# list installed packages by size
+alias large_packages="dpkg-query -Wf '\${Installed-Size}\t\${Package}\n' | sort -n"
+
 # vim: ft=zsh
