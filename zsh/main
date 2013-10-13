@@ -234,6 +234,11 @@ watch=(notme)
 LOGCHECK=300		# check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
+# PRIVACY
+# disattiva history del client mysql
+export MYSQL_HISTFILE=/dev/null
+export LESSHISTFILE=/dev/null
+
 # PYTHONSTARTUP è uno script che viene eseguito (a detta della man page) prima
 # di avviare la modalità interattiva; mi è però successo di essere root con
 # questa variabile settata, e il file a cui puntava era leggibile solo da root,
