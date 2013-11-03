@@ -9,27 +9,51 @@
 ; (scroll-bar-mode -1)
  
 ;;; OS X?
-(setq is-mac (equal system-type 'darwin))
+(defconst *is-a-mac* (eq system-type 'darwin))
+
+;;(when *is-a-mac*
+;;  (setq mouse-wheel-scroll-amount '(0.001)))
 
 ;;; emacs custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+(load custom-file 'noerror)
 
 ;;; Enable ido-mode
-(ido-mode 1)
-; ???
+(require 'ido)
+(ido-mode t)
+;;; Non-nil means that `ido' will do flexible string matching.
+;;; Flexible matching means that if the entered string does not
+;;; match any item, any item containing the entered characters
+;;; in the given sequence will match.
 (setq ido-enable-flex-matching t)
-; ???
+;;; To use ido for all buffer and file selections in Emacs, customize the
+;;; variable `ido-everywhere'.
 (setq ido-everywhere t)
 
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
+;;; uniquify buffer names
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
-This is particularly useful under Mac OSX, where GUI apps are not started from a shell."
-  (interactive)
-  (let ((path-from-shell (replace-regexp-in-string "[ \t\n]*$" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
+;;; save-place per salvare la posizione nel buffer quando si esce, tipo
+;;; viminfo in vim.
+;;; (require 'saveplace)
+;;; (setq-default save-place t)
+
+;;; proviamo ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;;; hippie?
+;;; (global-set-key (kbd "M-/") 'hippie-expand)
+
+;;; default regexp search
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+
+;;; show column number by default
+(setq column-number-mode t)
+
 
 ;;; RETURN -> indent (come fa C-j)
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
@@ -47,10 +71,22 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 
 ;; repositories
 (require 'package)
-;;; XXX questo setq sarebbe meglio trasformarlo in un add-to-list.
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("marmelade" . "http://marmalade-repo.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+;;; common repositories
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+
+;;; GNU for emacs < 24
+(when (< emacs-major-version 24)
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+
+;;; add also Melpa
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+
+;; But don't take Melpa versions of certain packages (from purcell emacs.d)
+(setq package-filter-function
+      (lambda (package version archive)
+        (or (not (string-equal archive "melpa"))
+            (not (memq package '())))))
 
 (package-initialize)
 
@@ -67,13 +103,14 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
 	   (package-install package))))
- '(anti-zenburn-theme apache-mode cyberpunk-theme go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode nzenburn-theme osx-plist php-mode twilight-theme zenburn-theme))
+ '(anti-zenburn-theme apache-mode go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode osx-plist php-mode twilight-theme zenburn-theme))
 
 
 ;; miei script
 (add-to-list 'load-path "~/elisp")
 
 ;;; themes
+;;; https://github.com/owainlewis/emacs-color-themes
 (add-to-list 'load-path "~/elisp/themes/tomorrow-theme")
 (add-to-list 'custom-theme-load-path "~/elisp/themes/base16-theme")
 (add-to-list 'custom-theme-load-path "~/elisp/themes/tomorrow-theme")
@@ -84,6 +121,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;(load-theme 'zenburn)
 ;(load-theme 'base16-default)
 (load-theme 'tomorrow-night)
+;;(load-theme 'dichromacy)
+;; (load-theme 'wilson)
 
 
 ;;; Fonts
@@ -96,6 +135,15 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;;;  '(default ((t (:height 120 :family "Cousine"))))
 ;;; )
 
+;;; `exec()` PATH from shell
+(require 'exec-path-from-shell)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+;; flymake
+;; (A quanto pare flymake e' l'originale "che funziona")
+(require 'flymake)
 
 ;;; org-mode
 ; general setup
@@ -130,6 +178,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (add-to-list 'auto-mode-alist '("\\.hbs?\\'" . web-mode))
 (setq web-mode-engines-alist
 	  '(("django"		. "/templates/.*\\.html\\'")
+		("django"		. "/templates-ink/.*\\.html\\'")
 		("ctemplate"	. "/webui/index\\.html\\'"))
 )
 
@@ -146,10 +195,88 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
 
 ;; golang
+(setenv "GOPATH" (expand-file-name "~/dev/go"))
+(setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
+(setq exec-path (append exec-path (list (expand-file-name "~/dev/go/bin"))))
+
+(add-to-list 'load-path "~/dev/go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
+
 (defun my-go-mode-hook()
   ;;(add-hook 'before-save-hook 'gofmt-before-save)
   (setq default-tab-width 2))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;;; flycheck
+(when (eval-when-compile (>= emacs-major-version 24))
+  (require 'flycheck)
+  ;; (add-hook 'after-init-hook 'global-flycheck-mode)
+)
+;; (add-hook 'go-mode-hook 'flycheck-mode)
+(add-hook 'go-mode-hook 'flymake-mode)
+
+
+;; flymake + Python
+(setq pylint "/usr/local/bin/epylint")
+(when (load "flymake" t)
+  (defun flymake-pylint-init ()
+	(let* ((temp-file (flymake-init-create-temp-buffer-copy
+					   'flymake-create-temp-inplace))
+		   (local-file (file-relative-name
+						temp-file
+						(file-name-directory buffer-file-name))))
+	  (list (expand-file-name pylint "") (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks
+			   '("\\.py\\'" flymake-pylint-init)))
+
+;; Configure to wait a bit longer after edits before starting
+(setq-default flymake-no-changes-timeout '3)
+
+;; Keymaps to navigate to the errors
+(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map "\C-cn" 'flymake-goto-next-error)))
+(add-hook 'python-mode-hook '(lambda () (define-key python-mode-map "\C-cp" 'flymake-goto-prev-error)))
+
+;; To avoid having to mouse hover for the error message, these functions make flymake error messages
+;; appear in the minibuffer
+(defun show-fly-err-at-point ()
+  "If the cursor is sitting on a flymake error, display the message in the minibuffer"
+  (require 'cl)
+  (interactive)
+  (let ((line-no (line-number-at-pos)))
+    (dolist (elem flymake-err-info)
+      (if (eq (car elem) line-no)
+      (let ((err (car (second elem))))
+        (message "%s" (flymake-ler-text err)))))))
+
+(add-hook 'post-command-hook 'show-fly-err-at-point)
+
+;; set as minor mode for Python
+(add-hook 'python-mode-hook '(lambda () (flymake-mode)))
+
+;;; show-paren-mode
+(add-hook 'python-mode-hook '(lambda () (show-paren-mode)))
+
+;;; flyspell prog mode
+(if (fboundp 'prog-mode)
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  (dolist (hook '(lisp-mode-hook
+                  emacs-lisp-mode-hook
+                  scheme-mode-hook
+                  clojure-mode-hook
+                  ruby-mode-hook
+                  yaml-mode
+                  python-mode-hook
+                  shell-mode-hook
+                  php-mode-hook
+                  css-mode-hook
+                  haskell-mode-hook
+                  caml-mode-hook
+                  nxml-mode-hook
+                  crontab-mode-hook
+                  perl-mode-hook
+                  tcl-mode-hook
+                  javascript-mode-hook))
+    (add-hook hook 'flyspell-prog-mode)))
 
 ;; enable Multi Hops in TRAMP
 ;; aka: with this you can edit a remote file with sudo
@@ -183,3 +310,31 @@ Including indent-buffer, which should not be called automatically on save."
   (untabify-buffer)
   (delete-trailing-whitespace)
   (indent-buffer))
+
+;; wcheck / aspell / hunspell
+(setq wcheck-language-data
+	  '(("Italian"
+		 (program . "/usr/local/bin/hunspell")
+		 (args "-l" "-d" "/Users/sand/Documents/dictionaries/dict-it-it_and_latin_2013-03-31/it_IT/it_IT")
+		 (action-program . "/usr/local/bin/hunspell")
+		 (action-args "-a" "-d" "/Users/sand/Documents/dictionaries/dict-it-it_and_latin_2013-03-31/it_IT/it_IT")
+		 (action-parser . wcheck-parser-ispell-suggestions))
+
+		("English"
+		 (program . "/usr/local/bin/enchant")
+		 (args "-l" "-d" "en")
+		 (action-program . " /usr/local/bin/enchant")
+		 (action-args "-a" "-d" "en")
+		 (action-parser . wcheck-parser-ispell-suggestions))))
+
+;		("English"
+;		 (program . "/usr/local/bin/hunspell")
+;		 (args "-l" "-d" "/Users/sand/Documents/dictionaries/en_us/en_US")
+;		 (action-program . "/usr/local/bin/hunspell")
+;		 (action-args "-a" "-d" "/Users/sand/Documents/dictionaries/en_us/en_US")
+;		 (action-parser . wcheck-parser-ispell-suggestions))))
+
+;;; git
+(require 'magit)
+(require 'git-commit-mode)
+(require 'git-rebase-mode)
