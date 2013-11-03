@@ -103,7 +103,8 @@
    (or (package-installed-p package)
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
 	   (package-install package))))
- '(anti-zenburn-theme apache-mode go-mode jinja2-mode js2-mode json json-mode less-css-mode markdown-mode nginx-mode osx-plist php-mode twilight-theme zenburn-theme))
+ '(anti-zenburn-theme apache-mode go-mode jinja2-mode js2-mode json-mode less-css-mode markdown-mode nginx-mode osx-plist php-mode twilight-theme zenburn-theme
+					  web-mode handlebars-sgml-mode magit exec-path-from-shell flycheck))
 
 
 ;; miei script
