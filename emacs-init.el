@@ -54,6 +54,21 @@
 ;;; show column number by default
 (setq column-number-mode t)
 
+;;; windmove
+;;; per switchare finestra con shift+arrows o alt+arrows
+(require 'windmove)
+(windmove-default-keybindings 'meta)
+
+;;; undo con C-z (al posto di minimize window)
+(global-unset-key "\C-z")
+(global-set-key "\C-z" 'undo)
+
+;;; browser con M-o
+(global-set-key "\M-o" 'browse-url-generic)
+(if (and (eq window-system 'x) (eq system-type 'gnu/linux))
+	(setq browse-url-generic-program "gvfs-open"))
+(if (and (eq window-system 'ns) *is-a-mac*)
+	(setq browse-url-generic-program "open"))
 
 ;;; RETURN -> indent (come fa C-j)
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
@@ -205,7 +220,7 @@
 
 (defun my-go-mode-hook()
   ;;(add-hook 'before-save-hook 'gofmt-before-save)
-  (setq default-tab-width 2))
+  (setq tab-width 2))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 
 ;;; flycheck
@@ -241,8 +256,8 @@
 ;; appear in the minibuffer
 (defun show-fly-err-at-point ()
   "If the cursor is sitting on a flymake error, display the message in the minibuffer"
-  (require 'cl)
   (interactive)
+  (require 'cl)
   (let ((line-no (line-number-at-pos)))
     (dolist (elem flymake-err-info)
       (if (eq (car elem) line-no)
