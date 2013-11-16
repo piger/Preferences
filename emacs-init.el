@@ -136,9 +136,10 @@
 ;(load-theme 'adwaita)
 ;(load-theme 'zenburn)
 ;(load-theme 'base16-default)
-(load-theme 'tomorrow-night)
+;; (load-theme 'tomorrow-night)
 ;;(load-theme 'dichromacy)
 ;; (load-theme 'wilson)
+(load-theme 'solarized-light)
 
 
 ;;; Fonts
@@ -273,26 +274,26 @@
 (add-hook 'python-mode-hook '(lambda () (show-paren-mode)))
 
 ;;; flyspell prog mode
-(if (fboundp 'prog-mode)
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (dolist (hook '(lisp-mode-hook
-                  emacs-lisp-mode-hook
-                  scheme-mode-hook
-                  clojure-mode-hook
-                  ruby-mode-hook
-                  yaml-mode
-                  python-mode-hook
-                  shell-mode-hook
-                  php-mode-hook
-                  css-mode-hook
-                  haskell-mode-hook
-                  caml-mode-hook
-                  nxml-mode-hook
-                  crontab-mode-hook
-                  perl-mode-hook
-                  tcl-mode-hook
-                  javascript-mode-hook))
-    (add-hook hook 'flyspell-prog-mode)))
+;; (if (fboundp 'prog-mode)
+;;     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+;;   (dolist (hook '(lisp-mode-hook
+;;                   emacs-lisp-mode-hook
+;;                   scheme-mode-hook
+;;                   clojure-mode-hook
+;;                   ruby-mode-hook
+;;                   yaml-mode
+;;                   python-mode-hook
+;;                   shell-mode-hook
+;;                   php-mode-hook
+;;                   css-mode-hook
+;;                   haskell-mode-hook
+;;                   caml-mode-hook
+;;                   nxml-mode-hook
+;;                   crontab-mode-hook
+;;                   perl-mode-hook
+;;                   tcl-mode-hook
+;;                   javascript-mode-hook))
+;;     (add-hook hook 'flyspell-prog-mode)))
 
 ;; enable Multi Hops in TRAMP
 ;; aka: with this you can edit a remote file with sudo

@@ -21,3 +21,4 @@ irssi/nickserv.*
 muttrc
 *.pyc
 .DS_Store
+*.elc

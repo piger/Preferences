@@ -3,7 +3,7 @@
 # Dialog script for ssh key management.
 # by: Daniel Kertesz <daniel@spatof.org> on 03-03-2008
 
-SSHOPTS="-c"
+LIFETIME="24h"
 
 : ${DIALOG=dialog}
 setopt extendedglob
@@ -34,7 +34,7 @@ the_dialog () {
 	case $retval in
 		0)
 			clear
-			ssh-add $SSHOPTS $HOME/.ssh/$choice
+			ssh-add -c -t $LIFETIME $HOME/.ssh/$choice
 			the_dialog
 			;;
 		1)
