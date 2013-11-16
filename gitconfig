@@ -2,9 +2,8 @@
     excludesfile = ~/.gitignore
 
 [user]
-    name = sand
+    name = Daniel Kertesz
     email = daniel@spatof.org
-    signingkey = BFAC82CE
 
 [diff]
     renames = copies
@@ -47,5 +46,6 @@
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
 	helper = osxkeychain
+
 [push]
 	default = simple
