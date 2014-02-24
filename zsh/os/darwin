@@ -87,6 +87,9 @@ end tell
 EOF
 }
 
+# cd to Finder directory
+cdf() { eval cd "$(osascript -e 'tell app "Finder" to return the quoted form of the POSIX path of (target of window 1 as alias)' 2>/dev/null)" }
+
 # print Finder selection
 function pfs() {
   osascript 2>/dev/null <<EOF

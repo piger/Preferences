@@ -57,4 +57,29 @@ ruslat() {
 urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $1 }
 urldecode() { python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" $1 }
 
+# https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
+# Apre una man page con Preview (la converte in PDF)
+preview_man() {
+	man $1 -t | open -f -a Preview
+}
+
+# check limits for a process
+# http://docs.mongodb.org/manual/reference/ulimit/
+return-limits(){
+
+     for process in $@; do
+          process_pids=`ps -C $process -o pid --no-headers | cut -d " " -f 2`
+
+          if [ -z $@ ]; then
+             echo "[no $process running]"
+          else
+             for pid in $process_pids; do
+                   echo "[$process #$pid -- limits]"
+                   cat /proc/$pid/limits
+             done
+          fi
+
+     done
+}
+
 # vim: ft=zsh
