@@ -11,6 +11,9 @@
 ;;; OS X?
 (defconst *is-a-mac* (eq system-type 'darwin))
 
+;;; transparency
+(add-to-list 'default-frame-alist '(alpha 95 50))
+
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
 
@@ -74,9 +77,8 @@
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ; 29.3 Tabs vs. Spaces
-; per disattivare l'inserimento di <TAB> settare `indent-tabs-mode` a `nil`.
-; (ricorda che un tab si inserisce con M-i)
-;(setq-default indent-tab-mode nil)
+; Settare indent-tabs-mode a nil per evitare che indent-to usi tabs.
+;(setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default c-basic-offset 4)
 (setq-default cperl-indent-level 4)
@@ -119,11 +121,14 @@
        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
 	   (package-install package))))
  '(anti-zenburn-theme apache-mode go-mode jinja2-mode js2-mode json-mode less-css-mode markdown-mode nginx-mode osx-plist php-mode twilight-theme zenburn-theme
-					  web-mode handlebars-sgml-mode magit exec-path-from-shell flycheck))
+					  web-mode handlebars-sgml-mode magit exec-path-from-shell flycheck smex yasnippet))
 
 
 ;; miei script
 (add-to-list 'load-path "~/elisp")
+
+;;; nagios-mode (da elisp locale)
+(autoload 'nagios-mode "nagios-mode" nil t)
 
 ;;; themes
 ;;; https://github.com/owainlewis/emacs-color-themes
@@ -136,10 +141,13 @@
 ;(load-theme 'adwaita)
 ;(load-theme 'zenburn)
 ;(load-theme 'base16-default)
-;; (load-theme 'tomorrow-night)
+;(load-theme 'tomorrow-night)
 ;;(load-theme 'dichromacy)
 ;; (load-theme 'wilson)
-(load-theme 'solarized-light)
+;; (load-theme 'solarized-light)
+;; (load-theme 'ample)
+(load-theme 'tomorrow-night-eighties)
+
 
 
 ;;; Fonts
@@ -161,6 +169,11 @@
 ;; flymake
 ;; (A quanto pare flymake e' l'originale "che funziona")
 (require 'flymake)
+
+;;; yasnippet
+(require 'yasnippet)
+;;; (yas-global-mode 1
+(yas-reload-all)
 
 ;;; org-mode
 ; general setup
@@ -202,6 +215,11 @@
 ;; js2-mode
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+;; Disable TABs when indenting code.
+(setq js2-mode-hook
+	  '(lambda () (progn
+					(set-variable 'indent-tabs-mode nil))))
 
 ;; handlebars
 (require 'handlebars-sgml-mode)
@@ -268,10 +286,21 @@
 (add-hook 'post-command-hook 'show-fly-err-at-point)
 
 ;; set as minor mode for Python
-(add-hook 'python-mode-hook '(lambda () (flymake-mode)))
+;;; (add-hook 'python-mode-hook '(lambda () (flymake-mode)))
 
 ;;; show-paren-mode
 (add-hook 'python-mode-hook '(lambda () (show-paren-mode)))
+
+;; yasnippet
+(add-hook 'python-mode-hook
+		  '(lambda ()
+			 (yas-minor-mode)))
+
+;;; Smex
+(autoload 'smex "smex"
+  "Smex is a M-x enhancement for Emacs, it provides a convenient interface to
+your recently and most frequently used commands")
+(global-set-key (kbd "M-x") 'smex)
 
 ;;; flyspell prog mode
 ;; (if (fboundp 'prog-mode)
@@ -298,11 +327,11 @@
 ;; enable Multi Hops in TRAMP
 ;; aka: with this you can edit a remote file with sudo
 ;; C-x C-f /sudo:root@remote-host:/path/to-file
-(require 'tramp)
-(add-to-list 'tramp-default-proxies-alist
-	     '(nil "\\`root\\'" "/ssh:%h:"))
-(add-to-list 'tramp-default-proxies-alist
-	     '((regexp-quote (system-name)) nil nil))
+;; (require 'tramp)
+;; (add-to-list 'tramp-default-proxies-alist
+;; 	     '(nil "\\`root\\'" "/ssh:%h:"))
+;; (add-to-list 'tramp-default-proxies-alist
+;; 	     '((regexp-quote (system-name)) nil nil))
 
 ;;; HTML & co
 ;; auto-start zencoding with SGML modes
@@ -355,3 +384,7 @@ Including indent-buffer, which should not be called automatically on save."
 (require 'magit)
 (require 'git-commit-mode)
 (require 'git-rebase-mode)
+
+
+;;; aliases
+(defalias 'qrr 'query-replace-regexp)
