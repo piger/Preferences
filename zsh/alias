@@ -73,4 +73,12 @@ alias large_packages="dpkg-query -Wf '\${Installed-Size}\t\${Package}\n' | sort 
 # rsync verso un filesystem FAT32
 alias rsync_fat32='rsync --modify-window=1'
 
+# alias buffi
+# http://www.reddit.com/r/programming/comments/1s2m76/whats_new_in_git_185/
+# alias ಠ_ಠ="git reset --hard HEAD"
+# alias (╯°□°）╯︵ ┻━┻="git push origin master --force"
+
+# python json tool (un pretty-printer)
+alias json.tool='python -m json.tool'
+
 # vim: ft=zsh

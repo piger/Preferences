@@ -1,3 +1,5 @@
+# gitconfig
+
 [core]
     excludesfile = ~/.gitignore
 
@@ -14,6 +16,7 @@
 
 [color]
     ui = true
+
 [color "branch"]
     current = magenta reverse
     local = yellow
@@ -24,7 +27,7 @@
 [alias]
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
-	st = status
+	st = status -sb
     changes = log --oneline --reverse
     ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
@@ -42,6 +45,7 @@
 	last = log -1 HEAD
 	unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	undo = reset --hard HEAD~1
+	latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
