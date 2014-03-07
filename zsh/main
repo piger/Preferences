@@ -271,6 +271,10 @@ zmodload zsh/complist
 # per 'syserorr'
 # zmodload zsh/system
 
+# META+delete come in bash, invece che settare WORDCHARS
+autoload -U select-word-style
+select-word-style bash
+
 # Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
 typeset -U fpath
 

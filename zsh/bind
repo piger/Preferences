@@ -20,7 +20,7 @@ bindkey -e
 # WORDCHARS
 # default: *?_-.[]~=/&;!#$%^(){}<>
 # tolgo lo '/' da WORDCHARS per killare le parole come si deve
-WORDCHARS="${WORDCHARS:s#/#}"
+### WORDCHARS="${WORDCHARS:s#/#}"
 
 bindkey '\e[5~' up-history		# PageUp -> history up
 bindkey '\e[6~' down-history 		# PageDown -> history down
