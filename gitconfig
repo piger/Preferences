@@ -24,6 +24,11 @@
 #[color "diff"]
 	#whitespace = red reverse
 
+# Per mostrare in 'git status' anche i file nelle directory 'untracked'
+# NOTA: determina la visibilita' anche in magit-status
+# [status]
+# 	showUntrackedFiles = all
+
 [alias]
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
