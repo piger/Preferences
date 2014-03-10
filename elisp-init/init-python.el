@@ -9,7 +9,7 @@
 		  '(lambda () (yas-minor-mode)))
 
 ;; eldoc (mostra nome funzione corrente nel mini buffer)
-(add-hook 'python-mode-hook
-		  '(lambda () (eldoc-mode 1)) t)
+;;(add-hook 'python-mode-hook
+;;		  '(lambda () (eldoc-mode 1)) t)
 
 (provide 'init-python)
