@@ -23,6 +23,20 @@
 ;; (global-set-key (kbd "s-r") 'recentf-open-files)
 ;; il binding e' in init-functions, sulla funzione che integra ido
 
+;; show parens mode
+(show-paren-mode t)
+
+;; align per puppet
+;; https://github.com/jwiegley/dot-emacs/blob/master/lisp/puppet-ext.el
+(add-hook 'puppet-mode-hook
+		  (lambda ()
+			(require 'align)
+			(add-to-list 'align-rules-list
+						 '(ruby-arrow
+						   (regexp   . "\\(\\s-*\\)=>\\(\\s-*\\)")
+						   (group    . (1 2))
+						   (modes    . '(ruby-mode puppet-mode))))))
+
 ;;; save-place per salvare la posizione nel buffer quando si esce, tipo
 ;;; viminfo in vim.
 ;;; (require 'saveplace)
