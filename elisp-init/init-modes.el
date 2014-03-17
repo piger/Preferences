@@ -34,15 +34,8 @@
      (add-hook 'css-mode-hook (lambda ()
                                 (run-hooks 'pl-css-mode-hook)))))
 
-(defun prelude-python-mode-defaults ()
-  "Defaults for Python programming."
-  (subword-mode +1)
-  ;;(smartparens-mode +1)
-  (electric-indent-mode -1))
+;; highlight FIXME & co
+(add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
 
-(setq prelude-python-mode-hook 'prelude-python-mode-defaults)
-
-(add-hook 'python-mode-hook (lambda ()
-                              (run-hooks 'prelude-python-mode-hook)))
 
 (provide 'init-modes)

@@ -20,6 +20,7 @@
 (load custom-file 'noerror)
 
 (require 'init-packages)
+(require 'init-functions)
 (require 'init-bindings)
 (require 'init-config)
 (require 'init-local-elisp)
@@ -29,6 +30,6 @@
 (require 'init-web)
 (require 'init-modes)
 (require 'init-python)
-(require 'init-functions)
 (require 'init-aliases)
 
+(message "Se vuoi usare yasnippet esegui: (yas-reload-all)")
