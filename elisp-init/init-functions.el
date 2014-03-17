@@ -23,12 +23,12 @@ Including indent-buffer, which should not be called automatically on save."
   "Use ido bla"
   (interactive)
   (let ((home (expand-file-name (getenv "HOME"))))
-	(find-file
-	 (ido-completing-read "Recentf open: "
-						  (mapcar (lambda (path)
-									(replace-regexp-in-string home "~" path))
-								  recentf-list)
-						  nil t))))
+    (find-file
+     (ido-completing-read "Recentf open: "
+                          (mapcar (lambda (path)
+                                    (replace-regexp-in-string home "~" path))
+                                  recentf-list)
+                          nil t))))
 (global-set-key (kbd "s-r") 'ido-recentf)
 
 ;; shutdown emacs server
@@ -42,6 +42,7 @@ Including indent-buffer, which should not be called automatically on save."
 (defvar prelude-tips
   '("Press <C-c o> to open a file with external program."
     "Access the official Emacs manual by pressing <C-h r>."
+    "Press <C-x v v> to do the next logical version control operation"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
@@ -65,5 +66,17 @@ Including indent-buffer, which should not be called automatically on save."
 (prelude-eval-after-init
  ;; greet me with useful tips
  (run-at-time 5 nil 'prelude-tip-of-the-day))
+
+;; google
+;; http://emacsredux.com/blog/2013/03/28/google/
+(defun google ()
+  "Google the selected region if any, display a query prompt otherwise."
+  (interactive)
+  (browse-url
+   (concat
+    "https://www.google.com/search?ie=utf-8&oe=utf-8&q="
+    (url-hexify-string (if mark-active
+                           (buffer-substring (region-beginning) (region-end))
+                         (read-string "Google: "))))))
 
 (provide 'init-functions)
