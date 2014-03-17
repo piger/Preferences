@@ -37,7 +37,33 @@ Including indent-buffer, which should not be called automatically on save."
   "Save buffers, Quit and Shutdown (kill) server"
   (interactive)
   (save-some-buffers)
-  (kill-emacs)
-)
+  (kill-emacs))
+
+(defvar prelude-tips
+  '("Press <C-c o> to open a file with external program."
+    "Access the official Emacs manual by pressing <C-h r>."
+    "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
+
+(defun prelude-tip-of-the-day ()
+  "Display a random entry from `prelude-tips'."
+  (interactive)
+  (unless (window-minibuffer-p)
+    ;; pick a new random seed
+    (random t)
+    (message
+     (concat "Prelude tip: " (nth (random (length prelude-tips)) prelude-tips)))))
+
+(defun prelude-eval-after-init (form)
+  "Add `(lambda () FORM)' to `after-init-hook'.
+
+    If Emacs has already finished initialization, also eval FORM immediately."
+  (let ((func (list 'lambda nil form)))
+    (add-hook 'after-init-hook func)
+    (when after-init-time
+      (eval form))))
+
+(prelude-eval-after-init
+ ;; greet me with useful tips
+ (run-at-time 5 nil 'prelude-tip-of-the-day))
 
 (provide 'init-functions)

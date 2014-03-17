@@ -35,18 +35,24 @@
 ;;; (yas-global-mode 1
 ;;; (yas-reload-all)
 
-;;; Smex
-(autoload 'smex "smex"
-  "Smex is a M-x enhancement for Emacs, it provides a convenient interface to
-your recently and most frequently used commands")
+;;; smex, remember recently and most frequently used commands
+(require 'smex)
+;; (setq smex-save-file (expand-file-name ".smex-items" prelude-savefile-dir))
+(smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
+;; editor di regexp che evita la pazzia dei backslash
+(require 're-builder)
+;; evita la pazzia dei backslash
+(setq reb-re-syntax 'string)
 
 ;; git
 (require 'magit)
 (require 'git-commit-mode)
 (require 'git-rebase-mode)
 
-;; dired bindings
+;; dired bindings (tipo C-x C-j)
 (require 'dired-x)
 
 (provide 'init-requires)

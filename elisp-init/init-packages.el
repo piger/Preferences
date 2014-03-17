@@ -29,6 +29,7 @@
 		   (package-install package))))
  '(apache-mode
    go-mode
+   diminish
    jinja2-mode
    js2-mode
    json-mode
@@ -44,7 +45,16 @@
    magit
    exec-path-from-shell
    smex
-   yasnippet))
+   yasnippet
+
+   volatile-highlights
+   rainbow-mode
+   move-text
+   gitignore-mode
+   gitconfig-mode
+   browse-kill-ring
+   anzu
+))
 
 
 (provide 'init-packages)

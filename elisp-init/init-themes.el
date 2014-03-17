@@ -7,9 +7,9 @@
 ;(load-theme 'base16-default)
 ;(load-theme 'tomorrow-night)
 ;;(load-theme 'dichromacy)
-;; (load-theme 'wilson)
+;; (load-theme 'wilson t)
 ;; (load-theme 'solarized-light)
-;; (load-theme 'ample)
+;; (load-theme 'ample t)
 (load-theme 'tomorrow-night-eighties t)
 
 ;;; Fonts

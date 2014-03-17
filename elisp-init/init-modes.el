@@ -22,4 +22,27 @@
   (setq tab-width 2))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 
+(eval-after-load 'css-mode
+  '(progn
+     (require 'rainbow-mode)
+
+     (defun pl-css-mode-defaults ()
+       (setq css-indent-offset 2)
+       (rainbow-mode +1))
+
+     (setq pl-css-mode-hook 'pl-css-mode-defaults)
+     (add-hook 'css-mode-hook (lambda ()
+                                (run-hooks 'pl-css-mode-hook)))))
+
+(defun prelude-python-mode-defaults ()
+  "Defaults for Python programming."
+  (subword-mode +1)
+  ;;(smartparens-mode +1)
+  (electric-indent-mode -1))
+
+(setq prelude-python-mode-hook 'prelude-python-mode-defaults)
+
+(add-hook 'python-mode-hook (lambda ()
+                              (run-hooks 'prelude-python-mode-hook)))
+
 (provide 'init-modes)

@@ -19,9 +19,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
+(require 'init-packages)
 (require 'init-bindings)
 (require 'init-config)
-(require 'init-packages)
 (require 'init-local-elisp)
 (require 'init-requires)
 (require 'init-themes)
