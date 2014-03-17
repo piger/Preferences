@@ -4,7 +4,8 @@
 ;;; - http://www.emacswiki.org/emacs/ImenuMode
 
 ;;; nasconde la toolbar; e' bene farlo all'inizio per evitare che venga mostrata brevemente
-(tool-bar-mode -1)
+(if window-system 
+	(tool-bar-mode -1))
 ;;; nasconde la scroll bar (perchè mai?)
 ; (scroll-bar-mode -1)
  
