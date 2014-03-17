@@ -10,7 +10,7 @@
 ;; (load-theme 'wilson)
 ;; (load-theme 'solarized-light)
 ;; (load-theme 'ample)
-(load-theme 'tomorrow-night-eighties)
+(load-theme 'tomorrow-night-eighties t)
 
 ;;; Fonts
 ;;; questo non saprei cosa fa:

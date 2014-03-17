@@ -13,6 +13,23 @@
 ;;; transparency
 (add-to-list 'default-frame-alist '(alpha 95 50))
 
+;; enable y/n answers
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; frame title
+(setq frame-title-format
+	  '("" invocation-name " - " (:eval (if (buffer-file-name)
+											(abbreviate-file-name (buffer-file-name))
+										  "%b"))))
+
+;; disable startup screen
+(setq inhibit-startup-screen t)
+
+;; nice scrolling ???
+(setq scroll-margin 0
+	  scroll-conservatively 100000
+	  scroll-preserve-screen-position 1)
+
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
 

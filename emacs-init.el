@@ -4,10 +4,12 @@
 ;;; - http://www.emacswiki.org/emacs/ImenuMode
 
 ;;; nasconde la toolbar; e' bene farlo all'inizio per evitare che venga mostrata brevemente
-(if window-system 
+(when (fboundp 'tool-bar-mode)
 	(tool-bar-mode -1))
 ;;; nasconde la scroll bar (perchè mai?)
 ; (scroll-bar-mode -1)
+;; nasconde menubar
+;; (menu-bar-mode -1)
  
 (defconst *is-a-mac* (eq system-type 'darwin))
 

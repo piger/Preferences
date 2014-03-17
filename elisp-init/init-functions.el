@@ -31,4 +31,13 @@ Including indent-buffer, which should not be called automatically on save."
 						  nil t))))
 (global-set-key (kbd "s-r") 'ido-recentf)
 
+;; shutdown emacs server
+;; http://www.emacswiki.org/emacs/EmacsAsDaemon
+(defun shutdown-server ()
+  "Save buffers, Quit and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+)
+
 (provide 'init-functions)
