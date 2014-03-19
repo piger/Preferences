@@ -1,5 +1,8 @@
 ;;; general configuration
 
+;; save bookmarks every time a bookmark is added
+(setq bookmark-save-flag 1)
+
 ; 29.3 Tabs vs. Spaces
 ;; Death to the tabs!  However, tabs historically indent to the next
 ;; 8-character offset; specifying anything else will cause *mass*

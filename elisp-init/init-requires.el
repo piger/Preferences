@@ -24,12 +24,6 @@
 (require 'windmove)
 (windmove-default-keybindings 'meta)
 
-;;; `exec()` PATH from shell
-(require 'exec-path-from-shell)
-
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
-
 ;;; yasnippet
 (require 'yasnippet)
 ;; O si abilita il global-mode, o il minor mode con degli hook per il major-mode

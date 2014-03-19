@@ -31,5 +31,7 @@
 (require 'init-modes)
 (require 'init-python)
 (require 'init-aliases)
+(if *is-a-mac*
+    (require 'init-osx))
 
 (message "Se vuoi usare yasnippet esegui: (yas-reload-all)")
