@@ -37,5 +37,25 @@
 ;; highlight FIXME & co
 (add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
 
+;; subword mode (capisce CamelCase)
+(add-hook 'js2-mode-hook (lambda ()
+                           (subword-mode +1)))
+
+(setq-default js2-global-externs '("module", "require", "console",
+                                   "jQuery", "$"))
+(add-hook 'js2-init-hook
+          (lambda ()
+            (when (string-match-p "zAFS" (buffer-file-name))
+              (setq js2-additional-externs '("Ember", "App")))))
+
+; elisp defaults
+(defun pl-elisp-mode-defaults ()
+  "Some defaults for elisp mode"
+  (turn-on-eldoc-mode)
+  (rainbow-mode +1))
+(setq pl-elisp-mode-hooks 'pl-elisp-mode-defaults)
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (run-hooks 'pl-elisp-mode-hooks)))
+
 
 (provide 'init-modes)

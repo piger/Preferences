@@ -52,4 +52,8 @@
 ;; dired bindings (tipo C-x C-j)
 (require 'dired-x)
 
+; zone e' fondamentale direi (per avere zone-when-idle)
+(require 'zone)
+
+
 (provide 'init-requires)
