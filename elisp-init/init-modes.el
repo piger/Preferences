@@ -46,7 +46,9 @@
 (add-hook 'js2-init-hook
           (lambda ()
             (when (string-match-p "zAFS" (buffer-file-name))
-              (setq js2-additional-externs '("Ember", "App")))))
+              (mapc (lambda (x)
+                      (add-to-list 'js2-additional-externs x))
+                    (list "Ember" "DS" "App")))))
 
 ; elisp defaults
 (defun pl-elisp-mode-defaults ()
