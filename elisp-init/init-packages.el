@@ -62,6 +62,7 @@
    base16-theme
    browse-kill-ring
    diminish
+   expand-region
    exec-path-from-shell
    gitconfig-mode
    gitignore-mode
@@ -110,6 +111,16 @@
     (pl-require-packages my-packages)))
 
 (pl-install-packages)
+
+
+;; `exec()` PATH from shell
+;; Questo va messo PRIMA di tutto perche' altrimenti tutti i PATH
+;; presi dai vari plugin non prendono il setting e pescano la roba in
+;; /usr/bin invece di /usr/local/bin
+(require 'exec-path-from-shell)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
 
 
 (provide 'init-packages)

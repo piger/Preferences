@@ -46,8 +46,9 @@
 
 ;; git
 (require 'magit)
-(require 'git-commit-mode)
-(require 'git-rebase-mode)
+;; questi due sarebbero dipendenze, ma funziona tutto anche senza...
+;(require 'git-commit-mode)
+;(require 'git-rebase-mode)
 
 ;; dired bindings (tipo C-x C-j)
 (require 'dired-x)
@@ -55,5 +56,8 @@
 ; zone e' fondamentale direi (per avere zone-when-idle)
 (require 'zone)
 
+; expand-region
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
 
 (provide 'init-requires)
