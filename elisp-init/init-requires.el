@@ -2,15 +2,19 @@
 
 ;; ido
 (require 'ido)
-(ido-mode t)
+
+(setq ido-enable-prefix nil
+      ido-enable-flex-matching t
+      ido-everywhere t)
+(ido-mode +1)
 ;;; Non-nil means that `ido' will do flexible string matching.
 ;;; Flexible matching means that if the entered string does not
 ;;; match any item, any item containing the entered characters
 ;;; in the given sequence will match.
-(setq ido-enable-flex-matching t)
+; (setq ido-enable-flex-matching t)
 ;;; To use ido for all buffer and file selections in Emacs, customize the
 ;;; variable `ido-everywhere'.
-(setq ido-everywhere t)
+; (setq ido-everywhere t)
 
 ;; meaningful names for buffers with the same name
 (require 'uniquify)

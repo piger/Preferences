@@ -67,7 +67,7 @@
    gitconfig-mode
    gitignore-mode
    go-mode
-   handlebars-sgml-mode
+   ; handlebars-sgml-mode
    ; jinja2-mode
    js2-mode
    json-mode
