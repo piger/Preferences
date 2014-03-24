@@ -134,6 +134,13 @@
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 ;; (setq gc-cons-threshold 50000000)
 
+;; make a shell script executable automatically on save
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+
+;; the blinking cursor is nothing, but an annoyance
+(blink-cursor-mode -1)
+
 
 ;; wcheck / aspell / hunspell
 (setq wcheck-language-data

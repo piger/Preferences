@@ -22,3 +22,4 @@ muttrc
 *.pyc
 .DS_Store
 *.elc
+/elisp-init/init-local.el

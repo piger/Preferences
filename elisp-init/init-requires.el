@@ -60,8 +60,15 @@
 ; zone e' fondamentale direi (per avere zone-when-idle)
 (require 'zone)
 
-; expand-region
+;; expand-region
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
+
+;; move-text
+(require 'move-text)
+;; i binding di default sono alt+up e alt+down, gli stessi che uso
+;; per switchare finestra.
+;; (move-text-default-bindings)
+
 
 (provide 'init-requires)
