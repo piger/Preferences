@@ -2,6 +2,7 @@
 
 [core]
     excludesfile = ~/.gitignore
+    pager = less -RSX
 
 [user]
     name = Daniel Kertesz
@@ -10,29 +11,32 @@
 [diff]
     renames = copies
 
+[log]
+    decorate = short
+
 #[help]
 #    # correction stile zsh :P dopo 3 secondi esegue il comando
 #    autocorrect = 30
 
 [color]
-    ui = true
+    ui = auto
 
 [color "branch"]
     current = magenta reverse
     local = yellow
     remote = green
 #[color "diff"]
-	#whitespace = red reverse
+        #whitespace = red reverse
 
 # Per mostrare in 'git status' anche i file nelle directory 'untracked'
 # NOTA: determina la visibilita' anche in magit-status
 # [status]
-# 	showUntrackedFiles = all
+#       showUntrackedFiles = all
 
 [alias]
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
-	st = status -sb
+    st = status -sb
     changes = log --oneline --reverse
     ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
@@ -43,18 +47,18 @@
     storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
     pushone = push origin master:refs/heads/master
     pullone = pull origin master:refs/heads/master
-	co = checkout
-	br = branch
-	ci = commit
-	unstage = reset HEAD --
-	last = log -1 HEAD
-	unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	undo = reset --hard HEAD~1
-	latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    undo = reset --hard HEAD~1
+    latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 
 [push]
-	default = simple
+    default = simple
