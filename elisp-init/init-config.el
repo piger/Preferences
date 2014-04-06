@@ -27,7 +27,7 @@
 (setq column-number-mode t)
 
 ;;; transparency
-(add-to-list 'default-frame-alist '(alpha 95 80))
+;; (add-to-list 'default-frame-alist '(alpha 95 80))
 
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
