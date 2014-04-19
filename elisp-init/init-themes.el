@@ -10,7 +10,7 @@
 ;; (load-theme 'solarized-light)
 ;; (load-theme 'ample t)
 ;(load-theme 'tomorrow-night-eighties t)
-(load-theme 'tomorrow-night t)
+;; (load-theme 'tomorrow-day t)
 ;; (load-theme 'base16-default t)
 ; (load-theme 'flatui t)
 ; (load-theme 'soft-stone t)

@@ -3,6 +3,8 @@
 # Dialog script for ssh key management.
 # by: Daniel Kertesz <daniel@spatof.org> on 03-03-2008
 
+export PATH=/usr/local/bin:/usr/bin:/bin
+
 LIFETIME="24h"
 
 : ${DIALOG=dialog}

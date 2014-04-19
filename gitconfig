@@ -1,12 +1,16 @@
+# -*- mode: conf -*-
 # gitconfig
 
 [core]
     excludesfile = ~/.gitignore
     pager = less -RSX
 
-[user]
-    name = Daniel Kertesz
-    email = daniel@spatof.org
+# Meglio settarlo su ogni progetto:
+# $ git config user.name "Daniel Kertesz"
+# $ git config user.email daniel@spatof.org
+# [user]
+#     name = Daniel Kertesz
+#     email = daniel@spatof.org
 
 [diff]
     renames = copies

@@ -1,8 +1,7 @@
---type-set
-django=.py,.html
---type-set
-less=.less
---type-set
-web=.html,.js,.less,.css,.hbs
 --smart-case
 --sort-files
+--type-set=django:ext:py,html
+--type-set=less:ext:less
+--type-set=web:ext:html,js,less,css,hbs
+--type-set=puppet:ext:pp
+--type-set=pp:ext:pp
