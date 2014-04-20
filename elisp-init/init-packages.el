@@ -13,11 +13,9 @@
 ;;; add also Melpa
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 
-;; But don't take Melpa versions of certain packages (from purcell emacs.d)
-(setq package-filter-function
-      (lambda (package version archive)
-        (or (not (string-equal archive "melpa"))
-            (not (memq package '())))))
+;; and Melpa stable
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "http://hiddencameras.milkbox.net/packages/") t)
 
 (package-initialize)
 
@@ -58,6 +56,7 @@
 
 (defvar my-packages
  '(anzu
+   ack-and-a-half
    apache-mode
    base16-theme
    browse-kill-ring
@@ -67,6 +66,11 @@
    gitconfig-mode
    gitignore-mode
    go-mode
+   helm
+   flx-ido
+   ido-vertical-mode
+   ido-ubiquitous
+   xkcd
    ; handlebars-sgml-mode
    ; jinja2-mode
    js2-mode
@@ -77,6 +81,7 @@
    move-text
    nginx-mode
    ; osx-plist
+   projectile
    php-mode
    rainbow-mode
    smex
