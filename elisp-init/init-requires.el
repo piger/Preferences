@@ -2,6 +2,7 @@
 
 ;; ido
 (require 'ido)
+(require 'flx-ido)
 
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
