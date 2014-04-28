@@ -68,7 +68,7 @@
    go-mode
    helm
    flx-ido
-   ido-vertical-mode
+   ;; ido-vertical-mode
    ido-ubiquitous
    xkcd
    ; handlebars-sgml-mode
