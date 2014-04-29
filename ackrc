@@ -5,3 +5,4 @@
 --type-set=web:ext:html,js,less,css,hbs
 --type-set=puppet:ext:pp
 --type-set=pp:ext:pp
+--type-set=markup:ext:md,rst,org

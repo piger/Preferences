@@ -13,7 +13,8 @@
 # Files
 # data.location=/Users/sand/.task
 # data.location=/Users/sand/Dropbox/task
-data.location=~/Dropbox/task
+# data.location=~/Dropbox/task
+data.location=~/Documents/task
 
 color=on
 regex=on
