@@ -9,8 +9,10 @@
 
 (setq web-mode-engines-alist
 	  '(("django"		. "/templates/.*\\.html\\'") ; flask
-            ("ctemplate"	. "/webui/index\\.html\\'"))
-)
+            ("ctemplate"	. "/webui/index\\.html\\'")))
+
+;; in caso di aggiunta runtime:
+;; (add-to-list 'web-mode-engines-alist '("go" . "webui/foo\\'"))
 
 (defun my-web-mode-hook ()
   "Customizations for web-mode"

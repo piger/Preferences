@@ -28,7 +28,8 @@
 
      (defun pl-css-mode-defaults ()
        (setq css-indent-offset 2)
-       (rainbow-mode +1))
+       (rainbow-mode +1)
+       (subword-mode +1))
 
      (setq pl-css-mode-hook 'pl-css-mode-defaults)
      (add-hook 'css-mode-hook (lambda ()
@@ -45,7 +46,8 @@
                                    "jQuery", "$"))
 (add-hook 'js2-init-hook
           (lambda ()
-            (when (string-match-p "zAFS" (buffer-file-name))
+            (when (or (string-match-p "zAFS" (buffer-file-name))
+                      (string-match-p "LogIntelligence" (buffer-file-name)))
               (mapc (lambda (x)
                       (add-to-list 'js2-additional-externs x))
                     (list "Ember" "DS" "App")))))
