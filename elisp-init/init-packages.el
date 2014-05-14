@@ -32,7 +32,7 @@
 ;;                                       solarized-theme
 ;;                                       js2-mode)))
 
-(setq package-archive-exclude-alist '(("gnu")
+(setq package-archive-exclude-alist '(("gnu"
                                       magit
                                       solarized-theme
                                       js2-mode
