@@ -29,6 +29,17 @@
 ;;; transparency
 ;; (add-to-list 'default-frame-alist '(alpha 95 80))
 
+;; Save clipboard strings into kill ring before replacing them.
+;; When one selects something in another program to paste it into Emacs,
+;; but kills something in Emacs before actually pasting it,
+;; this selection is gone unless this variable is non-nil,
+;; in which case the other program's selection is saved in the `kill-ring'
+;; before the Emacs kill and one can still paste it using C-y M-y.
+(setq save-interprogram-paste-before-kill t)
+
+;; If non-nil, mouse yank commands yank at point instead of at click.
+(setq mouse-yank-at-point t)
+
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -86,6 +97,7 @@
 ;;; viminfo in vim.
 ;;; (require 'saveplace)
 ;;; (setq-default save-place t)
+;;; (setq save-place-file (concat user-emacs-directory "places"))
 
 ;; enable Multi Hops in TRAMP
 ;; aka: with this you can edit a remote file with sudo

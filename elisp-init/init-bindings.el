@@ -3,6 +3,9 @@
 ;;; ibuffer (meglio del mode di default per browsare i buffer aperti)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+;; hippie-expand al posto di dabbrev-expand
+(global-set-key (kbd "M-/") 'hippie-expand)
+
 ;;; swap default search mode to regexp 
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
@@ -11,7 +14,10 @@
 
 ;;; undo con C-z (al posto di minimize window)
 (global-unset-key "\C-z")
-(global-set-key "\C-z" 'undo)
+(global-set-key (kbd "\C-z") 'undo)
+
+;; helm
+(global-set-key (kbd "C-c h") 'helm-mini)
 
 ;; font-size
 (global-set-key (kbd "C-+") 'text-scale-increase)
