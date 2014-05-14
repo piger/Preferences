@@ -4,55 +4,45 @@
 (require 'package)
 
 ;;; common repositories
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
-;;; GNU for emacs < 24
-(when (< emacs-major-version 24)
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-
-;;; add also Melpa
+;; melpa
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 
-;; and Melpa stable
-;; (add-to-list 'package-archives
-;;              '("melpa-stable" . "http://hiddencameras.milkbox.net/packages/") t)
+;; melpa-stable
+;; http://hiddencameras.milkbox.net/
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://hiddencameras.milkbox.net/packages/") t)
+
+;; package-filters
+;; Installando questo package e' possibile filtrare i pacchetti per repository,
+;; in modo da installare alcuni package da stable e altri da "unstable"; purtroppo
+;; il modo per farlo e' orribile...
+
+;; (progn
+;;   (switch-to-buffer
+;;     (url-retrieve-synchronously
+;;       "https://raw.github.com/milkypostman/package-filter/master/package-filter.el"))
+;;   (package-install-from-buffer  (package-buffer-info) 'single))
+
+;; (setq package-archive-enable-alist '(("gnu")
+;;                                      ("melpa")
+;;                                      ("melpa-stable"
+;;                                       magit
+;;                                       solarized-theme
+;;                                       js2-mode)))
+
+(setq package-archive-exclude-alist '(("gnu")
+                                      magit
+                                      solarized-theme
+                                      js2-mode
+                                      ("melpa"
+                                       magit
+                                       solarized-theme
+                                       js2-mode)
+                                      ("melpa-stable")))
 
 (package-initialize)
-
-
-;; check if a package is installed; if not, install it.
-;; (mapc
-;;  (lambda (package)
-;;    (or (package-installed-p package)
-;;        (if (y-or-n-p (format "Package %s is missing. Install it? " package))
-;; 		   (package-install package))))
- 
-;;  '(anzu
-;;    apache-mode
-;;    base16-theme
-;;    browse-kill-ring
-;;    diminish
-;;    exec-path-from-shell
-;;    gitconfig-mode
-;;    gitignore-mode
-;;    go-mode
-;;    handlebars-sgml-mode
-;;    ; jinja2-mode
-;;    js2-mode
-;;    json-mode
-;;    less-css-mode
-;;    magit
-;;    markdown-mode
-;;    move-text
-;;    nginx-mode
-;;    osx-plist
-;;    php-mode
-;;    rainbow-mode
-;;    smex
-;;    undo-tree
-;;    volatile-highlights
-;;    web-mode
-;;    yasnippet))
 
 (defvar my-packages
  '(anzu
@@ -68,11 +58,8 @@
    go-mode
    helm
    flx-ido
-   ;; ido-vertical-mode
    ido-ubiquitous
    xkcd
-   ; handlebars-sgml-mode
-   ; jinja2-mode
    js2-mode
    json-mode
    less-css-mode
@@ -84,6 +71,7 @@
    projectile
    php-mode
    rainbow-mode
+   rainbow-delimiters
    smex
    undo-tree
    volatile-highlights

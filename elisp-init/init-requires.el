@@ -30,7 +30,7 @@
 (windmove-default-keybindings 'meta)
 
 ;;; yasnippet
-(require 'yasnippet)
+;; (require 'yasnippet)
 ;; O si abilita il global-mode, o il minor mode con degli hook per il major-mode
 ;; del linguaggio visualizzato; nel secondo caso pero' bisogna chiamare manualmente
 ;; (yas-reload-all)!
@@ -45,9 +45,9 @@
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 ;; editor di regexp che evita la pazzia dei backslash
-(require 're-builder)
+;; (require 're-builder)
 ;; evita la pazzia dei backslash
-(setq reb-re-syntax 'string)
+;; (setq reb-re-syntax 'string)
 
 ;; git
 (require 'magit)
@@ -59,14 +59,14 @@
 (require 'dired-x)
 
 ; zone e' fondamentale direi (per avere zone-when-idle)
-(require 'zone)
+;; (require 'zone)
 
 ;; expand-region
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 ;; move-text
-(require 'move-text)
+;; (require 'move-text)
 ;; i binding di default sono alt+up e alt+down, gli stessi che uso
 ;; per switchare finestra.
 ;; (move-text-default-bindings)
