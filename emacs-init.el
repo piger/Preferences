@@ -51,6 +51,3 @@
 ;;; emacs custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
-
-
-(message "Se vuoi usare yasnippet esegui: (yas-reload-all)")

@@ -37,6 +37,8 @@
 
 ;; highlight FIXME & co
 (add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
+(add-hook 'prog-mode-hook '(lambda ()
+                             (rainbow-delimiters-mode)))
 
 ;; subword mode (capisce CamelCase)
 (add-hook 'js2-mode-hook (lambda ()
