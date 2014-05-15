@@ -35,7 +35,7 @@
 (setq package-archive-exclude-alist '(("gnu"
                                       magit
                                       solarized-theme
-                                      js2-mode
+                                      js2-mode)
                                       ("melpa"
                                        magit
                                        solarized-theme
