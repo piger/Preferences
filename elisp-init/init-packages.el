@@ -12,7 +12,7 @@
 ;; melpa-stable
 ;; http://hiddencameras.milkbox.net/
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://hiddencameras.milkbox.net/packages/") t)
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
 ;; package-filters
 ;; Installando questo package e' possibile filtrare i pacchetti per repository,
@@ -48,7 +48,7 @@
  '(anzu
    ack-and-a-half
    apache-mode
-   base16-theme
+   ; base16-theme
    browse-kill-ring
    diminish
    expand-region
@@ -59,7 +59,7 @@
    helm
    flx-ido
    ido-ubiquitous
-   xkcd
+   ; xkcd
    js2-mode
    json-mode
    less-css-mode
@@ -75,8 +75,8 @@
    smex
    undo-tree
    volatile-highlights
-   web-mode
-   ;yasnippet
+   ;;; web-mode
+   ;;; yasnippet
 )
  "A list of packages to ensure are installed at launch")
 
