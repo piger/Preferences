@@ -12,6 +12,8 @@
 (add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/tomorrow-theme")
 ; (add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/base16-theme")
 
+(when (file-exists-p "/usr/local/Cellar/gettext/0.18.3.2/share/emacs/site-lisp/")
+  (add-to-list 'load-path "/usr/local/Cellar/gettext/0.18.3.2/share/emacs/site-lisp"))
 
 
 (provide 'init-local-elisp)
