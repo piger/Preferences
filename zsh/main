@@ -359,14 +359,14 @@ if [[ -d ~/.zsh/help ]]; then
 fi
 
 # Plugins
-if [[ -e $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh ]]; then
-	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-	source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
-fi
+# if [[ -e $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh ]]; then
+# 	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+# 	source $ZDOTDIR/plugins/zsh-synyax-highlighting.git/zsh-syntax-highlighting.zsh
+# fi
 
 # composure
 # https://github.com/erichs/composure
-[[ -e $ZDOTDIR/plugins/composure.sh ]] && source $ZDOTDIR/plugins/composure.sh
+### [[ -e $ZDOTDIR/plugins/composure.sh ]] && source $ZDOTDIR/plugins/composure.sh
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che
 # dovrebbe essere equivalente in termini di "return OK".
