@@ -35,7 +35,9 @@
 ;; this selection is gone unless this variable is non-nil,
 ;; in which case the other program's selection is saved in the `kill-ring'
 ;; before the Emacs kill and one can still paste it using C-y M-y.
-(setq save-interprogram-paste-before-kill t)
+;; Jul 2014 - disattivo per problemi su OS X, quando nel "buffer" di osx
+;; non c'e' puro testo, emacs rompe il paste.
+;; (setq save-interprogram-paste-before-kill t)
 
 ;; If non-nil, mouse yank commands yank at point instead of at click.
 (setq mouse-yank-at-point t)
