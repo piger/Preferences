@@ -50,6 +50,7 @@
    apache-mode
    ; base16-theme
    browse-kill-ring
+   buffer-move
    diminish
    expand-region
    exec-path-from-shell
