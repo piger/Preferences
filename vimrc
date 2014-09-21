@@ -239,6 +239,8 @@ set noexpandtab
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
 " }}}
 
+" golang syntax
+set rtp+=/usr/local/go/misc/vim
 
 " Plugin Vim - Pathogen {{{
 " https://github.com/tpope/vim-pathogen.git
