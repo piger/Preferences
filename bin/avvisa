@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Esegue un comando e notifica il completamento con Notification Center
+# di OS X.
+#
+# Requisiti: terminal-notifier
+
+set -e
+
+TN=terminal-notifier
+
+$*
+$TN -message "Command \"$*\" done" -title "Command terminated"
