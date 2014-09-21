@@ -57,6 +57,7 @@
    gitconfig-mode
    gitignore-mode
    go-mode
+   go-eldoc
    helm
    flx-ido
    ido-ubiquitous

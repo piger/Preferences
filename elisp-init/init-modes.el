@@ -10,7 +10,7 @@
 
 ;; po-mode
 (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
-(autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
+; (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
 
 ;; golang
 (setenv "GOPATH" (expand-file-name "~/dev/go"))
@@ -19,8 +19,23 @@
 
 (defun my-go-mode-hook()
   ;;(add-hook 'before-save-hook 'gofmt-before-save)
-  (setq tab-width 2))
+  (setq tab-width 2)
+  (local-set-key (kbd "C-c C-k") 'godoc)
+  (add-hook 'before-save-hook #'gofmt-before-save))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+
+(let ((oracle-el-path (substitute-in-file-name "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")))
+  (if (file-exists-p oracle-el-path)
+      (progn
+        (load oracle-el-path)
+        (add-hook 'go-mode-hook 'go-oracle-mode))))
+
+(add-hook 'go-mode-hook 'company-mode)
+(add-hook 'go-mode-hook (lambda ()
+  (set (make-local-variable 'company-backends) '(company-go))
+  (company-mode)))
 
 (eval-after-load 'css-mode
   '(progn
