@@ -9,6 +9,7 @@
 
 (setq web-mode-engines-alist
 	  '(("django"		. "/templates/.*\\.html\\'") ; flask
+            ("go" . "/dev/go/src/.*\\.html\\'")
             ("ctemplate"	. "/webui/index\\.html\\'")))
 
 ;; in caso di aggiunta runtime:
