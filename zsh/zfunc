@@ -82,4 +82,17 @@ return-limits(){
      done
 }
 
+# ansible mk-role
+mkrole() {
+	if [[ -z $1 ]]; then
+		echo "Usage: $(basename $0) <role name>"
+		exit 1
+	fi
+	if [[ ! -d roles ]]; then
+		echo "Missing 'roles' directory"
+		exit 1
+	fi
+	mkdir -p roles/$1/{tasks,handlers,templates,files,vars,defaults,meta}
+}
+
 # vim: ft=zsh
