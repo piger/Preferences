@@ -50,6 +50,9 @@ path=(
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
 # instead of the PATH environment variable).
 [[ -d ~/bin ]] && path+=~/bin
+# same for ~/local
+LOCAL_PKGS=~/local
+[[ -d $LOCAL_PKGS/bin ]] && path+=$LOCAL_PKGS/bin
 # }}}
 
 
