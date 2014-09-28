@@ -121,4 +121,13 @@ locatemd() {
 # Flush DNS cache
 alias flush_dns_cache='dscacheutil -flushcache'
 
+# fix per gcc e clang da CLI developer tools apple (e non da Xcode)
+# in teoria con Xcode /usr/bin/gcc e' un symlink a clang, invece installando
+# i CLI no... boh?
+# export CC=/usr/bin/clang
+
+# xcode 5.1
+# http://kaspermunck.github.io/2014/03/fixing-clang-error/
+export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+
 # vim: ft=zsh
