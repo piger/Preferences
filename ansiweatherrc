@@ -1,0 +1,7 @@
+location:Rome,IT
+fetch_cmd:curl -s
+units:metric
+daylight:true
+background: \033[40m
+text: \033[32;1m
+data: \033[31m
