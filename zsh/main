@@ -122,6 +122,9 @@ SPROMPT="zsh: correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
 # Idee per path nel prompt colorato
 # http://superuser.com/questions/49092/how-to-format-the-path-in-a-zsh-prompt
 
+# MISC FUNCTIONS {{{
+function exists { which $1 &> /dev/null }
+# }}}
 
 # ENVIRONMENT {{{
 # -----------
