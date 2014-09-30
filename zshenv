@@ -59,16 +59,6 @@ LOCAL_PKGS=~/local
 # Use ssh for any remote operation involving CVS or rsync
 export CVS_RSH="ssh"
 export RSYNC_RSH="ssh"
-# This should be on os/linux ?
-export BROWSER="firefox"
-
-# This settings are valid only for remote sessions {{{
-if [[ ! -z $SSH_CONNECTION ]]; then
-	# Se sono loggato con ssh su un server remoto crea un alias di screen,
-	# screenf, che usa ^F come keybind.
-	alias screenf='screen -e "^Ff"'
-fi
-# }}}
 
 # Format string for 'time' command:
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
@@ -88,18 +78,17 @@ else
     umask u=rwx,g=rx,o=
 fi
 
-# Alcuni alias vanno qui per averli anche negli script.
-if [[ -e /Applications/MacVim.app ]]; then
-    alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
-    alias gvim="/Applications/MacVim.app/Contents/MacOS/MacVim"
-elif [[ -e ~/Applications/MacVim.app ]]; then
-    alias vim="~/Applications/MacVim.app/Contents/MacOS/Vim"
-    alias gvim="~/Applications/MacVim.app/Contents/MacOS/MacVim"
-fi
+# Alias vim and gvim to have it working inside shell functions and such.
+# See also: zsh/os/darwin
+foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
+  if [[ -e $macvim ]]; then
+      alias vim="$macvim/Contents/MacOS/Vim"
+      alias gvim="$macvim/Contents/MacOS/MacVim"
+      break
+  fi
+done
 
-# Ruby RVM path
-if [[ -d $HOME/.rvm/bin ]]; then
-	PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-fi
+# Ruby RVM path (for scripting)
+[[ -d $HOME/.rvm/bin ]] && path+=$HOME/.rvm/bin
 
 # vim: ft=zsh
