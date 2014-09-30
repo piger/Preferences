@@ -274,6 +274,60 @@ zmodload zsh/complist
 # per 'syserorr'
 # zmodload zsh/system
 
+# completion indicator
+# source: https://github.com/mattjj/my-oh-my-zsh/blob/master/keyboard.zsh
+zstyle ':omz:completion' indicator '...'
+
+function expand-or-complete-prefix-with-indicator() {
+  local indicator
+  zstyle -s ':omz:completion' indicator 'indicator'
+  print -Pn "$indicator"
+  zle expand-or-complete-prefix
+  zle redisplay
+}
+zle -N expand-or-complete-prefix-with-indicator
+
+# Use human-friendly identifiers.
+zmodload zsh/terminfo
+typeset -g -A keyinfo
+keyinfo=(
+  'Control'   '\C-'
+  'Escape'    '\e'
+  'Meta'      '\M-'
+  'F1'        "$terminfo[kf1]"
+  'F2'        "$terminfo[kf2]"
+  'F3'        "$terminfo[kf3]"
+  'F4'        "$terminfo[kf4]"
+  'F5'        "$terminfo[kf5]"
+  'F6'        "$terminfo[kf6]"
+  'F7'        "$terminfo[kf7]"
+  'F8'        "$terminfo[kf8]"
+  'F9'        "$terminfo[kf9]"
+  'F10'       "$terminfo[kf10]"
+  'F11'       "$terminfo[kf11]"
+  'F12'       "$terminfo[kf12]"
+  'Backspace' "$terminfo[kbs]"
+  'Insert'    "$terminfo[kich1]"
+  'Home'      "$terminfo[khome]"
+  'PageUp'    "$terminfo[kpp]"
+  'Delete'    "$terminfo[kdch1]"
+  'End'       "$terminfo[kend]"
+  'PageDown'  "$terminfo[knp]"
+  'Up'        "$terminfo[kcuu1]"
+  'Left'      "$terminfo[kcub1]"
+  'Down'      "$terminfo[kcud1]"
+  'Right'     "$terminfo[kcuf1]"
+  'BackTab'   "$terminfo[kcbt]"
+)
+
+# Complete in the middle of word.
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
+
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" \
+    expand-or-complete-prefix-with-indicator
+
 # META+delete come in bash, invece che settare WORDCHARS
 autoload -U select-word-style
 select-word-style bash
