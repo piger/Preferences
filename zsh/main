@@ -246,6 +246,10 @@ watch=(notme)
 LOGCHECK=300		# check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
+# report about cpu-/system-/user-time of command if running longer than
+# 5 seconds
+REPORTTIME=5
+
 # PRIVACY
 # disattiva history del client mysql
 export MYSQL_HISTFILE=/dev/null
