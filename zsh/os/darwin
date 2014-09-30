@@ -31,11 +31,11 @@ alias -s mp4='open'		# video -> quicktime o vlc
 [[ -d /usr/local/bin ]] && export PATH="/usr/local/bin:${PATH}"
 # completion: ln -s "$(brew --prefix)/Library/Contributions/brew_zsh_completion.zsh" ~/.zsh/func/_brew
 # ls da `homebrew` -> `coreutils`
-if [[ -x /usr/local/bin/gls ]]; then
-    alias ls="gls --color=always -F"
-	(( $+commands[gdircolors] )) && eval $(gdircolors -b ~/Preferences/dircolors/dircolors.256dark)
-	alias lss="gls --color=always -F --group-directories-first"
-	alias reals="command ls"
+if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
+    alias ls="gls --color=auto -F"
+    (( $+commands[gdircolors] )) && eval $(gdircolors -b ~/Preferences/dircolors/dircolors.256dark)
+    alias lss="gls --color=auto -F --group-directories-first"
+    alias reals="command ls"
 fi
 
 # ssh-askpass
