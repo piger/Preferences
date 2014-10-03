@@ -78,6 +78,8 @@ alias rsync_fat32='rsync --modify-window=1'
 # alias ಠ_ಠ="git reset --hard HEAD"
 # alias (╯°□°）╯︵ ┻━┻="git push origin master --force"
 
+alias tableflip='echo (╯°□°）╯︵ ┻━┻'
+
 # python json tool (un pretty-printer)
 alias json.tool='python -m json.tool'
 
