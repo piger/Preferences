@@ -1,0 +1,924 @@
+# $HOME/.zshrc
+# -*- mode: shell-script -*-
+#
+# ┻━┻︵ \(°□°)/ ︵ ┻━┻
+# FLIP ALL DEM TABLEZ!
+
+# CONFIG {{{
+# the 'percol' command for history search (C-r)
+PERCOL_CMD=peco
+DIRCOLORS_FILE=$HOME/Preferences/dircolors/dircolors.256dark
+FORTUNE_GREETING=1
+# }}}
+
+# OPTIONS {{{
+
+# If a command is issued that can't be executed as a normal command,
+# and the command is the name of a directory, perform the cd command
+# to that directory.
+setopt auto_cd
+
+# Make cd push the old directory onto the directory stack.
+setopt auto_pushd
+
+# Report the status of background and suspended jobs before exiting a
+# shell with job control; a second attempt to exit the shell will
+# succeed.
+setopt check_jobs
+
+# If unset, the cursor is set to the end of the word if completion is
+# started. Otherwise it stays there and completion is done from both
+# ends.
+setopt complete_in_word
+
+# Try to correct the spelling of commands.
+setopt correct
+
+# Perform = filename expansion (e.g. echo =ssh -> /usr/bin/ssh)
+setopt equals
+
+# Treat the `#', `~' and `^' characters as part of patterns for
+# filename generation, etc.
+setopt extended_glob
+
+# Try to make the completion list smaller (occupying less lines) by
+# printing the matches in columns with different widths.
+setopt list_packed
+
+# List jobs in the long format by default.
+setopt long_list_jobs
+
+# Report the status of background jobs immediately, rather than
+# waiting until just before printing a prompt.
+setopt notify
+
+# If numeric filenames are matched by a filename generation pattern,
+# sort the filenames numerically rather than lexicographically.
+setopt numeric_glob_sort
+
+# Print the exit value of programs with non-zero exit status.
+setopt print_exit_value
+
+# Parameter expansion, command substitution and arithmetic expansion
+# are performed in prompts.
+setopt prompt_subst
+
+# Don't push multiple copies of the same directory onto the directory
+# stack.
+setopt pushd_ignore_dups
+
+# Allow the short forms of for, repeat, select, if, and function
+# constructs.
+setopt short_loops
+
+# Allow comments even in interactive shells.
+setopt interactive_comments
+
+# Remove any right prompt from display when accepting a command line.
+# This may be useful with terminals with other cut/paste methods.
+setopt transient_rprompt
+
+# Regular expression matching with the =~ operator will use
+# Perl-Compatible Regular Expressions from the PCRE library, if
+# available.
+setopt rematch_pcre
+
+# Assume that the terminal displays combining characters
+# correctly. (i.e. UTF-8)
+[[ $ZSH_VERSION == <5->.* ]] && setopt combining_chars
+
+# Disabled options
+# ----------------
+
+# Disable bell alert
+setopt NO_beep
+
+# Output flow control via start/stop characters (usually assigned to
+# ^S/^Q) is disabled in the shell's editor.
+setopt NO_flow_control
+
+# Do not send the HUP signal to running jobs when the shell exits.
+setopt NO_hup
+
+# Query the user before executing `rm *' or `rm path/*'.
+setopt NO_rm_star_silent
+
+# }}}
+
+# COLOR SPECTRUM {{{
+# http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+for color in {000..255}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+# }}}
+
+# PROMPT {{{
+typeset -g hostname_color
+
+function set_hostname_color() {
+    local chash=0
+    foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+        (( chash+=#letter ))
+    end
+    hostname_color=$(printf "%03d" $(( $chash % 255 )))
+}
+set_hostname_color
+
+# PROMPT='${FG[$hostname_color]}%n@%m$FX[reset] $'
+
+PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
+${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
+
+# Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
+RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b)'
+
+# gather git info
+precmd() { vcs_info }
+
+# Il prompt per lo spelling
+# default: correct 'mano' to 'nano' [nyae]?
+SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+# }}}
+
+# FUNCTIONS {{{
+function exists() { which $1 &> /dev/null }
+# }}}
+
+# ENVIRONMENT {{{
+# Queste variabili d'ambiente servono solo in modalita' interattiva
+# Binda le seguenti variabili d'ambiente ai loro rispettivi array (ex: $perl5lib[@] )
+declare -T LD_LIBRARY_PATH ld_library_path
+declare -T PERL5LIB perl5lib
+declare -T PYTHONPATH pythonpath
+
+# FTP in passive mode (CPAN)
+export FTP_PASSIVE=1
+
+# Controllo accessi al server
+watch=(notme)
+LOGCHECK=300		# check every 5 min for login/logout activity
+WATCHFMT='%n %a %l from %m at %t.'
+
+# report about cpu-/system-/user-time of command if running longer than
+# 5 seconds
+REPORTTIME=5
+
+# PRIVACY - disattiva history del client mysql
+export MYSQL_HISTFILE=/dev/null
+export LESSHISTFILE=/dev/null
+# }}}
+
+# HISTORY {{{
+# Appende al file $HISTORY, invece di sovrascrivere.
+setopt append_history
+# Salva i timestamp nella history.
+setopt extended_history
+# se il comando e' uguale al precedente non metterlo nella history.
+setopt hist_ignore_dups
+# non salvare nella history i comandi "history".
+setopt hist_no_store
+# quando si usa la history expansion non esegue direttamente, cosi'
+# vedi che stai per fare.
+setopt hist_verify		
+# non salva nella history le command line che iniziano con uno spazio
+# (utile quando si inseriscono pw)
+setopt hist_ignore_space
+# cerca di cancellare dalla history i duplicati prima degli eventi unici.
+setopt hist_expire_dups_first
+# February 21, 2013 - 2000 di history è troppo poco, proviamo 12000 e vediamo
+# che accade (che tra l'altro è più di prima :-)
+SAVEHIST=10000
+HISTSIZE=12000
+
+# set the history file
+HISTFILE=$HOME/.history
+# }}}
+
+# COMMANDS CONFIGURATION {{{
+# Opzioni per less
+# -c	: pulisce lo schermo prima di mostrare il file
+# -i	: ignore case (ma una ricerca uppercase annulla l'opzione)
+# -M	: mostra percentuale del file ed e' piu' verboso di more
+# -R	: attiva i colori ANSI
+# -x<n> : lunghezza del tab
+# -w	: Temporarily highlights the first "new" line after a forward movement of a full page.
+# -J    : Mostra una 'status column' che indica la posizione dei match della ricerca.
+# -z-5  : Scrolling mantenendo 5 righe.
+LESS="-ciMRx4wJ -z-5"
+PAGER=less
+export LESS PAGER
+
+# man page colorate SENZA usare most! ;-P
+# http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+# Cthulhu ^(;,;)^ hates the nano editor!
+if [[ $commands[vim] ]]; then
+    export EDITOR=vim
+    export VISUAL=vim
+else
+    export EDITOR=vi
+    export VISUAL=vi
+fi
+
+# `grep` options
+# - grep colors (highlight verde)
+# - skippa i file device, FIFO e socket.
+export GREP_OPTIONS='--color=auto -D skip'
+export GREP_COLOR='1;32'
+
+# ssh-askpass
+[[ $commands[ssh-askpass] ]] && export SSH_ASKPASS=$(which ssh-askpass)
+
+# LS OPTIONS
+ls_options='-F'
+[[ $UID = 0 ]] && ls_options+='A'
+# }}}
+
+# ZSH MODULES {{{
+# The zsh/complist module offers three extensions to completion
+# listings: the ability to highlight matches in such a list, the
+# ability to scroll through long lists and a different style of menu
+# completion.
+zmodload zsh/complist
+
+# Use human-friendly key identifiers.
+zmodload zsh/terminfo
+typeset -g -A keyinfo
+keyinfo=(
+  'Control'   '\C-'
+  'Escape'    '\e'
+  'Meta'      '\M-'
+  'F1'        "$terminfo[kf1]"
+  'F2'        "$terminfo[kf2]"
+  'F3'        "$terminfo[kf3]"
+  'F4'        "$terminfo[kf4]"
+  'F5'        "$terminfo[kf5]"
+  'F6'        "$terminfo[kf6]"
+  'F7'        "$terminfo[kf7]"
+  'F8'        "$terminfo[kf8]"
+  'F9'        "$terminfo[kf9]"
+  'F10'       "$terminfo[kf10]"
+  'F11'       "$terminfo[kf11]"
+  'F12'       "$terminfo[kf12]"
+  'Backspace' "$terminfo[kbs]"
+  'Insert'    "$terminfo[kich1]"
+  'Home'      "$terminfo[khome]"
+  'PageUp'    "$terminfo[kpp]"
+  'Delete'    "$terminfo[kdch1]"
+  'End'       "$terminfo[kend]"
+  'PageDown'  "$terminfo[knp]"
+  'Up'        "$terminfo[kcuu1]"
+  'Left'      "$terminfo[kcub1]"
+  'Down'      "$terminfo[kcud1]"
+  'Right'     "$terminfo[kcuf1]"
+  'BackTab'   "$terminfo[kcbt]"
+)
+# }}}
+
+# COMPLETION {{{
+# completion indicator
+# source: https://github.com/mattjj/my-oh-my-zsh/blob/master/keyboard.zsh
+zstyle ':omz:completion' indicator '...'
+
+function expand-or-complete-prefix-with-indicator() {
+  local indicator
+  zstyle -s ':omz:completion' indicator 'indicator'
+  print -Pn "$indicator"
+  zle expand-or-complete-prefix
+  zle redisplay
+}
+zle -N expand-or-complete-prefix-with-indicator
+
+# Complete in the middle of word.
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
+
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" \
+    expand-or-complete-prefix-with-indicator
+
+# Completion per task warrior
+# NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
+[[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
+[[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
+
+# brew - zsh-completions
+[[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+# }}}
+
+# BINDINGS {{{
+# META+delete come in bash, invece che settare WORDCHARS
+autoload -U select-word-style
+select-word-style bash
+
+# emacs bindings (odio la modalita' vi)
+bindkey -e
+
+bindkey  '\e[5~' up-history		# PageUp -> history up
+bindkey  '\e[6~' down-history 		# PageDown -> history down
+bindkey  '[Z' reverse-menu-complete	# SHIFT+TAB per il tab "all'indietro"
+
+# CTRL, ALT & co.
+bindkey  '^z' undo			# CTRL+z per undo di expansion e completion
+bindkey  '\C-w' kill-region
+#bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
+#bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
+
+# sudo
+# Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
+_add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
+zle -N add-sudo _add-sudo
+# ALT+s per inserire 'sudo' a inizio cmdline.
+bindkey '\es' add-sudo	
+
+# Edita la linea di comando con $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
+
+# Alt+m copia la parola precedente, comodo per i file rename.
+bindkey "^[m" copy-prev-shell-word
+
+# autoload -U zkbd
+# Eseguire zkbd per compilare una lista di variabili associate ai tasti
+#source ~/.zkbd/$TERM-$VENDOR-$OSTYPE
+#    [[ -n ${key[Left]} ]] && bindkey "${key[Left]}" backward-char
+#    [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
+#    # etc.
+
+# idea from: zsh-lovers
+insert-datestamp() { LBUFFER+=${(%):-'%D{%d-%m-%Y}'}; }
+zle -N insert-datestamp
+# C-e d -- insert current date dd-mm-YYYY
+bindkey '^Ed' insert-datestamp
+
+if exists $PERCOL_CMD; then
+    function percol_select_history() {
+        local tac
+        exists gtac && tac="gtac" || { exists tac && tac="tac" || { tac="tail -r" } }
+        BUFFER=$(fc -l -n 1 | eval $tac | $PERCOL_CMD --query "$LBUFFER")
+        CURSOR=$#BUFFER         # move cursor
+        zle -R -c               # refresh
+    }
+
+    zle -N percol_select_history
+    bindkey '^R' percol_select_history
+fi
+# }}}
+
+# FUNCTIONS {{{
+# Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
+typeset -U fpath
+
+do_autoload () {
+    [[ ! -d "$1" ]] && return
+    fpath+=$1
+    autoload -U $1/*(:t)
+}
+
+do_autoload ~/.zsh/scripts
+do_autoload ~/.zsh/functions
+
+# autoload mini-help
+# -U also causes alias expansion to be suppressed  when  the  function is loaded
+# The -k and -z flags make the function be loaded using  ksh-style  or
+# zsh-style autoloading  respectively
+### autoload -Uz compinit
+### compinit
+autoload -U zcalc zmv zargs
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+# zsh-git
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' actionformats \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f %m%u%c'
+zstyle ':vcs_info:*' formats \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f %m%u%c'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '*'
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:*' use-quilt true
+# }}}
+
+# OS SPECIFIC {{{
+if [[ $OSTYPE = darwin* ]]; then
+    # *** OSX ***
+
+    # dosbox
+    alias dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox'
+    alias run_dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox -conf'
+
+    # spotlight
+    alias spotlight-info='sudo fs_usage -w -f filesys mdworker | grep "open"'
+
+    # da https://github.com/sjl/dotfiles/blob/master/fish/config.fish
+    # e da VERIFICARE (e convertire in zsh)
+    ### alias spotlight-off 'sudo mdutil -a -i off ; and sudo mv /System/Library/CoreServices/Search.bundle/ /System/Library/CoreServices/SearchOff.bundle/ ; and killall SystemUIServer'
+    ### alias spotlight-on 'sudo mdutil -a -i on ; and sudo mv /System/Library/CoreServices/SearchOff.bundle/ /System/Library/CoreServices/Search.bundle/ ; and killall SystemUIServer'
+
+    # suffix aliases
+    # Esempio:
+    # ~/Pictures $ *.jpeg
+    #	-> Eseguira': open *.jpeg
+    alias -s pdf='open'
+    alias -s avi='open'
+    alias -s jpeg='open'
+    alias -s jpg='open'
+    alias -s mp4='open'		# video -> quicktime o vlc
+
+    # Homebrew
+    [[ -d /usr/local/bin ]] && export PATH="/usr/local/bin:$PATH"
+
+    # ls
+    if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
+        alias ls="gls --color=auto $ls_options"
+        alias lss="gls --color=auto $ls_options --group-directories-first"
+        [[ $commands[gdircolors] ]] && eval $(gdircolors -b $DIRCOLORS_FILE)
+    fi
+
+    [[ -x /usr/libexec/ssh-askpass ]] && export SSH_ASKPASS=/usr/libexec/ssh-askpass
+
+    export CLICOLOR=1
+
+    # fix per i locale sbagliati di default su osx lion (?)
+    [[ $LC_CTYPE == "UTF-8" ]] && export LC_CTYPE="en_US.UTF-8"
+
+    # Supporto per la struttura di directory "local" (il --user di setup.py) su OSX
+    [[ -e ~/Library/Python/2.7/bin ]] && export PATH=~/Library/Python/2.7/bin:$PATH
+
+    # Aggiunge /usr/local/lib/python a PYTHONPATH per PyQt4 (installato tramite brew)
+    # export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
+    if [[ -d /usr/local/lib/python2.7/site-packages ]]; then
+            export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+    fi
+
+    # Node.js / NPM
+    # After installing, add the following path to your NODE_PATH environment
+    # variable to have npm libraries picked up:
+    #   /usr/local/lib/node_modules
+    [[ -d /usr/local/lib/node_modules ]] && export NODE_PATH=/usr/local/lib/node_modules
+
+    # da oh-my-zsh
+    function quick-look() {
+        (( $# > 0 )) && qlmanage -p $* &>/dev/null &
+    }
+
+    # Trasforma la man page in PDF e la apre con Preview, votamazzen.
+    function man-preview() {
+        man -t "$@" | open -f -a Preview
+    }
+
+    # print Finder directory
+    function pfd() {
+        osascript 2>/dev/null <<EOF
+    tell application "Finder"
+            return POSIX path of (target of window 1 as alias)
+    end tell
+EOF
+    }
+
+    # cd to Finder directory
+    cdf() { eval cd "$(osascript -e 'tell app "Finder" to return the quoted form of the POSIX path of (target of window 1 as alias)' 2>/dev/null)" }
+
+    # print Finder selection
+    function pfs() {
+        osascript 2>/dev/null <<EOF
+        set output to ""
+        tell application "Finder" to set the_selection to selection
+        set item_count to count the_selection
+        repeat with item_index from 1 to count the_selection
+          if item_index is less than item_count then set the_delimiter to "\n"
+          if item_index is item_count then set the_delimiter to ""
+          set output to output & ((item item_index of the_selection as alias)'s POSIX path) & the_delimiter
+        end repeat
+EOF
+    }
+
+    # cli volume control
+    vol() {
+        if [[ -n $1 ]]; then
+            osascript -e "set volume output volume $1"
+        else
+            osascript -e "output volume of (get volume settings)"
+        fi
+    }
+
+    # locate with Spotlight
+    locatemd() {
+        mdfind "kMDItemDisplayName == '$@'wc"
+    }
+
+    # Flush DNS cache
+    alias flush_dns_cache='dscacheutil -flushcache'
+
+    # fix per gcc e clang da CLI developer tools apple (e non da Xcode)
+    # in teoria con Xcode /usr/bin/gcc e' un symlink a clang, invece installando
+    # i CLI no... boh?
+    # export CC=/usr/bin/clang
+
+    # xcode 5.1
+    # http://kaspermunck.github.io/2014/03/fixing-clang-error/
+    export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+
+elif [[ $OSTYPE = linux* ]]; then
+    # *** LINUX *** 
+
+    alias ls="ls --color=auto $ls_options"
+
+    if (( ! $+commands[gnome-open] )); then
+        alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
+    fi
+
+    # locate/updatedb solo per la $HOME
+    if (( $+commands[updatedb] )); then
+        alias my_updatedb='updatedb -l 0 -o ~/.updatedb -U $HOME -e /,~/.cpan'
+        alias my_locate='locate -d ~/.updatedb'
+    fi
+
+    alias grep='grep --color=auto'
+
+    if [ -e /etc/debian_version ]; then
+        alias search="apt-cache search"
+        alias show="apt-cache show"
+        alias i="sudo aptitude install"
+        # alias backports="sudo aptitude -t lenny-backports"
+    fi
+
+    # LS_COLORS
+    [[ $commands[dircolors] ]] && eval $(dircolors -b $DIRCOLORS_FILE)
+
+elif [[ $OSTYPE = openbsd* ]]; then
+    # *** OPENBSD ***
+
+    export OBSD_CVSROOT=anoncvs@anoncvs.at.openbsd.org:/cvs
+    (( ${+PKG_PATH} )) || export PKG_PATH="ftp://ftp.kd85.com/pub/OpenBSD/4.6-EXAMPLE/packages/i386-EXAMPLE/"
+
+    if (( $+commands[gls] )); then
+        alias ls="gls --color=auto $ls_options"
+    else
+        alias ls="ls $ls_options"
+    fi
+
+    alias pfdump="tcpdump -n -e -ttt -i pflog0"
+    alias killppp="kill -TERM \$(cat /var/run/tun0.pid)"
+    alias pfrerules="pfctl -F rules -R -f /etc/pf.conf"
+    alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
+    alias flavors='make show=FLAVORS'
+    alias pdesc='make show=DESCRIPTION'
+
+    if [ -x /usr/libexec/locate.updatedb ]; then
+        alias hupdatedb="/usr/libexec/locate.updatedb \
+            --searchpaths=$HOME --prunepaths=\"/ $HOME/.vim\" \
+            --fcodes=$HOME/.locatedb"
+        alias hlocate="locate -d ${HOME}/.locatedb"
+    fi
+
+    # Su OpenBSD posso usarea anche -h e -r...
+    # [10:13] taleggio:~% ps -o pid,user,pcpu,pmem,state,command   
+    #   PID USER     %CPU %MEM S COMMAND
+    #  9639 sand      0.0  0.6 S -zsh
+    #  9697 sand      0.0  0.1 R ps -o pid,user,pcpu,pmem,state,command
+    # alias ps='ps -o pid,user,pcpu,pmem,state,command'
+    # Piccolo problema:
+    # % ps xauw
+    # ps: /dev/mem: Permission denied
+    # [1]    14269 exit 1     ps -o pid,user,pcpu,pmem,state,command xauw
+
+    obsd_cvslist () {
+        if (( ! $+commands[curl] )); then
+            echo "You need 'curl' to run this. pkg_add -i curl"
+            return
+        fi
+        CVSURL="http://www.openbsd.org/anoncvs.html"
+
+        for cvsroot in $(curl -s ${CVSURL} | grep "CVSROOT=" | cut -d">" -f3- | cut -d"<" -f1); do
+            echo "$cvsroot"
+        done
+    }
+
+    obsd_ftplist () {
+        if (( ! $+commands[curl] )); then
+            echo "You need 'curl' to run this. pkg_add -i curl"
+            return
+        fi
+        MIRRORURL="http://www.openbsd.org/ftp.html"
+
+        for mirror in $(curl -s ${MIRRORURL} | egrep -i "<a.*(http|ftp)://.*openbsd" | cut -d'"' -f2); do
+            echo "$mirror"
+        done
+    }
+
+fi # end if $OSTYPE = ...
+# }}}
+
+# ALIASES {{{
+# Aliases e altri comandi che non uso mai perche' sono SCEMO
+# ----------------------------------------------------------
+# man zshexpn -> search Glob Qualifier
+
+# 24/Nov/09 - provo a usare di default mv -i e cp -i
+# no spelling correction on mv, cp, mkdir
+alias mv='nocorrect mv -i'
+alias cp='nocorrect cp -i'
+alias mkdir='nocorrect mkdir'
+
+alias pu='pushd'
+alias po='popd'
+
+alias h="history"
+alias ll="ls -lh"
+alias la="ls -a"
+alias lla="ls -la"
+alias lsd="ls -ld *(-/)"		# ls delle sole directory
+alias lsa="ls -ld .*"			# ls dei soli file nascosti
+alias suz="su root -c zsh"		# su to root and run zsh ;)
+alias lsgrandi="ls -fl *(.oL)"	# ls -lrh --sort=size
+alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
+alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
+alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
+alias lsoggi="ls *(m0)"			# ls dei file modificati oggi
+alias dirdu="du -Hhs *(/,@)"	# du -h di ogni dir presente
+alias ..='cd ..'
+
+# alias globali, che pero' non gradisco.
+alias -g L='|less'
+alias -g M='|more'
+alias -g H='|head'
+alias -g T='|tail'
+
+# suffix aliases
+alias -s asc='gpg'
+
+alias tmessages="tail -f /var/log/messages"
+alias tsyslog="tail -f /var/log/syslog"
+alias pwgen_strong='pwgen -y1 15 20'
+alias vnc_colori='vncviewer -FullColor'
+alias screenf='screen -e "^Ff"'
+# Taskwarrior
+alias t=task
+
+# alias simpatici
+alias suco='sudo'
+# per poter fare 'mortacci tua kill -9 31337'
+alias mortacci=";"
+alias tua=";"
+alias shitdown="shutdown"
+
+# stampa la penultima riga di un input
+penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
+
+# supporto FORZATO dei 256 colori per tmux
+alias tmux='tmux -2'
+
+# oggi
+alias oggi='date "+%d-%m-%Y"'
+
+# aria2c - torrent
+alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
+
+# i miei fortune
+alias myfortune='fortune ~/.fortune'
+
+# list installed packages by size
+alias large_packages="dpkg-query -Wf '\${Installed-Size}\t\${Package}\n' | sort -n"
+
+# rsync verso un filesystem FAT32
+alias rsync_fat32='rsync --modify-window=1'
+
+# alias buffi
+# http://www.reddit.com/r/programming/comments/1s2m76/whats_new_in_git_185/
+# alias ಠ_ಠ="git reset --hard HEAD"
+# alias (╯°□°）╯︵ ┻━┻="git push origin master --force"
+
+alias tableflip='echo (╯°□°）╯︵ ┻━┻'
+
+# python json tool (un pretty-printer)
+alias json.tool='python -m json.tool'
+# }}}
+
+# COMPLETION {{{
+# Completion della ZSH, perche' la pigerrimitudo e' una virtute.
+# --------------------------------------------------------------
+#
+# :completion:function:completer:command:argument:tag
+
+# compinstall, dilemma TODO
+zstyle :compinstall filename '~/.zsh/main'
+
+# questo va all'inizio, altrimenti poi non ho `compdef` o altri comandi.
+autoload -Uz compinit && compinit
+
+# supporto bash completion (da chiamare DOPO 'compinit')
+autoload -Uz bashcompinit && bashcompinit
+
+# Lista di completers
+# _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
+# _ignored completa file/dir che per altre impostazioni verrebbero ignorati
+#zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+
+# Forza il rehash per ogni uso della completion (ie: premi tab).
+# http://zshwiki.org/home/examples/compquickstart?s=rehash
+_force_rehash() {
+    (( CURRENT == 1 )) && rehash
+    return 1	# Because we didn't really complete anything.
+}
+zstyle ':completion:*' rehash true	# rehash automatico, ma non sembra funzionare... TODO
+
+# Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
+# e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
+zstyle ':completion:*:messages' format %d
+zstyle ':completion:*:warnings' format '%BNo matches%b: %d'
+zstyle ':completion:*:descriptions' format '%B%d%b'
+# raggrouppa l'output
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-separator '-->'
+# Non completare i nomi delle funzioni che iniziano per '_'
+#zstyle ':completion::complete:*:functions' ignored-patterns '_*'
+# che sia cosi'?
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+# separa i man per sezione
+zstyle ':completion:*:manuals' separate-sections true
+
+# Mostra le descrizioni per cio' che viene completato, ad esempio le opzioni di ls;
+# quando manca la descrizione, prova a "indovinare"
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' auto-description 'specify: %d'
+
+# Utilizza un pager interno quando i risultati della completion sono troppi
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
+
+# Limit this fuckung "zsh: do you wish to see all NNN possibilities (NNN
+# lines)?" downward (default is 100). Only ask before displaying
+# completions if doing so would scroll. (strcat.de)
+#LISTMAX=0
+
+# Completion approssimativa, permette un errore ogni 3 caratteri
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
+# Completa cose tipo: gzip _-d -> gzip --decompress
+zstyle ':completion::approximate*:*' prefix-needed false
+
+# Case insensitive: converte solo le minuscole in maiuscole, perche' come dicono
+# NEL LIBRO, per scrivere le maiuscole devi premere anche shift, ed e' quindi piu'
+# probabile che sia una scelta deliberata e non un errore di battitura
+# INOLTRE, implementa la Partial Completion, usando '/' come carattere anchor: cio'
+# permette finezze come cd /u/l/b -> cd /usr/local/bin -- e' come premere TAB su ogni
+# '/'
+zstyle ':completion:*:(^approximate):*' matcher-list \
+	'r:|[/]=* r:|=* m:{a-z}={A-Z}'
+
+# titoli [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
+
+# statusline for many hits [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M %P -- \e[00;00m'
+
+# Prefix Completion: se il cursore e' nel mezzo di una word, zsh completa come se il
+# cursore si trovasse a fine word; l'opposto si ottiene abilitando complete_in_word.
+# Un altro approccio consiste nel completare ignorando completamente il suffix...
+zstyle ':completion::prefix:::' completer _complete
+zstyle ':completion:*:prefix:*' add-space true	# aggiunge anche uno spazio
+
+# Esclusioni
+# Avendo '_ignored' tra i completer, le seguenti regole verranno ignorate nel caso
+# in cui non ci sia altro da completare
+zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
+# Evita di completare cio' che e' gia' sulla command line
+# Questo e' AAAH, sputtana la completion e il Tab non cycla piu' tra i possibili match :-(
+#zstyle ':completion:*:(rm|rmdir|grep|vim|vi):*' ignore-line true
+# Non completare le directory se la completion "non ha senso" (../$PWD non ha senso)
+#zstyle ':completion:*' ignore-parents parent pwd
+# meglio?
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+# Per abilitare la completion di "cd ../"
+zstyle ':completion:*' special-dirs true
+
+# Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
+zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
+    LD_LIBRARY_PATH:array COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
+    PERL5LIB:array PYTHONPATH:array DJANGO_SETTINGS_MODULE:scalar \
+    SSH_AUTH_SOCK:scalar DYLD_LIBRARY_PATH:array DYLD_FALLBACK_LIBRARY_PATH:array
+
+# Completion per `kill`: mostra una lista di processi con la percentuale di CPU
+# utilizzata, e su linux come bonus mostra i processi come un albero
+# gerarchico.
+if [[ $OSTYPE == linux* ]]; then
+    zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,%mem,cmd'
+else
+    # -r -- sort by CPU usage
+    zstyle ':completion:*:processes' command 'ps x -U $USER -r -o pid,%cpu,%mem,tt,args'
+fi
+# ... e ovviamente i colori. [from: https://github.com/seebi/zshrc]
+zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+
+# cache
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
+
+# Completion con i colori di ls
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# completion from history [ https://github.com/seebi/zshrc/blob/master/options.zsh ]
+zle -C hist-complete complete-word _generic
+zstyle ':completion:hist-complete:*' completer _history
+bindkey '^X^X' hist-complete
+
+# Ctrl-X - SHIFT+S
+# Completa usando le parole della schermata attuale di tmux.
+# da zsh-lovers.
+_complete_screen_display() {
+    #[[ "$TERM" != screen* ]] && return 1
+
+    if (( $+commands[gmktemp] )); then
+	local TMPFILE=$(gmktemp)
+    else
+	local TMPFILE=$(mktemp)
+    fi
+    local -U -a _screen_display_wordlist
+    trap "rm -f $TMPFILE" EXIT
+
+    if ((${+TMUX})); then
+	tmux -V &>/dev/null || return
+	tmux -q capture-pane \; save-buffer -b 0 $TMPFILE \; delete-buffer -b 0
+    else
+	echo "eh no"
+	return
+    fi
+    _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
+    _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
+    compadd -a _screen_display_wordlist
+}
+bindkey -r "^XS"
+compdef -k _complete_screen_display complete-word '^XS'
+
+# completion per pip
+function _pip_completion {
+    local words cword
+    read -Ac words
+    read -cn cword
+    reply=( $( COMP_WORDS="$words[*]" \
+        COMP_CWORD=$(( cword-1 )) \
+        PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
+
+# completion bash per tmux
+[[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
+# la completion di ack e' linux only :(
+if [[ $OSTYPE == linux* ]]; then
+    [[ -e /usr/local/etc/bash_completion.d/ack.bash_completion.sh ]] && source /usr/local/etc/bash_completion.d/ack.bash_completion.sh
+fi
+# }}}
+
+# WELCOME {{{
+# fortune -e serve per scegliere equamente tra tutti i fortune file
+# presenti, a prescindere dalla dimensione.
+if [[ $FORTUNE_GREETING == 1 ]]; then
+    if (( $+commands[fortune] )); then
+	if [[ -d ~/.fortune ]]; then
+	    print; fortune -e ~/.fortune; print
+	else
+	    print; fortune -o; print
+	fi
+    fi
+fi
+# }}}
+
+# LOCAL SETTINGS {{{
+# Settings locali
+[[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
+# }}}
+
+# Invece di `return 0` alla fine del file ci metto questo assignment, che
+# dovrebbe essere equivalente in termini di "return OK".
+FOO="grosso peto che esce dalle chiappe roboanti"
+# Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
+# return 0

@@ -28,7 +28,7 @@
 
 # ZDOTDIR is HOME by default, by I prefer to keep everything inside a single
 # directory.
-ZDOTDIR=${HOME}/.zsh
+# ZDOTDIR=${HOME}/.zsh
 
 
 # PATH handling {{{
