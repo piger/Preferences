@@ -7,7 +7,7 @@
 # CONFIG {{{
 # the 'percol' command for history search (C-r)
 PERCOL_CMD=peco
-DIRCOLORS_FILE=$HOME/Preferences/dircolors/dircolors.256dark
+DIRCOLORS_FILE=$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark
 FORTUNE_GREETING=1
 # }}}
 
