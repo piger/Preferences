@@ -128,6 +128,5 @@ ssl-cert-info() {
     fi
     openssl x509 -noout -text -in $1
 }
-}
 
 # vim: ft=zsh
