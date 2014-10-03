@@ -13,3 +13,6 @@
 [submodule "vim/bundle/vim-airline"]
 	path = vim/bundle/vim-airline
 	url = https://github.com/bling/vim-airline.git
+[submodule "zsh/dircolors-solarized"]
+	path = zsh/dircolors-solarized
+	url = https://github.com/seebi/dircolors-solarized.git
