@@ -87,7 +87,7 @@ function spectrum_ls() {
 function hostname_color() {
 	local chash=0
 	foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
-		(( chash += #letter ))
+		(( chash+=#letter ))
 	end
 	local crand=$(( $chash % 9 ))
 	local crandname=$colnames[$crand]
