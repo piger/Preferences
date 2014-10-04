@@ -340,8 +340,13 @@ bindkey  '[Z' reverse-menu-complete	# SHIFT+TAB per il tab "all'indietro"
 # CTRL, ALT & co.
 bindkey  '^z' undo			# CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
-#bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
-#bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
+
+# predict
+autoload -U predict-on
+zle -N predict-on
+zle -N predict-off
+bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
+bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
 
 # sudo
 # Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
