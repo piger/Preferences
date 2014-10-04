@@ -16,5 +16,8 @@
 (setq org-mobile-directory "~/Dropbox/org/mobile")
 (setq org-mobile-inbox-for-pull (concat org-directory "/index.org"))
 
+;; add timestamp to closed TODO entries
+(setq org-log-done 'time)
+
 (provide 'init-org)
 
