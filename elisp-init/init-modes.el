@@ -90,4 +90,30 @@
 (require 'projectile)
 (global-set-key "\C-cf" 'projectile-find-file)
 
+;; outline mode
+;; code folding with vim compatibility
+;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
+;; modificato leggermente, perche' io i marker li uso anche senza numero (e.g. "{{{1")
+;; per indicare il livello di outline.
+(defun set-vim-foldmarker (fmr)
+  "Set Vim-type foldmarkers for the current buffer"
+  (interactive "sSet local Vim foldmarker: ")
+  (if (equal fmr "")
+      (message "Abort")
+    (setq fmr (regexp-quote fmr))
+    (set (make-local-variable 'outline-regexp)
+	 (concat ".*" fmr "\\([0-9]+\\)?"))
+    (set (make-local-variable 'outline-level)
+	 `(lambda ()
+	    (save-excursion
+	      (re-search-forward
+	       ,(concat fmr "\\([0-9]+\\)") nil t)
+              (if (match-string 1)
+                  (string-to-number (match-string 1))
+                (string-to-number "0")))))))
+;; (add-hook 'outline-minor-mode-hook
+;; 	  (lambda () (local-set-key "\C-c\C-c"
+;; 				    outline-mode-prefix-map)))
+(global-set-key (kbd "C-<tab>") 'outline-toggle-children)
+
 (provide 'init-modes)
