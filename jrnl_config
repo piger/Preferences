@@ -1,0 +1,14 @@
+{
+    "tagsymbols": "@",
+    "journals": {
+        "default": "~/Dropbox/journals/default.txt",
+        "work": "~/Dropbox/journals/work.txt"
+    },
+    "highlight": true,
+    "default_minute": 0,
+    "editor": "vim",
+    "encrypt": false,
+    "linewrap": 79,
+    "timeformat": "%d-%m-%Y %H:%M",
+    "default_hour": 9
+}
