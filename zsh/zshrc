@@ -1,5 +1,4 @@
-# $HOME/.zshrc
-# -*- mode: shell-script -*-
+# -*- mode: shell-script; eval: (outline-minor-mode t) -*-
 #
 # ┻━┻︵ \(°□°)/ ︵ ┻━┻
 # FLIP ALL DEM TABLEZ!
@@ -9,6 +8,7 @@
 PERCOL_CMD=peco
 DIRCOLORS_FILE=$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark
 FORTUNE_GREETING=1
+FORTUNES_DIRECTORY=$HOME/Dropbox/fortunes
 # }}}
 
 # OPTIONS {{{
@@ -105,6 +105,10 @@ setopt NO_rm_star_silent
 
 # }}}
 
+# FUNCTIONS {{{
+function exists() { which $1 &> /dev/null }
+# }}}
+
 # COLOR SPECTRUM {{{
 # http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
 typeset -Ag FX FG BG
@@ -145,16 +149,16 @@ ${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%
 RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b)'
 
 # gather git info
-precmd() { vcs_info }
+if exists vcs_info; then
+    premcd() { vcs_info }
+fi
 
 # Il prompt per lo spelling
 # default: correct 'mano' to 'nano' [nyae]?
 SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
 # }}}
 
-# FUNCTIONS {{{
-function exists() { which $1 &> /dev/null }
-# }}}
+
 
 # ENVIRONMENT {{{
 # Queste variabili d'ambiente servono solo in modalita' interattiva
@@ -231,7 +235,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Cthulhu ^(;,;)^ hates the nano editor!
-if [[ $commands[vim] ]]; then
+if (( $+commands[vim] )); then
     export EDITOR=vim
     export VISUAL=vim
 else
@@ -246,7 +250,7 @@ export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # ssh-askpass
-[[ $commands[ssh-askpass] ]] && export SSH_ASKPASS=$(which ssh-askpass)
+(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$(which ssh-askpass) 
 
 # LS OPTIONS
 ls_options='-F'
@@ -460,7 +464,7 @@ if [[ $OSTYPE = darwin* ]]; then
     if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
         alias ls="gls --color=auto $ls_options"
         alias lss="gls --color=auto $ls_options --group-directories-first"
-        [[ $commands[gdircolors] ]] && eval $(gdircolors -b $DIRCOLORS_FILE)
+        (( $+commands[gdircolors] )) && eval $(gdircolors -b $DIRCOLORS_FILE)
     fi
 
     [[ -x /usr/libexec/ssh-askpass ]] && export SSH_ASKPASS=/usr/libexec/ssh-askpass
@@ -572,7 +576,7 @@ elif [[ $OSTYPE = linux* ]]; then
     fi
 
     # LS_COLORS
-    [[ $commands[dircolors] ]] && eval $(dircolors -b $DIRCOLORS_FILE)
+    (( $+commands[dircolors] )) && eval $(dircolors -b $DIRCOLORS_FILE)
 
 elif [[ $OSTYPE = openbsd* ]]; then
     # *** OPENBSD ***
@@ -908,8 +912,8 @@ fi
 # presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]]; then
     if (( $+commands[fortune] )); then
-	if [[ -d ~/.fortune ]]; then
-	    print; fortune -e ~/.fortune; print
+	if [[ -d "$FORTUNES_DIRECTORY" ]]; then
+	    print; fortune -e "$FORTUNES_DIRECTORY"; print
 	else
 	    print; fortune -o; print
 	fi
