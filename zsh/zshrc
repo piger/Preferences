@@ -9,6 +9,7 @@ PERCOL_CMD=peco
 DIRCOLORS_FILE=$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark
 FORTUNE_GREETING=1
 FORTUNES_DIRECTORY=$HOME/Dropbox/fortunes
+LOCAL_CONFIG=$HOME/Preferences/zsh/local
 # }}}
 
 # OPTIONS {{{
@@ -927,7 +928,7 @@ fi
 
 # LOCAL SETTINGS {{{
 # Settings locali
-[[ -e $ZDOTDIR/local ]] && source $ZDOTDIR/local
+[[ -e $LOCAL_CONFIG ]] && source $LOCAL_CONFIG
 # }}}
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che
