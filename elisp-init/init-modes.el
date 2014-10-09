@@ -116,4 +116,8 @@
 ;; 				    outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
+;; projectile
+(require 'projectile)
+(projectile-global-mode +1)
+
 (provide 'init-modes)

@@ -64,6 +64,12 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
+;;; disattivo la scroll-bar, effettivamente pia solo spazio.
+(scroll-bar-mode -1)
+
+;; line num
+(global-linum-mode +1)
+
 ;; nice scrolling ???
 (setq scroll-margin 0
       scroll-conservatively 100000
