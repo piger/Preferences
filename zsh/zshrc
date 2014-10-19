@@ -173,6 +173,9 @@ if [[ -d /usr/local/go ]]; then
     path+=/usr/local/go/bin
 fi
 
+# Ansible pls
+export ANSIBLE_NOCOWS=1
+
 # FTP in passive mode (CPAN)
 export FTP_PASSIVE=1
 
