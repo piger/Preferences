@@ -29,7 +29,9 @@ Including indent-buffer, which should not be called automatically on save."
                                     (replace-regexp-in-string home "~" path))
                                   recentf-list)
                           nil t))))
-(global-set-key (kbd "s-r") 'ido-recentf)
+(if *is-a-mac*
+    (global-set-key [(hyper r)] 'ido-recentf)
+  (global-set-key (kbd "s-r") 'ido-recentf))
 
 ;; shutdown emacs server
 ;; http://www.emacswiki.org/emacs/EmacsAsDaemon
