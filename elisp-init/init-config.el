@@ -52,7 +52,7 @@
                                           "%b"))))
 
 ;; highlight the current line
-(global-hl-line-mode +1)
+;; (global-hl-line-mode +1)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -68,7 +68,7 @@
 (scroll-bar-mode -1)
 
 ;; line num
-(global-linum-mode +1)
+;; (global-linum-mode +1)
 
 ;; nice scrolling ???
 (setq scroll-margin 0
