@@ -71,9 +71,9 @@
 ;; (global-linum-mode +1)
 
 ;; nice scrolling ???
-(setq scroll-margin 0
-      scroll-conservatively 100000
-      scroll-preserve-screen-position 1)
+;; (setq scroll-margin 0
+;;       scroll-conservatively 100000
+;;       scroll-preserve-screen-position 1)
 
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
