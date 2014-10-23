@@ -26,11 +26,11 @@
 
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 
-(let ((oracle-el-path (substitute-in-file-name "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")))
-  (if (file-exists-p oracle-el-path)
-      (progn
-        (load oracle-el-path)
-        (add-hook 'go-mode-hook 'go-oracle-mode))))
+;; (let ((oracle-el-path (substitute-in-file-name "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")))
+;;   (if (file-exists-p oracle-el-path)
+;;       (progn
+;;         (load oracle-el-path)
+;;         (add-hook 'go-mode-hook 'go-oracle-mode))))
 
 (add-hook 'go-mode-hook 'company-mode)
 (add-hook 'go-mode-hook (lambda ()
