@@ -11,8 +11,8 @@
 
 ;; melpa-stable
 ;; http://hiddencameras.milkbox.net/
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
 ;; package-filters
 ;; Installando questo package e' possibile filtrare i pacchetti per repository,
@@ -32,15 +32,15 @@
 ;;                                       solarized-theme
 ;;                                       js2-mode)))
 
-(setq package-archive-exclude-alist '(("gnu"
-                                      magit
-                                      solarized-theme
-                                      js2-mode)
-                                      ("melpa"
-                                       magit
-                                       solarized-theme
-                                       js2-mode)
-                                      ("melpa-stable")))
+;; (setq package-archive-exclude-alist '(("gnu"
+;;                                       magit
+;;                                       solarized-theme
+;;                                       js2-mode)
+;;                                       ("melpa"
+;;                                        magit
+;;                                        solarized-theme
+;;                                        js2-mode)
+;;                                       ("melpa-stable")))
 
 (package-initialize)
 
