@@ -16,4 +16,4 @@
   (add-to-list 'load-path "/usr/local/opt/gettext/share/emacs/site-lisp"))
 
 
-(provide 'init-local-elisp)
+(provide 'init-extra-elisp)

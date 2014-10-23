@@ -1,3 +1,4 @@
+
 ;; emacs.d/init.el
 ;;
 ;; - https://github.com/magnars/.emacs.d/blob/master/init.el
@@ -33,7 +34,7 @@
 (require 'init-functions)
 (require 'init-bindings)
 (require 'init-config)
-(require 'init-local-elisp)
+(require 'init-extra-elisp)
 (require 'init-requires)
 (require 'init-themes)
 (require 'init-org)
