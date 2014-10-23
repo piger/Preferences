@@ -48,9 +48,10 @@
  '(anzu
    ack-and-a-half
    apache-mode
-   ; base16-theme
+   base16-theme
    browse-kill-ring
    buffer-move
+   company
    diminish
    expand-region
    exec-path-from-shell
