@@ -89,6 +89,7 @@
 
 (require 'projectile)
 (global-set-key "\C-cf" 'projectile-find-file)
+(projectile-global-mode +1)
 
 ;; outline mode
 ;; code folding with vim compatibility
@@ -116,8 +117,5 @@
 ;; 				    outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
-;; projectile
-(require 'projectile)
-(projectile-global-mode +1)
 
 (provide 'init-modes)
