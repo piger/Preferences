@@ -7,40 +7,20 @@
 ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 ;; melpa
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 ;; melpa-stable
 ;; http://hiddencameras.milkbox.net/
 ;; (add-to-list 'package-archives
 ;;              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
-;; package-filters
-;; Installando questo package e' possibile filtrare i pacchetti per repository,
-;; in modo da installare alcuni package da stable e altri da "unstable"; purtroppo
-;; il modo per farlo e' orribile...
-
-;; (progn
-;;   (switch-to-buffer
-;;     (url-retrieve-synchronously
-;;       "https://raw.github.com/milkypostman/package-filter/master/package-filter.el"))
-;;   (package-install-from-buffer  (package-buffer-info) 'single))
-
-;; (setq package-archive-enable-alist '(("gnu")
-;;                                      ("melpa")
-;;                                      ("melpa-stable"
-;;                                       magit
-;;                                       solarized-theme
-;;                                       js2-mode)))
-
-;; (setq package-archive-exclude-alist '(("gnu"
-;;                                       magit
-;;                                       solarized-theme
-;;                                       js2-mode)
-;;                                       ("melpa"
-;;                                        magit
-;;                                        solarized-theme
-;;                                        js2-mode)
-;;                                       ("melpa-stable")))
+(when (and (>= emacs-major-version 24)
+           (>= emacs-minor-version 4))
+  (add-to-list 'package-archives
+               '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+  (setq package-pinned-packages '((magit . "melpa-stable")
+                                  (magit-tramp . "melpa-stable")
+                                  (web-mode . "melpa-stable"))))
 
 (package-initialize)
 
