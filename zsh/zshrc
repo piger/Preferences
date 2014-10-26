@@ -186,7 +186,7 @@ WATCHFMT='%n %a %l from %m at %t.'
 
 # report about cpu-/system-/user-time of command if running longer than
 # 5 seconds
-REPORTTIME=5
+# REPORTTIME=5
 
 # PRIVACY - disattiva history del client mysql
 export MYSQL_HISTFILE=/dev/null
@@ -477,7 +477,7 @@ if [[ $OSTYPE = darwin* ]]; then
     # ls
     if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
         alias ls="gls --color=auto $ls_options"
-        alias lss="gls --color=auto $ls_options --group-directories-first"
+        alias lss="gls --color=auto $ls_options --group-directories-first --sort=extension -B"
         (( $+commands[gdircolors] )) && eval $(gdircolors -b $DIRCOLORS_FILE)
     fi
 
