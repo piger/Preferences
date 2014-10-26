@@ -168,12 +168,6 @@ declare -T LD_LIBRARY_PATH ld_library_path
 declare -T PERL5LIB perl5lib
 declare -T PYTHONPATH pythonpath
 
-# Go, which is tipically installed in /usr/local/go; note: on OSX this can be
-# handled with /etc/paths.d and path_helper(8).
-if [[ -d /usr/local/go ]]; then
-    path+=/usr/local/go/bin
-fi
-
 # Ansible pls
 export ANSIBLE_NOCOWS=1
 
