@@ -40,17 +40,13 @@ import sys
 import optparse
 
 
-pwd = os.getcwd()
-
-dotfiles = [
-    ('aria2.conf', '.aria2.conf'),
-    ('zsh/zshrc', '.zshrc'),
-]
-
-
 def link(dotsrc, dotdest, opts):
     src = os.path.join(os.path.abspath(opts.source), dotsrc)
-    dest = os.path.join(os.path.abspath(opts.target), dotdest)
+    if not dotdest:
+        base_src = os.path.basename(src)
+        dest = os.path.join(os.path.abspath(opts.target), '.' + base_src)
+    else:
+        dest = os.path.join(os.path.abspath(opts.target), dotdest)
 
     if os.path.islink(dest):
         lpath = os.readlink(dest)
@@ -67,9 +63,26 @@ def link(dotsrc, dotdest, opts):
         print "[*] '%s' already exists" % dest
         return False
 
+    if not os.path.exists(os.path.dirname(dest)):
+        os.makedirs(os.path.dirname(dest), mode=0770)
+
     print "[+] %s -> %s" % (dest, src)
     os.symlink(src, dest)
     return True
+
+def read_linkfile(filename):
+    links = []
+    with open(filename) as fd:
+        for line in fd:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if ' ' in line:
+                src, dest = line.rsplit(' ', 1)
+            else:
+                src, dest = line, None
+            links.append((src, dest))
+    return links
 
 def main():
     parser = optparse.OptionParser(description="Create symlinks for dotfiles.")
@@ -81,7 +94,11 @@ def main():
                       help="Source directory")
     opts, args = parser.parse_args()
 
-    for dotsrc, dotdest in dotfiles:
+    if len(args) < 1:
+        print "You must specify a dotfiles configuration file"
+        sys.exit(1)
+
+    for dotsrc, dotdest in read_linkfile(args[0]):
         link(dotsrc, dotdest, opts)
 
 

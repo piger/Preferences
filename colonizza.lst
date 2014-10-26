@@ -1,0 +1,14 @@
+aria2.conf
+jrnl_config
+gitconfig
+vim
+vimrc
+gvimrc
+pythonrc.py
+zshenv
+zsh/zshrc
+tmux.conf
+lftprc
+taskrc
+pdbrc
+emacs-init.el .emacs.d/init.el
