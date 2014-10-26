@@ -4,12 +4,13 @@
 # FLIP ALL DEM TABLEZ!
 
 # CONFIG {{{
+[[ -f $HOME/.zshrc.override ]] && source $HOME/.zshrc.override
 # the 'percol' command for history search (C-r)
-PERCOL_CMD=peco
-DIRCOLORS_FILE=$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark
-FORTUNE_GREETING=1
-FORTUNES_DIRECTORY=$HOME/Dropbox/fortunes
-LOCAL_CONFIG=$HOME/Preferences/zsh/local
+PERCOL_CMD=${PERCOL_CMD:-peco}
+DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
+FORTUNE_GREETING=${FORTUNE_GREETING:-1}
+FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
+LOCAL_CONFIG=${LOCAL_CONFIG:-$HOME/Preferences/zsh/local}
 # }}}
 
 # OPTIONS {{{
