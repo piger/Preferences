@@ -35,108 +35,55 @@ de backup e se lo leva dar cazzo.>>
          -- Anonimo
 
 """
-
-from __future__ import with_statement
 import os
 import sys
-import filecmp
-from os.path import expanduser, join, exists
+import optparse
 
-from termcolor import colored, cprint
 
-__author__ = 'sand <daniel@spatof.org>'
-__version__ = '0.1'
+pwd = os.getcwd()
 
-# Dove mettero' il tutto?
-#DEFAULT_DESTINATION = "~/Preferences"
-DEFAULT_DESTINATION = "~/tmp/colonizza"
-
-# Lista dei file da colonizzare.
-DOTFILES = [
-    'gitconfig',
-    'gvimrc',
-    'lftprc',
-    'tmux.conf',
-    'vim',
-    'vimrc',
-    'zsh',
-    'zshenv',
+dotfiles = [
+    ('aria2.conf', '.aria2.conf'),
+    ('zsh/zshrc', '.zshrc'),
 ]
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# COLOR JIZZ
-def title(name):
-    cprint(name, 'green', attrs=['underline', 'bold'])
-    cprint("Siamo i puntofile di Borg, la resistenza è inutile.\n", 'yellow')
+def link(dotsrc, dotdest, opts):
+    src = os.path.join(os.path.abspath(opts.source), dotsrc)
+    dest = os.path.join(os.path.abspath(opts.target), dotdest)
 
-s_warn = colored('***', 'red', attrs=['bold'])
-s_error = colored('!!!', 'red', attrs=['bold'])
-s_notice = colored('---', 'green', attrs=['bold'])
-s_link = colored('->', 'green', attrs=['bold'])
-
-warning = lambda x: cprint("{0} {1}".format(s_warn, x))
-error = lambda x: cprint("{0} {1}".format(s_error, x))
-notice = lambda x: cprint("{0} {1}".format(s_notice, x))
-
-biancone = lambda x: colored(x, 'white', attrs=['bold'])
-
-def lynkmsg(source, dest):
-    csource = biancone(source)
-    cdest = biancone(dest)
-
-    print "{0} {1} {2} {3}".format(
-        s_notice,
-        csource,
-        s_link,
-        cdest
-    )
-
-def linka(source, dest):
-    source_base = os.path.basename(source)
-    lynkmsg(source_base, dest)
-    os.symlink(source, dest)
-
-def borg():
-    destination = expanduser(DEFAULT_DESTINATION)
-    cwd = os.getcwd()
-
-    for dotfile in DOTFILES:
-        fsource = join(cwd, dotfile)
-        fdest = join(destination, '.' + dotfile)
-
-        # Non esiste, posso linkare
-        if not exists(fdest):
-            linka(fsource, fdest)
-
-        # E' un link
-        elif os.path.islink(fdest):
-
-            # Punta al file giusto ?
-            ldest = os.readlink(fdest)
-            if os.path.abspath(ldest) == fsource:
-                continue
-
-            warning("Removing link: %s -> %s" % (fdest, ldest))
-            os.remove(fdest)
-            linka(fsource, fdest)
-
-        elif not filecmp.cmp(dotfile, fdest):
-            if os.path.exists(fdest + '.bak'):
-                warning("Non posso procedere: esiste già un file .bak di %s" % fdest)
-                continue
-
-            warning("Backuppin' %s" % fdest)
-            os.rename(fdest, fdest + '.bak')
-            linka(fsource, fdest)
-
+    if os.path.islink(dest):
+        lpath = os.readlink(dest)
+        if lpath != src:
+            if opts.force:
+                os.unlink(dest)
+            else:
+                print "[*] '%s' exists and it's a symlink to '%s', not '%s'" % (
+                    dest, lpath, src)
+                return False
         else:
-            warning("Cosa devo fare con %s?" % dotfile)
+            return False
+    elif os.path.exists(dest):
+        print "[*] '%s' already exists" % dest
+        return False
 
+    print "[+] %s -> %s" % (dest, src)
+    os.symlink(src, dest)
+    return True
 
 def main():
-    title("Colonizza %s" % __version__)
-    borg()
+    parser = optparse.OptionParser(description="Create symlinks for dotfiles.")
+    parser.add_option('-f', '--force', action='store_true',
+                      help="Overwrite wrong symlinks")
+    parser.add_option('-t', '--target', default=os.environ.get('HOME'),
+                      metavar='DIR', help="Destination directory")
+    parser.add_option('-s', '--source', default='.', metavar='DIR',
+                      help="Source directory")
+    opts, args = parser.parse_args()
+
+    for dotsrc, dotdest in dotfiles:
+        link(dotsrc, dotdest, opts)
+
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
