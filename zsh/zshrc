@@ -671,12 +671,9 @@ alias pu='pushd'
 alias po='popd'
 
 alias h="history"
-alias ll="ls -lh"
 alias la="ls -a"
-alias lla="ls -la"
 alias lsd="ls -ld *(-/)"		# ls delle sole directory
 alias lsa="ls -ld .*"			# ls dei soli file nascosti
-alias suz="su root -c zsh"		# su to root and run zsh ;)
 alias lsgrandi="ls -fl *(.oL)"	# ls -lrh --sort=size
 alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
 alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
@@ -684,22 +681,18 @@ alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
 alias lsoggi="ls *(m0)"			# ls dei file modificati oggi
 alias dirdu="du -Hhs *(/,@)"	# du -h di ogni dir presente
 alias ..='cd ..'
+alias ...='cd ../..'
 
 # alias globali, che pero' non gradisco.
 alias -g L='|less'
-alias -g M='|more'
 alias -g H='|head'
 alias -g T='|tail'
 
 # suffix aliases
 alias -s asc='gpg'
 
-alias tmessages="tail -f /var/log/messages"
-alias tsyslog="tail -f /var/log/syslog"
 alias pwgen_strong='pwgen -y1 15 20'
-alias vnc_colori='vncviewer -FullColor'
 alias screenf='screen -e "^Ff"'
-# Taskwarrior
 alias t=task
 
 # alias simpatici
@@ -712,17 +705,8 @@ alias shitdown="shutdown"
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
 
-# supporto FORZATO dei 256 colori per tmux
-alias tmux='tmux -2'
-
 # oggi
 alias oggi='date "+%d-%m-%Y"'
-
-# aria2c - torrent
-alias aria2c_torrent='aria2c --max-download-limit=400K -u 15k'
-
-# i miei fortune
-alias myfortune='fortune ~/.fortune'
 
 # list installed packages by size
 alias large_packages="dpkg-query -Wf '\${Installed-Size}\t\${Package}\n' | sort -n"
