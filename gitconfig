@@ -66,3 +66,6 @@
 
 [push]
     default = simple
+[user]
+	name = Daniel Kertesz
+	email = daniel@spatof.org
