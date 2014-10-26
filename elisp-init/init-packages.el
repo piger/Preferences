@@ -18,9 +18,7 @@
            (>= emacs-minor-version 4))
   (add-to-list 'package-archives
                '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-  (setq package-pinned-packages '((magit . "melpa-stable")
-                                  (magit-tramp . "melpa-stable")
-                                  (web-mode . "melpa-stable"))))
+  (setq package-pinned-packages '((magit . "melpa-stable"))))
 
 (package-initialize)
 
@@ -40,6 +38,7 @@
    go-mode
    go-eldoc
    helm
+   evil
    flx-ido
    ido-ubiquitous
    ; xkcd
@@ -58,7 +57,7 @@
    smex
    undo-tree
    volatile-highlights
-   ;;; web-mode
+   web-mode
    ;;; yasnippet
 )
  "A list of packages to ensure are installed at launch")
