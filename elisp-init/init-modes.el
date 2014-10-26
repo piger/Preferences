@@ -12,6 +12,11 @@
 (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
 ; (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
 
+;; unfuck python indentation with electric-mode
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq electric-indent-chars '(?\n))))
+
 ;; golang
 (setenv "GOPATH" (expand-file-name "~/dev/go"))
 (setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
