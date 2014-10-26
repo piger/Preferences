@@ -116,7 +116,7 @@
 ;; (add-to-list 'tramp-default-proxies-alist
 ;; 	     '((regexp-quote (system-name)) nil nil))
 (require 'tramp)
-(setq tramp-default-method "ssh")
+;; (setq tramp-default-method "ssh")
 
 ;; undo-tree
 (global-undo-tree-mode +1)
