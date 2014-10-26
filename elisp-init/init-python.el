@@ -7,7 +7,8 @@
 (defun prelude-python-mode-defaults ()
   "Defaults for Python programming."
   (subword-mode +1)
-  ;;(smartparens-mode +1)
+  ;; (eldoc-mode)
+  ;; (smartparens-mode +1)
   (show-paren-mode +1)
   ;; (yas-minor-mode +1)
   ;; (electric-indent-mode -1)

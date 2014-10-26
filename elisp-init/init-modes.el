@@ -22,25 +22,26 @@
 (setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
 (setq exec-path (append exec-path (list (expand-file-name "~/dev/go/bin"))))
 
-(defun my-go-mode-hook()
-  ;;(add-hook 'before-save-hook 'gofmt-before-save)
-  (setq tab-width 2)
-  (local-set-key (kbd "C-c C-k") 'godoc)
-  (add-hook 'before-save-hook #'gofmt-before-save))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
+(eval-after-load 'go-mode
+  '(progn
+     (defun prelude-go-mode-defaults ()
+       (add-hook 'before-save-hook 'gofmt-before-save nil t)
+       (set (make-local-variable 'company-backends) '(company-go))
+       (go-eldoc-setup)
+       (setq tab-width 2)
+       (local-set-key (kbd "C-c C-k") 'godoc)
+       (subword-mode +1))
 
-(add-hook 'go-mode-hook 'go-eldoc-setup)
-
-;; (let ((oracle-el-path (substitute-in-file-name "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")))
-;;   (if (file-exists-p oracle-el-path)
-;;       (progn
-;;         (load oracle-el-path)
-;;         (add-hook 'go-mode-hook 'go-oracle-mode))))
-
-(add-hook 'go-mode-hook 'company-mode)
-(add-hook 'go-mode-hook (lambda ()
-  (set (make-local-variable 'company-backends) '(company-go))
-  (company-mode)))
+     (setq prelude-go-mode-hook 'prelude-go-mode-defaults)
+     (add-hook 'go-mode-hook (lambda ()
+                               (run-hooks 'prelude-go-mode-hook)))
+     
+     ;; Enable go-oracle-mode if available
+     (let ((oracle (executable-find "oracle")))
+       (when oracle
+         (setq go-oracle-command oracle)
+         (autoload 'go-oracle-mode "oracle")
+         (add-hook 'go-mode-hook 'go-oracle-mode)))))
 
 (eval-after-load 'css-mode
   '(progn
@@ -122,5 +123,8 @@
 ;; 				    outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
+;; company (completion)
+(require 'company)
+(global-company-mode 1)
 
 (provide 'init-modes)

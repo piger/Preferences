@@ -7,7 +7,8 @@
 ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 ;; melpa
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; melpa-stable
 ;; http://hiddencameras.milkbox.net/
@@ -37,6 +38,8 @@
    gitignore-mode
    go-mode
    go-eldoc
+   company-go
+   gotest
    helm
    evil
    flx-ido
@@ -52,6 +55,8 @@
    ; osx-plist
    projectile
    php-mode
+   pyenv-mode
+   anaconda-mode
    rainbow-mode
    rainbow-delimiters
    smex

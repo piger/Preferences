@@ -26,6 +26,13 @@
 ;;; show column number by default
 (setq column-number-mode t)
 
+(size-indication-mode t)
+
+;; make the fringe (gutter) smaller
+;; the argument is a width in pixels (the default is 8)
+(if (fboundp 'fringe-mode)
+    (fringe-mode 4))
+
 ;;; transparency
 ;; (add-to-list 'default-frame-alist '(alpha 95 80))
 

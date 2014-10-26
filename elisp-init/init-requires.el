@@ -76,4 +76,10 @@
 (setq evil-want-C-u-scroll t)
 (require 'evil)
 
+(setq evil-emacs-state-cursor  '("red" box))
+(setq evil-normal-state-cursor '("gray" box))
+(setq evil-visual-state-cursor '("gray" box))
+(setq evil-insert-state-cursor '("gray" bar))
+(setq evil-motion-state-cursor '("gray" box))
+
 (provide 'init-requires)
