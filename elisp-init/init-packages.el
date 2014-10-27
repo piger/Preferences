@@ -63,6 +63,7 @@
    undo-tree
    volatile-highlights
    web-mode
+   use-package
    ;;; yasnippet
 )
  "A list of packages to ensure are installed at launch")

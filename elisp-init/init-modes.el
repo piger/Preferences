@@ -127,4 +127,9 @@
 (require 'company)
 (global-company-mode 1)
 
+;; apache-mode
+(autoload 'apache-mode "apache-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
+(add-to-list 'auto-mode-alist '("sites-\\(available|enabled\\)/" . apache-mode))
+
 (provide 'init-modes)
