@@ -26,7 +26,27 @@
 ;;; show column number by default
 (setq column-number-mode t)
 
+;; show files size in minibar
 (size-indication-mode t)
+
+;; show keystrokes in minibuffer early
+(setq echo-keystrokes 0.1)
+
+;; major mode for scracth buffer
+(setq initial-major-mode 'emacs-lisp-mode)
+
+;; delete region if typing
+(pending-delete-mode 1)
+
+;; Kill whole line
+(setq kill-whole-line t)
+
+;; Prefer utf8
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 
 ;; make the fringe (gutter) smaller
 ;; the argument is a width in pixels (the default is 8)
