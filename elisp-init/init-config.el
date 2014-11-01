@@ -81,10 +81,6 @@
 ;; highlight the current line
 ;; (global-hl-line-mode +1)
 
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-(diminish 'volatile-highlights-mode)
-
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
 
@@ -104,15 +100,6 @@
 
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
-
-;; rember recent files
-(require 'recentf)
-(setq recentf-max-saved-items 200
-      recentf-max-menu-items 15
-      recentf-exclude '("/tmp/" "/ssh:"))
-(recentf-mode +1)
-;; (global-set-key (kbd "s-r") 'recentf-open-files)
-;; il binding e' in init-functions, sulla funzione che integra ido
 
 ;; show parens mode
 (show-paren-mode t)
@@ -145,37 +132,7 @@
 (require 'tramp)
 ;; (setq tramp-default-method "ssh")
 
-;; undo-tree
-(global-undo-tree-mode +1)
-(diminish 'undo-tree-mode)
-
-;; enable winner-mode to manage window configurations
-(winner-mode +1)
-
-;; flyspell
-(defcustom pl-flyspell t
-  "Non-nil values enable flyspell support."
-  :type 'boolean
-  :group 'prelude)
-
-;; per ora disattivo flyspell di default
-(setq pl-flyspell nil)
-
-(require 'flyspell)
-(setq ispell-program-name "aspell" ; use aspell
-      ispell-extra-args '("--sug-mode=ultra"))
-
-(defun pl-enable-flyspell ()
-  "Prelude: enable command `flyspell-mode' if `pl-flyspell' is not nil."
-  (when (and pl-flyspell (executable-find ispell-program-name))
-    (flyspell-mode +1)))
-
-(add-hook 'text-mode-hook 'pl-enable-flyspell)
-
-;; anzu-mode enhances isearch by showing total matches and current match position
-(require 'anzu)
-(diminish 'anzu-mode)
-(global-anzu-mode)
+(add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
@@ -187,12 +144,6 @@
 
 ;; the blinking cursor is nothing, but an annoyance
 (blink-cursor-mode -1)
-
-;; helm
-(require 'helm-config)
-(global-set-key (kbd "C-c h") 'helm-mini)
-(helm-mode 1)
-(diminish 'helm-mode)
 
 ;; wcheck / aspell / hunspell
 (setq wcheck-language-data

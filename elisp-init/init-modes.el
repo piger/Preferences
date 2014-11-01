@@ -15,6 +15,15 @@
 (use-package flx-ido
   :init (flx-ido-mode 1))
 
+(use-package helm
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 15)
+    (helm-mode))
+  :diminish helm-mode
+  :bind (("C-c h" . helm-mini)))
+
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
 
@@ -245,8 +254,34 @@
 ;; 				    outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
-;;; org-mode
+(use-package volatile-highlights
+  :init (volatile-highlights-mode +1)
+  :diminish volatile-highlights-mode)
 
+(use-package recentf
+  :init (recentf-mode +1)
+  :config
+  (setq recentf-max-saved-items 200
+        recentf-max-menu-items 15
+        recentf-exclude '("/tmp/" "/ssh:")))
+
+(use-package undo-tree-mode
+  :init (global-undo-tree-mode +1)
+  :diminish undo-tree-mode)
+
+(use-package winner-mode
+  :init (winner-mode +1))
+
+(use-package anzu
+  :init (global-anzu-mode)
+  :diminish anzu-mode)
+
+(use-package flyspell
+  :config
+  (setq ispell-program-name "aspell"
+        ispell-extra-args '("--sug-mode=ultra")))
+
+;;; org-mode
 ; general setup
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-cc" 'org-capture)
