@@ -38,7 +38,6 @@
 (require 'init-requires)
 (require 'init-themes)
 (require 'init-org)
-(require 'init-web)
 (require 'init-modes)
 (require 'init-python)
 (require 'init-aliases)

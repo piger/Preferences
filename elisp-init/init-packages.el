@@ -21,6 +21,7 @@
                '("melpa-stable" . "http://stable.melpa.org/packages/") t)
   (setq package-pinned-packages '((magit . "melpa-stable"))))
 
+;; load and activate installed packages
 (package-initialize)
 
 (defvar my-packages
@@ -91,8 +92,8 @@
     (message "%s" "done.")
     (pl-require-packages my-packages)))
 
+;; install missing packages
 (pl-install-packages)
-
 
 ;; `exec()` PATH from shell
 ;; Questo va messo PRIMA di tutto perche' altrimenti tutti i PATH
@@ -103,5 +104,7 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+;; enable use-package
+(require 'use-package)
 
 (provide 'init-packages)

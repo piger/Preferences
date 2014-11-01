@@ -61,20 +61,38 @@
 (add-hook 'prog-mode-hook '(lambda ()
                              (rainbow-delimiters-mode)))
 
-;; subword mode (capisce CamelCase)
-(add-hook 'js2-mode-hook (lambda ()
-                           (subword-mode +1)))
+(use-package js2-mode
+  :mode (("\\.js$" . js2-mode))
+  :interpreter ("node" . js2-mode)
+  :config
+  (progn
+    (setq-default js2-global-externs '("module", "require", "console",
+                                       "jQuery", "$"))
+    (add-hook 'js2-init-hook
+              (lambda ()
+                (when (or (string-match-p "zAFS" (buffer-file-name))
+                          (string-match-p "LogIntelligence" (buffer-file-name)))
+                  (mapc (lambda (x)
+                          (add-to-list 'js2-additional-externs x))
+                        (list "Ember" "DS" "App")))))
+    (add-hook 'js2-mode-hook (lambda () (subword-mode +1)))
+    (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 4)))
+    (set-variable 'indent-tabs-mode nil)
+    ))
 
-(setq-default js2-global-externs '("module", "require", "console",
-                                   "jQuery", "$"))
-(add-hook 'js2-init-hook
-          (lambda ()
-            (when (or (string-match-p "zAFS" (buffer-file-name))
-                      (string-match-p "LogIntelligence" (buffer-file-name)))
-              (mapc (lambda (x)
-                      (add-to-list 'js2-additional-externs x))
-                    (list "Ember" "DS" "App")))))
-
+(use-package web-mode
+  :init
+  (progn
+    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+  :config
+  (progn
+    (add-hook 'web-mode-hook (lambda ()
+                               (local-set-key (kbd "RET") 'newline-and-indent)))
+    (setq web-mode-engines-alist
+          '(("go" . "/dev/go/src/.*\\.html\\'")))))
+  
 ; elisp defaults
 (defun pl-elisp-mode-defaults ()
   "Some defaults for elisp mode"
@@ -87,15 +105,21 @@
                                   (run-hooks 'pl-elisp-mode-hooks)))
 
 ;; ack-and-a-half
-(require 'ack-and-a-half)
-(defalias 'ack 'ack-and-a-half)
-(defalias 'ack-same 'ack-and-a-half-same)
-(defalias 'ack-find-file 'ack-and-a-half-find-file)
-(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+(use-package ack-and-a-half
+  :init
+  (progn
+    (defalias 'ack 'ack-and-a-half)
+    (defalias 'ack-same 'ack-and-a-half-same)
+    (defalias 'ack-find-file 'ack-and-a-half-find-file)
+    (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)))
 
-(require 'projectile)
-(global-set-key "\C-cf" 'projectile-find-file)
-(projectile-global-mode +1)
+;; projectile
+(use-package projectile
+  :init
+  (progn
+    (projectile-global-mode +1)
+    (bind-key "\C-cf" 'projectile-find-file)))
+(use-package helm-projectile)
 
 ;; outline mode
 ;; code folding with vim compatibility
@@ -125,7 +149,6 @@
 
 ;; company (completion)
 (require 'company)
-(global-company-mode 1)
 
 ;; apache-mode
 (autoload 'apache-mode "apache-mode" nil t)

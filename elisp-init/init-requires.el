@@ -1,33 +1,35 @@
 ;;; various required packages
 
-;; ido
-(require 'ido)
-(require 'flx-ido)
+(use-package ido
+  :init
+  (progn
+    (ido-mode +1)
+    (ido-everywhere +1))
+  :config
+  (progn
+    (setq ido-enable-prefix nil
+          ido-enable-flex-matching t
+          ido-everywhere t)
+    (add-to-list 'ido-ignore-files "\\.DS_Store")))
 
-(setq ido-enable-prefix nil
-      ido-enable-flex-matching t
-      ido-everywhere t)
-(ido-mode +1)
-;;; Non-nil means that `ido' will do flexible string matching.
-;;; Flexible matching means that if the entered string does not
-;;; match any item, any item containing the entered characters
-;;; in the given sequence will match.
-; (setq ido-enable-flex-matching t)
-;;; To use ido for all buffer and file selections in Emacs, customize the
-;;; variable `ido-everywhere'.
-; (setq ido-everywhere t)
+(use-package flx-ido
+  :init (flx-ido-mode 1))
+
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
 
 ;; meaningful names for buffers with the same name
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'forward
+        uniquify-separator "/"
+        uniquify-after-kill-buffer-p t          ; rename after killing uniquified
+        uniquify-ignore-buffers-re "^\\*"))     ; don't muck with special buffers
 
 ;;; windmove
 ;;; per switchare finestra con shift+arrows o alt+arrows
-(require 'windmove)
-(windmove-default-keybindings 'meta)
+(use-package windmove
+  :config (windmove-default-keybindings 'meta))
 
 ;;; yasnippet
 ;; (require 'yasnippet)
@@ -37,33 +39,32 @@
 ;;; (yas-global-mode 1
 ;;; (yas-reload-all)
 
-;;; smex, remember recently and most frequently used commands
-(require 'smex)
-;; (setq smex-save-file (expand-file-name ".smex-items" prelude-savefile-dir))
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(use-package smex
+  :init (smex-initialize)
+  :bind
+  ("M-x" . smex)
+  ("M-X" . smex-major-mode-commands))
 
 ;; editor di regexp che evita la pazzia dei backslash
 ;; (require 're-builder)
 ;; evita la pazzia dei backslash
 ;; (setq reb-re-syntax 'string)
 
-;; git
-(require 'magit)
-;; questi due sarebbero dipendenze, ma funziona tutto anche senza...
-;(require 'git-commit-mode)
-;(require 'git-rebase-mode)
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
+(use-package git-gutter
+  :init (global-git-gutter-mode +1))
 
 ;; dired bindings (tipo C-x C-j)
-(require 'dired-x)
+(use-package dired-x)
 
 ; zone e' fondamentale direi (per avere zone-when-idle)
-;; (require 'zone)
+(use-package zone)
 
 ;; expand-region
-(require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
 
 ;; move-text
 ;; (require 'move-text)
@@ -71,15 +72,14 @@
 ;; per switchare finestra.
 ;; (move-text-default-bindings)
 
-
 ;; evil-mode
 (setq evil-want-C-u-scroll t)
-(require 'evil)
-
-(setq evil-emacs-state-cursor  '("red" box))
-(setq evil-normal-state-cursor '("gray" box))
-(setq evil-visual-state-cursor '("gray" box))
-(setq evil-insert-state-cursor '("gray" bar))
-(setq evil-motion-state-cursor '("gray" box))
+(use-package evil
+  :config
+  (setq evil-emacs-state-cursor  '("red" box)
+        evil-normal-state-cursor '("gray" box)
+        evil-visual-state-cursor '("gray" box)
+        evil-insert-state-cursor '("gray" bar)
+        evil-motion-state-cursor '("gray" box)))
 
 (provide 'init-requires)

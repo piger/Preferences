@@ -1,8 +1,5 @@
 ;;; keyboard bindings
 
-;;; ibuffer (meglio del mode di default per browsare i buffer aperti)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
 ;; hippie-expand al posto di dabbrev-expand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
@@ -22,9 +19,6 @@
 ;; font-size
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
-
-;; magit-mode
-(global-set-key (kbd "C-x g") 'magit-status)
 
 ;;; browser con M-o
 (global-set-key "\M-o" 'browse-url-generic)
