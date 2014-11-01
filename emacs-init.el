@@ -34,9 +34,6 @@
 (require 'init-bindings)
 (require 'init-config)
 (require 'init-extra-elisp)
-(require 'init-requires)
-(require 'init-themes)
-(require 'init-org)
 (require 'init-modes)
 (require 'init-aliases)
 (when *is-a-mac*
