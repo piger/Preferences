@@ -38,7 +38,6 @@
 (require 'init-themes)
 (require 'init-org)
 (require 'init-modes)
-(require 'init-python)
 (require 'init-aliases)
 (when *is-a-mac*
   (require 'init-osx))
