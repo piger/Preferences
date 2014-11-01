@@ -43,18 +43,13 @@
          (autoload 'go-oracle-mode "oracle")
          (add-hook 'go-mode-hook 'go-oracle-mode)))))
 
-(eval-after-load 'css-mode
-  '(progn
-     (require 'rainbow-mode)
-
-     (defun pl-css-mode-defaults ()
-       (setq css-indent-offset 2)
-       (rainbow-mode +1)
-       (subword-mode +1))
-
-     (setq pl-css-mode-hook 'pl-css-mode-defaults)
-     (add-hook 'css-mode-hook (lambda ()
-                                (run-hooks 'pl-css-mode-hook)))))
+(use-package css-mode
+  :config
+  (progn
+    (use-package rainbow-mode)
+    (setq css-indent-offset 2)
+    (rainbow-mode +1)
+    (subword-mode +1)))
 
 ;; highlight FIXME & co
 (add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
@@ -121,6 +116,16 @@
     (bind-key "\C-cf" 'projectile-find-file)))
 (use-package helm-projectile)
 
+;; company (completion)
+(use-package company)
+
+;; apache-mode
+(use-package apache-mode
+  :init
+  (progn
+    (add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
+    (add-to-list 'auto-mode-alist '("sites-\\(available|enabled\\)/" . apache-mode))))
+
 ;; outline mode
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
@@ -147,12 +152,5 @@
 ;; 				    outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
-;; company (completion)
-(require 'company)
-
-;; apache-mode
-(autoload 'apache-mode "apache-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
-(add-to-list 'auto-mode-alist '("sites-\\(available|enabled\\)/" . apache-mode))
 
 (provide 'init-modes)
