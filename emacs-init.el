@@ -22,7 +22,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 
 (defvar piger/preferences-dir (expand-file-name "~/Preferences/elisp-init")
-  "The directory containing moo elisp files.")
+  "The directory containing my elisp files.")
 
 
 ;; (add-to-list 'load-path
@@ -44,7 +44,7 @@
   (require 'init-osx))
 
 (let ((piger/local-config
-       (concat (file-name-as-directory moo-preferences-dir) "init-local.el")))
+       (concat (file-name-as-directory piger/preferences-dir) "init-local.el")))
   (load piger/local-config 'noerror))
 
 ;;; emacs custom settings
