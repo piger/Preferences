@@ -54,6 +54,7 @@
   :bind ("C-x g" . magit-status))
 
 (use-package git-gutter
+  :diminish git-gutter-mode
   :init (global-git-gutter-mode +1))
 
 ;; dired bindings (tipo C-x C-j)

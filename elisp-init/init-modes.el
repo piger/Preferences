@@ -117,10 +117,11 @@
 
 ;; projectile
 (use-package projectile
+  :bind ("\C-cf" . projectile-find-file)
   :init
-  (progn
-    (projectile-global-mode +1)
-    (bind-key "\C-cf" 'projectile-find-file)))
+  (projectile-global-mode +1)
+  :config
+  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))))
 (use-package helm-projectile)
 
 ;; company (completion)
