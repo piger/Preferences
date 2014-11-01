@@ -58,11 +58,11 @@
 
 ;; highlight FIXME & co
 (add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
-(add-hook 'prog-mode-hook '(lambda ()
-                             (rainbow-delimiters-mode)))
+;; add colors to parenthesis
+(add-hook 'prog-mode-hook '(lambda () (rainbow-delimiters-mode)))
 
 (use-package js2-mode
-  :mode (("\\.js$" . js2-mode))
+  :mode ("\\.js$" . js2-mode)
   :interpreter ("node" . js2-mode)
   :config
   (progn

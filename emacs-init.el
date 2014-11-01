@@ -1,3 +1,4 @@
+;;; piger-emacs -- Summary
 
 ;; emacs.d/init.el
 ;;
@@ -17,18 +18,16 @@
 	(tool-bar-mode -1))
 ;; nasconde la scroll bar (perchè mai?)
 ; (scroll-bar-mode -1)
-;; nasconde menubar
-;; (menu-bar-mode -1)
  
 (defconst *is-a-mac* (eq system-type 'darwin))
 
-(defvar moo-preferences-dir (expand-file-name "~/Preferences/elisp-init")
+(defvar piger/preferences-dir (expand-file-name "~/Preferences/elisp-init")
   "The directory containing moo elisp files.")
 
 
 ;; (add-to-list 'load-path
 ;;              (expand-file-name "elisp-init" user-emacs-directory))
-(add-to-list 'load-path moo-preferences-dir)
+(add-to-list 'load-path piger/preferences-dir)
 
 (require 'init-packages)
 (require 'init-functions)
@@ -44,10 +43,12 @@
 (when *is-a-mac*
   (require 'init-osx))
 
-(let ((moo-local-config
+(let ((piger/local-config
        (concat (file-name-as-directory moo-preferences-dir) "init-local.el")))
-  (load moo-local-config 'noerror))
+  (load piger/local-config 'noerror))
 
 ;;; emacs custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
+
+;;; emacs-init.el ends here
