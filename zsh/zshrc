@@ -108,6 +108,61 @@ setopt NO_rm_star_silent
 
 # FUNCTIONS {{{
 function exists() { which $1 &> /dev/null }
+
+# tree amanuense se non c'e' il pacchetto installato (from strcat.de)
+if (( ! $+commands[tree] )); then
+    tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
+fi
+
+# https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
+rot13() {
+	echo $1 | tr "A-Za-z" "N-ZA-Mn-za-m"
+}
+
+latrus() {
+	echo $1 | tr "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+}
+
+ruslat() {
+	echo $1 | tr "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM"
+}
+
+urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $1 }
+urldecode() { python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" $1 }
+
+# from: grml
+ssl_hashes=( sha512 sha256 sha1 md5 )
+
+for sh in ${ssl_hashes}; do
+    eval 'ssl-cert-'${sh}'() {
+        emulate -L zsh
+        if [[ -z $1 ]] ; then
+            printf '\''usage: %s <file>\n'\'' "ssh-cert-'${sh}'"
+            return 1
+        fi
+        openssl x509 -noout -fingerprint -'${sh}' -in $1
+    }'
+done; unset sh
+
+ssl-cert-fingerprints() {
+    emulate -L zsh
+    local i
+    if [[ -z $1 ]] ; then
+        printf 'usage: ssl-cert-fingerprints <file>\n'
+        return 1
+    fi
+    for i in ${ssl_hashes}
+        do ssl-cert-$i $1;
+    done
+}
+
+ssl-cert-info() {
+    if [[ -z $1 ]]; then
+        echo "Usage: ssl-cert-info <file>"
+        exit 1
+    fi
+    openssl x509 -noout -text -in $1
+}
 # }}}
 
 # COLOR SPECTRUM {{{
@@ -301,37 +356,6 @@ keyinfo=(
 )
 # }}}
 
-# COMPLETION {{{
-# completion indicator
-# source: https://github.com/mattjj/my-oh-my-zsh/blob/master/keyboard.zsh
-zstyle ':omz:completion' indicator '...'
-
-function expand-or-complete-prefix-with-indicator() {
-  local indicator
-  zstyle -s ':omz:completion' indicator 'indicator'
-  print -Pn "$indicator"
-  zle expand-or-complete-prefix
-  zle redisplay
-}
-zle -N expand-or-complete-prefix-with-indicator
-
-# Complete in the middle of word.
-[[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
-
-[[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M "emacs" "$keyinfo[Control]I" \
-    expand-or-complete-prefix-with-indicator
-
-# Completion per task warrior
-# NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
-[[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
-[[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
-
-# brew - zsh-completions
-[[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
-# }}}
-
 # BINDINGS {{{
 # META+delete come in bash, invece che settare WORDCHARS
 autoload -U select-word-style
@@ -397,7 +421,7 @@ if exists $PERCOL_CMD; then
 fi
 # }}}
 
-# FUNCTIONS {{{
+# AUTOLOADS {{{
 # Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
 typeset -U fpath
 
@@ -725,8 +749,37 @@ alias json.tool='python -m json.tool'
 #
 # :completion:function:completer:command:argument:tag
 
+# completion indicator
+# source: https://github.com/mattjj/my-oh-my-zsh/blob/master/keyboard.zsh
+zstyle ':omz:completion' indicator '...'
+
+function expand-or-complete-prefix-with-indicator() {
+  local indicator
+  zstyle -s ':omz:completion' indicator 'indicator'
+  print -Pn "$indicator"
+  zle expand-or-complete-prefix
+  zle redisplay
+}
+zle -N expand-or-complete-prefix-with-indicator
+
+# Complete in the middle of word.
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
+
+[[ -n "$keyinfo[Control]" ]] && \
+    bindkey -M "emacs" "$keyinfo[Control]I" \
+    expand-or-complete-prefix-with-indicator
+
+# Completion per task warrior
+# NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
+[[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
+[[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
+
+# brew - zsh-completions
+[[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+
 # compinstall, dilemma TODO
-zstyle :compinstall filename '~/.zsh/main'
+zstyle :compinstall filename '~/.zshrc'
 
 # questo va all'inizio, altrimenti poi non ho `compdef` o altri comandi.
 autoload -Uz compinit && compinit
