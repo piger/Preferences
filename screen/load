@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-if [ -d /proc ]; then
-    printf "\005{= Yk}%s\005{-} " $(awk '{print $1}' /proc/loadavg)
-else
-    printf "\005{= Yk}%s\005{-} " $(sysctl -n vm.loadavg | cut -d" " -f2)
-fi
