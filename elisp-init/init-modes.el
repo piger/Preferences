@@ -19,7 +19,7 @@
   :init
   (progn
     (require 'helm-config)
-    (setq helm-candidate-number-limit 15)
+    (setq helm-candidate-number-limit 100)
     (helm-mode))
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)))
@@ -265,11 +265,11 @@
         recentf-max-menu-items 15
         recentf-exclude '("/tmp/" "/ssh:")))
 
-(use-package undo-tree-mode
+(use-package undo-tree
   :init (global-undo-tree-mode +1)
   :diminish undo-tree-mode)
 
-(use-package winner-mode
+(use-package winner
   :init (winner-mode +1))
 
 (use-package anzu
