@@ -156,10 +156,14 @@
     (rainbow-mode +1)
     (subword-mode +1)))
 
-;; highlight FIXME & co
-(add-hook 'prog-mode-hook '(lambda () (prelude-font-lock-comment-annotations)))
-;; add colors to parenthesis
-(add-hook 'prog-mode-hook '(lambda () (rainbow-delimiters-mode)))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (use-package idle-highlight-mode
+              :init (idle-highlight-mode t))
+            (prelude-font-lock-comment-annotations)
+            (rainbow-delimiters-mode t)
+            (setq show-trailing-whitespace t)
+            (subword-mode t)))
 
 (use-package js2-mode
   :mode ("\\.js$" . js2-mode)
@@ -296,11 +300,16 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-c\M-p" 'org-babel-previous-src-block)
+(global-set-key "\C-c\M-n" 'org-babel-next-src-block)
+(global-set-key "\C-cS" 'org-babel-previous-src-block)
+(global-set-key "\C-cs" 'org-babel-next-src-block)
+
 ; capture-file
 (setq org-directory "~/Dropbox/org")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
-(setq org-todo-keywords
-      '((sequence "TODO" "VERIFY" "|" "DONE" "DELEGATED")))
+;; (setq org-todo-keywords
+;;       '((sequence "TODO" "VERIFY" "|" "DONE" "DELEGATED")))
 (setq org-tags-alist
       '((sequence "work" "personal" "computer" "blog")))
 ;; mobile org
@@ -310,4 +319,27 @@
 ;; add timestamp to closed TODO entries
 (setq org-log-done 'time)
 
+;; highlight code blocks
+(setq org-src-fontify-natively t)
+
+;; turn off source blocks default indentation
+(setq org-edit-src-content-indentation 0)
+
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+(setq org-todo-keywords
+      (quote
+       ((sequence "SOMEDAY(s)" "TODO(t)" "INPROGRESS(i)" "WAITING(w@/!)"
+                  "|" "DONE(d)")
+        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("INPROGRESS" :foreground "deep sky blue" :weight bold)
+              ("SOMEDAY" :foreground "purple" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold))))
+    
 (provide 'init-modes)
