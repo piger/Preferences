@@ -1,50 +1,17 @@
-#                                   ________,cccccccc.__________
-#  cc$$FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF""""""""'''''''`"""""""""?$F
-#   ]$[                      ___                              d$'
-#   ]$[                    ,dF"?F$c.                          d$
-#   ]$[                   ,$[     7$[                        ,$F
-#    $h              ,c.  d$      `$'    ,$F           _     J$'
-#    $h        _,ccc$$$    ?h.           ]$[          d$     d$
-#    d$      c$F"'  dF      `?hc_        ]$[          d$     d$
-#    ?$.          ,dF         ``?$c.     ]$[          d$     d$
-#    ]$[         d$'              `?$c   ]$[          $h     dF
-#    ]$[       ,$F                  `?$  ,$ccccccccccp$[     $h
-#    ]$[    _d$F'         d$'       ,$F  ]$[         d$      $F
-#     $h  dd$$           ]$[       ,$F   ]$[         d$     ]$[
-#     ?h   `"?F$ccc._     ?$ccccccd$F    ]$[         $h     ]$[
-#     d$         ``"?F$cc   `'''''        '          $h     d$
-#     d$               `'                            $F     d$
-#     ?$                                            ]$[     $F
-#     ]$[                                           d$'     $h
-#     ]$[                                            '     ]$[
-#     ]$[                         _______________,cccccccccd$[
-#     ]$[           ____,cccccdFFFF"""""""""""""""'''''''''`'
-#     `$hccccccdFFFFF""""''''
-#  .-------------------------------------------------------.
-#  | Questo file verrà' sempre letto da zsh e dovrà' quindi|
-#  |contenere tutti le impostazioni che potrebbero influire|
-#  |         sui job in crontab, su script eseguiti, etc...|
-#  `-------------------------------------------------------'
-
-# ZDOTDIR is HOME by default, by I prefer to keep everything inside a single
-# directory.
-# ZDOTDIR=${HOME}/.zsh
-
+# -*- mode: shell-script -*-
+# zshenv
+# This file is always executed by zsh so it's mostly useful to set environment
+# variables used by non-interactive jobs.
 
 # PATH handling {{{
-# My default PATH *must* contain all 'sbin' directories (cause I use sudo a lot
-# and I want completion); then there are some issues:
-# - on slackware the default zsh init files in /etc overwrite any PATH value.
-# - on OSX if you use MacPorts or Homebrew you should put '/usr/local/{s,}bin
-# before /usr/{s,}bin.
-#
 # PATH and path refers to the same variable (tied), so as MANPATH and manpath.
 # The attribute flag -U is to keep unique values inside an array.
 typeset -U path manpath fpath cdpath
+
+# set default PATH, keeping any existing system-wide PATH value.
 path=(
     $path /sbin /bin /usr/sbin /usr/bin /usr/X11R6/bin 
-    /usr/games /usr/local/sbin /usr/local/bin /opt/local/bin
-    /opt/bin
+    /usr/local/sbin /usr/local/bin
 )
 
 # Go, which is tipically installed in /usr/local/go; note: on OSX this can be
@@ -53,12 +20,16 @@ if [[ -d /usr/local/go ]]; then
     path+=/usr/local/go/bin
 fi
 
+# Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
 # instead of the PATH environment variable).
-[[ -d ~/bin ]] && path+=~/bin
+[[ -d $HOME/bin ]] && path+=$HOME/bin
 # same for ~/local
-LOCAL_PKGS=~/local
-[[ -d $LOCAL_PKGS/bin ]] && path+=$LOCAL_PKGS/bin
+[[ -d $HOME/local/bin ]] && path+=$HOME/local/bin
+
+[[ -d /opt/bin ]] && path+=/opt/bin
+[[ -d /opt/local/bin ]] && path+=/opt/local/bin
+[[ -d /usr/games ]] && path+=/usr/games
 # }}}
 
 
@@ -68,14 +39,6 @@ export RSYNC_RSH="ssh"
 
 # Format string for 'time' command:
 TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
-
-# Se la shell e' interattiva, usa 026.
-#if [[ $- == *i* ]]; then
-#	# u+rw, g+r, o+NIENTE
-#	umask 026
-#else
-#	umask 022
-#fi
 
 # Set the umask
 if [[ $UID == 0 ]]; then
@@ -96,5 +59,8 @@ done
 
 # Ruby RVM path (for scripting)
 [[ -d $HOME/.rvm/bin ]] && path+=$HOME/.rvm/bin
+
+# Load local zshenv
+[[ -f $HOME/.zshenv.local ]] && source $HOME/.zshenv.local
 
 # vim: ft=zsh
