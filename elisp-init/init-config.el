@@ -32,9 +32,6 @@
 ;; show keystrokes in minibuffer early
 (setq echo-keystrokes 0.1)
 
-;; major mode for scracth buffer
-(setq initial-major-mode 'emacs-lisp-mode)
-
 ;; delete region if typing
 (pending-delete-mode 1)
 
