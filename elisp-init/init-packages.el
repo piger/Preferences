@@ -42,6 +42,7 @@
    company-go
    gotest
    helm
+   helm-projectile
    evil
    flx-ido
    ido-ubiquitous
@@ -49,6 +50,7 @@
    js2-mode
    json-mode
    less-css-mode
+   git-gutter
    magit
    markdown-mode
    move-text
@@ -56,11 +58,11 @@
    ; osx-plist
    projectile
    php-mode
-   pyenv-mode
-   anaconda-mode
+   ;; pyenv-mode
+   ;; anaconda-mode
    rainbow-mode
    rainbow-delimiters
-   smex
+   ;; smex
    undo-tree
    volatile-highlights
    web-mode

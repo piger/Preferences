@@ -1,28 +1,33 @@
 ;;; general modes configuration
 
-(use-package ido
-  :init
-  (progn
-    (ido-mode +1)
-    (ido-everywhere +1))
-  :config
-  (progn
-    (setq ido-enable-prefix nil
-          ido-enable-flex-matching t
-          ido-everywhere t)
-    (add-to-list 'ido-ignore-files "\\.DS_Store")))
+;;; 2/11/2014 - provo a usare Helm
+;; (use-package ido
+;;   :init
+;;   (progn
+;;     (ido-mode +1)
+;;     (ido-everywhere +1))
+;;   :config
+;;   (progn
+;;     (setq ido-enable-prefix nil
+;;           ido-enable-flex-matching t
+;;           ido-everywhere t)
+;;     (add-to-list 'ido-ignore-files "\\.DS_Store")))
 
-(use-package flx-ido
-  :init (flx-ido-mode 1))
+;; (use-package flx-ido
+;;   :init (flx-ido-mode 1))
 
 (use-package helm
   :init
   (progn
     (require 'helm-config)
-    (setq helm-candidate-number-limit 100)
+    (setq helm-candidate-number-limit 100
+          helm-split-window-in-side-p t
+          helm-ff-file-name-history-use-recentf t)
     (helm-mode))
   :diminish helm-mode
-  :bind (("C-c h" . helm-mini)))
+  :bind
+  (("C-c h" . helm-mini)
+   ("M-x" . helm-M-x)))
 
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
@@ -48,11 +53,12 @@
 ;;; (yas-global-mode 1
 ;;; (yas-reload-all)
 
-(use-package smex
-  :init (smex-initialize)
-  :bind
-  ("M-x" . smex)
-  ("M-X" . smex-major-mode-commands))
+;; helm-M-x è meglio? - 02/11/2014
+;; (use-package smex
+;;   :init (smex-initialize)
+;;   :bind
+;;   ("M-x" . smex)
+;;   ("M-X" . smex-major-mode-commands))
 
 ;; editor di regexp che evita la pazzia dei backslash
 ;; (require 're-builder)
