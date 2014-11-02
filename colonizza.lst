@@ -1,14 +1,15 @@
+ackrc
 aria2.conf
-jrnl_config
+emacs-init.el .emacs.d/init.el
 gitconfig
+gvimrc
+jrnl_config
+lftprc
+pdbrc
+pythonrc.py
+taskrc
+tmux.conf
 vim
 vimrc
-gvimrc
-pythonrc.py
-zshenv
 zsh/zshrc
-tmux.conf
-lftprc
-taskrc
-pdbrc
-emacs-init.el .emacs.d/init.el
+zshenv
