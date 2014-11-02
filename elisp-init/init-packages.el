@@ -98,16 +98,17 @@
 ;; install missing packages
 (pl-install-packages)
 
+;; enable use-package asap
+(require 'use-package)
+
 ;; `exec()` PATH from shell
 ;; Questo va messo PRIMA di tutto perche' altrimenti tutti i PATH
 ;; presi dai vari plugin non prendono il setting e pescano la roba in
 ;; /usr/bin invece di /usr/local/bin
-(require 'exec-path-from-shell)
-
 (when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
-
-;; enable use-package
-(require 'use-package)
+  (setq exec-path-from-shell-variables
+        '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
+  (use-package exec-path-from-shell
+    :init (exec-path-from-shell-initialize)))
 
 (provide 'init-packages)
