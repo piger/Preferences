@@ -27,6 +27,7 @@
 (defvar my-packages
  '(anzu
    ack-and-a-half
+   ace-jump-mode
    apache-mode
    base16-theme
    browse-kill-ring

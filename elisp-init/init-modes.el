@@ -287,6 +287,9 @@
   (setq ispell-program-name "aspell"
         ispell-extra-args '("--sug-mode=ultra")))
 
+(use-package ace-jump-mode
+  :bind ("C-c SPC" . ace-jump-mode))
+
 ;;; org-mode
 ; general setup
 (global-set-key "\C-cl" 'org-store-link)
