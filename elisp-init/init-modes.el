@@ -284,7 +284,12 @@
 
 (use-package anzu
   :init (global-anzu-mode)
-  :diminish anzu-mode)
+  :diminish anzu-mode
+  :config
+  (progn
+    (set-face-attribute 'anzu-mode-line nil
+                        :foreground "orange" :weight 'bold)
+    (setq anzu-minimum-input-length 3)))
 
 (use-package flyspell
   :config
