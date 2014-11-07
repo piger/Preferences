@@ -2,8 +2,9 @@
 
 ;; try to use GNU ls from coreutils (installed with homebrew)
 (let ((gnu-ls "/usr/local/bin/gls"))
-  (if (file-exists-p gnu-ls)
-      (setq insert-directory-program gnu-ls)))
+  (when (file-exists-p gnu-ls)
+    (setq insert-directory-program gnu-ls)
+    (setq dired-listing-switches "-aBhl --group-directories-first")))
 
 ;; non so se serve anche questo:
 ;; (setq ls-lisp-use-insert-directory-program t)  ;; use external ls
