@@ -158,11 +158,11 @@
 
 (add-hook 'prog-mode-hook
           (lambda ()
-            (use-package idle-highlight-mode
-              :init (idle-highlight-mode t))
+            ;; (use-package idle-highlight-mode
+            ;;   :init (idle-highlight-mode t))
             (prelude-font-lock-comment-annotations)
             (rainbow-delimiters-mode t)
-            (setq show-trailing-whitespace t)
+            ;; (setq show-trailing-whitespace t)
             (subword-mode t)))
 
 (use-package js2-mode
