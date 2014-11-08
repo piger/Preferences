@@ -13,3 +13,4 @@ vim
 vimrc
 zsh/zshrc
 zshenv
+sqliterc
