@@ -11,7 +11,7 @@
 ;; load settings file
 (require 'org)
 (org-babel-load-file
- (expand-file-name "~/Dropbox/org/emacs-settings.org"))
+ (expand-file-name "~/Preferences/emacs-settings.org"))
 
 ;; display loading time
 (let ((elapsed (float-time (time-subtract (current-time)
