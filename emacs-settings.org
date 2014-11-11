@@ -63,15 +63,15 @@ General emacs shortcuts:
 
 Org shortcuts:
 
-| Shortcut    | What it does                        |
-|-------------+-------------------------------------|
-| C-c C-p     | jump to previous heading            |
-| C-c C-n     | jump to next heading                |
-| M-UP/DOWN   | move a heading/row/thing up or down |
-| C-c C-t     | toggle TODO state                   |
-| C-c a       | open Agenda                         |
-| C-c C-x C-i | start clocking the current task     |
-| C-c C-x C-o | stop clocking the current task      |
+| Shortcut      | What it does                        |
+|---------------+-------------------------------------|
+| =C-c C-p=     | jump to previous heading            |
+| =C-c C-n=     | jump to next heading                |
+| =M-UP/DOWN=   | move a heading/row/thing up or down |
+| =C-c C-t=     | toggle TODO state                   |
+| =C-c a=       | open Agenda                         |
+| =C-c C-x C-i= | start clocking the current task     |
+| =C-c C-x C-o= | stop clocking the current task      |
 
 A note about completion: =M-/= runs =dabbrev= (or =hippie-expand=) to
 *expand* text, while =TAB= runs try to complete the text using some
