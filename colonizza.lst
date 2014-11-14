@@ -14,3 +14,5 @@ vimrc
 zsh/zshrc
 zshenv
 sqliterc
+colordiffrc
+svn-config .subversion/config

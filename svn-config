@@ -1,0 +1,4 @@
+# -*- mode: conf-windows -*-
+
+[helpers]
+diff-cmd = svn-diff
