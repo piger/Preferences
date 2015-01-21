@@ -732,6 +732,14 @@ checking the script by running it.
           '(("go" . "/dev/go/src/.*\\.html\\'")))))
 #+END_SRC
 
+*** logstash
+
+Configure indentation for logstash-conf-mode:
+
+#+BEGIN_SRC emacs-lisp
+(custom-set-variables '(logstash-indent 2))
+#+END_SRC
+
 ** Modes configuration
 
 *** ido
