@@ -379,7 +379,8 @@ Save the minibuffer history:
 (require 'tramp)
 ;; (setq tramp-default-method "ssh")
 
-(add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
+;; 08/04/2015 - mi stai sul cazzo porcodio, ti commento
+;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
