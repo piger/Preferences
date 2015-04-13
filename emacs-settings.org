@@ -901,10 +901,13 @@ Provides a better interface to open buffers.
 
 *** git-gutter
 
+13/04/2015 lo commento perche' di default mi sta un po' sul cazzo,
+sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
+
 #+BEGIN_SRC emacs-lisp
-(use-package git-gutter
-  :diminish git-gutter-mode
-  :init (global-git-gutter-mode +1))
+;; (use-package git-gutter
+;;   :diminish git-gutter-mode
+;;   :init (global-git-gutter-mode +1))
 #+END_SRC
 
 *** dired-x
