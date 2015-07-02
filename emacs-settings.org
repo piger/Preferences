@@ -1085,9 +1085,13 @@ Because Vim is the best text editor.
 *** volatile-highlights
 
 #+BEGIN_SRC emacs-lisp
-(use-package volatile-highlights
-  :init (volatile-highlights-mode +1)
-  :diminish volatile-highlights-mode)
+;; (use-package volatile-highlights
+;;   :init (volatile-highlights-mode +1)
+;;   :diminish volatile-highlights-mode)
+
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+(eval-after-load "volatile-highlights" '(diminish 'volatile-highlights-mode))
 #+END_SRC
 
 *** recentf
