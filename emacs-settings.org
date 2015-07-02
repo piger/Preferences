@@ -97,7 +97,12 @@ list.
            (>= emacs-minor-version 4))
   (add-to-list 'package-archives
                '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-  (setq package-pinned-packages '((magit . "melpa-stable"))))
+  (setq package-pinned-packages '(
+                                  (magit . "melpa-stable")
+                                  (with-editor . "melpa-stable")
+                                  (git-commit . "melpa-stable")
+                                  (magit-popup . "melpa-stable")
+                                  )))
 
 ;; load and activate installed packages
 (package-initialize)
