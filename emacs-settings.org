@@ -129,7 +129,6 @@ list.
 
 (defvar my-packages
  '(anzu
-   ack-and-a-half
    ace-jump-mode
    alert
    apache-mode
@@ -204,7 +203,11 @@ list.
 (pl-install-packages)
 
 ;; enable use-package asap
-(require 'use-package)
+;; !! changed in use-package 2.0
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
 
 ;; `exec()` PATH from shell
 ;; Questo va messo PRIMA di tutto perche' altrimenti tutti i PATH
@@ -213,8 +216,7 @@ list.
 (when (memq window-system '(mac ns))
   (setq exec-path-from-shell-variables
         '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
-  (use-package exec-path-from-shell
-    :init (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 #+END_SRC
 
@@ -749,17 +751,16 @@ checking the script by running it.
 
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
-  :init
-  (progn
-    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+  :mode (("\\.erb\\'" . web-mode)
+         ("\\.hbs\\'" . web-mode)
+         ("\\.html?\\'" . web-mode))
+  :init (setq web-mode-engines-alist
+              '(("go" . "/go/src/.*\\.html\\'")))
   :config
   (progn
     (add-hook 'web-mode-hook (lambda ()
-                               (local-set-key (kbd "RET") 'newline-and-indent)))
-    (setq web-mode-engines-alist
-          '(("go" . "/dev/go/src/.*\\.html\\'")))))
+                               (local-set-key (kbd "RET") 'newline-and-indent)))))
+
 #+END_SRC
 
 *** logstash
@@ -802,18 +803,24 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
 
 #+BEGIN_SRC emacs-lisp
 (use-package helm
-  :init
+  :ensure t
+  :demand t
+  :config
   (progn
     (require 'helm-config)
     (setq helm-candidate-number-limit 100
           helm-split-window-in-side-p t
           helm-ff-file-name-history-use-recentf t)
-    (helm-mode))
+    (helm-mode 1))
   :diminish helm-mode
   :bind
   (("C-c h" . helm-mini)
    ("M-x" . helm-M-x)))
+#+END_SRC
 
+Other random helm things:
+
+#+BEGIN_SRC emacs-lisp
 (defvar helm-httpstatus-source
   '((name . "HTTP STATUS")
     (candidates . (("100 Continue") ("101 Switching Protocols")
@@ -1046,30 +1053,18 @@ Because Vim is the best text editor.
                                   (run-hooks 'pl-elisp-mode-hooks)))
 #+END_SRC
 
-*** ack-and-a-half
-
-#+BEGIN_SRC emacs-lisp
-(use-package ack-and-a-half
-  :init
-  (progn
-    (defalias 'ack 'ack-and-a-half)
-    (defalias 'ack-same 'ack-and-a-half-same)
-    (defalias 'ack-find-file 'ack-and-a-half-find-file)
-    (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)))
-#+END_SRC
-
 *** projectile
 
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
-  :bind ("\C-cf" . projectile-find-file)
-  :init
+  :config
   (progn
     (projectile-global-mode +1)
-    (use-package helm-projectile
-      :init (helm-projectile-on)))
-  :config
-  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))))
+    (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name))))
+    (require 'helm-projectile)
+    (helm-projectile-on))
+  :bind
+  ("\C-cf" . projectile-find-file))
 #+END_SRC
 
 *** company (completion)
@@ -1083,10 +1078,8 @@ Because Vim is the best text editor.
 #+BEGIN_SRC emacs-lisp
 ;; apache-mode
 (use-package apache-mode
-  :init
-  (progn
-    (add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
-    (add-to-list 'auto-mode-alist '("sites-\\(available|enabled\\)/" . apache-mode))))
+  :mode (("\\.htaccess\\'" . apache-mode)
+         ("sites-\\(available|enabled\\)/" . apache-mode)))
 #+END_SRC
 
 *** outline
@@ -1134,22 +1127,22 @@ Because Vim is the best text editor.
 Keep track of recent used files.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :init
-    (progn
-      (setq recentf-max-saved-items 300
-            recentf-max-menu-items 20
-            recentf-exclude '(".recentf" "/elpa/" "\\.ido.last" "/ssh:" "/tmp/"
-                              "COMMIT_EDITMSG" ".gz")
-            recentf-auto-cleanup 600)
-      (when (not noninteractive) (recentf-mode t))))
+(use-package recentf
+  :config
+  (progn
+    (setq recentf-max-saved-items 300
+          recentf-max-menu-items 20
+          recentf-exclude '(".recentf" "/elpa/" "\\.ido.last" "/ssh:" "/tmp/"
+                            "COMMIT_EDITMSG" ".gz")
+          recentf-auto-cleanup 600)
+    (recentf-mode +1)))
 #+END_SRC
 
 *** undo-tree
 
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
-  :init (global-undo-tree-mode +1)
+  :config (global-undo-tree-mode +1)
   :diminish undo-tree-mode)
 #+END_SRC
 
@@ -1160,7 +1153,7 @@ Bindings: =C-c LEFT= and =C-c RIGHT=.
 
 #+BEGIN_SRC emacs-lisp
 (use-package winner
-  :init (winner-mode +1))
+  :config (winner-mode +1))
 #+END_SRC
 
 *** anzu
@@ -1169,10 +1162,10 @@ things telling you how many matches was found for the current search.
 
 #+BEGIN_SRC emacs-lisp
 (use-package anzu
-  :init (global-anzu-mode)
   :diminish anzu-mode
   :config
   (progn
+    (global-anzu-mode +1)
     (set-face-attribute 'anzu-mode-line nil
                         :foreground "orange" :weight 'bold)
     (setq anzu-minimum-input-length 3)))
@@ -1319,6 +1312,17 @@ Use terminal-notifier to notify stuff.
         (setq alert-default-style 'terminal-notifier))))
 #+END_SRC
 
+*** smart-mode-line
+
+I'm trying [[https://github.com/Malabarba/smart-mode-line][smart-mode-line]] just to have a better visual of the current
+active window.
+
+#+BEGIN_SRC emacs-lisp
+(use-package smart-mode-line
+  :ensure t
+  :init (setq sml/theme 'dark)
+  :config (sml/setup))
+#+END_SRC
 ** Aliases
 I'd like to have more aliases... :)
 
