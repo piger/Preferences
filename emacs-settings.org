@@ -455,6 +455,8 @@ Including indent-buffer, which should not be called automatically on save."
     "Magit is available with <C-x g>"
     "Press <j u> in Magit to jump to unstaged files"
     "disable-theme can unload a theme"
+    "In helm-mini you can search for a @pattern inside a file; M-s to see context"
+    "C-c SPC to ace-jump to a word"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
