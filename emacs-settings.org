@@ -597,6 +597,33 @@ Search Wikipedia using =eww=:
                 (url-encode-url text))))
 #+END_SRC
 
+Easily insert RST links (from Fabrizio Furnari):
+
+#+BEGIN_SRC emacs-lisp
+(defun insert-rst-reference (url)
+  "Inserts footnote link in rst format"
+  (interactive "sURL: ")
+  (if (use-region-p)
+      (let (
+            (beg (region-beginning))
+            (end (region-end))
+            (name (buffer-substring-no-properties (region-beginning) (region-end))))
+        
+        (goto-char beg)
+        (insert "`")
+        (goto-char end)
+        (forward-char)
+        (insert "`_")
+        (deactivate-mark)
+        (save-excursion
+          (goto-char (point-max))
+          (newline)
+          (insert ".. _" name ": " url))))
+  (error "No region selected!"))
+
+(global-set-key (kbd "C-c l") 'insert-rst-reference)
+#+END_SRC
+
 ** Keyboard bindings
 
 #+BEGIN_SRC emacs-lisp
