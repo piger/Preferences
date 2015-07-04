@@ -49,6 +49,26 @@ Light themes:
 - flatui (light)
 - leuven (light)
 
+List of interesting themes that I prefer to have listed here instead
+of being installed locally, cluttering my =package-list-packages=
+invocations with useless updates.
+
+- atom-one-dark-theme
+- birds-of-paradise
+- color-theme-sanityinc-tomorrow
+- flatui-theme
+- leuven-theme
+- material-theme
+- moe-theme
+- obsidian-theme
+- soft-morning-theme
+- solarized-theme
+- tangotango-theme
+- twiligh-anti-bright-theme
+- twilight-bright-theme
+- twilight-theme
+- ujelly-theme
+
 ** Keyboard shortcuts
 General emacs shortcuts:
 
@@ -114,7 +134,7 @@ list.
    alert
    apache-mode
    base16-theme
-   browse-kill-ring
+   ; browse-kill-ring
    buffer-move
    company
    dictionary
@@ -130,8 +150,8 @@ list.
    helm
    helm-projectile
    evil
-   flx-ido
-   ido-ubiquitous
+   ; flx-ido
+   ; ido-ubiquitous
    ; xkcd
    js2-mode
    json-mode
@@ -612,15 +632,16 @@ Search Wikipedia using =eww=:
 
 #+BEGIN_SRC emacs-lisp
 ;; miei script
-(add-to-list 'load-path "~/Preferences/elisp")
+(when (file-exists-p "~/Preferences/elisp")
+  (add-to-list 'load-path "~/Preferences/elisp")
 
-;;; nagios-mode (da elisp locale)
-(autoload 'nagios-mode "nagios-mode" nil t)
+  ; nagios-mode (da elisp locale)
+  (autoload 'nagios-mode "nagios-mode" nil t))
 
 ;;; themes
 ;;; https://github.com/owainlewis/emacs-color-themes
-(add-to-list 'load-path "~/Preferences/elisp/themes/tomorrow-theme")
-(add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/tomorrow-theme")
+; (add-to-list 'load-path "~/Preferences/elisp/themes/tomorrow-theme")
+; (add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/tomorrow-theme")
 
 ;; gettext on OS X ships with additional elisp files
 (when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
@@ -651,6 +672,9 @@ checking the script by running it.
     "Defaults for python-mode."
     (subword-mode +1)
     (show-paren-mode +1)
+    (company-mode +1)
+    ;; eldoc needs a running python interpreter
+    ;; (eldoc-mode +1)
     ;; unfuck electric indentation
     (setq electric-indent-chars '(?\n)))
   (add-hook 'python-mode-hook 'piger/python-mode-hooks))
@@ -985,14 +1009,26 @@ Because Vim is the best text editor.
 **** TODO this must be moved!
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'prog-mode-hook
-          (lambda ()
-            ;; (use-package idle-highlight-mode
-            ;;   :init (idle-highlight-mode t))
-            (prelude-font-lock-comment-annotations)
-            (rainbow-delimiters-mode t)
-            ;; (setq show-trailing-whitespace t)
-            (subword-mode t)))
+(defun moo-prog-mode-defaults ()
+  "Default coding hook, useful with any programming language"
+  (rainbow-delimiters-mode t)
+  (company-mode t)
+  (prelude-font-lock-comment-annotations)
+  (subword-mode t))
+
+(setq moo-prog-mode-hook 'moo-prog-mode-defaults)
+
+(add-hook 'prog-mode-hook (lambda ()
+                            (run-hooks 'moo-prog-mode-hooks)))
+
+;; (add-hook 'prog-mode-hook
+;;           (lambda ()
+;;             ;; (use-package idle-highlight-mode
+;;             ;;   :init (idle-highlight-mode t))
+;;             (prelude-font-lock-comment-annotations)
+;;             (rainbow-delimiters-mode t)
+;;             ;; (setq show-trailing-whitespace t)
+;;             (subword-mode t)))
 #+END_SRC
 
 *** elisp
