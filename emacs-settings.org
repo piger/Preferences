@@ -421,28 +421,6 @@ Save the minibuffer history:
 ** Custom functions
 A small collection of elisp functions taken from the internet.
 
-Browse the recentf file list with ido (*DEPRECATED*, I use helm now):
-
-#+BEGIN_SRC emacs-lisp :tangle no
-;; use ido to browse recentf files
-;; http://www.xsteve.at/prg/emacs/power-user-tips.html
-(defun ido-recentf ()
-  "Use ido bla"
-  (interactive)
-  (let ((home (expand-file-name (getenv "HOME"))))
-    (find-file
-     (ido-completing-read "Recentf open: "
-                          (mapcar (lambda (path)
-                                    (replace-regexp-in-string home "~" path))
-                                  recentf-list)
-                          nil t))))
-(if *is-a-mac*
-    (global-set-key [(hyper r)] 'ido-recentf)
-  (global-set-key (kbd "s-r") 'ido-recentf))
-#+END_SRC
-
-Unsorted code:
-
 #+BEGIN_SRC emacs-lisp
 ;;; https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el
 (defun untabify-buffer ()
