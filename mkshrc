@@ -1,0 +1,11 @@
+# mksh rc file
+
+alias ls='gls --color=auto -FA'
+
+SHORTNAME=${HOSTNAME:=$(hostname)}
+SHORTNAME=${SHORTNAME%%.*}
+
+PS1='${USER:=$(id -un)}'"@${SHORTNAME}:\$PWD $(
+        if (( USER_ID )); then print \$; else print \#; fi) "
+
+unset SHORTNAME
