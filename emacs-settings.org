@@ -167,7 +167,6 @@ list.
    ;; anaconda-mode
    rainbow-mode
    rainbow-delimiters
-   ;; smex
    undo-tree
    volatile-highlights
    web-mode
@@ -536,7 +535,9 @@ point reaches the beginning or end of the buffer, stop there."
                 'smarter-move-beginning-of-line)
 #+END_SRC
 
-Open a /terminal/ buffer:
+Use this command to create a new terminal buffer; use =C-x C-j= to
+switch to =term-line-mode=, where you can select text and =C-c C-k= to
+switch back to =character-mode=.
 
 #+BEGIN_SRC emacs-lisp
 (defun visit-term-buffer ()
@@ -903,6 +904,18 @@ Provides a better interface to open buffers.
   :config (windmove-default-keybindings 'meta))
 #+END_SRC
 
+*** transpose-frame
+
+This package provides some useful commands to move windows around, for
+example =transpose-frame= on a frame with two vertical windows will
+give you an horizontal split.
+
+#+BEGIN_SRC emacs-lisp
+(use-package transpose-frame
+  :ensure t
+  :bind (("C-x j" . transpose-frame)))
+#+END_SRC
+
 *** yasnippet
 
 #+BEGIN_SRC emacs-lisp
@@ -913,17 +926,6 @@ Provides a better interface to open buffers.
 ;; (yas-reload-all)!
 ;;; (yas-global-mode 1
 ;;; (yas-reload-all)
-#+END_SRC
-
-*** smex
-
-#+BEGIN_SRC emacs-lisp
-;; helm-M-x è meglio? - 02/11/2014
-;; (use-package smex
-;;   :init (smex-initialize)
-;;   :bind
-;;   ("M-x" . smex)
-;;   ("M-X" . smex-major-mode-commands))
 #+END_SRC
 
 *** re-builder
@@ -948,20 +950,23 @@ Provides a better interface to open buffers.
 sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
 
 #+BEGIN_SRC emacs-lisp
-;; (use-package git-gutter
-;;   :diminish git-gutter-mode
-;;   :init (global-git-gutter-mode +1))
+(use-package git-gutter
+  :diminish git-gutter-mode)
 #+END_SRC
 
 *** dired-x
 
+I've followed the installation [[http://www.gnu.org/software/emacs/manual/html_node/dired-x/Installation.html#Installation][guide]].
+
 #+BEGIN_SRC emacs-lisp
-(use-package dired
-  :bind ("C-x C-j" . dired-jump)
-  :config
-  (progn
-    (use-package dired-x)
-    (add-hook 'dired-mode-hook (lambda () (hl-line-mode t)))))
+(add-hook 'dired-load-hook
+          (lambda ()
+            (load "dired-x")
+            ))
+(add-hook 'dired-mode-hook
+          (lambda ()
+            (hl-line-mode +1)
+            ))
 #+END_SRC
 
 *** expand-region
@@ -1069,9 +1074,7 @@ Because Vim is the best text editor.
     (projectile-global-mode +1)
     (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name))))
     (require 'helm-projectile)
-    (helm-projectile-on))
-  :bind
-  ("\C-cf" . projectile-find-file))
+    (helm-projectile-on)))
 #+END_SRC
 
 *** company (completion)
