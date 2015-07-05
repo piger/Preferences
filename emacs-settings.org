@@ -812,6 +812,23 @@ Configure indentation for logstash-conf-mode:
 
 ** Modes configuration
 
+*** A note on C programming
+
+If you need to alter the indenting value check out the following
+variables:
+
+- =c-basic-offset=
+- =tab-width=
+- =indent-tabs-mode=
+
+Ad esempio:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default c-basic-offset 8
+              tab-width 8
+              indent-tabs-mode t)
+#+END_SRC
+
 *** ido
 
 #+BEGIN_SRC emacs-lisp
@@ -1377,6 +1394,15 @@ active window.
   :init (setq sml/theme 'dark)
   :config (sml/setup))
 #+END_SRC
+*** [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
+
+A minor mode which guesses the indentation offset of a source file and
+adjust the corresponding configuration in Emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dtrt-indent)
+#+END_SRC
+
 ** Aliases
 I'd like to have more aliases... :)
 
