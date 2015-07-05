@@ -69,6 +69,8 @@ invocations with useless updates.
 - twilight-theme
 - ujelly-theme
 
+A page with an overview of [[http://raebear.net/comp/emacscolors.html][available colors]].
+
 ** Keyboard shortcuts
 General emacs shortcuts:
 
@@ -122,6 +124,7 @@ list.
                                   (with-editor . "melpa-stable")
                                   (git-commit . "melpa-stable")
                                   (magit-popup . "melpa-stable")
+                                  (flycheck . "melpa-stable")
                                   )))
 
 ;; load and activate installed packages
@@ -355,7 +358,7 @@ Save the minibuffer history:
                                           "%b"))))
 
 ;; highlight the current line
-;; (global-hl-line-mode +1)
+(global-hl-line-mode +1)
 
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
@@ -607,9 +610,32 @@ Easily insert RST links (from Fabrizio Furnari):
 
 ** Keyboard bindings
 
+Mac OS X customization. Note that you should use my modified keyboard
+layout which permits accented characters.
+
+#+BEGIN_SRC emacs-lisp
+(when (eq system-type 'darwin)
+  ;; Smart assignments of Mac specific keys
+  (setq mac-option-modifier 'meta)
+  (setq mac-command-modifier 'hyper)
+  (setq mac-function-modifier 'super)  ;; questo sposta SUPER sul tasto Fn
+  (setq mac-right-option-modifier nil) ;; questo permette le accentate con ALT destro
+
+  ;; Key bindings with the CMD key
+  (global-set-key [(hyper a)] 'mark-whole-buffer)
+  (global-set-key [(hyper v)] 'yank)
+  (global-set-key [(hyper c)] 'kill-ring-save)
+  (global-set-key [(hyper s)] 'save-buffer)
+  (global-set-key [(hyper l)] 'goto-line)
+  (global-set-key [(hyper w)]
+                  (lambda () (interactive) (delete-window)))
+  (global-set-key [(hyper z)] 'undo))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 ;; hippie-expand al posto di dabbrev-expand
-(global-set-key (kbd "M-/") 'hippie-expand)
+;; <2015-07-05 Sun> lo disabilito perché mi sembra esagerato.
+;(global-set-key (kbd "M-/") 'hippie-expand)
 
 ;;; swap default search mode to regexp 
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
@@ -659,6 +685,12 @@ Easily insert RST links (from Fabrizio Furnari):
 #+END_SRC
 
 ** Programming
+*** flycheck
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck)
+#+END_SRC
+
 *** Shell
 Not much configuration for shell scripting at the moment. I prefer to
 let emacs guess the indentation level. I disable flycheck to avoid
@@ -1082,6 +1114,19 @@ Because Vim is the best text editor.
 #+BEGIN_SRC emacs-lisp
 (use-package company)
 #+END_SRC
+
+For python you need:
+
+- anaconda-mode (+ pip install jedi)
+- company
+- company-anaconda
+
+And run this code:
+#+BEGIN_SRC emacs-lisp :tangle no
+(add-to-list 'company-backends 'company-anaconda)
+#+END_SRC
+
+To start completion you can use =C-M-i=.
 
 *** apache
 
