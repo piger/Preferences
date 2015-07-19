@@ -748,9 +748,7 @@ checking the script by running it.
      ;; Enable go-oracle-mode if available
      (let ((oracle (executable-find "oracle")))
        (when oracle
-         (setq go-oracle-command oracle)
-         (autoload 'go-oracle-mode "oracle")
-         (add-hook 'go-mode-hook 'go-oracle-mode)))))
+         (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")))))
 #+END_SRC
 
 *** CSS
