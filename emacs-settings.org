@@ -1394,16 +1394,17 @@ active window.
   :init (setq sml/theme 'dark)
   :config (sml/setup))
 #+END_SRC
-*** [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
 
-A minor mode which guesses the indentation offset of a source file and
-adjust the corresponding configuration in Emacs.
+*** dtrt-indent 						:new:
+
+[[https://github.com/jscheid/dtrt-indent][dtrt-indent]] is a minor mode which guesses the indentation offset of a
+source file and adjust the corresponding configuration in Emacs.
 
 #+BEGIN_SRC emacs-lisp
 (use-package dtrt-indent)
 #+END_SRC
 
-*** which-key
+*** which-key								:new:
 
 [[https://github.com/justbur/emacs-which-key][which-key]] whill show a list of possible completion for the key binding
 typed so far; it's very useful for less used modes (like Org), for
