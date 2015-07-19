@@ -135,6 +135,7 @@ list.
    ; anaconda-mode
    ; pyenv-mode
    ; yasnippet
+   ; google-translate
    ace-jump-mode
    alert
    anzu
@@ -1402,6 +1403,19 @@ adjust the corresponding configuration in Emacs.
 
 #+BEGIN_SRC emacs-lisp
 (use-package dtrt-indent)
+#+END_SRC
+
+*** which-key
+
+[[https://github.com/justbur/emacs-which-key][which-key]] whill show a list of possible completion for the key binding
+typed so far; it's very useful for less used modes (like Org), for
+example I can press =C-c= and then read the list of org bindings.
+
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config (which-key-mode))
 #+END_SRC
 
 ** Aliases
