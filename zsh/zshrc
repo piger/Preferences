@@ -382,11 +382,12 @@ bindkey  '^z' undo			# CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
 # predict
-autoload -Uz predict-on
-zle -N predict-on
-zle -N predict-off
-bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
-bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
+# [NOTA: non è per niente comodo...]
+# autoload -Uz predict-on
+# zle -N predict-on
+# zle -N predict-off
+# bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
+# bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
 
 # sudo
 # Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
