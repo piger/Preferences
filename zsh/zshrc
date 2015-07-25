@@ -1,4 +1,8 @@
 # -*- mode: shell-script; eval: (outline-minor-mode t) -*-
+
+# Uncomment here and at the bottom of this file to profile this file
+# zmodload zsh/zprof
+
 #
 # ┻━┻︵ \(°□°)/ ︵ ┻━┻
 # FLIP ALL DEM TABLEZ!
@@ -7,7 +11,7 @@
 # Settings can be customized inside ~/.zshenv.local.
 PERCOL_CMD=${PERCOL_CMD:-peco}
 DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
-FORTUNE_GREETING=${FORTUNE_GREETING:-1}
+FORTUNE_GREETING=${FORTUNE_GREETING:-0}
 FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
 LOCAL_CONFIG=${LOCAL_CONFIG:-$HOME/.zshrc.local}
 # }}}
@@ -778,7 +782,8 @@ zle -N expand-or-complete-prefix-with-indicator
 [[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
 [[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
 
-# brew - zsh-completions
+# zsh-completions
+# OS X: install with "brew install zsh-completions"
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
 # compinstall, dilemma TODO
@@ -959,6 +964,7 @@ fi
 # fortune -e serve per scegliere equamente tra tutti i fortune file
 # presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]]; then
+    echo culo
     if (( $+commands[fortune] )); then
 	if [[ -d "$FORTUNES_DIRECTORY" ]]; then
 	    print; fortune -e "$FORTUNES_DIRECTORY"; print
@@ -1075,3 +1081,5 @@ fi
 FOO="grosso peto che esce dalle chiappe roboanti"
 # Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
 # return 0
+
+# zprof
