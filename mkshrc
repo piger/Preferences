@@ -1,11 +1,9 @@
+# -*- shell-script -*-
 # mksh rc file
 
 alias ls='gls --color=auto -FA'
 
-SHORTNAME=${HOSTNAME:=$(hostname)}
-SHORTNAME=${SHORTNAME%%.*}
+HOSTNAME=${HOSTNAME:=$(hostname)}
 
-PS1='${USER:=$(id -un)}'"@${SHORTNAME}:\$PWD $(
+PS1='${USER:=$(id -un)}'"@${HOSTNAME%%.*}:\${PWD/#\$HOME/~} $(
         if (( USER_ID )); then print \$; else print \#; fi) "
-
-unset SHORTNAME
