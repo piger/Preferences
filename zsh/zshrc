@@ -647,8 +647,8 @@ elif [[ $OSTYPE = linux* ]]; then
 elif [[ $OSTYPE = openbsd* ]]; then
     # *** OPENBSD ***
 
-    export OBSD_CVSROOT=anoncvs@anoncvs.at.openbsd.org:/cvs
-    (( ${+PKG_PATH} )) || export PKG_PATH="ftp://ftp.kd85.com/pub/OpenBSD/4.6-EXAMPLE/packages/i386-EXAMPLE/"
+    export OBSD_CVSROOT="anoncvs@anoncvs.at.openbsd.org:/cvs"
+    export PKG_PATH=${PKG_PATH:="ftp://ftp.kd85.com/pub/OpenBSD/$(uname -r)/packages/$(uname -m)/"}
 
     if (( $+commands[gls] )); then
         alias ls="gls --color=auto $ls_options"
@@ -657,7 +657,6 @@ elif [[ $OSTYPE = openbsd* ]]; then
     fi
 
     alias pfdump="tcpdump -n -e -ttt -i pflog0"
-    alias killppp="kill -TERM \$(cat /var/run/tun0.pid)"
     alias pfrerules="pfctl -F rules -R -f /etc/pf.conf"
     alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
     alias flavors='make show=FLAVORS'
