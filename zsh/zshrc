@@ -16,6 +16,11 @@ FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
 LOCAL_CONFIG=${LOCAL_CONFIG:-$HOME/.zshrc.local}
 # }}}
 
+# NOTES {{{
+# According to http://bewatermyfriend.org/p/2012/003/ 'autoload -Uz <name>' is
+# "the right thing"[tm] almost always.
+# }}}
+
 # OPTIONS {{{
 
 # If a command is issued that can't be executed as a normal command,
@@ -362,7 +367,7 @@ keyinfo=(
 
 # BINDINGS {{{
 # META+delete come in bash, invece che settare WORDCHARS
-autoload -U select-word-style
+autoload -Uz select-word-style
 select-word-style bash
 
 # emacs bindings (odio la modalita' vi)
@@ -377,7 +382,7 @@ bindkey  '^z' undo			# CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
 # predict
-autoload -U predict-on
+autoload -Uz predict-on
 zle -N predict-on
 zle -N predict-off
 bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
@@ -391,7 +396,7 @@ zle -N add-sudo _add-sudo
 bindkey '\es' add-sudo	
 
 # Edita la linea di comando con $EDITOR
-autoload -U edit-command-line
+autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
 
@@ -432,7 +437,7 @@ typeset -U fpath
 do_autoload () {
     [[ ! -d "$1" ]] && return
     fpath+=$1
-    autoload -U $1/*(:t)
+    autoload -Uz $1/*(:t)
 }
 
 do_autoload ~/.zsh/scripts
@@ -444,7 +449,7 @@ do_autoload ~/.zsh/functions
 # zsh-style autoloading  respectively
 ### autoload -Uz compinit
 ### compinit
-autoload -U zcalc zmv zargs
+autoload -Uz zcalc zmv zargs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
