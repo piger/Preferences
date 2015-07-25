@@ -813,6 +813,16 @@ checking the script by running it.
 
 #+END_SRC
 
+*** shell
+
+Hook function for shell-script mode(s). See also =sh-basic-offset=.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'sh-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
+#+END_SRC
+
 *** logstash
 
 Configure indentation for logstash-conf-mode:
