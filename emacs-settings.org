@@ -290,6 +290,14 @@ Save the minibuffer history:
 (savehist-mode 1)
 #+END_SRC
 
+**** Font configuration
+
+Here we could setup fonts; interesting list:
+
+- Menlo 12
+- Source Code Pro 11
+- Monoid 13
+
 *** Miscellaneous configuration
 
 #+BEGIN_SRC emacs-lisp
