@@ -19,6 +19,16 @@ This file is heavily inspired by [[http://p.writequit.org/org/settings.html#sec-
 Chua's Emacs configuration]], which could probably be nice to open
 directly from here [[https://raw.githubusercontent.com/dakrone/dakrone-dotfiles/master/.emacs.d/settings.org][Lee's emacs]] and [[https://raw.githubusercontent.com/sachac/.emacs.d/gh-pages/Sacha.org][Sacha.org]].
 
+Note about =setq= vs. =setq-default=:
+
+#+BEGIN_QUOTE
+If a variable is buffer-local, then setq sets its local value in the
+current buffer and setq-default sets the global default value.
+
+If a variable is not buffer-local, then setq and setq-default do the
+same thing.
+#+END_QUOTE
+
 ** Installation notes
 On OS X the best setup is achieved by installing the basic =emacs= for
 the command line and =emacs-mac-port= for the GUI; the latter has
@@ -817,7 +827,8 @@ checking the script by running it.
 
 Hook function for shell-script mode(s). See also =sh-basic-offset=.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
+;; NOTE: this code block is UNTANGLED! (i.e. disabled)
 (add-hook 'sh-mode-hook
           (lambda ()
             (setq indent-tabs-mode nil)))
@@ -844,7 +855,7 @@ variables:
 
 Ad esempio:
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (setq-default c-basic-offset 8
               tab-width 8
               indent-tabs-mode t)
