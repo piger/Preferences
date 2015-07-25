@@ -208,7 +208,7 @@ list.
 (require 'diminish)
 (require 'bind-key)
 
-; TODO Where to put this ?
+; TODO XXX subword-mode appears as " , " in emacs modeline...
 ; (diminish 'subword-mode)
 
 ;; `exec()` PATH from shell
@@ -714,6 +714,7 @@ checking the script by running it.
   (defun piger/python-mode-hooks ()
     "Defaults for python-mode."
     (subword-mode +1)
+    (diminish 'subword-mode)
     (show-paren-mode +1)
     (company-mode +1)
     ;; eldoc needs a running python interpreter
@@ -739,7 +740,8 @@ checking the script by running it.
        (go-eldoc-setup)
        (setq tab-width 2)
        (local-set-key (kbd "C-c C-k") 'godoc)
-       (subword-mode +1))
+       (subword-mode +1)
+       (diminish 'subword-mode))
 
      (setq prelude-go-mode-hook 'prelude-go-mode-defaults)
      (add-hook 'go-mode-hook (lambda ()
@@ -760,7 +762,8 @@ checking the script by running it.
     (use-package rainbow-mode)
     (setq css-indent-offset 2)
     (rainbow-mode +1)
-    (subword-mode +1)))
+    (subword-mode +1)
+    (diminish 'subword-mode)))
 #+END_SRC
 
 *** js2
@@ -1081,7 +1084,8 @@ Because Vim is the best text editor.
   (rainbow-delimiters-mode t)
   (company-mode t)
   (prelude-font-lock-comment-annotations)
-  (subword-mode t))
+  (subword-mode t)
+  (diminish 'subword-mode))
 
 (setq moo-prog-mode-hook 'moo-prog-mode-defaults)
 
