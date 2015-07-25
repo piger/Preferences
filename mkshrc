@@ -1,9 +1,19 @@
 # -*- shell-script -*-
 # mksh rc file
 
-alias ls='gls --color=auto -FA'
+alias ls='gls --color=auto -F'
 
 HOSTNAME=${HOSTNAME:=$(hostname)}
 
-PS1='${USER:=$(id -un)}'"@${HOSTNAME%%.*}:\${PWD/#\$HOME/~} $(
+function precmd() {
+    typeset e=$?
+
+    (( e )) && print -n "$e|"
+}
+
+PS1='$(precmd)${USER:=$(id -un)}'"@${HOSTNAME%%.*}:\${PWD/#\$HOME/~} $(
         if (( USER_ID )); then print \$; else print \#; fi) "
+
+export PAGER=less
+export EDITOR=vim
+export VISUAL=vim
