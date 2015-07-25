@@ -958,10 +958,9 @@ _complete_screen_display() {
     trap "rm -f $TMPFILE" EXIT
 
     if ((${+TMUX})); then
-	tmux -V &>/dev/null || return
-	tmux -q capture-pane \; save-buffer -b 0 $TMPFILE \; delete-buffer -b 0
+	tmux -q capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp
     else
-	echo "eh no"
+	echo "ahi ahi ahi no tmux"
 	return
     fi
     _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
