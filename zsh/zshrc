@@ -125,15 +125,15 @@ fi
 
 # https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
 rot13() {
-	echo $1 | tr "A-Za-z" "N-ZA-Mn-za-m"
+        echo $1 | tr "A-Za-z" "N-ZA-Mn-za-m"
 }
 
 latrus() {
-	echo $1 | tr "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+        echo $1 | tr "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM" "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
 }
 
 ruslat() {
-	echo $1 | tr "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM"
+        echo $1 | tr "йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ" "qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM"
 }
 
 urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $1 }
@@ -239,7 +239,7 @@ export FTP_PASSIVE=1
 
 # Controllo accessi al server
 watch=(notme)
-LOGCHECK=300		# check every 5 min for login/logout activity
+LOGCHECK=300            # check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
 # report about cpu-/system-/user-time of command if running longer than
@@ -262,7 +262,7 @@ setopt hist_ignore_dups
 setopt hist_no_store
 # quando si usa la history expansion non esegue direttamente, cosi'
 # vedi che stai per fare.
-setopt hist_verify		
+setopt hist_verify
 # non salva nella history le command line che iniziano con uno spazio
 # (utile quando si inseriscono pw)
 setopt hist_ignore_space
@@ -279,12 +279,12 @@ HISTFILE=$HOME/.history
 
 # COMMANDS CONFIGURATION {{{
 # Opzioni per less
-# -c	: pulisce lo schermo prima di mostrare il file
-# -i	: ignore case (ma una ricerca uppercase annulla l'opzione)
-# -M	: mostra percentuale del file ed e' piu' verboso di more
-# -R	: attiva i colori ANSI
+# -c    : pulisce lo schermo prima di mostrare il file
+# -i    : ignore case (ma una ricerca uppercase annulla l'opzione)
+# -M    : mostra percentuale del file ed e' piu' verboso di more
+# -R    : attiva i colori ANSI
 # -x<n> : lunghezza del tab
-# -w	: Temporarily highlights the first "new" line after a forward movement of a full page.
+# -w    : Temporarily highlights the first "new" line after a forward movement of a full page.
 # -J    : Mostra una 'status column' che indica la posizione dei match della ricerca.
 # -z-5  : Scrolling mantenendo 5 righe.
 LESS="-ciMRx4wJ -z-5"
@@ -317,7 +317,7 @@ export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # ssh-askpass
-(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$(which ssh-askpass) 
+(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$(which ssh-askpass)
 
 # LS OPTIONS
 ls_options='-F'
@@ -373,12 +373,12 @@ select-word-style bash
 # emacs bindings (odio la modalita' vi)
 bindkey -e
 
-bindkey  '\e[5~' up-history		# PageUp -> history up
-bindkey  '\e[6~' down-history 		# PageDown -> history down
-bindkey  '[Z' reverse-menu-complete	# SHIFT+TAB per il tab "all'indietro"
+bindkey  '\e[5~' up-history             # PageUp -> history up
+bindkey  '\e[6~' down-history           # PageDown -> history down
+bindkey  '[Z' reverse-menu-complete   # SHIFT+TAB per il tab "all'indietro"
 
 # CTRL, ALT & co.
-bindkey  '^z' undo			# CTRL+z per undo di expansion e completion
+bindkey  '^z' undo                      # CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
 # predict
@@ -386,20 +386,20 @@ bindkey  '\C-w' kill-region
 # autoload -Uz predict-on
 # zle -N predict-on
 # zle -N predict-off
-# bindkey "^X^Z" predict-on	# CTRL+X CTRL+Z per attivare il predict
-# bindkey "^Z" predict-off	# CTRL+Z per disattivare il predict
+# bindkey "^X^Z" predict-on     # CTRL+X CTRL+Z per attivare il predict
+# bindkey "^Z" predict-off      # CTRL+Z per disattivare il predict
 
 # sudo
 # Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
 _add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
 zle -N add-sudo _add-sudo
 # ALT+s per inserire 'sudo' a inizio cmdline.
-bindkey '\es' add-sudo	
+bindkey '\es' add-sudo
 
 # Edita la linea di comando con $EDITOR
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey '\ee' edit-command-line		# ALT+e per editare la cmdline
+bindkey '\ee' edit-command-line         # ALT+e per editare la cmdline
 
 # Alt+m copia la parola precedente, comodo per i file rename.
 bindkey "^[m" copy-prev-shell-word
@@ -479,16 +479,16 @@ lazy_vcs_info() {
     dev_dirs=(~/dev ~/dev.ai)
 
     for d in $dev_dirs; do
-	if [[ $PWD = ${d}* ]]; then
-	    vcs_info
-	    vcs_info_needs_bye=1
-	    return
-	fi
+        if [[ $PWD = ${d}* ]]; then
+            vcs_info
+            vcs_info_needs_bye=1
+            return
+        fi
     done
 
     if (( vcs_info_needs_bye )); then
-	vcs_info
-	vcs_info_needs_bye=0
+        vcs_info
+        vcs_info_needs_bye=0
     fi
 }
 if exists vcs_info; then
@@ -516,12 +516,12 @@ if [[ $OSTYPE = darwin* ]]; then
     # suffix aliases
     # Esempio:
     # ~/Pictures $ *.jpeg
-    #	-> Eseguira': open *.jpeg
+    #   -> Eseguira': open *.jpeg
     alias -s pdf='open'
     alias -s avi='open'
     alias -s jpeg='open'
     alias -s jpg='open'
-    alias -s mp4='open'		# video -> quicktime o vlc
+    alias -s mp4='open'         # video -> quicktime o vlc
 
     # Homebrew
     [[ -d /usr/local/bin ]] && export PATH="/usr/local/bin:$PATH"
@@ -618,7 +618,7 @@ EOF
     export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 
 elif [[ $OSTYPE = linux* ]]; then
-    # *** LINUX *** 
+    # *** LINUX ***
 
     alias ls="ls --color=auto $ls_options"
 
@@ -670,7 +670,7 @@ elif [[ $OSTYPE = openbsd* ]]; then
     fi
 
     # Su OpenBSD posso usarea anche -h e -r...
-    # [10:13] taleggio:~% ps -o pid,user,pcpu,pmem,state,command   
+    # [10:13] taleggio:~% ps -o pid,user,pcpu,pmem,state,command
     #   PID USER     %CPU %MEM S COMMAND
     #  9639 sand      0.0  0.6 S -zsh
     #  9697 sand      0.0  0.1 R ps -o pid,user,pcpu,pmem,state,command
@@ -723,14 +723,14 @@ alias po='popd'
 
 alias h='fc -l -t "%d/%m/%Y %H:%M" -D'
 alias la="ls -a"
-alias lsd="ls -ld *(-/)"		# ls delle sole directory
-alias lsa="ls -ld .*"			# ls dei soli file nascosti
-alias lsgrandi="ls -fl *(.oL)"	# ls -lrh --sort=size
-alias lsuid="ls -l *(s,S,t)"	# ls solo di file suid/setgid/sticky
-alias dirvuote="ls -ld *(/^F)"	# ls solo delle directory vuote
-alias lsnodot="ls *~*.*(.)"		# ls dei file senza estenzione
-alias lsoggi="ls *(m0)"			# ls dei file modificati oggi
-alias dirdu="du -Hhs *(/,@)"	# du -h di ogni dir presente
+alias lsd="ls -ld *(-/)"                # ls delle sole directory
+alias lsa="ls -ld .*"                   # ls dei soli file nascosti
+alias lsgrandi="ls -fl *(.oL)"  # ls -lrh --sort=size
+alias lsuid="ls -l *(s,S,t)"    # ls solo di file suid/setgid/sticky
+alias dirvuote="ls -ld *(/^F)"  # ls solo delle directory vuote
+alias lsnodot="ls *~*.*(.)"             # ls dei file senza estenzione
+alias lsoggi="ls *(m0)"                 # ls dei file modificati oggi
+alias dirdu="du -Hhs *(/,@)"    # du -h di ogni dir presente
 alias ..='cd ..'
 alias ...='cd ../..'
 
@@ -833,9 +833,9 @@ autoload -Uz bashcompinit && bashcompinit
 # http://zshwiki.org/home/examples/compquickstart?s=rehash
 _force_rehash() {
     (( CURRENT == 1 )) && rehash
-    return 1	# Because we didn't really complete anything.
+    return 1    # Because we didn't really complete anything.
 }
-zstyle ':completion:*' rehash true	# rehash automatico, ma non sembra funzionare... TODO
+zstyle ':completion:*' rehash true      # rehash automatico, ma non sembra funzionare... TODO
 
 # Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
 # e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
@@ -860,7 +860,7 @@ zstyle ':completion:*' auto-description 'specify: %d'
 
 # Utilizza un pager interno quando i risultati della completion sono troppi
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-bindkey -M listscroll q send-break	# binda 'q' per uscire dal pager
+bindkey -M listscroll q send-break      # binda 'q' per uscire dal pager
 
 # Limit this fuckung "zsh: do you wish to see all NNN possibilities (NNN
 # lines)?" downward (default is 100). Only ask before displaying
@@ -881,7 +881,7 @@ zstyle ':completion::approximate*:*' prefix-needed false
 # permette finezze come cd /u/l/b -> cd /usr/local/bin -- e' come premere TAB su ogni
 # '/'
 zstyle ':completion:*:(^approximate):*' matcher-list \
-	'r:|[/]=* r:|=* m:{a-z}={A-Z}'
+        'r:|[/]=* r:|=* m:{a-z}={A-Z}'
 
 # titoli [from: https://github.com/seebi/zshrc]
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
@@ -896,7 +896,7 @@ zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M %P -- \e[00
 # cursore si trovasse a fine word; l'opposto si ottiene abilitando complete_in_word.
 # Un altro approccio consiste nel completare ignorando completamente il suffix...
 zstyle ':completion::prefix:::' completer _complete
-zstyle ':completion:*:prefix:*' add-space true	# aggiunge anche uno spazio
+zstyle ':completion:*:prefix:*' add-space true  # aggiunge anche uno spazio
 
 # Esclusioni
 # Avendo '_ignored' tra i completer, le seguenti regole verranno ignorate nel caso
@@ -949,18 +949,18 @@ _complete_screen_display() {
     #[[ "$TERM" != screen* ]] && return 1
 
     if (( $+commands[gmktemp] )); then
-	local TMPFILE=$(gmktemp)
+        local TMPFILE=$(gmktemp)
     else
-	local TMPFILE=$(mktemp)
+        local TMPFILE=$(mktemp)
     fi
     local -U -a _screen_display_wordlist
     trap "rm -f $TMPFILE" EXIT
 
     if ((${+TMUX})); then
-	tmux -q capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp
+        tmux -q capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp
     else
-	echo "ahi ahi ahi no tmux"
-	return
+        echo "ahi ahi ahi no tmux"
+        return
     fi
     _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
     _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
@@ -994,11 +994,11 @@ fi
 if [[ $FORTUNE_GREETING == 1 ]]; then
     echo culo
     if (( $+commands[fortune] )); then
-	if [[ -d "$FORTUNES_DIRECTORY" ]]; then
-	    print; fortune -e "$FORTUNES_DIRECTORY"; print
-	else
-	    print; fortune -o; print
-	fi
+        if [[ -d "$FORTUNES_DIRECTORY" ]]; then
+            print; fortune -e "$FORTUNES_DIRECTORY"; print
+        else
+            print; fortune -o; print
+        fi
     fi
 fi
 # }}}
@@ -1076,7 +1076,7 @@ function _zle_line_finish() {
 # Get a random quote fron the site http://www.quotationspage.com/random.php3
 # Created by Eduardo San Martin Morote aka Posva
 # http://posva.github.io
-# Sun Jun 09 10:59:36 CEST 2013 
+# Sun Jun 09 10:59:36 CEST 2013
 # Don't remove this header, thank you
 # Usage: quote
 
