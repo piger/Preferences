@@ -16,3 +16,4 @@ zshenv
 sqliterc
 colordiffrc
 svn-config .subversion/config
+hammerspoon_init.lua .hammerspoon/init.lua
