@@ -5,13 +5,6 @@
     excludesfile = ~/.gitignore
     pager = less -RSX
 
-# Meglio settarlo su ogni progetto:
-# $ git config user.name "Daniel Kertesz"
-# $ git config user.email daniel@spatof.org
-# [user]
-#     name = Daniel Kertesz
-#     email = daniel@spatof.org
-
 [diff]
     renames = copies
 
@@ -66,6 +59,13 @@
 
 [push]
     default = simple
-[user]
-	name = Daniel Kertesz
-	email = daniel@spatof.org
+
+# http://stackoverflow.com/questions/16244969/how-to-tell-git-to-ignore-individual-lines-i-e-gitignore-for-specific-lines-of
+[filter "email_ignore"]
+    smudge = cat
+    clean = "sed -n '/^\\[user\\]/q;p'"
+
+# $ cat .gitattributes
+# /gitconfig filter=email_ignore
+
+# #### LINES BELOW WILL BE IGNORED BY GIT ####
