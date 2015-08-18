@@ -2,7 +2,6 @@
 
 local mash = {"cmd", "alt", "ctrl"}
 local mashift = {"cmd", "alt", "shift"}
-local wifiWatcher = nil
 local workSSID = "Zendesk"
 local lastSSID = hs.wifi.currentNetwork()
 
@@ -18,11 +17,7 @@ hs.window.animationDuration = 0
 
 hs.hotkey.bind(mash, "R", hs.reload)
 
-hs.hotkey.bind(mash, "M", function()
-                  local win = hs.window.focusedWindow()
-                  win:maximize()
-                  -- hs.grid.maximizeWindow()
-end)
+hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
 
 hs.hotkey.bind(mash, "space", hs.spotify.displayCurrentTrack)
 
@@ -50,7 +45,7 @@ function ssidChangedCallback()
    lastSSID = newSSID
 end
 
-wifiWatcher = hs.wifi.watcher.new(ssidChangedCallback)
+local wifiWatcher = hs.wifi.watcher.new(ssidChangedCallback)
 wifiWatcher:start()
 
 hs.alert.show("Hammerspoon loaded!")
