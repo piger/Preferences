@@ -476,7 +476,7 @@ vcs_info_needs_bye=0
 # this wrapper that enable 'vcs_info' only on selected directory roots.
 lazy_vcs_info() {
     local dev_dirs
-    dev_dirs=(~/dev ~/dev.ai)
+    dev_dirs=(~/dev ~/dev.ai ~/src)
 
     for d in $dev_dirs; do
         if [[ $PWD = ${d}* ]]; then
