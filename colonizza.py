@@ -41,6 +41,8 @@ import optparse
 
 
 def link(dotsrc, dotdest, opts):
+    """Create a symlink for the source file in the destination directory/filename"""
+
     src = os.path.join(os.path.abspath(opts.source), dotsrc)
     if not dotdest:
         base_src = os.path.basename(src)
@@ -70,7 +72,10 @@ def link(dotsrc, dotdest, opts):
     os.symlink(src, dest)
     return True
 
-def read_linkfile(filename):
+def read_config(filename):
+    """Read a simple configuration file and returns a list of tuples containing
+    the source file and the destination file."""
+
     links = []
     with open(filename) as fd:
         for line in fd:
@@ -89,16 +94,18 @@ def main():
     parser.add_option('-f', '--force', action='store_true',
                       help="Overwrite wrong symlinks")
     parser.add_option('-t', '--target', default=os.environ.get('HOME'),
-                      metavar='DIR', help="Destination directory")
+                      metavar='DIR',
+                      help="Destination directory (default: %s)" % os.environ.get('HOME'))
     parser.add_option('-s', '--source', default='.', metavar='DIR',
-                      help="Source directory")
+                      help="Source directory (default: .)")
+    parser.add_option('-c', '--config', default='dotfiles.cfg', metavar='FILE',
+                      help="Path to the configuration file (default: dotfiles.cfg)")
     opts, args = parser.parse_args()
 
-    if len(args) < 1:
-        print "You must specify a dotfiles configuration file"
-        sys.exit(1)
+    if not os.path.exists(opts.config):
+        parser.error("Cannot find configuration file %s." % opts.config)
 
-    for dotsrc, dotdest in read_linkfile(args[0]):
+    for dotsrc, dotdest in read_config(opts.config):
         link(dotsrc, dotdest, opts)
 
 
