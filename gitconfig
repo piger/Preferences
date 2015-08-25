@@ -57,8 +57,27 @@
 [credential]
     helper = osxkeychain
 
+# NOTE: default from git 2.0
 [push]
     default = simple
+
+# tig configuration (here instead of ~/.tigrc)
+# See also: https://github.com/dolinsky/dotfiles/blob/e1df41bb6d457669bbce7d2b4998b688357cec11/.tigrc
+[tig]
+line-graphics = utf-8
+main-view = line-number:no,interval:5 id:true date:relative author:abbreviated commit-title:yes,graph,refs,overflow=no
+[tig "color"] cursor = white black
+[tig "color"] status = white default
+[tig "color"] title-focus = white black
+[tig "color"] date = yellow default
+[tig "color"] author = green default
+[tig "color"] main-head = magenta default
+[tig "color"] main-tag = magenta default
+[tig "color"] stat-staged = green default
+[tig "color"] stat-unstaged = red default
+[tig "color"] stat-untracked = yellow default
+# [tig "color"] tree.header = white default
+# [tig "color"] tree.directory = cyan default
 
 # http://stackoverflow.com/questions/16244969/how-to-tell-git-to-ignore-individual-lines-i-e-gitignore-for-specific-lines-of
 [filter "email_ignore"]
