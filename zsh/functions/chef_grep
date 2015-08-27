@@ -1,0 +1,5 @@
+# cerca nelle run_list di chef
+# jq '.run_list | if contains(["package[peto]", "package[pappo]"]) then (input_filename, .) else empty end' *.json
+# chef_grep() {
+jq '.run_list | if contains(['$1']) then (input_filename, .) else empty end' *.json
+#}
