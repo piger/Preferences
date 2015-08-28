@@ -627,6 +627,15 @@ Easily insert RST links (from Fabrizio Furnari):
 (global-set-key (kbd "C-c l") 'insert-rst-reference)
 #+END_SRC
 
+Ansi colors (for console dumps from samson, for example):
+
+#+BEGIN_SRC emacs-lisp
+(require 'ansi-color)
+(defun display-ansi-colors ()
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+#+END_SRC
+
 ** Keyboard bindings
 
 Mac OS X customization. Note that you should use my modified keyboard
