@@ -179,6 +179,7 @@ list.
    rainbow-delimiters
    rainbow-mode
    undo-tree
+   unfill
    use-package
    volatile-highlights
    web-mode
