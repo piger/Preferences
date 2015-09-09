@@ -781,6 +781,14 @@ checking the script by running it.
          (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")))))
 #+END_SRC
 
+*** Ruby
+
+Don't want the /magic/ comment.
+
+#+BEGIN_SRC emacs-lisp
+(setq ruby-insert-encoding-magic-comment nil)
+#+END_SRC
+
 *** CSS
 
 #+BEGIN_SRC emacs-lisp
