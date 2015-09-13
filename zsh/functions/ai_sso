@@ -1,0 +1,3 @@
+# ai_sso() {
+ykchalresp -t26 | perl -pe 's/\n//' | tee /dev/tty | pbcopy ; echo
+# }
