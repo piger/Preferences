@@ -942,6 +942,16 @@ zle -C hist-complete complete-word _generic
 zstyle ':completion:hist-complete:*' completer _history
 bindkey '^X^X' hist-complete
 
+# extend ssh host completion with chef nodes (set CHEF_NODES_DIR in ~/.zshenv.local)
+if [[ $CHEF_NODES_DIR != "" ]]; then
+    zstyle -s ':completion:*:hosts' hosts _ssh_hosts
+    for f in ${CHEF_NODES_DIR}/*.json; do
+        _ssh_hosts+=(${${f%.json}##*/})
+    done
+    zstyle ':completion:*:hosts' hosts $_ssh_hosts
+fi
+
+
 # Ctrl-X - SHIFT+S
 # Completa usando le parole della schermata attuale di tmux.
 # da zsh-lovers.
