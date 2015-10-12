@@ -769,6 +769,9 @@ checking the script by running it.
        (setq tab-width 2)
        (local-set-key (kbd "C-c C-k") 'godoc)
        (subword-mode +1)
+       (company-mode)
+       (flycheck-mode)
+       ; (local-set-key (kbd "M-.") 'godef-jump)
        (diminish 'subword-mode))
 
      (setq prelude-go-mode-hook 'prelude-go-mode-defaults)
@@ -780,6 +783,10 @@ checking the script by running it.
        (when oracle
          (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")))))
 #+END_SRC
+
+**** TODO goimports
+
+Sembra interessante
 
 *** Ruby
 
