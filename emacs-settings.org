@@ -1470,10 +1470,10 @@ typed so far; it's very useful for less used modes (like Org), for
 example I can press =C-c= and then read the list of org bindings.
 
 #+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :ensure t
-  :diminish which-key-mode
-  :config (which-key-mode))
+;; (use-package which-key
+;;   :ensure t
+;;   :diminish which-key-mode
+;;   :config (which-key-mode))
 #+END_SRC
 
 ** Aliases
