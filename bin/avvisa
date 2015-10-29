@@ -4,9 +4,14 @@
 #
 # Requisiti: terminal-notifier
 
-set -e
+# can't "set -e" because otherwise the script would stop after executing a command which
+# exit code is not 0 and not display the notification.
 
 TN=terminal-notifier
 
+if [[ -x /usr/local/bin/reattach-to-user-namespace ]]; then
+    TN="/usr/local/bin/reattach-to-user-namespace $TN"
+fi
+
 $*
-$TN -message "Command \"$*\" done" -title "Command terminated"
+$TN -message "Command \"$*\" done" -title "Command terminated (exit: $?)"
