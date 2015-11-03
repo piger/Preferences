@@ -52,7 +52,7 @@ def link(dotsrc, dotdest, opts):
 
     if os.path.islink(dest):
         lpath = os.readlink(dest)
-        if lpath != src:
+        if lpath.lower() != src.lower():
             if opts.force:
                 os.unlink(dest)
             else:
