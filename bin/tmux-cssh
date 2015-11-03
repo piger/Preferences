@@ -1,0 +1,16 @@
+#!/bin/sh
+# cluster ssh with tmux
+# Usage: tmux-cssh user1@host1 user2@host2 host3 host4 host5 host6 [...]
+
+SESSION="cssh-$$"
+WINDOW="${SESSION}:1"
+
+tmux new-session -d -s $SESSION -P ssh $1
+shift
+for host in "$@"; do
+   tmux split-window -t $WINDOW ssh $host
+   tmux select-layout -t $WINDOW tiled
+done
+tmux set-window-option -t $WINDOW status off
+tmux set-window-option -t $WINDOW synchronize-panes on
+tmux switch-client -t $SESSION
