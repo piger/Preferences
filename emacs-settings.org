@@ -936,7 +936,8 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
     (setq helm-candidate-number-limit 100
           helm-split-window-in-side-p t
           helm-ff-skip-boring-files t
-          helm-ff-file-name-history-use-recentf t)
+          helm-ff-file-name-history-use-recentf t
+          helm-buffer-max-length 40)
     (helm-mode 1))
   :diminish helm-mode
   :bind
