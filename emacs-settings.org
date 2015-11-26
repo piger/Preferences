@@ -1165,9 +1165,15 @@ Because Vim is the best text editor.
 ;; rst-mode: default to auto-fill
 (add-hook 'rst-mode-hook 'turn-on-auto-fill)
 
-;; po-mode
-(add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
-; (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
+*** po-mode & i18n
+
+#+BEGIN_SRC emacs-lisp
+;; gettext on OS X (homebrew) ships with additional elisp files
+(when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
+  (add-to-list 'load-path "/usr/local/opt/gettext/share/emacs/site-lisp")
+  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
+  (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t))
+#+END_SRC
 
 *** prog-mode
 
