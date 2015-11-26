@@ -29,6 +29,36 @@ If a variable is not buffer-local, then setq and setq-default do the
 same thing.
 #+END_QUOTE
 
+** Emergency elisp
+
+*** modify lists
+
+Example: *company-mode* complains because it cannot find one of the
+backends defined inside =company-backends=, so you want to remove it
+from that list.
+
+Optional: make a backup
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(setq company-backends-bkp company-backends)
+#+END_SRC
+
+First: check if the backend is inside =company-backends=:
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(member 'company-anaconda company-backends)
+#+END_SRC
+
+it will return =nil= if =company-anaconda= is not inside
+=company-backends=, otherwise it will return "stuff that you can
+ignore".
+
+Now to remove it:
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(setq company-backends (delete 'company-anaconda company-backends))
+#+END_SRC
+
 ** Installation notes
 On OS X the best setup is achieved by installing the basic =emacs= for
 the command line and =emacs-mac-port= for the GUI; the latter has
@@ -124,122 +154,84 @@ copied a function from prelude to check and install packages from a
 list.
 
 #+BEGIN_SRC emacs-lisp
-(require 'cl)
 (require 'package)
+(setq package-enable-at-startup nil)
 
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-(when (and (>= emacs-major-version 24)
-           (>= emacs-minor-version 4))
-  (add-to-list 'package-archives
-               '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-  (setq package-pinned-packages '(
-                                  (magit . "melpa-stable")
-                                  (with-editor . "melpa-stable")
-                                  (git-commit . "melpa-stable")
-                                  (magit-popup . "melpa-stable")
-                                  (flycheck . "melpa-stable")
-                                  )))
+;; (when (and (>= emacs-major-version 24)
+;;            (>= emacs-minor-version 4))
+;;   (add-to-list 'package-archives
+;;                '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+;;   (setq package-pinned-packages '(
+;;                                   (magit . "melpa-stable")
+;;                                   (flycheck . "melpa-stable")
+;;                                   )))
 
 ;; load and activate installed packages
 (package-initialize)
 
-(defvar my-packages
- '(
-   ; browse-kill-ring
-   ; flx-ido
-   ; ido-ubiquitous
-   ; osx-plist
-   ; xkcd
-   ; anaconda-mode
-   ; pyenv-mode
-   ; yasnippet
-   ; google-translate
-   ace-jump-mode
-   alert
-   anzu
-   apache-mode
-   base16-theme
-   buffer-move
-   company
-   company-go
-   dictionary
-   diminish
-   evil
-   exec-path-from-shell
-   expand-region
-   git-gutter
-   gitconfig-mode
-   gitignore-mode
-   go-eldoc
-   go-mode
-   gotest
-   helm
-   helm-projectile
-   js2-mode
-   json-mode
-   less-css-mode
-   magit
-   markdown-mode
-   move-text
-   nginx-mode
-   php-mode
-   projectile
-   rainbow-delimiters
-   rainbow-mode
-   undo-tree
-   unfill
-   use-package
-   volatile-highlights
-   web-mode
-)
- "A list of packages to ensure are installed at launch")
+; osx-plist
+; xkcd
+; anaconda-mode
+; pyenv-mode
+; yasnippet
+; google-translate
 
-(defun my-packages-installed-p ()
-  "Check if all packages in `my-packages' are installed"
-  (every #'package-installed-p my-packages))
+; TODO XXX subword-mode appears as " , " in emacs modeline...
+; (diminish 'subword-mode)
+#+END_SRC
 
-(defun pl-require-package (package)
-  "Install PACKAGE unless already installed"
-  (unless (memq package my-packages)
-    (add-to-list 'my-packages package))
-  (unless (package-installed-p package)
-    (package-install package)))
+*** Initialize use-package
 
-(defun pl-require-packages (packages)
-  "Ensure PACKAGES are installed"
-  (mapc #'pl-require-package packages))
+[[https://github.com/jwiegley/use-package][use-package]] is a nice macro to configure and load external packages.
 
-(defun pl-install-packages ()
-  "Install all packages listed in `my-packages'"
-  (unless (my-packages-installed-p)
-    (message "%s" "refreshing the package database...")
-    (package-refresh-contents)
-    (message "%s" "done.")
-    (pl-require-packages my-packages)))
+#+BEGIN_SRC emacs-lisp
+;; bootstrap use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
 
-;; install missing packages
-(pl-install-packages)
-
-;; enable use-package asap
-;; !! changed in use-package 2.0
 (eval-when-compile
   (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
+#+END_SRC
 
-; TODO XXX subword-mode appears as " , " in emacs modeline...
-; (diminish 'subword-mode)
+*** run execute-path-from-shell early as possible
 
+This will impact packages which call system binaries or need
+environment variables, like *go-mode*.
+
+#+BEGIN_SRC emacs-lisp
 ;; `exec()` PATH from shell
 ;; Questo va messo PRIMA di tutto perche' altrimenti tutti i PATH
 ;; presi dai vari plugin non prendono il setting e pescano la roba in
 ;; /usr/bin invece di /usr/local/bin
 (when (memq window-system '(mac ns))
-  (setq exec-path-from-shell-variables
-        '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
-  (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (setq exec-path-from-shell-variables
+          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
+    (exec-path-from-shell-initialize)))
+#+END_SRC
 
+*** install base16 themes
+
+#+BEGIN_SRC emacs-lisp
+(use-package base16-theme
+  :ensure t)
+#+END_SRC
+
+*** install diminish
+
+#+BEGIN_SRC emacs-lisp
+(use-package diminish
+  :ensure t)
 #+END_SRC
 
 ** Basic settings
@@ -742,10 +734,6 @@ layout which permits accented characters.
 ;;; https://github.com/owainlewis/emacs-color-themes
 ; (add-to-list 'load-path "~/Preferences/elisp/themes/tomorrow-theme")
 ; (add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/tomorrow-theme")
-
-;; gettext on OS X ships with additional elisp files
-(when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
-  (add-to-list 'load-path "/usr/local/opt/gettext/share/emacs/site-lisp"))
 #+END_SRC
 
 ** Programming
@@ -795,10 +783,12 @@ checking the script by running it.
 ; (setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
 ; (setq exec-path (append exec-path (list (expand-file-name "~/dev/go/bin"))))
 
-(eval-after-load 'go-mode
-  '(progn
-     (defun prelude-go-mode-defaults ()
-       (add-hook 'before-save-hook 'gofmt-before-save nil t)
+(use-package go-mode
+  :ensure t
+  :config
+  (defun piger/go-mode-defaults ()
+    "Defaults for go-mode."
+    (add-hook 'before-save-hook 'gofmt-before-save nil t)
        (set (make-local-variable 'company-backends) '(company-go))
        (go-eldoc-setup)
        (setq tab-width 2)
@@ -807,16 +797,20 @@ checking the script by running it.
        (company-mode)
        (flycheck-mode)
        ; (local-set-key (kbd "M-.") 'godef-jump)
-       (diminish 'subword-mode))
-
-     (setq prelude-go-mode-hook 'prelude-go-mode-defaults)
-     (add-hook 'go-mode-hook (lambda ()
-                               (run-hooks 'prelude-go-mode-hook)))
-     
+       (diminish 'subword-mode))       
+  (setq piger-go-mode-hook 'piger/go-mode-defaults)
+  (add-hook 'go-mode-hook (lambda ()
+                            (run-hooks 'piger-go-mode-hook)))
      ;; Enable go-oracle-mode if available
      (let ((oracle (executable-find "oracle")))
        (when oracle
-         (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")))))
+         (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el"))))
+
+(use-package go-eldoc
+  :ensure t)
+
+(use-package gotest
+  :ensure t)
 #+END_SRC
 
 **** TODO goimports
@@ -831,55 +825,79 @@ Don't want the /magic/ comment.
 (setq ruby-insert-encoding-magic-comment nil)
 #+END_SRC
 
+Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
+
+#+BEGIN_SRC emacs-lisp
+(use-package enh-ruby-mode
+  :ensure t)
+
+(use-package inf-ruby
+  :ensure t)
+#+END_SRC
+
 *** CSS
 
 #+BEGIN_SRC emacs-lisp
 (use-package css-mode
+  :ensure t
   :config
-  (progn
-    (use-package rainbow-mode)
-    (setq css-indent-offset 2)
-    (rainbow-mode +1)
-    (subword-mode +1)
-    (diminish 'subword-mode)))
+  (setq css-indent-offset 2)
+  (rainbow-mode +1)
+  (subword-mode +1)
+  (diminish 'subword-mode))
+
+(use-package rainbow-mode
+  :ensure t)
+
+(use-package less-css-mode
+  :ensure t)
 #+END_SRC
 
 *** js2
 
 #+BEGIN_SRC emacs-lisp
 (use-package js2-mode
+  :ensure t
   :mode ("\\.js$" . js2-mode)
   :interpreter ("node" . js2-mode)
   :config
-  (progn
-    (setq-default js2-global-externs '("module", "require", "console",
-                                       "jQuery", "$"))
-    (add-hook 'js2-init-hook
-              (lambda ()
-                (when (or (string-match-p "zAFS" (buffer-file-name))
-                          (string-match-p "LogIntelligence" (buffer-file-name)))
-                  (mapc (lambda (x)
-                          (add-to-list 'js2-additional-externs x))
-                        (list "Ember" "DS" "App")))))
-    (add-hook 'js2-mode-hook (lambda () (subword-mode +1)))
-    (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 4)))
+  (defun piger/js2-mode-hooks ()
+    "Defaults for js2-mode."
+    (subword-mode +1)
     (set-variable 'indent-tabs-mode nil)
-    ))
+    (setq js2-basic-offset 4))
+  (add-hook 'js2-mode-hook 'piger/js2-mode-hooks)
+  (setq-default js2-global-externs '("module", "require", "console", "jQuery", "$"))
+  (add-hook 'js2-init-hook
+            (lambda ()
+              (when (or (string-match-p "zAFS" (buffer-file-name))
+                        (string-match-p "LogIntelligence" (buffer-file-name)))
+                (mapc (lambda (x)
+                        (add-to-list 'js2-additional-externs x))
+                      (list "Ember" "DS" "App"))))))
+#+END_SRC
+
+*** json
+
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode
+  :ensure t)
 #+END_SRC
 
 *** web
 
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
+  :ensure t
   :mode (("\\.erb\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("\\.html?\\'" . web-mode))
-  :init (setq web-mode-engines-alist
-              '(("go" . "/go/src/.*\\.html\\'")))
+  :init
+  (setq web-mode-engines-alist
+        '(("go" . "/go/src/.*\\.html\\'")))
   :config
-  (progn
-    (add-hook 'web-mode-hook (lambda ()
-                               (local-set-key (kbd "RET") 'newline-and-indent)))))
+  (add-hook 'web-mode-hook (lambda ()
+                             (local-set-key (kbd "RET") 'newline-and-indent))))
 
 #+END_SRC
 
@@ -967,18 +985,22 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
   :ensure t
   :demand t
   :config
-  (progn
-    (require 'helm-config)
-    (setq helm-candidate-number-limit 100
-          helm-split-window-in-side-p t
-          helm-ff-skip-boring-files t
-          helm-ff-file-name-history-use-recentf t
-          helm-buffer-max-length 40)
-    (helm-mode 1))
+  (require 'helm-config)
+  
+  (setq
+   ;; Limit candidate number globally.
+   helm-candidate-number-limit 100
+   ;; open helm buffer inside current window, not occupy whole other window.
+   helm-split-window-in-side-p t
+   ;; skip files which you usually don't want to open
+   helm-ff-skip-boring-files t
+   helm-ff-file-name-history-use-recentf t
+   ;; Max length of buffer names before truncate.
+   helm-buffer-max-length 40)
+  (helm-mode 1)
   :diminish helm-mode
-  :bind
-  (("C-c h" . helm-mini)
-   ("M-x" . helm-M-x)))
+  :bind (("C-c h" . helm-mini)
+         ("M-x" . helm-M-x)))
 #+END_SRC
 
 Other random helm things:
@@ -1027,7 +1049,29 @@ Other random helm things:
   (helm-other-buffer '(helm-httpstatus-source) "*helm httpstatus*"))
 
 (global-set-key (kbd "C-c M-C-h") 'helm-httpstatus)
+#+END_SRC
 
+Let's try one of the suggested extensions:
+
+#+BEGIN_SRC emacs-lisp
+(use-package helm-ls-git
+  :ensure t)
+#+END_SRC
+
+Let's also use the silver searcher:
+
+#+BEGIN_SRC emacs-lisp
+(use-package helm-ag
+  :ensure t)
+#+END_SRC
+
+And also [[https://github.com/ShingoFukuyama/helm-swoop][helm-swoop]] seems interesting:
+
+#+BEGIN_SRC emacs-lisp
+(use-package helm-swoop
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c o") 'helm-swoop))
 #+END_SRC
 
 *** ibuffer
@@ -1052,11 +1096,12 @@ Provides a better interface to open buffers.
 
 *** windmove
 
+Nice keybinding to switch frame using shift or alt + arrows:
+
 #+BEGIN_SRC emacs-lisp
-;;; windmove
-;;; per switchare finestra con shift+arrows o alt+arrows
 (use-package windmove
-  :config (windmove-default-keybindings 'meta))
+  :config
+  (windmove-default-keybindings 'meta))
 #+END_SRC
 
 *** transpose-frame
@@ -1096,6 +1141,7 @@ give you an horizontal split.
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
+  :pin melpa-stable
   :bind ("C-x g" . magit-status))
 #+END_SRC
 
@@ -1106,7 +1152,29 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
 
 #+BEGIN_SRC emacs-lisp
 (use-package git-gutter
-  :diminish git-gutter-mode)
+  :ensure t
+  :diminish git-gutter-mode
+  :config
+  (add-hook 'prog-mode-hook 'git-gutter-mode))
+#+END_SRC
+
+*** git-commit
+
+#+BEGIN_SRC emacs-lisp
+(use-package git-commit
+  :ensure t
+  :config
+  (add-hook 'git-commit-mode-hook 'flyspell-mode))
+#+END_SRC
+
+*** gitconfig and gitignore
+
+#+BEGIN_SRC emacs-lisp
+(use-package gitconfig-mode
+  :ensure t)
+
+(use-package gitignore-mode
+  :ensure t)
 #+END_SRC
 
 *** dired-x
@@ -1129,8 +1197,8 @@ This is useful to mark /things/ inside markers, for example the text
 inside a quoted string or inside some parenthesis.
 
 #+BEGIN_SRC emacs-lisp
-;; expand-region
 (use-package expand-region
+  :ensure t
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 
@@ -1152,6 +1220,7 @@ Because Vim is the best text editor.
 (setq evil-want-C-u-scroll t)
 
 (use-package evil
+  :ensure t
   :config
   (setq evil-emacs-state-cursor  '("red" box)
         evil-normal-state-cursor '("gray" box)
@@ -1161,6 +1230,11 @@ Because Vim is the best text editor.
 #+END_SRC
 
 *** markdown
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t)
+#+END_SRC
 
 **** TODO move this section somewhere
 
@@ -1179,9 +1253,9 @@ Because Vim is the best text editor.
 #+BEGIN_SRC emacs-lisp
 ;; gettext on OS X (homebrew) ships with additional elisp files
 (when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
-  (add-to-list 'load-path "/usr/local/opt/gettext/share/emacs/site-lisp")
-  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
-  (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t))
+  (use-package po-mode
+    :load-path "/usr/local/opt/gettext/share/emacs/site-lisp"
+    :mode ("\\.po\\'\\|\\.po\\." . po-mode)))
 #+END_SRC
 
 *** prog-mode
@@ -1201,6 +1275,9 @@ Because Vim is the best text editor.
 
 (add-hook 'prog-mode-hook (lambda ()
                             (run-hooks 'moo-prog-mode-hooks)))
+
+;; spell check comments and strings
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 ;; (add-hook 'prog-mode-hook
 ;;           (lambda ()
@@ -1231,18 +1308,26 @@ Because Vim is the best text editor.
 
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
+  :ensure t
   :config
-  (progn
-    (projectile-global-mode +1)
-    (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name))))
-    (require 'helm-projectile)
-    (helm-projectile-on)))
+  (projectile-global-mode +1)
+  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))))
+
+(use-package helm-projectile
+  :ensure t
+  :config
+  (helm-projectile-on))
 #+END_SRC
 
 *** company (completion)
 
 #+BEGIN_SRC emacs-lisp
-(use-package company)
+(use-package company
+  :ensure t
+  :config
+  (define-key company-mode-map [remap hippie-expand] 'company-complete)
+  (define-key company-active-map [remap hippie-expand] 'company-complete)
+  (add-hook 'after-init-hook 'global-company-mode))
 #+END_SRC
 
 For python you need:
@@ -1257,6 +1342,20 @@ And run this code:
 #+END_SRC
 
 To start completion you can use =C-M-i=.
+
+For go:
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-go
+  :ensure t)
+#+END_SRC
+
+For web:
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-web
+  :ensure t)
+#+END_SRC
 
 *** apache
 
@@ -1327,7 +1426,9 @@ Keep track of recent used files.
 
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
-  :config (global-undo-tree-mode +1)
+  :ensure t
+  :config
+  (global-undo-tree-mode +1)
   :diminish undo-tree-mode)
 #+END_SRC
 
@@ -1377,7 +1478,8 @@ estrarre i file =.aff= e =.dic= e copiarli in =~/Library/Spelling=.
 (setq ispell-personal-dictionary "~/.flydict"
       ispell-extra-args '("--sug-mode=normal" "--ignore=3"))
 
-(use-package flyspell
+(use-package flyspell-lazy
+  :ensure t
   :config
   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "M-.") 'ispell-word))
@@ -1560,6 +1662,87 @@ Potrebbe essere utile.
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'highlight-symbol-mode))
+#+END_SRC
+
+*** ace-jump-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-jump-mode
+  :ensure t)
+#+END_SRC
+
+*** TODO alert (growl-style notifications?)
+
+#+BEGIN_SRC emacs-lisp
+(use-package alert
+  :ensure t)
+#+END_SRC
+
+*** anzu
+
+Highlight matches from search
+
+#+BEGIN_SRC emacs-lisp
+(use-package anzu
+  :ensure t)
+#+END_SRC
+
+*** apache-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package apache-mode
+  :ensure t)
+#+END_SRC
+
+*** nginx-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package nginx-mode
+  :ensure t)
+#+END_SRC
+
+*** php-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package php-mode
+  :ensure t)
+#+END_SRC
+
+*** TODO buffer-move
+
+#+BEGIN_SRC emacs-lisp
+(use-package buffer-move
+  :ensure t)
+#+END_SRC
+
+*** TODO move-text
+
+#+BEGIN_SRC emacs-lisp
+(use-package move-text
+  :ensure t)
+#+END_SRC
+
+*** rainbow-delimiters
+
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
+
+*** TODO unfill
+
+#+BEGIN_SRC emacs-lisp
+(use-package unfill
+  :ensure t)
+#+END_SRC
+
+*** TODO volatile-highlights
+
+#+BEGIN_SRC emacs-lisp
+(use-package volatile-highlights
+  :ensure t)
 #+END_SRC
 
 ** Aliases
