@@ -414,12 +414,6 @@ Here we could setup fonts; interesting list:
                            (group    . (1 2))
                            (modes    . '(ruby-mode puppet-mode))))))
 
-;;; save-place per salvare la posizione nel buffer quando si esce, tipo
-;;; viminfo in vim.
-;;; (require 'saveplace)
-;;; (setq-default save-place t)
-;;; (setq save-place-file (concat user-emacs-directory "places"))
-
 ;; enable Multi Hops in TRAMP
 ;; aka: with this you can edit a remote file with sudo
 ;; C-x C-f /sudo:root@remote-host:/path/to-file
@@ -441,6 +435,23 @@ Here we could setup fonts; interesting list:
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
+
+;; extracts from better defaults: https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
+(require 'saveplace)
+(setq-default save-place t)
+
+(setq apropos-do-all t
+      mouse-yank-at-point t
+      visible-bell t
+      load-prefer-newer t
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      save-place-file (concat user-emacs-directory "places")
+      backup-directory-alist `(("." . ,(concat user-emacs-directory
+                                               "backups"))))
 #+END_SRC
 
 ** Custom functions
