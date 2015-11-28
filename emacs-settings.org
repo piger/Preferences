@@ -840,7 +840,12 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
 
 #+BEGIN_SRC emacs-lisp
 (use-package enh-ruby-mode
-  :ensure t)
+  :ensure t
+  :mode ("\\.rb\\'" "Rakefile" "Gemfile")
+  :interpreter "ruby"
+  :config
+  ; use "deep indentation" for parenthesis (it's the right indentation for the work codebase)
+  (setq enh-ruby-bounce-deep-indent t))
 
 (use-package inf-ruby
   :ensure t)
