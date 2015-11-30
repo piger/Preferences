@@ -946,7 +946,10 @@ Hook function for shell-script mode(s). See also =sh-basic-offset=.
 Configure indentation for logstash-conf-mode:
 
 #+BEGIN_SRC emacs-lisp
-(custom-set-variables '(logstash-indent 2))
+(use-package logstash-conf
+  :ensure t
+  :config
+  (custom-set-variables '(lostash-indent 2)))
 #+END_SRC
 
 ** Modes configuration
@@ -1144,13 +1147,15 @@ give you an horizontal split.
 ;;; (yas-reload-all)
 #+END_SRC
 
-*** re-builder
+*** TODO re-builder
+
+Editor di regexp che evita la pazzia dei backslash
 
 #+BEGIN_SRC emacs-lisp
-;; editor di regexp che evita la pazzia dei backslash
-;; (require 're-builder)
-;; evita la pazzia dei backslash
-;; (setq reb-re-syntax 'string)
+(use-package re-builder
+  :disabled t
+  :config
+  (setq reb-re-syntax 'string))
 #+END_SRC
 
 *** magit
@@ -1293,7 +1298,7 @@ Because Vim is the best text editor.
                             (run-hooks 'moo-prog-mode-hooks)))
 
 ;; spell check comments and strings
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
 ;; (add-hook 'prog-mode-hook
 ;;           (lambda ()
@@ -1379,8 +1384,9 @@ For web:
 #+BEGIN_SRC emacs-lisp
 ;; apache-mode
 (use-package apache-mode
+  :ensure t
   :mode (("\\.htaccess\\'" . apache-mode)
-         ("sites-\\(available|enabled\\)/" . apache-mode)))
+         ("/apache2?/sites-\\(available|enabled\\)/" . apache-mode)))
 #+END_SRC
 
 *** outline
@@ -1432,13 +1438,12 @@ Keep track of recent used files.
 #+BEGIN_SRC emacs-lisp
 (use-package recentf
   :config
-  (progn
-    (setq recentf-max-saved-items 300
-          recentf-max-menu-items 20
-          recentf-exclude '(".recentf" "/elpa/" "\\.ido.last" "/ssh:" "/tmp/"
-                            "COMMIT_EDITMSG" ".gz")
-          recentf-auto-cleanup 600)
-    (recentf-mode +1)))
+  (setq recentf-max-saved-items 300
+        recentf-max-menu-items 20
+        recentf-exclude '(".recentf" "/elpa/" "\\.ido.last" "/ssh:" "/tmp/"
+                          "COMMIT_EDITMSG" ".gz")
+        recentf-auto-cleanup 600)
+  (recentf-mode +1))
 #+END_SRC
 
 *** undo-tree
@@ -1469,11 +1474,10 @@ things telling you how many matches was found for the current search.
 (use-package anzu
   :diminish anzu-mode
   :config
-  (progn
-    (global-anzu-mode +1)
-    (set-face-attribute 'anzu-mode-line nil
-                        :foreground "orange" :weight 'bold)
-    (setq anzu-minimum-input-length 3)))
+  (global-anzu-mode +1)
+  (set-face-attribute 'anzu-mode-line nil
+                      :foreground "orange" :weight 'bold)
+  (setq anzu-minimum-input-length 3))
 #+END_SRC
 
 *** Spellcheck and flyspell settings
@@ -1666,8 +1670,9 @@ active window.
 #+BEGIN_SRC emacs-lisp
 (use-package smart-mode-line
   :ensure t
-  :init (setq sml/theme 'dark)
-  :config (sml/setup))
+  :config
+  (setq sml/theme 'dark)
+  (sml/setup))
 #+END_SRC
 
 *** dtrt-indent 						:new:
@@ -1687,10 +1692,10 @@ typed so far; it's very useful for less used modes (like Org), for
 example I can press =C-c= and then read the list of org bindings.
 
 #+BEGIN_SRC emacs-lisp
-;; (use-package which-key
-;;   :ensure t
-;;   :diminish which-key-mode
-;;   :config (which-key-mode))
+(use-package which-key
+  :disabled t
+  :diminish which-key-mode
+  :config (which-key-mode))
 #+END_SRC
 
 *** window-numbering
@@ -1748,13 +1753,6 @@ Highlight matches from search
   :ensure t)
 #+END_SRC
 
-*** apache-mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package apache-mode
-  :ensure t)
-#+END_SRC
-
 *** nginx-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1799,13 +1797,6 @@ Highlight matches from search
   :ensure t)
 #+END_SRC
 
-*** TODO volatile-highlights
-
-#+BEGIN_SRC emacs-lisp
-(use-package volatile-highlights
-  :ensure t)
-#+END_SRC
-
 *** TODO smartparens
 
 #+BEGIN_SRC emacs-lisp
@@ -1813,6 +1804,23 @@ Highlight matches from search
   :ensure t
   :config
   (require 'smartparens-config))
+#+END_SRC
+
+*** chef-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package chef-mode
+  :ensure t)
+#+END_SRC
+
+*** rvm
+
+#+BEGIN_SRC emacs-lisp
+(use-package rvm
+  :ensure t
+  :pin melpa-stable
+  :config
+  (rvm-use-default))
 #+END_SRC
 
 ** Aliases
