@@ -1,5 +1,11 @@
 # Preferences.git -- i miei file di configurazione per la command line.
 
+My collection of dotfiles.
+
+## Installation
+
+Just run `./colonizza.py`, or edit `dotfiles.cfg` for customization.
+
 ## Submodules
 
 Installazione submodules git:
@@ -70,28 +76,28 @@ includono un helper per integrarsi con keychains di OS X; per abilitarlo:
 
 	$ git config --global credential.helper osxkeychain
 
-### Esportare Preferences
+### Export a tar.gz of Preferences
 
-Per esportare tutto il repository in formato tar.gz:
-
-	$ git archive --format=tar.gz --prefix=Preferences/ --output=Preferences_$(date +"%d-%b-%Y").tar.gz HEAD
+To export a tar.gz of this repository run `make release`.
 
 ## Repository e utility
 
-- [zsh-syntax-highlighting](git://github.com/zsh-users/zsh-syntax-highlighting.git)
+- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - [tmux-colors-solarized](https://github.com/seebi/tmux-colors-solarized.git)
 - [dircolors-solarized](https://github.com/seebi/dircolors-solarized.git)
-- [cliweather](https://github.com/AaronFoltz/cliweather.git) - per il clima in
-  command line.
-- # gem install lolcat
-- [python-mode](https://github.com/klen/python-mode.git)
 
 ## Note
+
+### Vim e css.vim (OLD)
 
 Il plugin `css.vim` rende lentissima l'apertura di file html, css, e simili in
 console; vedi anche [qui](http://markhansen.co.nz/vim-slow-html/); il problema
 si risolve caricando lo script solo con la GUI.
 
-Per la completion di brew su OSX, linkare:
+### OS X, zsh and brew completion
 
-	/usr/local/Library/Contributions/brew_zsh_completion.zsh in ~/.zsh/func/_brew
+To enable brew completion with zsh:
+
+```
+ln -s /usr/local/Library/Contributions/brew_zsh_completion.zsh ~/.zsh/func/_brew
+```
