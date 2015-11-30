@@ -235,6 +235,16 @@ environment variables, like *go-mode*.
 #+END_SRC
 
 ** Basic settings
+
+*** Load custom settings
+
+This should be the place where customization goes.
+
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+#+END_SRC
+
 *** General settings
 Define some constants and variables:
 
