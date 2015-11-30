@@ -1,7 +1,0 @@
-[ui]
-# username = sand <sand@crm114.laptop>
-ssh = ssh -C
-editor = vim
-
-[extensions]
-color=
