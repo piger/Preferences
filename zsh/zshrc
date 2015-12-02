@@ -811,13 +811,16 @@ function expand-or-complete-prefix-with-indicator() {
 }
 zle -N expand-or-complete-prefix-with-indicator
 
-# Complete in the middle of word.
-[[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
+# 02/12/2015 - middle word completion doesn't work well with the chef hostname completion.
 
-[[ -n "$keyinfo[Control]" ]] && \
-    bindkey -M "emacs" "$keyinfo[Control]I" \
-    expand-or-complete-prefix-with-indicator
+# Complete in the middle of word.
+# [[ -n "$keyinfo[Control]" ]] && \
+#     bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
+
+# Complete in the middle of word and show indicator. (remember to comment previous binding)
+# [[ -n "$keyinfo[Control]" ]] && \
+#     bindkey -M "emacs" "$keyinfo[Control]I" \
+#     expand-or-complete-prefix-with-indicator
 
 # Completion per task warrior
 # NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
