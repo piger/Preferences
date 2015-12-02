@@ -207,7 +207,7 @@ set_hostname_color
 
 # PROMPT='${FG[$hostname_color]}%n@%m$FX[reset] $'
 
-PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
+PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_} ${rbenv_prompt}
 ${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
 
 # Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
@@ -495,6 +495,19 @@ if exists vcs_info; then
     # precmd_functions+=vcs_info
     precmd_functions+=lazy_vcs_info
 fi
+
+# Add rbenv informations to the prompt
+# ------------------------------------
+rbenv_prompt=""
+
+update_rbenv_prompt() {
+    if [[ -n $RBENV_VERSION ]]; then
+        rbenv_prompt="(ruby: $RBENV_VERSION)"
+    else
+        rbenv_prompt=""
+    fi
+}
+precmd_functions+=update_rbenv_prompt
 # }}}
 
 # OS SPECIFIC {{{
