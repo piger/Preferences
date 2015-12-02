@@ -994,7 +994,7 @@ Configure indentation for logstash-conf-mode:
 (use-package logstash-conf
   :ensure t
   :config
-  (custom-set-variables '(lostash-indent 2)))
+  (custom-set-variables '(logstash-indent 2)))
 #+END_SRC
 
 ** Modes configuration
@@ -1716,7 +1716,8 @@ active window.
 (use-package smart-mode-line
   :ensure t
   :config
-  (setq sml/theme 'dark)
+  ; this is customized in custom.el
+  ; (setq sml/theme 'dark)
   (sml/setup))
 #+END_SRC
 
