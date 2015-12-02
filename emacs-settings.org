@@ -19,7 +19,42 @@ This file is heavily inspired by [[http://p.writequit.org/org/settings.html#sec-
 Chua's Emacs configuration]], which could probably be nice to open
 directly from here [[https://raw.githubusercontent.com/dakrone/dakrone-dotfiles/master/.emacs.d/settings.org][Lee's emacs]] and [[https://raw.githubusercontent.com/sachac/.emacs.d/gh-pages/Sacha.org][Sacha.org]].
 
-Note about =setq= vs. =setq-default=:
+** About emacs configuration
+
+http://stackoverflow.com/questions/12058717/confusing-about-the-emacs-custom-system
+
+#+BEGIN_QUOTE
+- use setq or setq-default for variables defined by defvar.
+- use setq, setq-default, or the Customize mechanism for variables defined by defcustom
+
+Below is the long answer.
+
+The functions that you are going to use are the following:
+
+- set is the main function to set the value of a variable.
+
+- setq is another version that automatically quotes its first argument. This is useful since quoting the first argument is what
+  you want to do almost all the time.
+
+Some variables cannot be set globally. Whenever you set the variable it is only set for the current buffer. If you want to
+simulate setting this variable globally you use set-default or setq-default.
+
+The functions that a package writer uses are:
+
+- defvar which allows the package writer to define a variable and to give some documentation. This function is not required but
+  makes the life of users easier.
+- defcustom builds on defvar. It tells emacs that it is a variable, and it allows the developer to create a custom interface to
+  set the value. The developer can say, things like "this variable can contain only the value 'foo or 'bar".
+
+Setting variables can be done two ways:
+
+- if defvar was used, the values can only be set by the user in its .emacs by using the set function (or variants)
+
+- if defcustom was used, the values can be set using set (see 1.) OR by using Customize. When using the customize mechanism, emacs
+  will generate some code that it will place in custom-set-variables. The user should not use this function.
+#+END_QUOTE
+
+(Another) Note about =setq= vs. =setq-default=:
 
 #+BEGIN_QUOTE
 If a variable is buffer-local, then setq sets its local value in the
