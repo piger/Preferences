@@ -19,9 +19,9 @@ This file is heavily inspired by [[http://p.writequit.org/org/settings.html#sec-
 Chua's Emacs configuration]], which could probably be nice to open
 directly from here [[https://raw.githubusercontent.com/dakrone/dakrone-dotfiles/master/.emacs.d/settings.org][Lee's emacs]] and [[https://raw.githubusercontent.com/sachac/.emacs.d/gh-pages/Sacha.org][Sacha.org]].
 
-** About emacs configuration
-
-http://stackoverflow.com/questions/12058717/confusing-about-the-emacs-custom-system
+** Documentation
+*** About emacs configuration
+This is an extract from a [[http://stackoverflow.com/questions/12058717/confusing-about-the-emacs-custom-system][StackOverflow question]]:
 
 #+BEGIN_QUOTE
 - use setq or setq-default for variables defined by defvar.
@@ -64,9 +64,9 @@ If a variable is not buffer-local, then setq and setq-default do the
 same thing.
 #+END_QUOTE
 
-** Emergency elisp
+*** Emergency elisp
 
-*** modify lists
+**** modify lists
 
 Example: *company-mode* complains because it cannot find one of the
 backends defined inside =company-backends=, so you want to remove it
@@ -94,12 +94,12 @@ Now to remove it:
 (setq company-backends (delete 'company-anaconda company-backends))
 #+END_SRC
 
-** Installation notes
+*** Installation notes
 On OS X the best setup is achieved by installing the basic =emacs= for
 the command line and =emacs-mac-port= for the GUI; the latter has
 better integration with OS X.
 
-*** Themes
+**** Themes
 I usually leave the configuration of the theme inside the /local/
 settings file, to customize it for the environment I am (work, home).
 
@@ -146,7 +146,7 @@ invocations with useless updates.
 
 A page with an overview of [[http://raebear.net/comp/emacscolors.html][available colors]].
 
-** Keyboard shortcuts
+*** Keyboard shortcuts
 General emacs shortcuts:
 
 | Shortcut  | What it does             | Usage frequency |
@@ -183,7 +183,7 @@ Configure garbage collection for a faster emacs startup:
 (setq-default gc-cons-threshold 10000000)
 #+END_SRC
 
-** Packages
+*** Packages
 Packages setup should be done early during emacs initialization; I
 copied a function from prelude to check and install packages from a
 list.
@@ -219,7 +219,7 @@ list.
 ; (diminish 'subword-mode)
 #+END_SRC
 
-*** Initialize use-package
+**** Initialize use-package
 
 [[https://github.com/jwiegley/use-package][use-package]] is a nice macro to configure and load external packages.
 
@@ -236,7 +236,7 @@ list.
 (require 'bind-key)
 #+END_SRC
 
-*** run execute-path-from-shell early as possible
+**** run execute-path-from-shell early as possible
 
 This will impact packages which call system binaries or need
 environment variables, like *go-mode*.
@@ -255,23 +255,24 @@ environment variables, like *go-mode*.
     (exec-path-from-shell-initialize)))
 #+END_SRC
 
-*** install base16 themes
+**** install base16 themes
 
 #+BEGIN_SRC emacs-lisp
 (use-package base16-theme
   :ensure t)
 #+END_SRC
 
-*** install diminish
+**** install diminish
 
 #+BEGIN_SRC emacs-lisp
 (use-package diminish
   :ensure t)
 #+END_SRC
 
-** Basic settings
+** Settings
+*** Basic settings
 
-*** Load custom settings
+**** Load custom settings
 
 This should be the place where customization goes.
 
@@ -280,7 +281,7 @@ This should be the place where customization goes.
 (load custom-file 'noerror)
 #+END_SRC
 
-*** General settings
+**** General settings
 Define some constants and variables:
 
 #+BEGIN_SRC emacs-lisp
@@ -347,7 +348,7 @@ Save the minibuffer history:
 (savehist-mode 1)
 #+END_SRC
 
-**** Font configuration
+***** Font configuration
 
 Here we could setup fonts; interesting list:
 
@@ -355,7 +356,7 @@ Here we could setup fonts; interesting list:
 - Source Code Pro 11
 - Monoid 13
 
-*** Miscellaneous configuration
+**** Miscellaneous configuration
 
 #+BEGIN_SRC emacs-lisp
 ;; save bookmarks every time a bookmark is added
@@ -499,7 +500,7 @@ Here we could setup fonts; interesting list:
                                                "backups"))))
 #+END_SRC
 
-** Custom functions
+*** Custom functions
 A small collection of elisp functions taken from the internet.
 
 #+BEGIN_SRC emacs-lisp
@@ -720,7 +721,7 @@ Per joinare una /region/:
           (join-line 1)))))
 #+END_SRC
 
-** Keyboard bindings
+*** Keyboard bindings
 
 Mac OS X customization. Note that you should use my modified keyboard
 layout which permits accented characters.
@@ -776,30 +777,27 @@ layout which permits accented characters.
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
 #+END_SRC
 
-** Extra scripts
+*** Extra scripts
 
 #+BEGIN_SRC emacs-lisp
-;; miei script
+;; Local elisp code
 (when (file-exists-p "~/Preferences/elisp")
   (add-to-list 'load-path "~/Preferences/elisp")
 
   ; nagios-mode (da elisp locale)
   (autoload 'nagios-mode "nagios-mode" nil t))
 
-;;; themes
-;;; https://github.com/owainlewis/emacs-color-themes
-; (add-to-list 'load-path "~/Preferences/elisp/themes/tomorrow-theme")
-; (add-to-list 'custom-theme-load-path "~/Preferences/elisp/themes/tomorrow-theme")
 #+END_SRC
 
-** Programming
-*** flycheck
+** Configuration
+*** Programming
+**** flycheck
 
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck)
 #+END_SRC
 
-*** Shell
+**** Shell
 Not much configuration for shell scripting at the moment. I prefer to
 let emacs guess the indentation level. I disable flycheck to avoid
 checking the script by running it.
@@ -810,8 +808,8 @@ checking the script by running it.
             ;; do not run flycheck
             (flycheck-mode -1)))
 #+END_SRC
-**** TODO Verify flycheck
-*** Python
+***** TODO Verify flycheck
+**** Python
 
 #+BEGIN_SRC emacs-lisp
 (use-package python
@@ -831,7 +829,7 @@ checking the script by running it.
   (add-hook 'python-mode-hook 'piger/python-mode-hooks))
 #+END_SRC
 
-*** Go
+**** Go
 
 #+BEGIN_SRC emacs-lisp
 ; Those env variables should be inherithed using exec-path-from-shell
@@ -869,11 +867,11 @@ checking the script by running it.
   :ensure t)
 #+END_SRC
 
-**** TODO goimports
+***** TODO goimports
 
 Sembra interessante
 
-*** Ruby
+**** Ruby
 
 Don't want the /magic/ comment.
 
@@ -896,7 +894,7 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
   :ensure t)
 #+END_SRC
 
-*** CSS
+**** CSS
 
 #+BEGIN_SRC emacs-lisp
 (use-package css-mode
@@ -914,7 +912,7 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
   :ensure t)
 #+END_SRC
 
-*** js2
+**** js2
 
 #+BEGIN_SRC emacs-lisp
 (use-package js2-mode
@@ -938,14 +936,14 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
                       (list "Ember" "DS" "App"))))))
 #+END_SRC
 
-*** json
+**** json
 
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode
   :ensure t)
 #+END_SRC
 
-*** web
+**** web
 
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
@@ -962,7 +960,7 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
 
 #+END_SRC
 
-**** Aggiungere una regola per impostare l'engine automaticamente
+***** Aggiungere una regola per impostare l'engine automaticamente
 
 #+BEGIN_SRC emacs-lisp :tangle no
 web-mode-engines-alist
@@ -975,7 +973,7 @@ web-mode-engines-alist
 (("django" . "/sand/src/.*templates/") ("go" . "/go/src/.*\\.html\\'"))
 #+END_SRC
 
-*** shell
+**** shell
 
 Hook function for shell-script mode(s). See also =sh-basic-offset=.
 
@@ -986,7 +984,7 @@ Hook function for shell-script mode(s). See also =sh-basic-offset=.
             (setq indent-tabs-mode nil)))
 #+END_SRC
 
-*** logstash
+**** logstash
 
 Configure indentation for logstash-conf-mode:
 
@@ -997,9 +995,9 @@ Configure indentation for logstash-conf-mode:
   (custom-set-variables '(logstash-indent 2)))
 #+END_SRC
 
-** Modes configuration
+*** Modes configuration
 
-*** A note on C programming
+**** A note on C programming
 
 If you need to alter the indenting value check out the following
 variables:
@@ -1016,7 +1014,7 @@ Ad esempio:
               indent-tabs-mode t)
 #+END_SRC
 
-*** ido
+**** ido
 
 #+BEGIN_SRC emacs-lisp
 ;;; 2/11/2014 - provo a usare Helm
@@ -1037,7 +1035,7 @@ Ad esempio:
 (ido-mode -1)
 #+END_SRC
 
-*** helm                                                                :new:
+**** helm                                                               :new:
 Helm could be a nice ido replacement with more features. I'm still
 trying to understand if I like it.
 
@@ -1138,7 +1136,7 @@ And also [[https://github.com/ShingoFukuyama/helm-swoop][helm-swoop]] seems inte
   (global-set-key (kbd "C-c o") 'helm-swoop))
 #+END_SRC
 
-*** ibuffer
+**** ibuffer
 Provides a better interface to open buffers.
 
 #+BEGIN_SRC emacs-lisp
@@ -1146,7 +1144,7 @@ Provides a better interface to open buffers.
   :bind ("C-x C-b" . ibuffer))
 #+END_SRC
 
-*** uniquify
+**** uniquify
 
 #+BEGIN_SRC emacs-lisp
 ;; meaningful names for buffers with the same name
@@ -1158,7 +1156,7 @@ Provides a better interface to open buffers.
         uniquify-ignore-buffers-re "^\\*"))     ; don't muck with special buffers
 #+END_SRC
 
-*** windmove
+**** windmove
 
 Nice keybinding to switch frame using shift or alt + arrows:
 
@@ -1168,7 +1166,7 @@ Nice keybinding to switch frame using shift or alt + arrows:
   (windmove-default-keybindings 'meta))
 #+END_SRC
 
-*** transpose-frame
+**** transpose-frame
 
 This package provides some useful commands to move windows around, for
 example =transpose-frame= on a frame with two vertical windows will
@@ -1180,7 +1178,7 @@ give you an horizontal split.
   :bind (("C-x j" . transpose-frame)))
 #+END_SRC
 
-*** yasnippet
+**** yasnippet
 
 #+BEGIN_SRC emacs-lisp
 ;;; yasnippet
@@ -1192,7 +1190,7 @@ give you an horizontal split.
 ;;; (yas-reload-all)
 #+END_SRC
 
-*** TODO re-builder
+**** TODO re-builder
 
 Editor di regexp che evita la pazzia dei backslash
 
@@ -1203,7 +1201,7 @@ Editor di regexp che evita la pazzia dei backslash
   (setq reb-re-syntax 'string))
 #+END_SRC
 
-*** magit
+**** magit
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
@@ -1211,7 +1209,7 @@ Editor di regexp che evita la pazzia dei backslash
   :bind ("C-x g" . magit-status))
 #+END_SRC
 
-*** git-gutter
+**** git-gutter
 
 13/04/2015 lo commento perche' di default mi sta un po' sul cazzo,
 sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
@@ -1221,10 +1219,11 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   :ensure t
   :diminish git-gutter-mode
   :config
+  (git-gutter:linum-setup)
   (add-hook 'prog-mode-hook 'git-gutter-mode))
 #+END_SRC
 
-*** git-commit
+**** git-commit
 
 #+BEGIN_SRC emacs-lisp
 (use-package git-commit
@@ -1233,7 +1232,7 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   (add-hook 'git-commit-mode-hook 'flyspell-mode))
 #+END_SRC
 
-*** gitconfig and gitignore
+**** gitconfig and gitignore
 
 #+BEGIN_SRC emacs-lisp
 (use-package gitconfig-mode
@@ -1243,7 +1242,7 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   :ensure t)
 #+END_SRC
 
-*** dired-x
+**** dired-x
 
 I've followed the installation [[http://www.gnu.org/software/emacs/manual/html_node/dired-x/Installation.html#Installation][guide]].
 
@@ -1258,7 +1257,7 @@ I've followed the installation [[http://www.gnu.org/software/emacs/manual/html_n
             ))
 #+END_SRC
 
-*** expand-region
+**** expand-region
 This is useful to mark /things/ inside markers, for example the text
 inside a quoted string or inside some parenthesis.
 
@@ -1268,7 +1267,7 @@ inside a quoted string or inside some parenthesis.
   :bind ("C-=" . er/expand-region))
 #+END_SRC
 
-*** move-text
+**** move-text
 
 #+BEGIN_SRC emacs-lisp
 ;; move-text
@@ -1278,7 +1277,7 @@ inside a quoted string or inside some parenthesis.
 ;; (move-text-default-bindings)
 #+END_SRC
 
-*** evil
+**** evil
 Because Vim is the best text editor.
 
 #+BEGIN_SRC emacs-lisp
@@ -1295,14 +1294,14 @@ Because Vim is the best text editor.
         evil-motion-state-cursor '("gray" box)))
 #+END_SRC
 
-*** markdown
+**** markdown
 
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
   :ensure t)
 #+END_SRC
 
-**** TODO move this section somewhere
+***** TODO move this section somewhere
 
 #+BEGIN_SRC emacs-lisp
 ;; Assign a specific mode for certain directories
@@ -1314,7 +1313,7 @@ Because Vim is the best text editor.
 ;; rst-mode: default to auto-fill
 (add-hook 'rst-mode-hook 'turn-on-auto-fill)
 
-*** po-mode & i18n
+**** po-mode & i18n
 
 #+BEGIN_SRC emacs-lisp
 ;; gettext on OS X (homebrew) ships with additional elisp files
@@ -1324,9 +1323,9 @@ Because Vim is the best text editor.
     :mode ("\\.po\\'\\|\\.po\\." . po-mode)))
 #+END_SRC
 
-*** prog-mode
+**** prog-mode
 
-**** TODO this must be moved!
+***** TODO this must be moved!
 
 #+BEGIN_SRC emacs-lisp
 (defun moo-prog-mode-defaults ()
@@ -1355,7 +1354,7 @@ Because Vim is the best text editor.
 ;;             (subword-mode t)))
 #+END_SRC
 
-*** elisp
+**** elisp
 
 #+BEGIN_SRC emacs-lisp
 ; elisp defaults
@@ -1370,7 +1369,7 @@ Because Vim is the best text editor.
                                   (run-hooks 'pl-elisp-mode-hooks)))
 #+END_SRC
 
-*** projectile
+**** projectile
 
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
@@ -1385,7 +1384,7 @@ Because Vim is the best text editor.
   (helm-projectile-on))
 #+END_SRC
 
-*** company (completion)
+**** company (completion)
 
 #+BEGIN_SRC emacs-lisp
 (use-package company
@@ -1424,7 +1423,7 @@ For web:
   :ensure t)
 #+END_SRC
 
-*** apache
+**** apache
 
 #+BEGIN_SRC emacs-lisp
 ;; apache-mode
@@ -1434,7 +1433,7 @@ For web:
          ("/apache2?/sites-\\(available|enabled\\)/" . apache-mode)))
 #+END_SRC
 
-*** outline
+**** outline
 
 #+BEGIN_SRC emacs-lisp
 ;; code folding with vim compatibility
@@ -1463,7 +1462,7 @@ For web:
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 #+END_SRC
 
-*** volatile-highlights
+**** volatile-highlights
 
 #+BEGIN_SRC emacs-lisp
 ;; (require 'volatile-highlights)
@@ -1477,7 +1476,7 @@ For web:
   (volatile-highlights-mode +!))
 #+END_SRC
 
-*** recentf
+**** recentf
 Keep track of recent used files.
 
 #+BEGIN_SRC emacs-lisp
@@ -1491,7 +1490,7 @@ Keep track of recent used files.
   (recentf-mode +1))
 #+END_SRC
 
-*** undo-tree
+**** undo-tree
 
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -1501,7 +1500,7 @@ Keep track of recent used files.
     (global-undo-tree-mode +1))
 #+END_SRC
 
-*** winner
+**** winner
 Keep track of window layouts and buffers and *try* to restore them.
 
 Bindings: =C-c LEFT= and =C-c RIGHT=.
@@ -1511,7 +1510,7 @@ Bindings: =C-c LEFT= and =C-c RIGHT=.
   :config (winner-mode +1))
 #+END_SRC
 
-*** anzu
+**** anzu
 Anzu shows an indicator inside the minibar when you are searching for
 things telling you how many matches was found for the current search.
 
@@ -1525,7 +1524,7 @@ things telling you how many matches was found for the current search.
   (setq anzu-minimum-input-length 3))
 #+END_SRC
 
-*** Spellcheck and flyspell settings
+**** Spellcheck and flyspell settings
 Spell checking.
 
 Per usare =hunspell= bisogna scaricare i dizionari dal sito delle
@@ -1593,7 +1592,7 @@ con "SET UTF-8".
   (define-key flyspell-mode-map [mouse-3] #'undefined))
 #+END_SRC
 
-*** ace-jump                                                            :new:
+**** ace-jump                                                           :new:
 Quick jump to a word.
 
 #+BEGIN_SRC emacs-lisp
@@ -1601,9 +1600,9 @@ Quick jump to a word.
   :bind ("C-c SPC" . ace-jump-mode))
 #+END_SRC
 
-**** TODO C-c SPC binding conflicts with org
+***** TODO C-c SPC binding conflicts with org
 
-*** org
+**** org
 
 #+BEGIN_SRC emacs-lisp
 ; general setup
@@ -1652,7 +1651,7 @@ Quick jump to a word.
               ("CANCELLED" :foreground "forest green" :weight bold))))
 #+END_SRC
 
-*** alert                                                               :new:
+**** alert                                                              :new:
 
 Use terminal-notifier to notify stuff.
 
@@ -1707,7 +1706,7 @@ Use terminal-notifier to notify stuff.
         (setq alert-default-style 'terminal-notifier))))
 #+END_SRC
 
-*** smart-mode-line
+**** smart-mode-line
 
 I'm trying [[https://github.com/Malabarba/smart-mode-line][smart-mode-line]] just to have a better visual of the current
 active window.
@@ -1721,7 +1720,7 @@ active window.
   (sml/setup))
 #+END_SRC
 
-*** dtrt-indent 						:new:
+**** dtrt-indent                                                        :new:
 
 [[https://github.com/jscheid/dtrt-indent][dtrt-indent]] is a minor mode which guesses the indentation offset of a
 source file and adjust the corresponding configuration in Emacs.
@@ -1731,7 +1730,7 @@ source file and adjust the corresponding configuration in Emacs.
   :ensure t)
 #+END_SRC
 
-*** which-key								:new:
+**** which-key                                                          :new:
 
 [[https://github.com/justbur/emacs-which-key][which-key]] whill show a list of possible completion for the key binding
 typed so far; it's very useful for less used modes (like Org), for
@@ -1744,7 +1743,7 @@ example I can press =C-c= and then read the list of org bindings.
   :config (which-key-mode))
 #+END_SRC
 
-*** window-numbering
+**** window-numbering
 
 Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
 
@@ -1754,7 +1753,7 @@ Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
   :config (window-numbering-mode))
 #+END_SRC
 
-*** dash-at-point
+**** dash-at-point
 
 Per usare dash su OS X
 
@@ -1764,7 +1763,7 @@ Per usare dash su OS X
     :ensure t))
 #+END_SRC
 
-*** highlight-symbol
+**** highlight-symbol
 
 Potrebbe essere utile.
 
@@ -1776,21 +1775,21 @@ Potrebbe essere utile.
   (add-hook 'prog-mode-hook 'highlight-symbol-mode))
 #+END_SRC
 
-*** ace-jump-mode
+**** ace-jump-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package ace-jump-mode
   :ensure t)
 #+END_SRC
 
-*** TODO alert (growl-style notifications?)
+**** TODO alert (growl-style notifications?)
 
 #+BEGIN_SRC emacs-lisp
 (use-package alert
   :ensure t)
 #+END_SRC
 
-*** anzu
+**** anzu
 
 Highlight matches from search
 
@@ -1799,35 +1798,35 @@ Highlight matches from search
   :ensure t)
 #+END_SRC
 
-*** nginx-mode
+**** nginx-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package nginx-mode
   :ensure t)
 #+END_SRC
 
-*** php-mode
+**** php-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package php-mode
   :ensure t)
 #+END_SRC
 
-*** TODO buffer-move
+**** TODO buffer-move
 
 #+BEGIN_SRC emacs-lisp
 (use-package buffer-move
   :ensure t)
 #+END_SRC
 
-*** TODO move-text
+**** TODO move-text
 
 #+BEGIN_SRC emacs-lisp
 (use-package move-text
   :ensure t)
 #+END_SRC
 
-*** rainbow-delimiters
+**** rainbow-delimiters
 
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
@@ -1836,14 +1835,14 @@ Highlight matches from search
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
 
-*** TODO unfill
+**** TODO unfill
 
 #+BEGIN_SRC emacs-lisp
 (use-package unfill
   :ensure t)
 #+END_SRC
 
-*** TODO smartparens
+**** TODO smartparens
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
@@ -1852,14 +1851,14 @@ Highlight matches from search
   (require 'smartparens-config))
 #+END_SRC
 
-*** chef-mode
+**** chef-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package chef-mode
   :ensure t)
 #+END_SRC
 
-*** rvm
+**** rvm
 
 #+BEGIN_SRC emacs-lisp
 (use-package rvm
@@ -1869,14 +1868,14 @@ Highlight matches from search
   (rvm-use-default))
 #+END_SRC
 
-** Aliases
+*** Aliases
 I'd like to have more aliases... :)
 
 #+BEGIN_SRC emacs-lisp
 (defalias 'qrr 'query-replace-regexp)
 #+END_SRC
 
-** OS Specific settings
+*** OS Specific settings
 
 #+BEGIN_SRC emacs-lisp
 (when *is-a-mac*
@@ -1896,7 +1895,7 @@ I'd like to have more aliases... :)
   (setq delete-by-moving-to-trash t))
 #+END_SRC
 
-** Local settings
+*** Local settings
 I like to keep a /local/ settings file to override or further
 customize programs on each of my workstations.
 
