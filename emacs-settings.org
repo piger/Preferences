@@ -540,6 +540,7 @@ Including indent-buffer, which should not be called automatically on save."
     "In helm-mini you can search for a @pattern inside a file; M-s to see context"
     "C-c SPC to ace-jump to a word"
     "C-x j to switch window layout (transpose-frame)"
+    "C-h l or view-lossage is the command to know How Did I Get There?"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
@@ -1219,7 +1220,7 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   :ensure t
   :diminish git-gutter-mode
   :config
-  (git-gutter:linum-setup)
+  ;(git-gutter:linum-setup)
   (add-hook 'prog-mode-hook 'git-gutter-mode))
 #+END_SRC
 
