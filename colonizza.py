@@ -83,7 +83,7 @@ def read_config(filename):
             if not line or line.startswith('#'):
                 continue
             if ' ' in line:
-                src, dest = line.rsplit(' ', 1)
+                src, dest = line.split(' ', 1)
             else:
                 src, dest = line, None
             links.append((src, dest))
