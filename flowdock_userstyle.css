@@ -20,3 +20,9 @@
   font-size: 14px !important;
   /* line-height: 16px !important; */
 }
+
+/* I should find a more appropriate way to override <code>'s CSS attributes */
+code {
+  font-family: "Source Code Pro" !important;
+  font-size: 10pt !important;
+}
