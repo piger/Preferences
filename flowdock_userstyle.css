@@ -1,0 +1,22 @@
+/*
+ * Flowdock customization via userstyle.css
+ * Place this file in: ~/Library/Application Support/Flowdock/userstyle.css
+ *
+ */
+
+* {
+  font-family: "Lato";
+  font-weight: 400;
+}
+
+#inbox * {
+  font-family: "Helvetica Neue";
+  font-size: 10pt;
+  line-height: 12pt;
+  font-weight: 400;
+}
+
+#chat li[class*="message"] {
+  font-size: 14px !important;
+  /* line-height: 16px !important; */
+}
