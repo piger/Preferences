@@ -1063,7 +1063,8 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
   (helm-mode 1)
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
-         ("M-x" . helm-M-x)))
+         ("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)))
 #+END_SRC
 
 Other random helm things:
