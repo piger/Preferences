@@ -25,5 +25,5 @@ muttrc
 /elisp-init/init-local.el
 /emacs-settings.el
 /emacs-settings.html
-emacs/elpa/archives
 Preferences_*.tar.gz
+emacs/elpa/
