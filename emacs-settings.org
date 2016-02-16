@@ -1208,7 +1208,9 @@ Editor di regexp che evita la pazzia dei backslash
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :pin melpa-stable
-  :bind ("C-x g" . magit-status))
+  :bind ("C-x g" . magit-status)
+  :config
+  (setq magit-diff-refine-hunk 'all))
 #+END_SRC
 
 **** git-gutter
