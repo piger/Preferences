@@ -832,6 +832,14 @@ checking the script by running it.
 
 **** Go
 
+Per l'auto completion serve gocode:
+
+#+BEGIN_QUOTE
+go get -u github.com/nsf/gocode
+#+END_QUOTE
+
+e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
+
 #+BEGIN_SRC emacs-lisp
 ; Those env variables should be inherithed using exec-path-from-shell
 ; (setenv "GOPATH" (expand-file-name "~/dev/go"))
