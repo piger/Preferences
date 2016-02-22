@@ -967,6 +967,9 @@ if [[ $CHEF_NODES_DIR != "" ]]; then
     zstyle ':completion:*:hosts' hosts $_ssh_hosts
 fi
 
+# use hosts completion also for tmux-cssh
+compdef _hosts tmux-cssh
+
 
 # Ctrl-X - SHIFT+S
 # Completa usando le parole della schermata attuale di tmux.
