@@ -378,6 +378,12 @@ Here we could setup fonts; interesting list:
 (setq-default c-basic-offset 4)
 (setq-default cperl-indent-level 4)
 
+;;; show long lines as "wrapped"
+(setq truncate-lines nil)
+
+;;; set the fill column (for text indentation) to 100 columns (130 is also a good value)
+(setq fill-column 100)
+
 ;;; show column number by default
 (setq column-number-mode t)
 
