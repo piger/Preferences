@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+import os
+import sys
+import re
+import subprocess
+
+
+def main():
+    args = ' '.join(sys.argv[1:])
+    if not len(args):
+        print "NOTICE: reading targets from stdin"
+        args = sys.stdin.read()
+
+    args = args.strip()
+    args = re.sub(r'[,\s]+', r'\n', args)
+    args = args.split("\n")
+    my_pid = os.getpid()
+
+    session = "cssh-{}".format(my_pid)
+    window = "{}:1".format(session)
+
+    os.system("tmux new-session -d -s {} -P ssh {}".format(session, args[0]))
+    for host in args[1:]:
+        os.system("tmux split-window -t {} ssh {}".format(window, host))
+        os.system("tmux select-layout -t {} tiled".format(window))
+    os.system("tmux set-window-option -t {} status off".format(window))
+    os.system("tmux set-window-option -t {} synchronize-panes on".format(window))
+    os.system("tmux switch-client -t {}".format(session))
+
+
+if __name__ == '__main__':
+    main()

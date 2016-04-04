@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#
+# Chef node search helper
+#
+# It will output a list of nodes (one per line) or a comma separated host list (when -c is supplied).
+#
+# Example usage:
+# $ find_nodes 'role:hg_work AND zendesk_config_pod:3 AND chef_environment:production'
+
+set -e
+set -o pipefail
+
+COMMA=0
+POD=""
+PRODUCTION=0
+
+while getopts ":cp:P" opt; do
+    case $opt in
+        c)
+            COMMA=1
+            ;;
+        p)
+            POD=$OPTARG
+            ;;
+        P)
+            PRODUCTION=1
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+QUERY="$*"
+
+if [[ -z $QUERY ]]; then
+    echo "Usage: $(basename $0) <query>"
+    echo -e " -c\tOutput a comma separated host list"
+    echo -e " -p <num>\tLimit the search to a specific pod"
+    echo -e " -P\tLimit the search to production nodes"
+    exit 1
+fi
+
+if [[ $COMMA = 1 ]]; then
+    JQ_CMD="jq -j '.rows | join(\",\")'"
+else
+    JQ_CMD="jq -r '.rows[]'"
+fi
+
+if [[ $POD != "" ]]; then
+    QUERY="${QUERY} AND zendesk_config_pod:${POD}"
+fi
+
+if [[ $PRODUCTION = 1 ]]; then
+    QUERY="${QUERY} AND chef_environment:production"
+fi
+
+knife search node "${QUERY}" -i -F json | eval $JQ_CMD
