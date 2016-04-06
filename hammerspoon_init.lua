@@ -2,12 +2,12 @@
 
 local mash = {"cmd", "alt", "ctrl"}
 local mashift = {"cmd", "alt", "shift"}
-local workSSID = "Zendesk"
+local workSSID = "zendesk"
 local lastSSID = hs.wifi.currentNetwork()
 
 -- set grid size
-hs.grid.GRIDWIDTH = 12
-hs.grid.GRIDHEIGHT = 12
+hs.grid.GRIDWIDTH = 40
+hs.grid.GRIDHEIGHT = 40
 hs.grid.MARGINX = 0
 hs.grid.MARGINY = 0
 
