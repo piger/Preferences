@@ -1,7 +1,7 @@
 #+TITLE: my emacs settings
 #+AUTHOR: Daniel Kertesz
 #+EMAIL: daniel [at] spatof [dot] org
-#+STARTUP: align content 
+#+STARTUP: align content
 #+LANGUAGE: en
 
 * Emacs Configuration
@@ -252,7 +252,18 @@ environment variables, like *go-mode*.
     :config
     (setq exec-path-from-shell-variables
           '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
-    (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize))
+
+  ;; use vkill on OSX because proced doesn't work (stolen from prelude)
+  (use-package vkill
+    :ensure t
+    :bind
+    (("C-x p" . vkill)))
+
+  ;; Enable emoji, and stop the UI from freezing when trying to display them.
+  ;; (stolen from prelude)
+  (if (fboundp 'set-fontset-font)
+      (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 #+END_SRC
 
 **** install base16 themes
@@ -355,6 +366,12 @@ Here we could setup fonts; interesting list:
 - Menlo 12
 - Source Code Pro 11
 - Monoid 13
+
+To actually set the default font on GUI emacs:
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(set-default-font "Droid Sans Mono for Powerline-12")
+#+END_SRC
 
 **** Miscellaneous configuration
 
@@ -680,7 +697,7 @@ Easily insert RST links (from Fabrizio Furnari):
             (beg (region-beginning))
             (end (region-end))
             (name (buffer-substring-no-properties (region-beginning) (region-end))))
-        
+
         (goto-char beg)
         (insert "`")
         (goto-char end)
@@ -757,7 +774,7 @@ layout which permits accented characters.
 ;; <2015-07-05 Sun> lo disabilito perché mi sembra esagerato.
 ;(global-set-key (kbd "M-/") 'hippie-expand)
 
-;;; swap default search mode to regexp 
+;;; swap default search mode to regexp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
@@ -866,7 +883,7 @@ e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
        (company-mode)
        (flycheck-mode)
        ; (local-set-key (kbd "M-.") 'godef-jump)
-       (diminish 'subword-mode))       
+       (diminish 'subword-mode))
   (setq piger-go-mode-hook 'piger/go-mode-defaults)
   (add-hook 'go-mode-hook (lambda ()
                             (run-hooks 'piger-go-mode-hook)))
@@ -897,16 +914,29 @@ Don't want the /magic/ comment.
 Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
 
 #+BEGIN_SRC emacs-lisp
-(use-package enh-ruby-mode
-  :ensure t
-  :mode ("\\.rb\\'" "Rakefile" "Gemfile")
-  :interpreter "ruby"
-  :config
-  ; use "deep indentation" for parenthesis (it's the right indentation for the work codebase)
-  (setq enh-ruby-bounce-deep-indent t))
+(use-package ruby-tools
+  :ensure t)
 
 (use-package inf-ruby
   :ensure t)
+
+(use-package yari
+  :ensure t)
+
+(define-key 'help-command (kbd "R") 'yari)
+
+(eval-after-load 'ruby-mode
+  '(progn
+     (defun prelude-ruby-mode-defaults ()
+       (inf-ruby-minor-mode +1)
+       (ruby-tools-mode +1)
+       (subword-mode +1))
+
+     (setq prelude-ruby-mode-hook 'prelude-ruby-mode-defaults)
+     (add-hook 'ruby-mode-hook (lambda ()
+                                 (run-hooks 'prelude-ruby-mode-hook)))))
+
+
 #+END_SRC
 
 **** CSS
@@ -1060,10 +1090,11 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :ensure t
+  :pin melpa-stable
   :demand t
   :config
   (require 'helm-config)
-  
+
   (setq
    ;; Limit candidate number globally.
    helm-candidate-number-limit 100
@@ -1352,6 +1383,7 @@ Because Vim is the best text editor.
   (company-mode t)
   (prelude-font-lock-comment-annotations)
   (subword-mode t)
+  (which-function-mode t)
   (diminish 'subword-mode))
 
 (setq moo-prog-mode-hook 'moo-prog-mode-defaults)
