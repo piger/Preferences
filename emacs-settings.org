@@ -1106,10 +1106,21 @@ b=); you should not worry about them. See also issue [[https://github.com/emacs-
    ;; Max length of buffer names before truncate.
    helm-buffer-max-length 40)
   (helm-mode 1)
+  (helm-adaptive-mode 1)
+  (helm-push-mark-mode 1)
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)))
+
+;;; setup helm bindings
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+(global-set-key (kbd "C-c i") 'helm-imenu-in-all-buffers)
+(define-key global-map (kbd "M-g a") 'helm-do-grep-ag)
+(define-key global-map (kbd "M-g g") 'helm-grep-do-git-grep)
 #+END_SRC
 
 Other random helm things:
