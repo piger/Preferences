@@ -1698,6 +1698,11 @@ Quick jump to a word.
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+;; TODO states
+;; the first letter is the quick key
+;; ! means "add timestamp"
+;; @ means "add timestamp and note"
+;; f@/! means "add timestamp and note and timestamp when leaving this state"
 (setq org-todo-keywords
       (quote
        ((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w@/!)"
