@@ -48,4 +48,31 @@ end
 local wifiWatcher = hs.wifi.watcher.new(ssidChangedCallback)
 wifiWatcher:start()
 
+-- caffeine mode
+local caffeine = hs.menubar.new()
+local sleepType = "displayIdle"
+
+function setCaffeineDisplay(state)
+   if state then
+      caffeine:setTitle("🐴")
+   else
+      caffeine:setTitle("🎋")
+   end
+end
+
+function caffeineClicked()
+   setCaffeineDisplay(hs.caffeinate.toggle(sleepType))
+   if hs.caffeinate.get(sleepType) then
+      hs.alert.show("Niiihhhh!")
+   else
+      hs.alert.show("Zzz...")
+   end
+end
+
+if caffeine then
+   caffeine:setClickCallback(caffeineClicked)
+   setCaffeineDisplay(hs.caffeinate.get(sleepType))
+end
+
 hs.alert.show("Hammerspoon loaded!")
+
