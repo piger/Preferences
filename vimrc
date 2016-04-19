@@ -255,6 +255,8 @@ filetype plugin indent on
 " }}}
 
 " Statusline {{{
+" enable fancy fonts for airline / powerline
+let g:airline_powerline_fonts = 1
 " Questi setting vengono ignorati se il plugin Powerline è installato.
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}\ %{VimBuddy()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
 "set statusline=%<%F\ %h%m%r%w\ %{fugitive#statusline()}%=\ [FORMAT:%{&ff}]\ %([TYPE:%Y]\ %)line:%l/%L\ col:%v\ [%p%%]
