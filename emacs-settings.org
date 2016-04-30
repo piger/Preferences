@@ -1373,6 +1373,13 @@ Because Vim is the best text editor.
 ;; rst-mode: default to auto-fill
 (add-hook 'rst-mode-hook 'turn-on-auto-fill)
 
+**** yaml-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+END_SRC
+
 **** po-mode & i18n
 
 #+BEGIN_SRC emacs-lisp
