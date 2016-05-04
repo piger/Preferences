@@ -87,14 +87,5 @@ main-view = line-number:no,interval:5 id:true date:relative author:abbreviated c
 # [tig "color"] tree.header = white default
 # [tig "color"] tree.directory = cyan default
 
-# git explanation: http://stackoverflow.com/questions/16244969/how-to-tell-git-to-ignore-individual-lines-i-e-gitignore-for-specific-lines-of
-# sed command explanation: http://stackoverflow.com/questions/5227295/how-do-i-delete-all-lines-in-a-file-starting-from-after-a-matching-line
-# it's basically "don't print matching line and following lines".
-[filter "email_ignore"]
-    smudge = cat
-    clean = "sed -n '/^\\[user\\]/q;p'"
-
-# $ cat .gitattributes
-# /gitconfig filter=email_ignore
-
-# #### LINES BELOW WILL BE IGNORED BY GIT ####
+[include]
+path = ~/.gitconfig.local
