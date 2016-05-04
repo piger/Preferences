@@ -74,5 +74,15 @@ if caffeine then
    setCaffeineDisplay(hs.caffeinate.get(sleepType))
 end
 
+-- disable caffeine mode after sleep
+function sleepWatcherAction(eventType)
+   if (eventType == hs.caffeinate.watcher.systemDidWake) then
+      setCaffeineDisplay(hs.caffeinate.set(sleepType, false, true))
+   end
+end
+
+local sleepWatcher = hs.caffeinate.watcher.new(sleepWatcherAction)
+sleepWatcher:start()
+
 hs.alert.show("Hammerspoon loaded!")
 
