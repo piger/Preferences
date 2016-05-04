@@ -754,8 +754,9 @@ imap <C-S-tab> <ESC>:tabprevious<CR>
 " PRIMA: \w\+
 " DOPO: \w+
 " OVVERO: niente escape MORTALI per ogni cosa!
-nnoremap / /\v
-vnoremap / /\v
+""nnoremap / /\v
+""vnoremap / /\v
+" 28/04/2016: pero' oramai uso vim poco e questa cosa e' piu' scomoda che altro.
 
 " Ardito, ma interessante:
 " Rimappare altri tasti in vece di <ESC>
