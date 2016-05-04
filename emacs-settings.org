@@ -845,7 +845,7 @@ checking the script by running it.
     (subword-mode +1)
     (diminish 'subword-mode)
     (show-paren-mode +1)
-    (company-mode +1)
+    ;; (company-mode +1)
     ;; eldoc needs a running python interpreter
     ;; (eldoc-mode +1)
     ;; unfuck electric indentation
@@ -880,7 +880,7 @@ e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
        (setq tab-width 2)
        (local-set-key (kbd "C-c C-k") 'godoc)
        (subword-mode +1)
-       (company-mode)
+       ;; (company-mode)
        (flycheck-mode)
        ; (local-set-key (kbd "M-.") 'godef-jump)
        (diminish 'subword-mode))
@@ -1398,7 +1398,7 @@ Because Vim is the best text editor.
 (defun moo-prog-mode-defaults ()
   "Default coding hook, useful with any programming language"
   (rainbow-delimiters-mode t)
-  (company-mode t)
+  ;; (company-mode t)
   (prelude-font-lock-comment-annotations)
   (subword-mode t)
   (which-function-mode t)
