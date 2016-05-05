@@ -241,6 +241,13 @@ WATCHFMT='%n %a %l from %m at %t.'
 # PRIVACY - disattiva history del client mysql
 export MYSQL_HISTFILE=/dev/null
 export LESSHISTFILE=/dev/null
+
+# golang support
+if [[ -d ~/dev/go ]]; then
+    export GOPATH=~/dev/go
+    path+=(~/dev/go/bin)
+fi
+[[ -d /usr/local/opt/go/libexec/bin ]] && path+=(/usr/local/opt/go/libexec/bin)
 # }}}
 
 # HISTORY {{{
