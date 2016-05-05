@@ -315,8 +315,8 @@ fi
 export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
-# ssh-askpass
-(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$(which ssh-askpass)
+# ssh-askpass support
+(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$commands[ssh-askpass]
 
 # LS OPTIONS
 ls_options='-F'
