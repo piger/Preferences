@@ -1454,7 +1454,10 @@ Because Vim is the best text editor.
 
 **** company (completion)
 
-#+BEGIN_SRC emacs-lisp
+The following configuration is too aggressive: I don't like
+company-mode in textual modes like org.
+
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package company
   :ensure t
   :diminish (company-mode . " ç")
@@ -1462,6 +1465,14 @@ Because Vim is the best text editor.
   (define-key company-mode-map [remap hippie-expand] 'company-complete)
   (define-key company-active-map [remap hippie-expand] 'company-complete)
   (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
+
+This configuration is more "on-demand":
+
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :diminish (company-mode . " ç"))
 #+END_SRC
 
 For python you need:
