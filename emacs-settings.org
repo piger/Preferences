@@ -781,8 +781,8 @@ layout which permits accented characters.
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
 ;;; undo con C-z (al posto di minimize window)
-(global-unset-key "\C-z")
-(global-set-key (kbd "\C-z") 'undo)
+;(global-unset-key "\C-z")
+;(global-set-key (kbd "\C-z") 'undo)
 
 ;; font-size
 (global-set-key (kbd "C-+") 'text-scale-increase)
