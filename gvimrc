@@ -38,8 +38,10 @@ elseif has("gui_macvim")
 	colorscheme inkpot
 	"set guifont=Monaco:h10
 	"set guifont=Cousine:h11
-	set guifont=Inconsolata:h13
-	colo olive
+	"set guifont=Inconsolata:h13
+	set guifont=Menlo:h12
+	" colo olive
+	colo gruvbox
 
     " Configurazione finestra (altezza, larghezza, trasparenza)
     "set lines=55
