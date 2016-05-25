@@ -38,7 +38,7 @@ function ssidChangedCallback()
    newSSID = hs.wifi.currentNetwork()
 
    if newSSID == workSSID and lastSSID ~= workSSID then
-      hs.audiodevice.defaultOutputDevice():setVolume(10)
+      hs.audiodevice.defaultOutputDevice():setVolume(1)
       hs.notify.new({title="Hammerspoon", informativeText="Lowering volume as we are at Work!"}):send():release()
    end
 
