@@ -17,13 +17,16 @@
 
 [color]
     ui = auto
-
 [color "branch"]
     current = magenta reverse
     local = yellow
     remote = green
-#[color "diff"]
-        #whitespace = red reverse
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+  whitespace = red reverse
 
 # Per mostrare in 'git status' anche i file nelle directory 'untracked'
 # NOTA: determina la visibilita' anche in magit-status
@@ -36,29 +39,31 @@
     diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
 
 [alias]
-    commit = commit -v
-    co = checkout
     br = branch
-    ci = commit
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-    ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
-    st = status -sb
     changes = log --oneline --reverse
-    ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    w = whatchanged
-    ls = ls-files
-    storia = log --pretty=medium --graph --abbrev-commit --date=relative --decorate
+    ci = commit
+    co = checkout
+    commit = commit -v
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     istoria = log --pretty=medium --reverse --abbrev-commit --date=relative --decorate
-    storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
-    pushone = push origin master:refs/heads/master
-    pullone = pull origin master:refs/heads/master
-    unstage = reset HEAD --
     last = log -1 HEAD
-    unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    undo = reset --hard HEAD~1
     latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
     lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
+    ls = ls-files
+    ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
+    pullone = pull origin master:refs/heads/master
+    pushone = push origin master:refs/heads/master
+    #via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
+    recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+    st = status -sb
+    storia = log --pretty=medium --graph --abbrev-commit --date=relative --decorate
+    storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
+    undo = reset --hard HEAD~1
+    unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    unstage = reset HEAD --
+    w = whatchanged
 
 
 # Questo e' per OSX ma su Linux non crea conflitti.
