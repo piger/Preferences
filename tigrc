@@ -1,0 +1,29 @@
+# tig configuration file
+
+set line-graphics = utf-8
+set tab-size = 4
+set main-view = line-number:no,interval:5 id:true date:relative author:abbreviated commit-title:yes,graph,refs,overflow=no
+
+color cursor white black
+color status white default
+color title-focus white black
+color date yellow default
+color author green default
+color main-head magenta default
+color main-tag magenta default
+color stat-staged green default
+color stat-unstaged red default
+color stat-untracked yellow default
+
+# Jump the line like vim
+# bind generic g move-first-line
+# bind generic G move-last-line
+
+# set git-colors = no
+# set show-changes = yes
+# set commit-order = topo
+# set main-view = \
+#     date:default \
+#     author:abbreviated \
+#     id:yes,color \
+#     commit-title:graph=yes,refs=yes
