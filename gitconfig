@@ -92,5 +92,10 @@ main-view = line-number:no,interval:5 id:true date:relative author:abbreviated c
 # [tig "color"] tree.header = white default
 # [tig "color"] tree.directory = cyan default
 
+# Example "user" configuration:
+# [user]
+# name = Daniel Kertesz
+# email = daniel@spatof.org
+
 [include]
 path = ~/.gitconfig.local
