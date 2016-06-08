@@ -1,0 +1,11 @@
+{
+  "Profiles": [
+    {
+      "Name": "Default+Dynamic",
+      "Guid": "90B59958-1F30-419B-9E4A-B52C24700CB5",
+      "Dynamic Profile Parent Name": "Default",
+      "Normal Font" : "FiraMono-Regular 11",
+      "Non Ascii Font" : "FiraMono-Regular 11"
+    }
+  ]
+}
