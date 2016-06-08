@@ -10,3 +10,6 @@
 [submodule "vim/bundle/gruvbox"]
 	path = vim/bundle/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
+[submodule "zsh/plugins/z"]
+	path = zsh/plugins/z
+	url = https://github.com/rupa/z.git
