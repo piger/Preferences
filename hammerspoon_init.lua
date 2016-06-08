@@ -1,10 +1,5 @@
 -- hammerspoon init.lua
 
-local mash = {"cmd", "alt", "ctrl"}
-local mashift = {"cmd", "alt", "shift"}
-local workSSID = "zendesk"
-local lastSSID = hs.wifi.currentNetwork()
-
 -- set grid size
 hs.grid.GRIDWIDTH = 40
 hs.grid.GRIDHEIGHT = 40
@@ -14,39 +9,39 @@ hs.grid.MARGINY = 0
 -- no animation pls
 hs.window.animationDuration = 0
 
+local mash = {"cmd", "alt", "ctrl"}
+local mashift = {"cmd", "alt", "shift"}
 
 hs.hotkey.bind(mash, "R", hs.reload)
-
 hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
-
 hs.hotkey.bind(mash, "space", hs.spotify.displayCurrentTrack)
-
 hs.hotkey.bind(mash, "h", hs.grid.resizeWindowThinner)
 hs.hotkey.bind(mash, "l", hs.grid.resizeWindowWider)
 hs.hotkey.bind(mash, "j", hs.grid.resizeWindowTaller)
 hs.hotkey.bind(mash, "k", hs.grid.resizeWindowShorter)
-
 hs.hotkey.bind(mash, "up", hs.grid.pushWindowUp)
 hs.hotkey.bind(mash, "down", hs.grid.pushWindowDown)
 hs.hotkey.bind(mash, "left", hs.grid.pushWindowLeft)
 hs.hotkey.bind(mash, "right", hs.grid.pushWindowRight)
-
 hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end)
 hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
 
-function ssidChangedCallback()
-   newSSID = hs.wifi.currentNetwork()
+-- functions and callbacks
 
-   if newSSID == workSSID and lastSSID ~= workSSID then
+local wifi_work_ssid = "zendesk"
+local wifi_last_ssid = hs.wifi.currentNetwork()
+local wifi_watcher = hs.wifi.watcher.new(function ()
+   local wifi_new_ssid = hs.wifi.currentNetwork()
+   wifi_new_ssid = hs.wifi.currentNetwork()
+
+   if wifi_new_ssid == wifi_work_ssid and wifi_last_ssid ~= wifi_work_ssid then
       hs.audiodevice.defaultOutputDevice():setVolume(1)
       hs.notify.new({title="Hammerspoon", informativeText="Lowering volume as we are at Work!"}):send():release()
    end
 
-   lastSSID = newSSID
-end
-
-local wifiWatcher = hs.wifi.watcher.new(ssidChangedCallback)
-wifiWatcher:start()
+   wifi_last_ssid = wifi_new_ssid
+end)
+wifi_watcher:start()
 
 -- caffeine mode
 local caffeine = hs.menubar.new()
@@ -75,17 +70,15 @@ if caffeine then
 end
 
 -- disable caffeine mode after sleep
-function sleepWatcherAction(eventType)
+local sleepWatcher = hs.caffeinate.watcher.new(function (eventType)
    if (eventType == hs.caffeinate.watcher.systemDidWake) then
       setCaffeineDisplay(hs.caffeinate.set(sleepType, false, true))
    end
-end
-
-local sleepWatcher = hs.caffeinate.watcher.new(sleepWatcherAction)
+end)
 sleepWatcher:start()
 
 --- try to detect the external monitor
-function monitorCallback()
+local monitorWatcher = hs.screen.watcher.new(function ()
    hasExternal = false
    for id, screen in pairs(hs.screen.allScreens()) do
       if screen:name() == "Thunderbolt Display" then
@@ -99,10 +92,9 @@ function monitorCallback()
    else
       hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_11.json $HOME/Library/Application\\ Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json")
    end
-end
-
-local monitorWatcher = hs.screen.watcher.new(monitorCallback)
+end)
 monitorWatcher:start()
 
-hs.alert.show("Hammerspoon loaded!")
+--- ole'
+hs.alert.show("Hammerspoon 💩 loaded!")
 
