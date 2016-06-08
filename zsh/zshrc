@@ -164,6 +164,11 @@ ssl-cert-info() {
     fi
     openssl x509 -noout -text -in $1
 }
+
+teprego() {
+    echo -e "$(tput setaf 1)sudo$(tput sgr0) → $(fc -ln -1)"
+    eval "sudo $(fc -ln -1)"
+}
 # }}}
 
 # COLOR SPECTRUM {{{
