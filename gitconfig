@@ -1,5 +1,5 @@
 # -*- mode: conf -*-
-# gitconfig
+# vim: ft=dosini
 
 [core]
     excludesfile = ~/.gitignore
