@@ -14,12 +14,6 @@ path=(
     /usr/local/sbin /usr/local/bin
 )
 
-# Go, which is tipically installed in /usr/local/go; note: on OSX this can be
-# handled with /etc/paths.d and path_helper(8).
-if [[ -d /usr/local/go ]]; then
-    path+=/usr/local/go/bin
-fi
-
 # Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
 # instead of the PATH environment variable).
