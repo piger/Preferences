@@ -32,7 +32,7 @@ export CVS_RSH="ssh"
 export RSYNC_RSH="ssh"
 
 # Format string for 'time' command:
-TIMEFMT="Real: %E User: %U System: %S Percent: %P Cmd: %J"
+TIMEFMT="%*E real time :: CPU: %P (%U user, %S kernel) :: %J"
 
 # Set the umask
 if [[ $UID == 0 ]]; then
@@ -50,9 +50,6 @@ foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
       break
   fi
 done
-
-# Ruby RVM path (for scripting)
-[[ -d $HOME/.rvm/bin ]] && path+=$HOME/.rvm/bin
 
 # Load local zshenv
 [[ -f $HOME/.zshenv.local ]] && source $HOME/.zshenv.local
