@@ -13,3 +13,6 @@
 [submodule "zsh/plugins/z"]
 	path = zsh/plugins/z
 	url = https://github.com/rupa/z.git
+[submodule "zsh/plugins/LS_COLORS"]
+	path = zsh/plugins/LS_COLORS
+	url = https://github.com/trapd00r/LS_COLORS.git
