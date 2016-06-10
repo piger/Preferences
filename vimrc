@@ -246,9 +246,6 @@ set rtp+=/usr/local/go/misc/vim
 " https://github.com/tpope/vim-pathogen.git
 " NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
 " filetype off 
-" call pathogen#infect()
-" call pathogen#helptags()
-" 13/03/2013
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
