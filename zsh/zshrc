@@ -1012,13 +1012,6 @@ function _pip_completion {
         PIP_AUTO_COMPLETE=1 $words[1] ) )
 }
 compctl -K _pip_completion pip
-
-# completion bash per tmux
-[[ -e /usr/local/etc/bash_completion.d/tmux ]] && source /usr/local/etc/bash_completion.d/tmux
-# la completion di ack e' linux only :(
-if [[ $OSTYPE == linux* ]]; then
-    [[ -e /usr/local/etc/bash_completion.d/ack.bash_completion.sh ]] && source /usr/local/etc/bash_completion.d/ack.bash_completion.sh
-fi
 # }}}
 
 # WELCOME {{{
