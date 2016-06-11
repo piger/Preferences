@@ -1872,29 +1872,6 @@ Potrebbe essere utile.
   (add-hook 'prog-mode-hook 'highlight-symbol-mode))
 #+END_SRC
 
-**** ace-jump-mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package ace-jump-mode
-  :ensure t)
-#+END_SRC
-
-**** TODO alert (growl-style notifications?)
-
-#+BEGIN_SRC emacs-lisp
-(use-package alert
-  :ensure t)
-#+END_SRC
-
-**** anzu
-
-Highlight matches from search
-
-#+BEGIN_SRC emacs-lisp
-(use-package anzu
-  :ensure t)
-#+END_SRC
-
 **** nginx-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1913,13 +1890,6 @@ Highlight matches from search
 
 #+BEGIN_SRC emacs-lisp
 (use-package buffer-move
-  :ensure t)
-#+END_SRC
-
-**** TODO move-text
-
-#+BEGIN_SRC emacs-lisp
-(use-package move-text
   :ensure t)
 #+END_SRC
 
