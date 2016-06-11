@@ -66,8 +66,7 @@ Oppure con un one-liner:
 Lista di plugin che potrebbero essere interessanti ma non mi servono e/o non
 utilizzo mai:
 
-- CSApprox (supporto temi 256 colori per vecchi vim/term)
-- TTCoach (il training per scrivere)
+- Extradite: un browser di history alla "tig"
 
 ## Git
 
