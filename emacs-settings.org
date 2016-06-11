@@ -206,7 +206,7 @@ list.
 ;;                                   )))
 
 ;; load and activate installed packages
-(package-initialize)
+(package-initialize nil)
 
 ; osx-plist
 ; xkcd
