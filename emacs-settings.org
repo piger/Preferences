@@ -1798,10 +1798,23 @@ active window.
 #+BEGIN_SRC emacs-lisp
 (use-package smart-mode-line
   :ensure t
+  :disabled t
   :config
   ; this is customized in custom.el
   ; (setq sml/theme 'dark)
   (sml/setup))
+#+END_SRC
+
+**** spaceline
+
+Meglio di smart-modeline, sembra...
+
+#+BEGIN_SRC emacs-lisp
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (setq powerline-default-separator 'zigzag)
+  (spaceline-emacs-theme))
 #+END_SRC
 
 **** dtrt-indent                                                        :new:
