@@ -1021,7 +1021,6 @@ compctl -K _pip_completion pip
 # fortune -e serve per scegliere equamente tra tutti i fortune file
 # presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]]; then
-    echo culo
     if (( $+commands[fortune] )); then
         if [[ -d "$FORTUNES_DIRECTORY" ]]; then
             print; fortune -e "$FORTUNES_DIRECTORY"; print
