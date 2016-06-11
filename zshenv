@@ -41,6 +41,10 @@ else
     umask u=rwx,g=rx,o=
 fi
 
+# 11/06/2016
+# Not having an umask of "022" breaks tools written by the cool kids (like kitchen)
+umask 022
+
 # Alias vim and gvim to have it working inside shell functions and such.
 # See also: zsh/os/darwin
 foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
