@@ -547,7 +547,7 @@ if [[ $OSTYPE = darwin* ]]; then
     if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
         alias ls="gls --color=auto $ls_options"
         alias lss="gls --color=auto $ls_options --group-directories-first --sort=extension -B"
-        (( $+commands[gdircolors] )) && eval $(gdircolors -b $DIRCOLORS_FILE)
+        (( $+commands[gdircolors] )) && test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
     fi
 
     [[ -x /usr/libexec/ssh-askpass ]] && export SSH_ASKPASS=/usr/libexec/ssh-askpass
@@ -659,7 +659,7 @@ elif [[ $OSTYPE = linux* ]]; then
     fi
 
     # LS_COLORS
-    (( $+commands[dircolors] )) && eval $(dircolors -b $DIRCOLORS_FILE)
+    (( $+commands[dircolors] )) && test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
 
 elif [[ $OSTYPE = openbsd* ]]; then
     # *** OPENBSD ***
