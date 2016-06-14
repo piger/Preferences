@@ -467,8 +467,8 @@ zstyle ':vcs_info:*' formats \
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 zstyle ':vcs_info:*' enable git svn
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr ' %F{3}★'
-zstyle ':vcs_info:*' stagedstr ' %F{2}●'
+zstyle ':vcs_info:*' unstagedstr ' %F{3}★%f'
+zstyle ':vcs_info:*' stagedstr ' %F{2}●%f'
 zstyle ':vcs_info:*' use-quilt true
 
 # add VCS informations to the prompt
