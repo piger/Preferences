@@ -43,12 +43,6 @@ if [[ -z $QUERY ]]; then
     exit 1
 fi
 
-if [[ $COMMA = 1 ]]; then
-    JQ_CMD="jq -j '.rows | join(\",\")'"
-else
-    JQ_CMD="jq -r '.rows[]'"
-fi
-
 if [[ $POD != "" ]]; then
     QUERY="${QUERY} AND zendesk_config_pod:${POD}"
 fi
@@ -57,4 +51,8 @@ if [[ $PRODUCTION = 1 ]]; then
     QUERY="${QUERY} AND chef_environment:production"
 fi
 
-knife search node "${QUERY}" -i -F json | eval $JQ_CMD
+if [[ $COMMA == 1 ]]; then
+    knife search node -i "$QUERY" 2>/dev/null | tr "\n" "," | sed 's/,$//'
+else
+    knife search node -i "$QUERY" 2>/dev/null
+fi
