@@ -1,0 +1,19 @@
+# ssh wrapper function to set tmux window (pane?) title
+
+# bypass this function if stdout is not a terminal, to avoid messing up
+# the output with our printf() calls.
+[[ -t 1 ]] || exec command ssh $@
+
+local previous_name=$(tmux display-message -p "#{window_name}")
+local hostname=$(perl -e 'if (length(@ARGV) == 1) { print $ARGV[0]; exit; } else { foreach $h (@ARGV) { if ($h =~ /[a-z\._-]+\.[a-z]{2,}/) { print $h; exit; } } }' -- $@)
+
+if [[ -z $hostname ]]; then
+    command ssh $@
+else
+    printf "\033k${hostname}\033\\"
+    # also set the pane title
+    # printf "\033]2;${hostname}\033\\"
+    command ssh $@
+    printf "\033k${previous_name}\033\\"
+    # printf "\033]2;${previous_name}\033\\"
+fi
