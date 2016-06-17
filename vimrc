@@ -539,17 +539,6 @@ if !exists("autocommands_loaded")
 		au BufWritePost *.hex setl nomod | endif
 	augroup END
 
-	" file .json
-	au! BufRead,BufNewFile *.json setl filetype=json
-
-	augroup json_autocmd
-		autocmd!
-		autocmd FileType json setl autoindent formatoptions=tcq2l
-		autocmd FileType json setl textwidth=78 shiftwidth=2
-		autocmd FileType json setl softtabstop=2 tabstop=8
-		autocmd FileType json setl expandtab foldmethod=syntax
-	augroup END
-
 	" When editing a file, always jump to the last known cursor position.
 	" Don't do it when the position is invalid or when inside an event handler
 	" (happens when dropping a file on gvim).

@@ -19,3 +19,6 @@
 [submodule "vim/bundle/vim-fugitive.git"]
 	path = vim/bundle/vim-fugitive.git
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/bundle/vim-json.git"]
+	path = vim/bundle/vim-json.git
+	url = https://github.com/elzr/vim-json.git
