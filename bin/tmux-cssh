@@ -40,12 +40,12 @@ while getopts ":r:p:q:u:lPvh" opt; do
             ;;
         h)
             printf "Usage: $(basename $0) [OPTIONS] [HOSTS...]\n"
-            printf "NOTE: hostnames will be read from stdin if no query option is used.\n\n"
-            printf " -l\t\tCapture each tmux pane output to a file\n"
-            printf " -p <pod>\tSpecify a pod by number\n"
-            printf " -P\t\tLimit search to production nodes\n"
+            printf "NOTE: hostnames will be read from stdin when no arguments are specified.\n\n"
+            printf " -l\t\tCapture each pane output to a file\n"
+            printf " -p <pod>\tSearch by Pod number\n"
+            printf " -P\t\tLimit the search to production nodes\n"
             printf " -q <query>\tSpecify a custom knife search query\n"
-            printf " -r <role>\tSpecify a hostgroup role\n"
+            printf " -r <role>\tSearch by hostgroup role\n"
             printf " -u <user>\tSpecify the user to log in as\n"
             printf " -v\t\tRun a verbose ssh session\n"
             printf " -h\t\tShow this help\n"
