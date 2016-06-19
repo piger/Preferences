@@ -10,9 +10,6 @@ function fatal() {
     exit 1
 }
 
-role=""
-is_prod=0
-pod=""
 user_query=""
 query=()
 ssh_options=()
@@ -24,13 +21,13 @@ while getopts ":r:p:q:u:lPvh" opt; do
             do_log=1
             ;;
         r)
-            role=$OPTARG
+            query+="role:hg_$OPTARG"
             ;;
         p)
-            pod=$OPTARG
+            query+="zendesk_config_pod:$OPTARG"
             ;;
         P)
-            is_prod=1
+            query+="chef_environment:production"
             ;;
         q)
             user_query=$OPTARG
@@ -67,11 +64,6 @@ done
 
 shift $((OPTIND-1))
 
-# collect options and build knife query if needed
-[[ ! -z $role ]] && query+="role:hg_$role"
-[[ ! -z $pod ]] && query+="zendesk_config_pod:$pod"
-[[ $is_prod = 1 ]] && query+="chef_environment:production"
-
 hosts=()
 
 # NOTE: do not redirect knife stderr, we need to see errors.
@@ -95,16 +87,7 @@ if [[ $#hosts = 0 ]]; then
     fatal "No hosts matched your query"
 fi
 
-# chose a useful name for tmux session
-if [[ ! -z $role ]]; then
-    SESSION="cssh-$$-$role"
-    if [[ ! -z $pod ]]; then
-        SESSION="${SESSION}-pod${pod}"
-    fi
-else
-    SESSION="cssh-$$"
-fi
-
+SESSION="cssh-$$"
 WINDOW="${SESSION}:1"
 
 now=$(date +"%d-%m-%Y-%H:%M")
