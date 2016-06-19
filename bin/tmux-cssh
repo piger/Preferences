@@ -1,6 +1,9 @@
 #!/usr/bin/env zsh
 # tmux cluster ssh + knife support
 # Daniel Kertesz <daniel@spatof.org>
+#
+# Add basic hosts completion to zsh by running:
+# compdef _hosts tmux-cssh
 
 function fatal() {
     echo "ERROR: $@"
@@ -13,9 +16,13 @@ pod=""
 user_query=""
 query=()
 ssh_options=()
+do_log=0
 
-while getopts ":r:p:q:u:Pvh" opt; do
+while getopts ":r:p:q:u:lPvh" opt; do
     case $opt in
+        l)
+            do_log=1
+            ;;
         r)
             role=$OPTARG
             ;;
@@ -37,6 +44,7 @@ while getopts ":r:p:q:u:Pvh" opt; do
         h)
             printf "Usage: $(basename $0) [OPTIONS] [HOSTS...]\n"
             printf "NOTE: hostnames will be read from stdin if no query option is used.\n\n"
+            printf " -l\t\tCapture each tmux pane output to a file\n"
             printf " -p <pod>\tSpecify a pod by number\n"
             printf " -P\t\tLimit search to production nodes\n"
             printf " -q <query>\tSpecify a custom knife search query\n"
@@ -99,12 +107,20 @@ fi
 
 WINDOW="${SESSION}:1"
 
+now=$(date +"%d-%m-%Y-%H:%M")
+logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
+i=1
+
 tmux new-session -d -s $SESSION -P ssh $ssh_options[@] $hosts[1]
+[[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[1]}"
+i=$((i+1))
 shift hosts
 
 for host in $hosts; do
     tmux split-window -t $WINDOW ssh $ssh_options[@] $host
     tmux select-layout -t $WINDOW tiled
+    [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/${host}}"
+    i=$((i+1))
 done
 
 tmux setw -t $WINDOW status off
