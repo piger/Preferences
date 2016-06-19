@@ -1,16 +1,97 @@
-#!/bin/sh
-# cluster ssh with tmux
-# Usage: tmux-cssh user1@host1 user2@host2 host3 host4 host5 host6 [...]
+#!/usr/bin/env zsh
+# tmux cluster ssh + knife support
+# Daniel Kertesz <daniel@spatof.org>
 
-SESSION="cssh-$$"
+function fatal() {
+    echo "ERROR: $@"
+    exit 1
+}
+
+role=""
+is_prod=0
+pod=""
+user_query=""
+query=()
+
+while getopts ":r:p:Ph" opt; do
+    case $opt in
+        r)
+            role=$OPTARG
+            ;;
+        p)
+            pod=$OPTARG
+            ;;
+        P)
+            is_prod=1
+            ;;
+        q)
+            user_query=$OPTARG
+            ;;
+        h)
+            echo "halp"
+            exit
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument" >&2
+            exit 1
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+# collect options and build knife query if needed
+[[ ! -z $role ]] && query+="role:hg_$role"
+[[ ! -z $pod ]] && query+="zendesk_config_pod:$pod"
+[[ $is_prod = 1 ]] && query+="chef_environment:production"
+
+hosts=()
+
+# NOTE: do not redirect knife stderr, we need to see errors.
+if [[ $#query > 0 ]]; then
+    # using knife search
+    hosts=$(knife search node -i "${(j: AND :)query}")
+elif [[ ! -z $user_query ]]; then
+    # using custom user knife search
+    hosts=$(knife search node -i "$user_query")
+elif [[ $# == 0 ]]; then
+    # reading hosts from stdin
+    while read line; do
+        hosts+=$line
+    done
+else
+    # reading hosts from command line
+    hosts+=($@)
+fi
+
+if [[ $#hosts = 0 ]]; then
+    fatal "No hosts matched your query"
+fi
+
+# chose a useful name for tmux session
+if [[ ! -z $role ]]; then
+    SESSION="cssh-$role"
+    if [[ ! -z $pod ]]; then
+        SESSION="${SESSION}-pod${pod}"
+    fi
+else
+    SESSION="cssh-$$"
+fi
+
 WINDOW="${SESSION}:1"
 
-tmux new-session -d -s $SESSION -P ssh $1
-shift
-for host in "$@"; do
-   tmux split-window -t $WINDOW ssh $host
-   tmux select-layout -t $WINDOW tiled
+tmux new-session -d -s $SESSION -P ssh $hosts[0]
+shift $hosts
+
+for host in $hosts; do
+    tmux split-window -t $WINDOW ssh $host
+    tmux select-layout -t $WINDOW tiled
 done
-tmux set-window-option -t $WINDOW status off
-tmux set-window-option -t $WINDOW synchronize-panes on
+
+tmux setw -t $WINDOW status off
+tmux setw -t $WINDOW synchronize-panes on
 tmux switch-client -t $SESSION
