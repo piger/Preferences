@@ -94,15 +94,14 @@ now=$(date +"%d-%m-%Y-%H:%M")
 logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
 i=1
 
-tmux new-session -d -s $SESSION -P ssh $ssh_options[@] $hosts[1]
-[[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[1]}"
+tmux new-session -d -s $SESSION -P ssh $ssh_options[@] $hosts[$i]
+[[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
 i=$((i+1))
-shift hosts
 
-for host in $hosts; do
-    tmux split-window -t $WINDOW ssh $ssh_options[@] $host
+while [[ $i -le $#hosts ]]; do
+    tmux split-window -t $WINDOW ssh $ssh_options[@] $hosts[$i]
     tmux select-layout -t $WINDOW tiled
-    [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/${host}}"
+    [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
     i=$((i+1))
 done
 
