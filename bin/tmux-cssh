@@ -6,7 +6,7 @@
 # compdef _hosts tmux-cssh
 
 function fatal() {
-    echo "ERROR: $@"
+    echo "ERROR: $@" >&2
     exit 1
 }
 
@@ -52,12 +52,10 @@ while getopts ":r:p:q:u:lPvh" opt; do
             exit
             ;;
         \?)
-            echo "Invalid option: -$OPTARG" >&2
-            exit 1
+            fatal "Invalid option: -$OPTARG"
             ;;
         :)
-            echo "Option -$OPTARG requires an argument" >&2
-            exit 1
+            fatal "Option -$OPTARG requires an argument"
             ;;
     esac
 done
@@ -84,7 +82,7 @@ else
 fi
 
 if [[ $#hosts = 0 ]]; then
-    fatal "No hosts matched your query"
+    fatal "No hosts matched your query or knife command has failed"
 fi
 
 SESSION="cssh-$$"
