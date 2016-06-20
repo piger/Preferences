@@ -88,9 +88,9 @@ local monitorWatcher = hs.screen.watcher.new(function ()
    end
 
    if hasExternal == true then
-      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_12.json $HOME/Library/Application\\ Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json")
+      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_12.json \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
    else
-      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_11.json $HOME/Library/Application\\ Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json")
+      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_11.json \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
    end
 end)
 monitorWatcher:start()
