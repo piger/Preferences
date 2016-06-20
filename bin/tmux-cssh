@@ -45,14 +45,14 @@ while getopts ":r:p:q:l:LPvh" opt; do
             ssh_options+="-v"
             ;;
         h)
-            printf "Usage: $(basename $0) [OPTIONS] [HOSTS...]\n"
+            printf "Usage: $(basename $0) [-LPvh] [-p pod] [-q query] [-r role] [-l user] [host ...]\n"
             printf "NOTE: hostnames will be read from stdin when no arguments are specified.\n\n"
-            phelp "-l" "Capture each pane output to a file"
+            phelp "-l <user>" "Specifies the user to log in as on the remote machines"
+            phelp "-L" "Capture each pane output to a file"
             phelp "-p <pod>" "Search by Pod number"
             phelp "-P" "Limit the search to production nodes"
             phelp "-q <query>" "Specify a custom knife search query"
             phelp "-r <role>" "Search by hostgroup role"
-            phelp "-u <user>" "Specify the user to log in as"
             phelp "-v" "Run a verbose ssh session"
             phelp "-h" "Show this help"
             exit
