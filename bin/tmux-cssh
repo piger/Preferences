@@ -15,9 +15,9 @@ query=()
 ssh_options=()
 do_log=0
 
-while getopts ":r:p:q:u:lPvh" opt; do
+while getopts ":r:p:q:l:LPvh" opt; do
     case $opt in
-        l)
+        L)
             do_log=1
             ;;
         r)
@@ -32,7 +32,7 @@ while getopts ":r:p:q:u:lPvh" opt; do
         q)
             user_query=$OPTARG
             ;;
-        u)
+        l)
             ssh_options+="-l$OPTARG"
             ;;
         v)
