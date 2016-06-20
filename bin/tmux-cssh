@@ -36,7 +36,7 @@ while getopts ":r:p:q:l:LPvh" opt; do
             query+="chef_environment:production"
             ;;
         q)
-            user_query=$OPTARG
+            user_query="$OPTARG"
             ;;
         l)
             ssh_options+="-l$OPTARG"
