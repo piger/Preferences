@@ -5,6 +5,8 @@
 # Add basic hosts completion to zsh by running:
 # compdef _hosts tmux-cssh
 
+set -e
+
 function fatal() {
     echo "ERROR: $@" >&2
     exit 1
