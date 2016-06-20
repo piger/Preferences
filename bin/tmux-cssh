@@ -69,10 +69,10 @@ hosts=()
 # NOTE: do not redirect knife stderr, we need to see errors.
 if [[ $#query > 0 ]]; then
     # using knife search
-    hosts=$(knife search node -i "${(j: AND :)query}")
+    hosts=($(knife search node -i "${(j: AND :)query}"))
 elif [[ ! -z $user_query ]]; then
     # using custom user knife search
-    hosts=$(knife search node -i "$user_query")
+    hosts=($(knife search node -i "$user_query"))
 elif [[ $# == 0 ]]; then
     # reading hosts from stdin
     while read line; do
