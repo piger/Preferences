@@ -13,7 +13,6 @@ PERCOL_CMD=${PERCOL_CMD:-peco}
 DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
 FORTUNE_GREETING=${FORTUNE_GREETING:-0}
 FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
-LOCAL_CONFIG=${LOCAL_CONFIG:-$HOME/.zshrc.local}
 # }}}
 
 # NOTES {{{
@@ -1031,11 +1030,6 @@ if [[ $FORTUNE_GREETING == 1 ]]; then
 fi
 # }}}
 
-# LOCAL SETTINGS {{{
-# Settings locali
-[[ -e $LOCAL_CONFIG ]] && source $LOCAL_CONFIG
-# }}}
-
 # NEW STUFF STOLEN FROM OH-MY-ZSH {{{
 
 # bracketed paste mode
@@ -1123,6 +1117,11 @@ if exists curl && exists iconv; then
     }
 fi
 
+# }}}
+
+# LOCAL SETTINGS {{{
+# Settings locali
+[[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
 # }}}
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che
