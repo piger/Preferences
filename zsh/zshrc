@@ -974,6 +974,11 @@ if [[ -e $HOME/.chef_hosts ]]; then
     zstyle ':completion:*:hosts' hosts $_ssh_hosts
 fi
 
+# check if the chef host file is stale
+if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
+    echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours"
+fi
+
 # use hosts completion also for tmux-cssh
 compdef _hosts tmux-cssh
 
