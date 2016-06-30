@@ -445,8 +445,8 @@ do_autoload () {
     autoload -Uz $1/*(:t)
 }
 
-do_autoload ~/.zsh/scripts
-do_autoload ~/.zsh/functions
+do_autoload ~/Preferences/zsh/scripts
+do_autoload ~/Preferences/zsh/functions
 
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
