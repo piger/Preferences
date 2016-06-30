@@ -965,17 +965,17 @@ zstyle ':completion:hist-complete:*' completer _history
 bindkey '^X^X' hist-complete
 
 # extend ssh host completion with chef nodes (set CHEF_NODES_DIR in ~/.zshenv.local)
-if [[ $CHEF_NODES_DIR != "" ]]; then
+# needs the following cron job:
+# @hourly find ~/src/chef-repo/nodes -name "*.json" | xargs cat | /usr/local/bin/jq -r ".name" > ~/.chef_hosts.new && mv ~/.chef_hosts.new ~/.chef_hosts
+if [[ -e $HOME/.chef_hosts ]]; then
+    zmodload zsh/mapfile
     zstyle -s ':completion:*:hosts' hosts _ssh_hosts
-    for f in ${CHEF_NODES_DIR}/*.json; do
-        _ssh_hosts+=(${${f%.json}##*/})
-    done
+    _ssh_hosts=("${(f@)mapfile[$HOME/.chef_hosts]}")
     zstyle ':completion:*:hosts' hosts $_ssh_hosts
 fi
 
 # use hosts completion also for tmux-cssh
 compdef _hosts tmux-cssh
-
 
 # Ctrl-X - SHIFT+S
 # Completa usando le parole della schermata attuale di tmux.
