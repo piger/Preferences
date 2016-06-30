@@ -975,7 +975,7 @@ if [[ -e $HOME/.chef_hosts ]]; then
 fi
 
 # check if the chef host file is stale
-if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
+if [[ -e $HOME/.chef_hosts && $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
     echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours"
 fi
 
