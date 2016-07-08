@@ -6,7 +6,7 @@
 
 local prev_window_name=$(tmux display-message -p "#{window_name}")
 local prev_pane_title=$(tmux display-message -p "#{pane_title}")
-local hostname=$(perl -e 'if (length(@ARGV) == 1) { print $ARGV[0]; exit; } else { foreach $h (@ARGV) { if ($h =~ /[a-z\._-]+\.[a-z]{2,}/) { print $h; exit; } } }' -- $@)
+local hostname=$(perl -e 'foreach $h (@ARGV) { if ($h =~ /^(?:\w+@)?([^.]+\.[^.]+)\./) { print $+; exit; } }' -- $@)
 
 if [[ -z $hostname ]]; then
     command ssh $@
