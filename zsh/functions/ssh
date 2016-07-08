@@ -20,7 +20,7 @@ set_window_title() {
 }
 
 # for each command line argument passed to ssh, check if it's a hostname
-local hostname=$(perl -e 'foreach $h (@ARGV) { if ($h =~ /^(?<!-)(?:\w+@)?([^.]+\.[^.]+\..*)/) { print $+; exit; } }' -- $@)
+local hostname=$(perl -e 'if (scalar @ARGV == 1) { print $ARGV[0]; } else {foreach $h (@ARGV) { if ($h =~ /^(?<!-)(?:\w+@)?([^.]+\.[^.]+\..*)/) { print $+; exit; } } }' -- $@)
 
 if [[ -z $hostname ]]; then
     command ssh $@
