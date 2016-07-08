@@ -7,6 +7,18 @@
 local prev_window_name=$(tmux display-message -p "#{window_name}")
 local prev_pane_title=$(tmux display-message -p "#{pane_title}")
 
+local win_escape_start="\033k"
+local pane_escape_start="\033]2;"
+local escape_end="\033\\"
+
+set_pane_title() {
+    printf "$pane_escape_start$1$escape_end"
+}
+
+set_window_title() {
+    printf "$win_escape_start$1$escape_end"
+}
+
 # for each command line argument passed to ssh, check if it's a hostname
 local hostname=$(perl -e 'foreach $h (@ARGV) { if ($h =~ /^(?<!-)(?:\w+@)?([^.]+\.[^.]+\..*)/) { print $+; exit; } }' -- $@)
 
@@ -17,14 +29,14 @@ else
     # otherwise set just the pane title.
     if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
         # Use a shortened version of the hostname for the window title
-        printf "\033k${hostname%.*.*.*}\033\\"
-        printf "\033]2;${hostname}\033\\"
+        set_window_title ${hostname%.*.*.*}
+        set_pane_title $hostname
     else
-        printf "\033]2;${hostname}\033\\"
+        set_pane_title $hostname
     fi
     command ssh $@
     if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-        printf "\033k${prev_window_name}\033\\"
+        set_window_title $prev_window_name
     fi
-    printf "\033]2;${prev_pane_title}\033\\"
+    set_pane_title $prev_pane_title
 fi
