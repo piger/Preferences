@@ -6,7 +6,9 @@
 
 local prev_window_name=$(tmux display-message -p "#{window_name}")
 local prev_pane_title=$(tmux display-message -p "#{pane_title}")
-local hostname=$(perl -e 'foreach $h (@ARGV) { if ($h =~ /^(?:\w+@)?([^.]+\.[^.]+)\./) { print $+; exit; } }' -- $@)
+
+# for each command line argument passed to ssh, check if it's a hostname
+local hostname=$(perl -e 'foreach $h (@ARGV) { if ($h =~ /^(?<!-)(?:\w+@)?([^.]+\.[^.]+\..*)/) { print $+; exit; } }' -- $@)
 
 if [[ -z $hostname ]]; then
     command ssh $@
@@ -14,7 +16,8 @@ else
     # Set window name and pane title when there's only 1 pane (i.e. the whole window),
     # otherwise set just the pane title.
     if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-        printf "\033k${hostname}\033\\"
+        # Use a shortened version of the hostname for the window title
+        printf "\033k${hostname%.*.*.*}\033\\"
         printf "\033]2;${hostname}\033\\"
     else
         printf "\033]2;${hostname}\033\\"
