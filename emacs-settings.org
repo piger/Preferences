@@ -174,6 +174,15 @@ A note about completion: =M-/= runs =dabbrev= (or =hippie-expand=) to
 *expand* text, while =TAB= runs try to complete the text using some
 completion backend like =company=.
 
+*** Hooks and how to deal with them
+
+- Why =eval-after-load=?
+  http://stackoverflow.com/questions/2736087/eval-after-load-vs-mode-hook
+- Why no =lambda= in hooks?
+  http://ergoemacs.org/emacs/emacs_avoid_lambda_in_hook.html
+
+
+
 ** Initialization
 
 Configure garbage collection for a faster emacs startup:
@@ -817,6 +826,8 @@ layout which permits accented characters.
 *** Programming
 **** flycheck
 
+See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languages][list of checkers]].
+
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck)
 #+END_SRC
@@ -914,28 +925,33 @@ Don't want the /magic/ comment.
 Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
 
 #+BEGIN_SRC emacs-lisp
+;; Collection of handy functions for ruby-mode
+;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
   :ensure t)
 
+;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
   :ensure t)
 
-(use-package yari
-  :ensure t)
+(defun moo-enh-ruby-mode-defaults ()
+  (ruby-tools-mode +1)
+  (subword-mode +1))
 
-(define-key 'help-command (kbd "R") 'yari)
-
-(eval-after-load 'ruby-mode
-  '(progn
-     (defun prelude-ruby-mode-defaults ()
-       (inf-ruby-minor-mode +1)
-       (ruby-tools-mode +1)
-       (subword-mode +1))
-
-     (setq prelude-ruby-mode-hook 'prelude-ruby-mode-defaults)
-     (add-hook 'ruby-mode-hook (lambda ()
-                                 (run-hooks 'prelude-ruby-mode-hook)))))
-
+(use-package enh-ruby-mode
+  :interpreter ("ruby" . enh-ruby-mode)
+  :mode
+  (("\\.rb\\'" . enh-ruby-mode)
+   ("\\Rakefile\\'" . enh-ruby-mode)
+   ("Gemfile\\'" . enh-ruby-mode)
+   ("Berksfile\\'" . enh-ruby-mode)
+   ("Vagrantfile\\'" . enh-ruby-mode)
+   ("Capfile\\'" . enh-ruby-mode))
+  :init
+  (setq enh-ruby-indent-level 2
+        enh-ruby-deep-indent-paren nil)
+  :config
+  (add-hook 'enh-ruby-mode-hook 'moo-enh-ruby-mode-defaults))
 
 #+END_SRC
 
@@ -957,21 +973,16 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
   :ensure t)
 #+END_SRC
 
-**** js2
+**** Javascript
 
 #+BEGIN_SRC emacs-lisp
-(use-package js2-mode
-  :ensure t
-  :mode ("\\.js$" . js2-mode)
-  :interpreter ("node" . js2-mode)
-  :config
-  (defun piger/js2-mode-hooks ()
-    "Defaults for js2-mode."
-    (subword-mode +1)
-    (set-variable 'indent-tabs-mode nil)
-    (setq js2-basic-offset 4))
-  (add-hook 'js2-mode-hook 'piger/js2-mode-hooks)
-  (setq-default js2-global-externs '("module", "require", "console", "jQuery", "$"))
+(defun moo-js2-mode-hooks ()
+  (subword-mode +1)
+  (set-variable 'indent-tabs-mode nil)
+  (setq js2-basic-offset 4))
+
+;; I used this while working with Ember.js
+(defun moo-ember-js2-hook ()
   (add-hook 'js2-init-hook
             (lambda ()
               (when (or (string-match-p "zAFS" (buffer-file-name))
@@ -979,13 +990,30 @@ Let's try enh-ruby-mode and inf-ruby, a ruby REPL.
                 (mapc (lambda (x)
                         (add-to-list 'js2-additional-externs x))
                       (list "Ember" "DS" "App"))))))
+
+(use-package js2-mode
+  :ensure t
+  :mode ("\\.js$" . js2-mode)
+  :interpreter ("node" . js2-mode)
+  :config
+  (add-hook 'js2-mode-hook 'moo-js2-mode-hooks)
+  (setq-default js2-global-externs
+                '("module", "require", "console", "jQuery", "$")))
 #+END_SRC
 
 **** json
 
+Uso =json-mode= perche' ha un highlight migliore di =js-mode= ed e'
+compatibile con flycheck.
+
 #+BEGIN_SRC emacs-lisp
+(defun moo-json-mode-hooks ()
+  (flycheck-mode +1))
+
 (use-package json-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'json-mode-hook 'moo-json-mode-hooks))
 #+END_SRC
 
 **** web
