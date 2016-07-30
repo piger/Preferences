@@ -64,63 +64,72 @@ wifi_watcher:start()
 
 -- caffeine mode --
 -------------------
-local caffeine = hs.menubar.new()
-local sleepType = "displayIdle"
+caffeineMenu = hs.menubar.new()
+caffeineMenu:setTooltip("Caffeinate mode (i.e. disable screen locking)")
+caffeinateSleepType = "displayIdle"
 
 function setCaffeineDisplay(state)
    if state then
-      caffeine:setTitle("🐴")
+      caffeineMenu:setTitle("🐴")
    else
-      caffeine:setTitle("🎋")
+      caffeineMenu:setTitle("🎋")
    end
 end
 
 function caffeineClicked()
-   setCaffeineDisplay(hs.caffeinate.toggle(sleepType))
-   if hs.caffeinate.get(sleepType) then
+   setCaffeineDisplay(hs.caffeinate.toggle(caffeinateSleepType))
+   if hs.caffeinate.get(caffeinateSleepType) then
       hs.alert.show("Niiihhhh!")
    else
       hs.alert.show("Zzz...")
    end
 end
 
-if caffeine then
-   caffeine:setClickCallback(caffeineClicked)
-   setCaffeineDisplay(hs.caffeinate.get(sleepType))
-end
+caffeineMenu:setClickCallback(caffeineClicked)
+setCaffeineDisplay(hs.caffeinate.get(caffeinateSleepType))
 
 -- disable caffeine mode after sleep
 local sleepWatcher = hs.caffeinate.watcher.new(function (eventType)
    if (eventType == hs.caffeinate.watcher.systemDidWake) then
-      setCaffeineDisplay(hs.caffeinate.set(sleepType, false, true))
+      setCaffeineDisplay(hs.caffeinate.set(caffeinateSleepType, false, true))
    end
 end)
 sleepWatcher:start()
 
 
---- try to detect the external monitor
-local monitorWatcher = hs.screen.watcher.new(function ()
-      local hasExternal = false
-      
-      for _, screen in pairs(hs.screen.allScreens()) do
-         if screen:name() == "Thunderbolt Display" then
-            hasExternal = true
-            break
-         end
+-- Monitor watcher, used to toggle the dynamic profile in iTerm2 --
+-------------------------------------------------------------------
+function hasExternalMonitor()
+   for _, screen in pairs(hs.screen.allScreens()) do
+      if screen:name() == "Thunderbolt Display" then
+         return true
       end
-
-   if hasExternal == true then
-      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_12.json \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
-   else
-      hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_11.json \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
    end
-end)
+   return false
+end
+
+-- Switch dynamic profile in iTerm2
+-- Valid values: iTerm2_Dynamic_12.json, iTerm2_Dynamic_11.json
+function setIterm2Profile(filename)
+   hs.execute("ln -sf $HOME/Preferences/iTerm2/" .. filename .. " \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
+end
+
+function updateItermProfile()
+   if hasExternalMonitor() then
+      setIterm2Profile("iTerm2_Dynamic_12.json")
+   else
+      setIterm2Profile("iTerm2_Dynamic_11.json")
+   end
+end
+
+local monitorWatcher = hs.screen.watcher.new(updateItermProfile)
 monitorWatcher:start()
 
 
 -- Audio Device toggle --
 -------------------------
 audioToggleMenu = hs.menubar.new()
+audioToggleMenu:setTooltip("Toggle the default audio output device")
 
 -- Set the menubar icon corresponding to the default output device
 function setToggleAudioIcon()
@@ -208,6 +217,7 @@ end
 
 musicMenu = hs.menubar.new()
 musicMenu:setTitle("🎷")
+musicMenu:setTooltip("Music Player (Spotify or iTunes) controls")
 
 musicMenuLayout = {
    { title = "📺 Search on YouTube", fn = lookupOnYoutube },
