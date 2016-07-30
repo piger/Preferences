@@ -1,0 +1,6 @@
+# name: it ... end
+# contributor: Daniel Kertesz <daniel@spatof.org>
+# --
+it '${1:description}' do
+  $0
+end

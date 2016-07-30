@@ -1,0 +1,6 @@
+# name: if conditional in Jinja2
+# contributor: Daniel Kertesz <daniel@spatof.org>
+# --
+{% if ${1:condition} %}
+  $0
+{% endif %}
