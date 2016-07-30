@@ -827,6 +827,16 @@ layout which permits accented characters.
 
 ** Configuration
 *** Programming
+**** auto-mode
+
+#+BEGIN_SRC emacs-lisp
+;; Assign a specific mode for certain directories
+;; note: you can't chain multiple paths in a single add-to-list call :(
+(add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("/Preferences/zsh/" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("/Preferences/emacs/snippets/" . snippet-mode))
+#+END_SRC
+
 **** flycheck
 
 See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languages][list of checkers]].
@@ -1270,13 +1280,12 @@ give you an horizontal split.
 **** yasnippet
 
 #+BEGIN_SRC emacs-lisp
-;;; yasnippet
-;; (require 'yasnippet)
-;; O si abilita il global-mode, o il minor mode con degli hook per il major-mode
-;; del linguaggio visualizzato; nel secondo caso pero' bisogna chiamare manualmente
-;; (yas-reload-all)!
-;;; (yas-global-mode 1
-;;; (yas-reload-all)
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/Preferences/emacs/snippets")))
+  (yas-reload-all))
 #+END_SRC
 
 **** TODO re-builder
@@ -1392,17 +1401,12 @@ Because Vim is the best text editor.
   :ensure t)
 #+END_SRC
 
-***** TODO move this section somewhere
+**** RestructuredText
 
 #+BEGIN_SRC emacs-lisp
-;; Assign a specific mode for certain directories
-;; note: you can't chain multiple paths in a single add-to-list call :(
-(add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("/Preferences/zsh/" . shell-script-mode))
-#+END_SRC
-
 ;; rst-mode: default to auto-fill
 (add-hook 'rst-mode-hook 'turn-on-auto-fill)
+#+END_SRC
 
 **** yaml-mode
 
