@@ -30,8 +30,22 @@ hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end
 hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
 
 
--- functions and callbacks
+-- functions and callbacks --
+-----------------------------
 
+-- Open a URL in Chrome
+function openInChrome(url)
+   local chrome = hs.application.find("Google Chrome")
+   if chrome == nil then
+      return
+   end
+
+   hs.urlevent.openURLWithBundle(url, chrome:bundleID())
+end
+
+
+-- WiFi Watcher --
+------------------
 local wifi_work_ssid = "zendesk"
 local wifi_last_ssid = hs.wifi.currentNetwork()
 
@@ -48,7 +62,8 @@ end)
 wifi_watcher:start()
 
 
--- caffeine mode
+-- caffeine mode --
+-------------------
 local caffeine = hs.menubar.new()
 local sleepType = "displayIdle"
 
@@ -155,43 +170,48 @@ setToggleAudioIcon()
 
 -- Music players controls --
 ----------------------------
-function openInChrome(url)
-   local chrome = hs.application.find("Google Chrome")
-   if chrome == nil then
-      return
-   end
-
-   hs.urlevent.openURLWithBundle(url, chrome:bundleID())
-end
-
 function getCurrentMusicPlayer()
-end
-
-function getCurrentTrackInfo()
-
-end
-
-function musicYoutubeLookup()
-   local currTrack, currArtist, currPlayer
-   
    if hs.itunes.isRunning() and hs.itunes.isPlaying() then
-      currPlayer = hs.itunes
+      return hs.itunes
    elseif hs.spotify.isRunning() and hs.spotify.isPlaying() then
-      currPlayer = hs.spotify
-   else
-      return
+      return hs.spotify
+   end
+   return nil
+end
+
+-- Get current Artist and Track name from the current music player.
+-- Returns: "Artist name", "Track name"
+function getCurrentTrackInfo()
+   local player = getCurrentMusicPlayer()
+   if player == nil then
+      return nil, nil
    end
 
-   currTrack = currPlayer.getCurrentTrack()
-   currArtist = currPlayer.getCurrentArtist()
+   return player.getCurrentArtist(), player.getCurrentTrack()
+end
+
+function lookupOnYoutube()
+   local currArtist, currTrack = getCurrentTrackInfo()
+   if currArtist == nil or currTrack == nil then
+      return
+   end
    openInChrome("https://www.youtube.com/results?search_query=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
+end
+
+function lookupOnGenius()
+   local currArtist, currTrack = getCurrentTrackInfo()
+   if currArtist == nil or currTrack == nil then
+      return
+   end
+   openInChrome("http://genius.com/search?q=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
 end
 
 musicMenu = hs.menubar.new()
 musicMenu:setTitle("🎷")
 
 musicMenuLayout = {
-   { title = "🔮 Search on YouTube", fn = musicYoutubeLookup },
+   { title = "📺 Search on YouTube", fn = lookupOnYoutube },
+   { title = "🔮 Search on Genius", fn = lookupOnGenius },
 }
 musicMenu:setMenu(musicMenuLayout)
 
