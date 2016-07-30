@@ -387,6 +387,8 @@ let g:pymode_rope_local_prefix = "<localleader>r"
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 
+" vim-json
+let g:vim_json_syntax_conceal = 0
 " }}}
 
 
