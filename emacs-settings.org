@@ -182,6 +182,10 @@ completion backend like =company=.
   http://ergoemacs.org/emacs/emacs_avoid_lambda_in_hook.html
 
 
+*** List of interesting and ugly emacs plugins
+
+- smartparens :: non sono abituato a tutta questa comodita'
+- chef-mode :: e' praticamente inutile, aggiunge solo 2 comandi del cazzo.
 
 ** Initialization
 
@@ -1288,13 +1292,12 @@ give you an horizontal split.
   (yas-reload-all))
 #+END_SRC
 
-**** TODO re-builder
+**** re-builder
 
 Editor di regexp che evita la pazzia dei backslash
 
 #+BEGIN_SRC emacs-lisp
 (use-package re-builder
-  :disabled t
   :config
   (setq reb-re-syntax 'string))
 #+END_SRC
@@ -1947,32 +1950,6 @@ Potrebbe essere utile.
 #+BEGIN_SRC emacs-lisp
 (use-package unfill
   :ensure t)
-#+END_SRC
-
-**** TODO smartparens
-
-#+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :ensure t
-  :config
-  (require 'smartparens-config))
-#+END_SRC
-
-**** chef-mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package chef-mode
-  :ensure t)
-#+END_SRC
-
-**** rvm
-
-#+BEGIN_SRC emacs-lisp
-(use-package rvm
-  :ensure t
-  :pin melpa-stable
-  :config
-  (rvm-use-default))
 #+END_SRC
 
 *** Aliases
