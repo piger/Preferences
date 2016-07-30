@@ -1,4 +1,5 @@
 -- hammerspoon init.lua
+-- NOTE: When you reload your configuration you keep all the old "watchers" running!
 
 -- set grid size
 hs.grid.GRIDWIDTH = 40
@@ -10,7 +11,7 @@ hs.grid.MARGINY = 0
 hs.window.animationDuration = 0
 
 local mash = {"cmd", "alt", "ctrl"}
-local mashift = {"cmd", "alt", "shift"}
+-- local mashift = {"cmd", "alt", "shift"}
 
 hs.hotkey.bind(mash, "R", hs.reload)
 hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
@@ -26,13 +27,14 @@ hs.hotkey.bind(mash, "right", hs.grid.pushWindowRight)
 hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end)
 hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
 
+
 -- functions and callbacks
 
 local wifi_work_ssid = "zendesk"
 local wifi_last_ssid = hs.wifi.currentNetwork()
+
 local wifi_watcher = hs.wifi.watcher.new(function ()
    local wifi_new_ssid = hs.wifi.currentNetwork()
-   wifi_new_ssid = hs.wifi.currentNetwork()
 
    if wifi_new_ssid == wifi_work_ssid and wifi_last_ssid ~= wifi_work_ssid then
       hs.audiodevice.defaultOutputDevice():setVolume(1)
@@ -43,11 +45,12 @@ local wifi_watcher = hs.wifi.watcher.new(function ()
 end)
 wifi_watcher:start()
 
+
 -- caffeine mode
 local caffeine = hs.menubar.new()
 local sleepType = "displayIdle"
 
-function setCaffeineDisplay(state)
+local function setCaffeineDisplay(state)
    if state then
       caffeine:setTitle("🐴")
    else
@@ -55,7 +58,7 @@ function setCaffeineDisplay(state)
    end
 end
 
-function caffeineClicked()
+local function caffeineClicked()
    setCaffeineDisplay(hs.caffeinate.toggle(sleepType))
    if hs.caffeinate.get(sleepType) then
       hs.alert.show("Niiihhhh!")
@@ -77,15 +80,17 @@ local sleepWatcher = hs.caffeinate.watcher.new(function (eventType)
 end)
 sleepWatcher:start()
 
+
 --- try to detect the external monitor
 local monitorWatcher = hs.screen.watcher.new(function ()
-   hasExternal = false
-   for id, screen in pairs(hs.screen.allScreens()) do
-      if screen:name() == "Thunderbolt Display" then
-         hasExternal = true
-         break
+      local hasExternal = false
+      
+      for _, screen in pairs(hs.screen.allScreens()) do
+         if screen:name() == "Thunderbolt Display" then
+            hasExternal = true
+            break
+         end
       end
-   end
 
    if hasExternal == true then
       hs.execute("ln -sf $HOME/Preferences/iTerm2/iTerm2_Dynamic_12.json \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
@@ -95,6 +100,6 @@ local monitorWatcher = hs.screen.watcher.new(function ()
 end)
 monitorWatcher:start()
 
+
 --- ole'
 hs.alert.show("Hammerspoon 💩 loaded!")
-
