@@ -103,7 +103,8 @@ end)
 monitorWatcher:start()
 
 
--- Audio Device toggle
+-- Audio Device toggle --
+-------------------------
 audioToggleMenu = hs.menubar.new()
 
 -- Set the menubar icon corresponding to the default output device
@@ -152,7 +153,50 @@ hs.audiodevice.watcher.start()
 setToggleAudioIcon()
 
 
--- reload hammerspoon (and stop all the running watchers)
+-- Music players controls --
+----------------------------
+function openInChrome(url)
+   local chrome = hs.application.find("Google Chrome")
+   if chrome == nil then
+      return
+   end
+
+   hs.urlevent.openURLWithBundle(url, chrome:bundleID())
+end
+
+function getCurrentMusicPlayer()
+end
+
+function getCurrentTrackInfo()
+
+end
+
+function musicYoutubeLookup()
+   local currTrack, currArtist, currPlayer
+   
+   if hs.itunes.isRunning() and hs.itunes.isPlaying() then
+      currPlayer = hs.itunes
+   elseif hs.spotify.isRunning() and hs.spotify.isPlaying() then
+      currPlayer = hs.spotify
+   else
+      return
+   end
+
+   currTrack = currPlayer.getCurrentTrack()
+   currArtist = currPlayer.getCurrentArtist()
+   openInChrome("https://www.youtube.com/results?search_query=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
+end
+
+musicMenu = hs.menubar.new()
+musicMenu:setTitle("🎷")
+
+musicMenuLayout = {
+   { title = "🔮 Search on YouTube", fn = musicYoutubeLookup },
+}
+musicMenu:setMenu(musicMenuLayout)
+
+-- reload hammerspoon (and stop all the running watchers) --
+------------------------------------------------------------
 function reloadHammerspoon()
    wifi_watcher:stop()
    sleepWatcher:stop()
