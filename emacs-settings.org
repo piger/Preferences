@@ -260,7 +260,7 @@ environment variables, like *go-mode*.
     :ensure t
     :config
     (setq exec-path-from-shell-variables
-          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
+          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH" "LANG"))
     (exec-path-from-shell-initialize))
 
   ;; use vkill on OSX because proced doesn't work (stolen from prelude)
