@@ -1038,7 +1038,8 @@ compatibile con flycheck.
 #+BEGIN_SRC emacs-lisp
 (defun moo-web-mode-hooks ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (yas-minor-mode +1))
+  (yas-minor-mode +1)
+  (whitespace-cleanup-mode +1))
 
 (use-package web-mode
   :ensure t
@@ -1311,6 +1312,8 @@ Editor di regexp che evita la pazzia dei backslash
 **** git
 
 ***** magit
+
+[[http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting][Perche' 70 colonne?]]
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
@@ -1958,6 +1961,15 @@ Potrebbe essere utile.
 
 #+BEGIN_SRC emacs-lisp
 (use-package unfill
+  :ensure t)
+#+END_SRC
+
+**** whitespace-cleanup-mode
+
+https://github.com/purcell/whitespace-cleanup-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package whitespace-cleanup-mode
   :ensure t)
 #+END_SRC
 
