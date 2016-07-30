@@ -1308,17 +1308,27 @@ Editor di regexp che evita la pazzia dei backslash
   (setq reb-re-syntax 'string))
 #+END_SRC
 
-**** magit
+**** git
+
+***** magit
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :pin melpa-stable
   :bind ("C-x g" . magit-status)
   :config
-  (setq magit-diff-refine-hunk 'all))
+  (setq magit-diff-refine-hunk 'all
+        git-commit-turn-on-flyspell t
+        git-commit-turn-on-auto-fill t
+        git-commit-fill-column 72
+        git-commit-summary-max-length 70)
+
+  (use-package git-commit
+    :ensure t
+    :pin melpa-stable))
 #+END_SRC
 
-**** git-gutter
+***** git-gutter
 
 13/04/2015 lo commento perche' di default mi sta un po' sul cazzo,
 sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
@@ -1332,23 +1342,16 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   (add-hook 'prog-mode-hook 'git-gutter-mode))
 #+END_SRC
 
-**** git-commit
-
-#+BEGIN_SRC emacs-lisp
-(use-package git-commit
-  :ensure t
-  :config
-  (add-hook 'git-commit-mode-hook 'flyspell-mode))
-#+END_SRC
-
-**** gitconfig and gitignore
+***** gitconfig and gitignore
 
 #+BEGIN_SRC emacs-lisp
 (use-package gitconfig-mode
-  :ensure t)
-
+  :ensure t
+  :mode ("\\.?gitconfig\\'" . gitconfig-mode))
+  
 (use-package gitignore-mode
-  :ensure t)
+  :ensure t
+  :mode ("\\.gitignore" . gitignore-mode))
 #+END_SRC
 
 **** dired-x
