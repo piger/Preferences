@@ -1970,7 +1970,8 @@ https://github.com/purcell/whitespace-cleanup-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package whitespace-cleanup-mode
-  :ensure t)
+  :ensure t
+  :diminish 'whitespace-cleanup-mode)
 #+END_SRC
 
 *** Aliases
