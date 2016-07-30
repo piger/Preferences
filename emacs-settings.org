@@ -1036,18 +1036,24 @@ compatibile con flycheck.
 **** web
 
 #+BEGIN_SRC emacs-lisp
+(defun moo-web-mode-hooks ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (yas-minor-mode +1))
+
 (use-package web-mode
   :ensure t
   :mode (("\\.erb\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
-         ("\\.html?\\'" . web-mode))
+         ("\\.html?\\'" . web-mode)
+         ("\\.j2\\'" . web-mode))
   :init
   (setq web-mode-engines-alist
-        '(("go" . "/go/src/.*\\.html\\'")))
+        '(("go" . "/go/src/.*\\.html\\'")
+          ("django" . "/dev/.*/templates/.*\\.html\\'")))
   :config
-  (add-hook 'web-mode-hook (lambda ()
-                             (local-set-key (kbd "RET") 'newline-and-indent))))
-
+  (add-hook 'web-mode-hook 'moo-web-mode-hooks)
+  (setq web-mode-enable-current-element-highlight t
+        web-mode-enable-auto-quoting -1))
 #+END_SRC
 
 ***** Aggiungere una regola per impostare l'engine automaticamente
