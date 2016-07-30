@@ -829,7 +829,9 @@ layout which permits accented characters.
 See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languages][list of checkers]].
 
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck)
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 #+END_SRC
 
 **** Shell
@@ -837,31 +839,29 @@ Not much configuration for shell scripting at the moment. I prefer to
 let emacs guess the indentation level. I disable flycheck to avoid
 checking the script by running it.
 
+NOTA: provo ad usare =shellcheck=.
+
 #+BEGIN_SRC emacs-lisp
-(add-hook 'sh-mode-look
-          (lambda ()
-            ;; do not run flycheck
-            (flycheck-mode -1)))
+;; (add-hook 'sh-mode-look
+;;           (lambda ()
+;;             ;; do not run flycheck
+;;             (flycheck-mode -1)))
 #+END_SRC
-***** TODO Verify flycheck
 **** Python
 
 #+BEGIN_SRC emacs-lisp
+(defun moo-python-mode-hooks ()
+  (subword-mode +1)
+  (show-paren-mode +1)
+  (flycheck-mode +1)
+  ;; unfuck electric indentation
+  (setq electric-indent-chars '(?\n)))
+
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
   :config
-  (defun piger/python-mode-hooks ()
-    "Defaults for python-mode."
-    (subword-mode +1)
-    (diminish 'subword-mode)
-    (show-paren-mode +1)
-    ;; (company-mode +1)
-    ;; eldoc needs a running python interpreter
-    ;; (eldoc-mode +1)
-    ;; unfuck electric indentation
-    (setq electric-indent-chars '(?\n)))
-  (add-hook 'python-mode-hook 'piger/python-mode-hooks))
+  (add-hook 'python-mode-hook 'moo-python-mode-hooks))
 #+END_SRC
 
 **** Go
@@ -1404,8 +1404,13 @@ Because Vim is the best text editor.
 **** yaml-mode
 
 #+BEGIN_SRC emacs-lisp
+(defun moo-yaml-mode-hooks ()
+  (flycheck-mode +1))
+
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'yaml-mode-hook 'moo-yaml-mode-hooks))
 #+END_SRC
 
 **** po-mode & i18n
