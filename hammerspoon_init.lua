@@ -7,13 +7,15 @@ hs.grid.GRIDHEIGHT = 40
 hs.grid.MARGINX = 0
 hs.grid.MARGINY = 0
 
+-- Audio Configuration
+local dacName = "FiiO USB DAC-E10"
+
 -- no animation pls
 hs.window.animationDuration = 0
 
 local mash = {"cmd", "alt", "ctrl"}
 -- local mashift = {"cmd", "alt", "shift"}
 
-hs.hotkey.bind(mash, "R", hs.reload)
 hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
 hs.hotkey.bind(mash, "space", hs.spotify.displayCurrentTrack)
 hs.hotkey.bind(mash, "h", hs.grid.resizeWindowThinner)
@@ -50,7 +52,7 @@ wifi_watcher:start()
 local caffeine = hs.menubar.new()
 local sleepType = "displayIdle"
 
-local function setCaffeineDisplay(state)
+function setCaffeineDisplay(state)
    if state then
       caffeine:setTitle("🐴")
    else
@@ -58,7 +60,7 @@ local function setCaffeineDisplay(state)
    end
 end
 
-local function caffeineClicked()
+function caffeineClicked()
    setCaffeineDisplay(hs.caffeinate.toggle(sleepType))
    if hs.caffeinate.get(sleepType) then
       hs.alert.show("Niiihhhh!")
@@ -99,6 +101,66 @@ local monitorWatcher = hs.screen.watcher.new(function ()
    end
 end)
 monitorWatcher:start()
+
+
+-- Audio Device toggle
+audioToggleMenu = hs.menubar.new()
+
+-- Set the menubar icon corresponding to the default output device
+function setToggleAudioIcon()
+   local device = hs.audiodevice.defaultOutputDevice()
+   if device == nil then
+      return nil
+   end
+   local name = device:name()
+   if name == "Built-in Output" then
+      audioToggleMenu:setTitle("🔈")
+   elseif name == dacName then
+      audioToggleMenu:setTitle("🎧")
+   else
+      audioToggleMenu:setTitle("🎵")
+   end
+end
+
+-- Toggle the default sound output bewteen built-in and DAC
+function toggleAudioDevice(modifier)
+   local currOutput = hs.audiodevice.defaultOutputDevice()
+   local builtinOut = hs.audiodevice.findOutputByName("Built-in Output")
+   local fioOutput = hs.audiodevice.findOutputByName(dacName)
+   if currOutput == nil or builtinOut == nil or fioOutput == nil then
+      hs.alert.show("Cannot find output devices, or FIO is not plugged in")
+      return nil
+   end
+
+   if currOutput:name() == "Built-in Output" then
+      fioOutput:setDefaultOutputDevice()
+   else
+      builtinOut:setDefaultOutputDevice()
+   end
+
+   setToggleAudioIcon()
+end
+audioToggleMenu:setClickCallback(toggleAudioDevice)
+
+-- Set up a watcher to update the menubar icon when the FIO gets unplugged
+hs.audiodevice.watcher.setCallback(function(event)
+      setToggleAudioIcon(audioToggleMenu)
+end)
+hs.audiodevice.watcher.start()
+
+-- Set the initial menubar icon
+setToggleAudioIcon()
+
+
+-- reload hammerspoon (and stop all the running watchers)
+function reloadHammerspoon()
+   wifi_watcher:stop()
+   sleepWatcher:stop()
+   monitorWatcher:stop()
+   hs.audiodevice.watcher.stop()
+   hs.reload()
+end
+hs.hotkey.bind(mash, "R", reloadHammerspoon)
 
 
 --- ole'
