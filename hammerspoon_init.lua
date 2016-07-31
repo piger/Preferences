@@ -115,7 +115,14 @@ function setIterm2Profile(filename)
    hs.execute("ln -sf $HOME/Preferences/iTerm2/" .. filename .. " \"$HOME/Library/Application Support/iTerm2/DynamicProfiles/iTerm2_Dynamic.json\"")
 end
 
-function updateItermProfile()
+-- Switch font in emacs
+function tellEmacsToChangeFont()
+   hs.execute("/usr/local/bin/emacsclient -e '(set-the-right-font)'")
+end
+
+function displayWatcherCallback()
+   tellEmacsToChangeFont()
+
    if hasExternalMonitor() then
       setIterm2Profile("iTerm2_Dynamic_12.json")
    else
@@ -123,7 +130,7 @@ function updateItermProfile()
    end
 end
 
-local monitorWatcher = hs.screen.watcher.new(updateItermProfile)
+local monitorWatcher = hs.screen.watcher.new(displayWatcherCallback)
 monitorWatcher:start()
 
 
