@@ -761,6 +761,21 @@ Per joinare una /region/:
           (join-line 1)))))
 #+END_SRC
 
+**** TODO Detect displays and switch font accordingly.
+
+Thunderbolt Display
+
+#+BEGIN_SRC elisp
+(defun detectMonitors ()
+  "Detect the connected monitors"
+  (interactive)
+  (let (monitors)
+    (setq monitors (shell-command-to-string "system_profiler  SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
+    (dolist (monitor (split-string monitors "\n"))
+      (when (string= monitor "Color LCD")
+        (message "Has default monitor!")))))
+#+END_SRC
+
 *** Keyboard bindings
 
 Mac OS X customization. Note that you should use my modified keyboard
