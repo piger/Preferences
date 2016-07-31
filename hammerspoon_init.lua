@@ -187,17 +187,18 @@ setToggleAudioIcon()
 function getCurrentMusicPlayer()
    if hs.itunes.isRunning() and hs.itunes.isPlaying() then
       return hs.itunes
-   elseif hs.spotify.isRunning() and hs.spotify.isPlaying() then
+   elseif hs.spotify.isRunning() then
+      -- NOTE: hs 0.9.46: hs.spotify.isPlaying() always returns nil?
+      -- or just when playing radio?
       return hs.spotify
    end
-   return
 end
 
 -- Get current Artist and Track name from the current music player.
 -- Returns: "Artist name", "Track name"
 function getCurrentTrackInfo()
    local player = getCurrentMusicPlayer()
-   if player == nil then
+   if not player then
       return nil, nil
    end
 
@@ -206,18 +207,16 @@ end
 
 function lookupOnYoutube()
    local currArtist, currTrack = getCurrentTrackInfo()
-   if currArtist == nil or currTrack == nil then
-      return
+   if currArtist and currTrack then
+      openInChrome("https://www.youtube.com/results?search_query=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
    end
-   openInChrome("https://www.youtube.com/results?search_query=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
 end
 
 function lookupOnGenius()
    local currArtist, currTrack = getCurrentTrackInfo()
-   if currArtist == nil or currTrack == nil then
-      return
+   if currArtist and currTrack then
+      openInChrome("http://genius.com/search?q=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
    end
-   openInChrome("http://genius.com/search?q=" .. hs.http.encodeForQuery(currArtist .. " " .. currTrack))
 end
 
 musicMenu = hs.menubar.new()
