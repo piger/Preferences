@@ -761,19 +761,22 @@ Per joinare una /region/:
           (join-line 1)))))
 #+END_SRC
 
-**** TODO Detect displays and switch font accordingly.
+**** Detect displays and switch font accordingly.
 
-Thunderbolt Display
+Set a larger font when a Thunderbolt Display is connected.
 
 #+BEGIN_SRC elisp
-(defun detectMonitors ()
-  "Detect the connected monitors"
+(defun set-the-right-font ()
+  "Set the right font according to the connected displays"
   (interactive)
-  (let (monitors)
-    (setq monitors (shell-command-to-string "system_profiler  SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
+  (let ((monitors (shell-command-to-string "system_profiler  SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
+        (hasExternal nil))
     (dolist (monitor (split-string monitors "\n"))
-      (when (string= monitor "Color LCD")
-        (message "Has default monitor!")))))
+      (when (string= monitor "Thunderbolt Display")
+        (setq hasExternal t)))
+    (if hasExternal
+        (set-default-font "Fira Mono-12")
+      (set-default-font "Fira Mono-11"))))
 #+END_SRC
 
 *** Keyboard bindings
