@@ -54,7 +54,7 @@ local wifi_watcher = hs.wifi.watcher.new(function ()
 
    if wifi_new_ssid == wifi_work_ssid and wifi_last_ssid ~= wifi_work_ssid then
       hs.audiodevice.defaultOutputDevice():setVolume(1)
-      hs.notify.new({title="Hammerspoon", informativeText="Lowering volume as we are at Work!"}):send():release()
+      hs.notify.new({title="Hammerspoon", informativeText="Lowering volume as we are at Work!"}):send()
    end
 
    wifi_last_ssid = wifi_new_ssid
@@ -239,6 +239,11 @@ cuppaTimerTimer = nil
 pourSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/pour.aiff")
 spoonSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/spoon.aiff")
 
+-- for notification center
+cuppaImage = hs.image.imageFromPath(os.getenv("HOME") .. "/Preferences/hammerspoon/cuppa.jpg")
+
+
+-- set the title of the menubar
 function cuppaSetTitle(timeLeft)
    if timeLeft ~= nil then
       cuppaMenu:setTitle("🍵 " .. timeLeft)
@@ -247,13 +252,15 @@ function cuppaSetTitle(timeLeft)
    end
 end
 
+-- callback called when the cuppa timer reaches the end
 function cuppaTimerEnd()
    hs.alert.show("🍵 is ready!")
-   hs.notify.new({title="Cuppa", informativeText="Your tea cup 🍵 is ready!"}):send():release()
+   hs.notify.new({title="Cuppa", informativeText="Your tea cup 🍵 is ready!"}):setIdImage(cuppaImage):send()
    cuppaSetTitle()
    spoonSound:play()
 end
 
+-- callback called to update the countdown timer on the menubar
 function cuppaTimerUpdate()
    if cuppaTimer ~= nil then
       local secondsLeft = cuppaTimer:nextTrigger()
@@ -268,6 +275,7 @@ function cuppaTimerUpdate()
    end
 end
 
+-- callback called by the supervisor timer to check on the cuppa timer
 function cuppaTimerPing()
    if cuppaTimer == nil or not cuppaTimer:running() then
       return true
@@ -275,6 +283,7 @@ function cuppaTimerPing()
    return false
 end
 
+-- cancel the current cuppa timer
 function cuppaTimerCancel()
    if cuppaTimer ~= nil then
       cuppaTimer:stop()
@@ -286,14 +295,18 @@ function cuppaTimerCancel()
    cuppaSetTitle()
 end
 
+-- prompt the user for a cuppa timer
 function cuppaAskForTimer(mod)
-   if mod["cmd"] then
-      cuppaTimerCancel()
-   else
-      local success, out, rawout = hs.osascript.applescript([[display dialog "How many minutes?" default answer "5"
-set answer to text returned of result
-return answer
-]])
+   script = [[
+   display dialog "How many minutes?" default answer "3"
+   set answer to text returned of result
+   return answer
+   ]]
+   
+   if mod["cmd"] then cuppaTimerCancel(); return; end
+
+   local success, out, rawout = hs.osascript.applescript(script)
+   if success then
       local minutes = tonumber(out)
       if minutes ~= nil and minutes > 0 then
          cuppaTimer = hs.timer.doAfter(minutes * 60, cuppaTimerEnd)
