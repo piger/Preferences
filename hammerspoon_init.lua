@@ -9,6 +9,7 @@ hs.grid.MARGINY = 0
 
 -- Audio Configuration
 local dacName = "FiiO USB DAC-E10"
+local speakersName = "Built-in Output"
 
 -- no animation pls
 hs.window.animationDuration = 0
@@ -134,34 +135,31 @@ audioToggleMenu:setTooltip("Toggle the default audio output device")
 -- Set the menubar icon corresponding to the default output device
 function setToggleAudioIcon()
    local device = hs.audiodevice.defaultOutputDevice()
-   if device == nil then
-      return nil
-   end
-   local name = device:name()
-   if name == "Built-in Output" then
+   if device:name() == speakersName then
       audioToggleMenu:setTitle("🔈")
-   elseif name == dacName then
-      audioToggleMenu:setTitle("🎧")
    else
-      audioToggleMenu:setTitle("🎵")
+      audioToggleMenu:setTitle("🎧")
    end
 end
 
 -- Toggle the default sound output bewteen built-in and DAC
 function toggleAudioDevice(modifier)
    local currOutput = hs.audiodevice.defaultOutputDevice()
-   local builtinOut = hs.audiodevice.findOutputByName("Built-in Output")
+   local builtinOut = hs.audiodevice.findOutputByName(speakersName)
    local fioOutput = hs.audiodevice.findOutputByName(dacName)
-   if currOutput == nil or builtinOut == nil or fioOutput == nil then
+
+   if not builtinOut or not fioOutput then
       hs.alert.show("Cannot find output devices, or FIO is not plugged in")
-      return nil
+      return
    end
 
-   if currOutput:name() == "Built-in Output" then
-      fioOutput:setDefaultOutputDevice()
-   else
+   if currOutput:name() == fioOutput:name() then
       builtinOut:setDefaultOutputDevice()
+   else
+      fioOutput:setDefaultOutputDevice()
    end
+
+   hs.notify.new({title="Hammerspoon", informativeText="New default audio device: " .. hs.audiodevice.defaultOutputDevice():name()}):send()
 
    setToggleAudioIcon()
 end
@@ -185,7 +183,7 @@ function getCurrentMusicPlayer()
    elseif hs.spotify.isRunning() and hs.spotify.isPlaying() then
       return hs.spotify
    end
-   return nil
+   return
 end
 
 -- Get current Artist and Track name from the current music player.
