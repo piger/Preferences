@@ -225,6 +225,88 @@ musicMenuLayout = {
 }
 musicMenu:setMenu(musicMenuLayout)
 
+
+-- Cuppa --
+-----------
+cuppaMenu = hs.menubar.new()
+cuppaMenu:setTitle("🍵")
+cuppaMenu:setTooltip("Cuppa tea timer. ⌘+click to cancel the timer")
+
+cuppaTimer = nil
+cuppaTimerTimer = nil
+
+-- stolen from Cuppa.app
+pourSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/pour.aiff")
+spoonSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/spoon.aiff")
+
+function cuppaSetTitle(timeLeft)
+   if timeLeft ~= nil then
+      cuppaMenu:setTitle("🍵 " .. timeLeft)
+   else
+      cuppaMenu:setTitle("🍵")
+   end
+end
+
+function cuppaTimerEnd()
+   hs.alert.show("🍵 is ready!")
+   hs.notify.new({title="Cuppa", informativeText="Your tea cup 🍵 is ready!"}):send():release()
+   cuppaSetTitle()
+   spoonSound:play()
+end
+
+function cuppaTimerUpdate()
+   if cuppaTimer ~= nil then
+      local secondsLeft = cuppaTimer:nextTrigger()
+      if secondsLeft < 0 then
+         secondsLeft = 0
+      end
+      local timeLeft = os.date("!%X", math.floor(secondsLeft))
+      if secondsLeft < (60 * 60) then
+         timeLeft = string.sub(timeLeft, 4)
+      end
+      cuppaSetTitle(timeLeft)
+   end
+end
+
+function cuppaTimerPing()
+   if cuppaTimer == nil or not cuppaTimer:running() then
+      return true
+   end
+   return false
+end
+
+function cuppaTimerCancel()
+   if cuppaTimer ~= nil then
+      cuppaTimer:stop()
+   end
+   if cuppaTimerTimer ~= nil then
+      cuppaTimerTimer:stop()
+   end
+   hs.alert.show("Cuppa timer canceled")
+   cuppaSetTitle()
+end
+
+function cuppaAskForTimer(mod)
+   if mod["cmd"] then
+      cuppaTimerCancel()
+   else
+      local success, out, rawout = hs.osascript.applescript([[display dialog "How many minutes?" default answer "5"
+set answer to text returned of result
+return answer
+]])
+      local minutes = tonumber(out)
+      if minutes ~= nil and minutes > 0 then
+         cuppaTimer = hs.timer.doAfter(minutes * 60, cuppaTimerEnd)
+         cuppaTimerTimer = hs.timer.doUntil(cuppaTimerPing, cuppaTimerUpdate, 1)
+         cuppaTimerUpdate()
+         pourSound:play()
+      end
+   end
+end
+
+cuppaMenu:setClickCallback(cuppaAskForTimer)
+
+
 -- reload hammerspoon (and stop all the running watchers) --
 ------------------------------------------------------------
 function reloadHammerspoon()
