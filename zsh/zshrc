@@ -981,6 +981,8 @@ fi
 
 # use hosts completion also for tmux-cssh
 compdef _hosts tmux-cssh
+# and also for bssh
+compdef _hosts bssh
 
 # Ctrl-X - SHIFT+S
 # Completa usando le parole della schermata attuale di tmux.
