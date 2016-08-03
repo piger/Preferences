@@ -1,15 +1,16 @@
 -- hammerspoon init.lua
 -- NOTE: When you reload your configuration you keep all the old "watchers" running!
 
--- set grid size
-hs.grid.GRIDWIDTH = 40
-hs.grid.GRIDHEIGHT = 40
-hs.grid.MARGINX = 0
-hs.grid.MARGINY = 0
-
 -- Audio Configuration
 local dacName = "FiiO USB DAC-E10"
 local speakersName = "Built-in Output"
+
+-- Screens Configuration
+local macScreenName = "Color LCD"
+local workScreenName = "Thunderbolt Display"
+
+-- Grid configuration
+hs.grid.setGrid("3x3", macScreenName)
 
 -- no animation pls
 hs.window.animationDuration = 0
@@ -102,7 +103,7 @@ sleepWatcher:start()
 -------------------------------------------------------------------
 function hasExternalMonitor()
    for _, screen in pairs(hs.screen.allScreens()) do
-      if screen:name() == "Thunderbolt Display" then
+      if screen:name() == workScreenName then
          return true
       end
    end
