@@ -10,7 +10,7 @@ if ! type -f rsync 2>&1 >/dev/null; then
     # we don't have rsync.
     skip_sync=1;
 fi
-if [ ! -f "$HOME/.briefcase" ]; then
+if [ ! -f "$HOME/Preferences/briefcase" ]; then
     skip_sync=1;
 fi
 # skip ssh options to find hostname
@@ -29,6 +29,6 @@ if echo "$server" | grep "@"; then
     skip_sync=1;
 fi
 if [ -z "$skip_sync" -a -z "$DISABLE_BRIEFCASE" ]; then
-    rsync -vurptgoDL -e ssh --files-from="$HOME/.briefcase" "$HOME" "$server":
+    rsync -vurptgoDL -e ssh --files-from="$HOME/Preferences/briefcase" "$HOME/Preferences/briefcase.d" "$server":
 fi
 ssh "$@"
