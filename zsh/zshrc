@@ -35,10 +35,11 @@ setopt auto_pushd
 # succeed.
 setopt check_jobs
 
+# 03/08/2016 - This causes errors with "chef" hostname completion :(
 # If unset, the cursor is set to the end of the word if completion is
 # started. Otherwise it stays there and completion is done from both
 # ends.
-setopt complete_in_word
+# setopt complete_in_word
 
 # Try to correct the spelling of commands.
 setopt correct
