@@ -9,6 +9,15 @@ local speakersName = "Built-in Output"
 local macScreenName = "Color LCD"
 local workScreenName = "Thunderbolt Display"
 
+function hasExternalMonitor()
+   for _, screen in pairs(hs.screen.allScreens()) do
+      if screen:name() == workScreenName then
+         return true
+      end
+   end
+   return false
+end
+
 -- Grid configuration
 hs.grid.setGrid("3x3", macScreenName)
 
@@ -16,7 +25,10 @@ hs.grid.setGrid("3x3", macScreenName)
 hs.window.animationDuration = 0
 
 local mash = {"cmd", "alt", "ctrl"}
--- local mashift = {"cmd", "alt", "shift"}
+local mod1 = {"alt", "shift"}
+local mod2 = {"ctrl", "option", "shift"}
+local mod3 = {"cmd", "ctrl"}
+local mod4 = {"cmd", "shift"} -- usa lo shift di destra, e' piu' comodo!
 
 hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
 hs.hotkey.bind(mash, "space", hs.spotify.displayCurrentTrack)
@@ -31,6 +43,24 @@ hs.hotkey.bind(mash, "right", hs.grid.pushWindowRight)
 hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end)
 hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
 
+-- Window layouts
+layouts = {
+   work = {
+      { "Spotify", nil, macScreenName, hs.layout.maximized, nil, nil },
+      { "Emacs", nil, workScreenName, hs.layout.maximized, nil, nil },
+      { "Google Chrome", nil, workScreenName, hs.layout.maximized, nil, nil },
+      { "iTerm2", nil, workScreenName, hs.layout.maximized, nil, nil },
+   },
+   home = {
+      { "Spotify", nil, macScreenName, hs.layout.maximized, nil, nil },
+      { "Emacs", nil, macScreenName, hs.layout.maximized, nil, nil },
+      { "Google Chrome", nil, macScreenName, hs.layout.maximized, nil, nil },
+      { "iTerm2", nil, macScreenName, hs.layout.maximized, nil, nil },
+   }
+}
+
+hs.hotkey.bind(mod4, "1", function() if hasExternalMonitor() then hs.layout.apply(layouts["work"]) end end)
+hs.hotkey.bind(mod4, "2", function() hs.layout.apply(layouts["home"]) end)
 
 -- functions and callbacks --
 -----------------------------
@@ -101,14 +131,7 @@ sleepWatcher:start()
 
 -- Monitor watcher, used to toggle the dynamic profile in iTerm2 --
 -------------------------------------------------------------------
-function hasExternalMonitor()
-   for _, screen in pairs(hs.screen.allScreens()) do
-      if screen:name() == workScreenName then
-         return true
-      end
-   end
-   return false
-end
+
 
 -- Switch dynamic profile in iTerm2
 -- Valid values: iTerm2_Dynamic_12.json, iTerm2_Dynamic_11.json
