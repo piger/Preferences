@@ -1000,7 +1000,7 @@ _complete_screen_display() {
     trap "rm -f $TMPFILE" EXIT
 
     if ((${+TMUX})); then
-        tmux -q capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp
+        tmux capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp </dev/null
     else
         echo "ahi ahi ahi no tmux"
         return
