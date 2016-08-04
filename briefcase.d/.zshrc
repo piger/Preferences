@@ -6,6 +6,7 @@
 setopt auto_pushd
 setopt check_jobs
 setopt extended_glob
+setopt list_packed
 setopt long_list_jobs
 setopt numeric_glob_sort
 setopt print_exit_value
@@ -13,6 +14,7 @@ setopt prompt_subst
 setopt pushd_ignore_dups
 setopt short_loops
 setopt interactive_comments
+setopt transient_rprompt
 setopt rematch_pcre
 [[ $ZSH_VERSION == <5->.* ]] && setopt combining_chars
 setopt NO_beep
@@ -172,18 +174,48 @@ zstyle :compinstall filename '~/.zshrc'
 autoload -Uz +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
+_force_rehash() {
+    (( CURRENT == 1 )) && rehash
+    return 1    # Because we didn't really complete anything.
+}
+zstyle ':completion:*' rehash true
+
+zstyle ':completion:*:messages' format %d
+zstyle ':completion:*:warnings' format '%BNo matches%b: %d'
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-separator '-->'
+zstyle ':completion:*:functions' ignored-patterns '_*'
+zstyle ':completion:*:manuals' separate-sections true
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# bindkey -M listscroll q send-break      # binda 'q' per uscire dal pager
+
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
+zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 
 # /home/dkertesz/.zshrc:zstyle:179: invalid pattern: :completion:*:(^approximate):*
 # zstyle ':completion:*:(^approximate):*' matcher-list \
 #        'r:|[/]=* r:|=* m:{a-z}={A-Z}'
 
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M %P -- \e[00;00m'
+
+zstyle ':completion::prefix:::' completer _complete
+zstyle ':completion:*:prefix:*' add-space true  # aggiunge anche uno spazio
+
 zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
+zstyle ':completion:*' special-dirs true
 zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,%mem,cmd'
 zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 ### Bracketed paste mode
