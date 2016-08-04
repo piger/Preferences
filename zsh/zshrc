@@ -437,6 +437,7 @@ fi
 
 # AUTOLOADS {{{
 # Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
+# http://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 typeset -U fpath
 
 do_autoload () {
@@ -479,8 +480,8 @@ vcs_info_needs_bye=0
 # This is really slow on a non SSD encrypted hard drive so I wrote
 # this wrapper that enable 'vcs_info' only on selected directory roots.
 lazy_vcs_info() {
-    local dev_dirs
-    dev_dirs=(~/dev ~/dev.ai ~/src ~/Preferences)
+    local dev_dirs d
+    dev_dirs=(~/dev ~/src ~/Preferences)
 
     for d in $dev_dirs; do
         if [[ $PWD = ${d}* ]]; then
@@ -528,20 +529,14 @@ if [[ $OSTYPE = darwin* ]]; then
     # spotlight
     alias spotlight-info='sudo fs_usage -w -f filesys mdworker | grep "open"'
 
-    # da https://github.com/sjl/dotfiles/blob/master/fish/config.fish
-    # e da VERIFICARE (e convertire in zsh)
-    ### alias spotlight-off 'sudo mdutil -a -i off ; and sudo mv /System/Library/CoreServices/Search.bundle/ /System/Library/CoreServices/SearchOff.bundle/ ; and killall SystemUIServer'
-    ### alias spotlight-on 'sudo mdutil -a -i on ; and sudo mv /System/Library/CoreServices/SearchOff.bundle/ /System/Library/CoreServices/Search.bundle/ ; and killall SystemUIServer'
-
     # suffix aliases
-    # Esempio:
-    # ~/Pictures $ *.jpeg
-    #   -> Eseguira': open *.jpeg
-    alias -s pdf='open'
-    alias -s avi='open'
-    alias -s jpeg='open'
-    alias -s jpg='open'
-    alias -s mp4='open'         # video -> quicktime o vlc
+    # i.e. executing "*.png" will in turn execute "open *.png"
+    alias -s pdf=open
+    alias -s avi=open
+    alias -s jpeg=open
+    alias -s jpg=open
+    alias -s mp4=open
+    alias -s png=open
 
     # Homebrew
     [[ -d /usr/local/bin ]] && export PATH="/usr/local/bin:$PATH"
@@ -646,12 +641,6 @@ elif [[ $OSTYPE = linux* ]]; then
         alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
     fi
 
-    # locate/updatedb solo per la $HOME
-    if (( $+commands[updatedb] )); then
-        alias my_updatedb='updatedb -l 0 -o ~/.updatedb -U $HOME -e /,~/.cpan'
-        alias my_locate='locate -d ~/.updatedb'
-    fi
-
     alias grep='grep --color=auto'
 
     if [ -e /etc/debian_version ]; then
@@ -679,51 +668,6 @@ elif [[ $OSTYPE = openbsd* ]]; then
     alias pfdump="tcpdump -n -e -ttt -i pflog0"
     alias pfrerules="pfctl -F rules -R -f /etc/pf.conf"
     alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
-    alias flavors='make show=FLAVORS'
-    alias pdesc='make show=DESCRIPTION'
-
-    if [ -x /usr/libexec/locate.updatedb ]; then
-        alias hupdatedb="/usr/libexec/locate.updatedb \
-            --searchpaths=$HOME --prunepaths=\"/ $HOME/.vim\" \
-            --fcodes=$HOME/.locatedb"
-        alias hlocate="locate -d ${HOME}/.locatedb"
-    fi
-
-    # Su OpenBSD posso usarea anche -h e -r...
-    # [10:13] taleggio:~% ps -o pid,user,pcpu,pmem,state,command
-    #   PID USER     %CPU %MEM S COMMAND
-    #  9639 sand      0.0  0.6 S -zsh
-    #  9697 sand      0.0  0.1 R ps -o pid,user,pcpu,pmem,state,command
-    # alias ps='ps -o pid,user,pcpu,pmem,state,command'
-    # Piccolo problema:
-    # % ps xauw
-    # ps: /dev/mem: Permission denied
-    # [1]    14269 exit 1     ps -o pid,user,pcpu,pmem,state,command xauw
-
-    obsd_cvslist () {
-        if (( ! $+commands[curl] )); then
-            echo "You need 'curl' to run this. pkg_add -i curl"
-            return
-        fi
-        CVSURL="http://www.openbsd.org/anoncvs.html"
-
-        for cvsroot in $(curl -s ${CVSURL} | grep "CVSROOT=" | cut -d">" -f3- | cut -d"<" -f1); do
-            echo "$cvsroot"
-        done
-    }
-
-    obsd_ftplist () {
-        if (( ! $+commands[curl] )); then
-            echo "You need 'curl' to run this. pkg_add -i curl"
-            return
-        fi
-        MIRRORURL="http://www.openbsd.org/ftp.html"
-
-        for mirror in $(curl -s ${MIRRORURL} | egrep -i "<a.*(http|ftp)://.*openbsd" | cut -d'"' -f2); do
-            echo "$mirror"
-        done
-    }
-
 fi # end if $OSTYPE = ...
 # }}}
 
@@ -731,16 +675,6 @@ fi # end if $OSTYPE = ...
 # Aliases e altri comandi che non uso mai perche' sono SCEMO
 # ----------------------------------------------------------
 # man zshexpn -> search Glob Qualifier
-
-# 24/Nov/09 - provo a usare di default mv -i e cp -i
-# no spelling correction on mv, cp, mkdir
-alias mv='nocorrect mv -i'
-alias cp='nocorrect cp -i'
-alias mkdir='nocorrect mkdir'
-
-alias pu='pushd'
-alias po='popd'
-
 alias h='fc -l -t "%d/%m/%Y %H:%M" -D'
 alias la="ls -a"
 alias lsd="ls -ld *(-/)"                # ls delle sole directory
@@ -763,7 +697,6 @@ alias -g T='|tail'
 alias -s asc='gpg'
 
 alias pwgen_strong='pwgen -y1 15 20'
-alias screenf='screen -e "^Ff"'
 alias t=task
 
 # alias simpatici
@@ -968,12 +901,16 @@ bindkey '^X^X' hist-complete
 # extend ssh host completion with chef nodes (set CHEF_NODES_DIR in ~/.zshenv.local)
 # needs the following cron job:
 # @hourly find ~/src/chef-repo/nodes -name "*.json" | xargs cat | /usr/local/bin/jq -r ".name" > ~/.chef_hosts.new && mv ~/.chef_hosts.new ~/.chef_hosts
-if [[ -e $HOME/.chef_hosts ]]; then
-    zmodload zsh/mapfile
-    zstyle -s ':completion:*:hosts' hosts _ssh_hosts
-    _ssh_hosts=("${(f@)mapfile[$HOME/.chef_hosts]}")
-    zstyle ':completion:*:hosts' hosts $_ssh_hosts
-fi
+function {
+    # I'm using an anonymous function to maintain _ssh_hosts as a local variable
+    local _ssh_hosts
+    if [[ -e $HOME/.chef_hosts ]]; then
+        zmodload zsh/mapfile
+        zstyle -s ':completion:*:hosts' hosts _ssh_hosts
+        _ssh_hosts=("${(f@)mapfile[$HOME/.chef_hosts]}")
+        zstyle ':completion:*:hosts' hosts $_ssh_hosts
+    fi
+}
 
 # check if the chef host file is stale
 if [[ -e $HOME/.chef_hosts && $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
@@ -1096,33 +1033,6 @@ function _zle_line_finish() {
   # doesn't get the ^[[200~ codes around the pasted text.
   [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004l'
 }
-
-# quote plugin
-# ------------
-
-# Get a random quote fron the site http://www.quotationspage.com/random.php3
-# Created by Eduardo San Martin Morote aka Posva
-# http://posva.github.io
-# Sun Jun 09 10:59:36 CEST 2013
-# Don't remove this header, thank you
-# Usage: quote
-
-if exists curl && exists iconv; then
-    function quote() {
-        local WHO_COLOR="\e[0;33m"
-        local TEXT_COLOR="\e[0;35m"
-        local COLON_COLOR="\e[0;35m"
-        local END_COLOR="\e[m"
-
-        Q=$(curl -s --connect-timeout 2 "http://www.quotationspage.com/random.php3" | iconv -c -f ISO-8859-1 -t UTF-8 | grep -m 1 "dt ")
-        TXT=$(echo "$Q" | sed -e 's/<\/dt>.*//g' -e 's/.*html//g' -e 's/^[^a-zA-Z]*//' -e 's/<\/a..*$//g')
-        W=$(echo "$Q" | sed -e 's/.*\/quotes\///g' -e 's/<.*//g' -e 's/.*">//g')
-        if [ "$W" -a "$TXT" ]; then
-            echo "${WHO_COLOR}${W}${COLON_COLOR}: ${TEXT_COLOR}“${TXT}”${END_COLOR}"
-        fi
-    }
-fi
-
 # }}}
 
 # LOCAL SETTINGS {{{
