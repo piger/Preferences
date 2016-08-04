@@ -1,5 +1,6 @@
 # -*- shell-script -*-
 # zshrc server-specific (GNU/Linux)
+# NOTE: must support 4.3.17-1ubuntu1 (ubuntu 12.04)
 
 ### Configuration
 setopt auto_pushd
@@ -30,10 +31,43 @@ SAVEHIST=10000
 HISTSIZE=12000
 HISTFILE=~/.history
 
-PROMPT='[%T] %n@%2m:%3~%(!.#.$) '
+# prompt
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+for color in {000..255}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+
+typeset -g hostname_color
+
+function set_hostname_color() {
+    local chash=0
+    foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
+        (( chash+=#letter ))
+    end
+    hostname_color=$(printf "%03d" $(( $chash % 255 )))
+}
+set_hostname_color
+
+# PROMPT='[%T] %n@%2m:%3~%(!.#.$) '
+PROMPT='${FG[027]}[%T] ${FG[208]}%~
+${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
+RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b)'
 
 ### Commands configuration
-(( $+commands[dircolors] )) && test -e ~/.dircolors && eval $(dircolors -b ~/.dircolors)
+function exists() { which $1 &> /dev/null }
+
+exists dircolors && test -e ~/.dircolors && eval $(dircolors -b ~/.dircolors)
 
 TIMEFMT="%*E real time :: CPU: %P (%U user, %S kernel) :: %J"
 
@@ -49,7 +83,7 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-if (( $+commands[vim] )); then
+if exists vim; then
     export EDITOR=vim
     export VISUAL=vim
 else
@@ -112,6 +146,9 @@ insert-datestamp() { LBUFFER+=${(%):-'%D{%d-%m-%Y}'}; }
 zle -N insert-datestamp
 bindkey '^Ed' insert-datestamp
 
+autoload -Uz select-word-style
+select-word-style bash
+
 ### Autoloads
 autoload -Uz zmv
 
@@ -132,14 +169,16 @@ alias cheflog='view /var/log/chef/client.log'
 
 ### Completion
 zstyle :compinstall filename '~/.zshrc'
-autoload -Uz compinit && compinit
+autoload -Uz +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
 
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 
-zstyle ':completion:*:(^approximate):*' matcher-list \
-       'r:|[/]=* r:|=* m:{a-z}={A-Z}'
+# /home/dkertesz/.zshrc:zstyle:179: invalid pattern: :completion:*:(^approximate):*
+# zstyle ':completion:*:(^approximate):*' matcher-list \
+#        'r:|[/]=* r:|=* m:{a-z}={A-Z}'
 
 zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
