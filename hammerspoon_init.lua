@@ -1,6 +1,10 @@
 -- hammerspoon init.lua
 -- NOTE: When you reload your configuration you keep all the old "watchers" running!
 
+local HOME = os.getenv("HOME")
+local sleepScript = HOME .. "/.sleep"
+local wakeupScript = HOME .. "/.wakeup"
+
 -- Audio Configuration
 local dacName = "FiiO USB DAC-E10"
 local speakersName = "Built-in Output"
@@ -75,6 +79,11 @@ function openInChrome(url)
    hs.urlevent.openURLWithBundle(url, chrome:bundleID())
 end
 
+-- test if we ken lee a file
+function ken_lee(filename)
+   local f = io.open(filename, "r")
+   if f ~= nil then io.close(f) return true else return false end
+end
 
 -- WiFi Watcher --
 ------------------
@@ -120,18 +129,31 @@ end
 caffeineMenu:setClickCallback(caffeineClicked)
 setCaffeineDisplay(hs.caffeinate.get(caffeinateSleepType))
 
--- disable caffeine mode after sleep
+--- Sleep watcher ---
+--------------------
+-- Can execute ~/.sleep and ~/.wakeup after sleep or wakeup events; note that those files
+-- must be shell scripts with the executable bit set
 local sleepWatcher = hs.caffeinate.watcher.new(function (eventType)
-   if (eventType == hs.caffeinate.watcher.systemDidWake) then
-      setCaffeineDisplay(hs.caffeinate.set(caffeinateSleepType, false, true))
-   end
+      if (eventType == hs.caffeinate.watcher.systemDidWake) then
+         -- disable caffeine mode after sleep
+         setCaffeineDisplay(hs.caffeinate.set(caffeinateSleepType, false, true))
+
+         if ken_lee(wakeupScript) then
+            hs.notify.new({title="Hammerspoon", informativeText="Running wakeup script"}):send()
+            hs.execute(wakeupScript)
+         end
+      elseif (eventType == hs.caffeinate.watcher.systemWillSleep) then
+         if ken_lee(sleepScript) then
+            hs.notify.new({title="Hammerspoon", informativeText="Running sleep script"}):send()
+            hs.execute(sleepScript)
+         end
+      end
 end)
 sleepWatcher:start()
 
 
 -- Monitor watcher, used to toggle the dynamic profile in iTerm2 --
 -------------------------------------------------------------------
-
 
 -- Switch dynamic profile in iTerm2
 -- Valid values: iTerm2_Dynamic_12.json, iTerm2_Dynamic_11.json
@@ -264,11 +286,11 @@ cuppaTimer = nil
 cuppaTimerTimer = nil
 
 -- stolen from Cuppa.app
-pourSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/pour.aiff")
-spoonSound = hs.sound.getByFile(os.getenv("HOME") .. "/Preferences/hammerspoon/spoon.aiff")
+pourSound = hs.sound.getByFile(HOME .. "/Preferences/hammerspoon/pour.aiff")
+spoonSound = hs.sound.getByFile(HOME .. "/Preferences/hammerspoon/spoon.aiff")
 
 -- for notification center
-cuppaImage = hs.image.imageFromPath(os.getenv("HOME") .. "/Preferences/hammerspoon/cuppa.jpg")
+cuppaImage = hs.image.imageFromPath(HOME .. "/Preferences/hammerspoon/cuppa.jpg")
 
 
 -- set the title of the menubar
