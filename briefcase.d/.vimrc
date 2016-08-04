@@ -1,5 +1,9 @@
 " vimrc: server-specific (GNU/Linux)
 
+if !isdirectory(expand("~/.vim"))
+    call mkdir(expand("~/.vim"), "", 0700)
+endif
+
 if !isdirectory(expand("~/.vim/backups"))
     call mkdir(expand("~/.vim/backups"), "", 0700)
 endif

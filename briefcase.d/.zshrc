@@ -135,7 +135,7 @@ zstyle :compinstall filename '~/.zshrc'
 autoload -Uz compinit && compinit
 
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 
 zstyle ':completion:*:(^approximate):*' matcher-list \
