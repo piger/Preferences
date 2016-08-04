@@ -1,0 +1,7 @@
+set -e
+setopt NULL_GLOB
+
+for socket in ~/.ssh/socket/*; do
+    echo "Closing ${socket##/*.ssh/socket/s_}..."
+    ssh -O exit -p ${socket##*:} ${${socket##/*.ssh/socket/s_}%%:*}
+done
