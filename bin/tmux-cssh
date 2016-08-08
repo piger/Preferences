@@ -20,8 +20,9 @@ user_query=""
 query=()
 ssh_options=()
 do_log=0
+do_force=0
 
-while getopts ":r:p:q:l:LPvh" opt; do
+while getopts ":r:p:q:l:LPvfh" opt; do
     case $opt in
         L)
             do_log=1
@@ -44,6 +45,9 @@ while getopts ":r:p:q:l:LPvh" opt; do
         v)
             ssh_options+="-v"
             ;;
+        f)
+            do_force=1
+            ;;
         h)
             printf "Usage: $(basename $0) [-LPvh] [-p pod] [-q query] [-r role] [-l user] [host ...]\n"
             printf "NOTE: hostnames will be read from stdin when no arguments are specified.\n\n"
@@ -53,6 +57,7 @@ while getopts ":r:p:q:l:LPvh" opt; do
             phelp "-P" "Limit the search to production nodes"
             phelp "-q <query>" "Specify a custom knife search query"
             phelp "-r <role>" "Search by hostgroup role"
+            phelp "-f" "Force the command, even if it matches too many hosts"
             phelp "-v" "Run a verbose ssh session"
             phelp "-h" "Show this help"
             exit
@@ -70,6 +75,12 @@ shift $((OPTIND-1))
 
 hosts=()
 
+# Check for conflicting command line switches
+if [[ $#query > 0 && ! -z $user_query ]]; then
+    fatal "Can't specify a custom query together with filtering options"
+fi
+
+# Build our knife search query
 # NOTE: do not redirect knife stderr, we need to see errors.
 if [[ $#query > 0 ]]; then
     # using knife search
@@ -87,8 +98,11 @@ else
     hosts+=($@)
 fi
 
+# Safety checks
 if [[ $#hosts = 0 ]]; then
     fatal "No hosts matched your query or knife command has failed"
+elif [[ $#hosts > 30 && $do_force = 0 ]]; then
+    fatal "More than 30 servers matched, please refine your search"
 fi
 
 SESSION="cssh-$$"
