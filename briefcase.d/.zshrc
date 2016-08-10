@@ -63,7 +63,7 @@ set_hostname_color
 
 # PROMPT='[%T] %n@%2m:%3~%(!.#.$) '
 PROMPT='${FG[027]}[%T] ${FG[208]}%~
-${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
+${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%2m${FX[reset]}%(1j.|%j.) %(!.#.$) '
 RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b)'
 
 ### Commands configuration
@@ -167,7 +167,20 @@ alias ..='cd ..'
 alias ...='cd ./..'
 alias -g L='|less'
 alias json.tool='python -m json.tool'
-alias cheflog='view /var/log/chef/client.log'
+alias cheflog='$PAGER /var/log/chef/client.log'
+
+### Functions
+cheftail() {
+    if [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
+        sudo tail -n 200 -f /var/log/daemon.log | awk '$3 ~ /chef-client/'
+    else
+        if [[ -r /var/log/chef/client.log ]]; then
+            tail -n 200 -f /var/log/chef/client.log
+        else
+            sudo tail -n 200 -f /var/log/chef/client.log
+        fi
+    fi
+}
 
 ### Completion
 zstyle :compinstall filename '~/.zshrc'
