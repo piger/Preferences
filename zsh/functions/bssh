@@ -28,10 +28,13 @@ done
 if [[ -z $skip_sync && -z $DISABLE_BRIEFCASE ]]; then
     eval server="\${$OPTIND}"
     # skip anyway if we're logging as a different user (user@server syntax)
-    [[ $server != *@* ]] && \
+    if [[ $server != *@* ]]; then
+        tmux setw automatic-rename off
         rsync -vurptgoDL -e ssh \
               --files-from="$HOME/Preferences/briefcase" \
               ~/Preferences/briefcase.d "$server":
+        tmux setw automatic-rename on
+    fi
 fi
 
 # reset OPTIND to the initial value
