@@ -7,6 +7,9 @@
 
 [diff]
     renames = copies
+    # let's try the new *experimental* heuristic engine for diffs
+    # https://github.com/blog/2188-git-2-9-has-been-released
+    compactionHeuristic = true
 
 [log]
     decorate = short
