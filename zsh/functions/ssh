@@ -19,8 +19,14 @@ set_window_title() {
     printf "$win_escape_start$1$escape_end"
 }
 
-# for each command line argument passed to ssh, check if it's a hostname
-local hostname=$(perl -e 'if ($#ARGV == 0) { print $ARGV[0]; } else {foreach $h (@ARGV) { if ($h =~ /^(?<!-)(?:\w+@)?([^.]+\.[^.]+\..*)/) { print $+; exit; } } }' -- $@)
+
+# Grab the hostname from ssh command line
+while getopts ":1246AaCfGgKkMNnqsTtVvXxYyb:c:D:E:e:F:I:i:L:l:m:O:o:p:Q:R:S:W:w:" option; do
+done
+
+local hostname=""
+eval hostname="\${$OPTIND}"
+OPTIND=1
 
 if [[ -z $hostname ]]; then
     command ssh $@
