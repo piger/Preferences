@@ -35,6 +35,7 @@ do_log=0
 do_force=0
 do_dry_run=0
 pods=()
+session_names=()
 
 while getopts ":r:p:q:l:LPvfnh" opt; do
     case $opt in
@@ -43,10 +44,11 @@ while getopts ":r:p:q:l:LPvfnh" opt; do
             ;;
         r)
             query+="role:hg_$OPTARG"
+            session_names+="$OPTARG"
             ;;
         p)
-            #query+="zendesk_config_pod:$OPTARG"
             pods+="$OPTARG"
+            session_names+="pod$OPTARG"
             ;;
         P)
             query+='chef_environment:*production*'
@@ -150,6 +152,9 @@ elif (( $#hosts > $HOSTLIMIT )) && [[ $do_force = 0 ]]; then
 fi
 
 SESSION="cssh-$$"
+if (( $#session_names > 0 )); then
+    SESSION="$SESSION-${(j:-:)session_names}"
+fi
 WINDOW="${SESSION}:1"
 
 now=$(date +"%d-%m-%Y-%H:%M")
@@ -157,7 +162,8 @@ logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
 
 i=1
 
-tmux new-session -d -s $SESSION -P ssh $ssh_options[@] $hosts[$i]
+tmux new-session -d -s $SESSION -P -F "tmux session: #{session_name}" \
+     ssh $ssh_options[@] $hosts[$i]
 [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
 i=$((i+1))
 
