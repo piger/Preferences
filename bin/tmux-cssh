@@ -132,14 +132,19 @@ else
     hosts+=($@)
 fi
 
+# sort the hosts array to have nice ordered tmux windows later
+IFS=$'\n' hosts=($(sort_hosts <<<"${hosts[*]}"))
+unset IFS
+
+# Print and exit if the user requested a dry-run
 if [[ $do_dry_run = 1 ]]; then
-    print ${(j:\n:)hosts} | sort_hosts
+    print ${(j:\n:)hosts}
     exit 0
 fi
 
 # Safety checks
 if [[ $#hosts = 0 ]]; then
-    fatal "No hosts matched your query or knife command has failed"
+    fatal "No hosts matched your query or you gave me an empty list"
 elif (( $#hosts > $HOSTLIMIT )) && [[ $do_force = 0 ]]; then
     fatal "Too many hosts matched ($#hosts); please refine your search query"
 fi
@@ -149,6 +154,7 @@ WINDOW="${SESSION}:1"
 
 now=$(date +"%d-%m-%Y-%H:%M")
 logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
+
 i=1
 
 tmux new-session -d -s $SESSION -P ssh $ssh_options[@] $hosts[$i]
