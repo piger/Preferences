@@ -25,7 +25,9 @@ function sort_hosts() {
     sort -t '.' -k 3,3 -k 2,2 -k 1,1
 }
 
-HOSTLIMIT=10
+# 12 servers can be viewed in a 3x4 split window
+HOSTLIMIT=12
+
 user_query=""
 query=()
 ssh_options=()
