@@ -32,7 +32,7 @@ if [[ -z $skip_sync && -z $DISABLE_BRIEFCASE ]]; then
         tmux setw automatic-rename off
         rsync -vurptgoDL -e ssh \
               --files-from="$HOME/Preferences/briefcase" \
-              ~/Preferences/briefcase.d "$server":
+              ~/Preferences/briefcase.d "$server": || { echo "rsync failed"; return }
         tmux setw automatic-rename on
     fi
 fi

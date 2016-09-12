@@ -136,6 +136,9 @@ teprego() {
 }
 
 ### Key bindings
+# emacs bindings, ffs!
+bindkey -e
+
 _add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
 zle -N add-sudo _add-sudo
 
