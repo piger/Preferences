@@ -765,7 +765,7 @@ Per joinare una /region/:
 
 Set a larger font when a Thunderbolt Display is connected.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
 (defun set-the-right-font ()
   "Set the right font according to the connected displays"
   (interactive)
