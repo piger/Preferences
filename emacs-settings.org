@@ -209,6 +209,13 @@ list.
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
+(when (>= emacs-major-version 25)
+  (setq package-archive-priorities
+        '(("melpa-stable" . 30)
+          ("marmalade" . 20)
+          ("gnu" . 10)
+          ("melpa" . 0))))
+
 ;; (when (and (>= emacs-major-version 24)
 ;;            (>= emacs-minor-version 4))
 ;;   (add-to-list 'package-archives
