@@ -1050,7 +1050,9 @@ compatibile con flycheck.
 
 #+BEGIN_SRC emacs-lisp
 (defun moo-json-mode-hooks ()
-  (flycheck-mode +1))
+  (flycheck-mode +1)
+  (setq eldoc-documentation-function 'jsons-print-path)
+  (eldoc-mode +1))
 
 (use-package json-mode
   :ensure t
