@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# change the current pane title (from inside tmux)
+set_pane_title() {
+    local pane_escape_start="\033]2;"
+    local escape_end="\033\\"
+    
+    printf "$pane_escape_start$1$escape_end"
+}
+
+set_pane_title "$*"

@@ -163,17 +163,17 @@ logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
 i=1
 
 tmux new-session -d -s $SESSION -P -F "tmux session: #{session_name}" \
-     ssh $ssh_options[@] $hosts[$i]
+     "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
 [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
 i=$((i+1))
 
 while [[ $i -le $#hosts ]]; do
-    tmux split-window -t $WINDOW ssh $ssh_options[@] $hosts[$i]
+    tmux split-window -t $WINDOW "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
     tmux select-layout -t $WINDOW tiled
     [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
     i=$((i+1))
 done
 
-tmux setw -t $WINDOW status off
+tmux setw -t $WINDOW status on
 tmux setw -t $WINDOW synchronize-panes on
 tmux switch-client -t $SESSION
