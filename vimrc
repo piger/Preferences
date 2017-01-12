@@ -57,13 +57,13 @@ set nocursorcolumn		" evidenzia la colonna dove si trova il cursore, ma e' LENTO
 " set directory=~/.vim/swap,.
 
 " persistent undo (vim 7.3)
-if v:version >= 703
-	if !isdirectory(expand("~/.vim/undo"))
-		call mkdir(expand("~/.vim/undo"), "", 0700)
-	endif
-	set undodir=~/.vim/undo,.
-	set undofile
-endif
+"if v:version >= 703
+"	if !isdirectory(expand("~/.vim/undo"))
+"		call mkdir(expand("~/.vim/undo"), "", 0700)
+"	endif
+"	set undodir=~/.vim/undo,.
+"	set undofile
+"endif
 
 set encoding=utf-8		" default encoding
 set history=200			" quante entry di history per comandi e search
