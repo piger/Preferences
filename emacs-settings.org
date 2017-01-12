@@ -202,38 +202,12 @@ copied a function from prelude to check and install packages from a
 list.
 
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(setq package-enable-at-startup nil)
-
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
 (when (>= emacs-major-version 25)
   (setq package-archive-priorities
         '(("melpa-stable" . 30)
           ("marmalade" . 20)
           ("gnu" . 10)
           ("melpa" . 0))))
-
-;; (when (and (>= emacs-major-version 24)
-;;            (>= emacs-minor-version 4))
-;;   (add-to-list 'package-archives
-;;                '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-;;   (setq package-pinned-packages '(
-;;                                   (magit . "melpa-stable")
-;;                                   (flycheck . "melpa-stable")
-;;                                   )))
-
-;; load and activate installed packages
-(package-initialize nil)
-
-; osx-plist
-; xkcd
-; anaconda-mode
-; pyenv-mode
-; yasnippet
-; google-translate
 
 ; TODO XXX subword-mode appears as " , " in emacs modeline...
 ; (diminish 'subword-mode)
