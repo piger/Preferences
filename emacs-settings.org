@@ -209,6 +209,11 @@ list.
           ("gnu" . 10)
           ("melpa" . 0))))
 
+; try to pin helm and helm-core (which is a dependency)
+(setq package-pinned-packages
+      '((helm . "melpa-stable")
+        (helm-core . "melpa-stable")))
+
 ; TODO XXX subword-mode appears as " , " in emacs modeline...
 ; (diminish 'subword-mode)
 #+END_SRC
@@ -1022,6 +1027,29 @@ Sembra interessante
 Uso =json-mode= perche' ha un highlight migliore di =js-mode= ed e'
 compatibile con flycheck.
 
+*NOTA*: Questo ha problemi con Helm e Flycheck. In pratica qualcosa di
+json-mode disturba Helm; questo succede dal primo file json che apro
+in poi, durante la stessa sessione di emacs.
+
+*NOTA2*: Forse tutto questo si risolve facendo usare a flycheck un
+checker meglio per json? Tipo jsonlint?
+
+#+BEGIN_EXAMPLE
+$ npm install jsonlint -g
+/usr/local/bin/jsonlint -> /usr/local/lib/node_modules/jsonlint/lib/cli.js
+/usr/local/lib
+└─┬ jsonlint@1.6.2
+  ├── JSV@4.0.2
+  └─┬ nomnom@1.8.1
+    ├─┬ chalk@0.4.0
+    │ ├── ansi-styles@1.0.0
+    │ ├── has-color@0.1.7
+    │ └── strip-ansi@0.1.1
+    └── underscore@1.6.0
+#+END_EXAMPLE
+
+per ora PARE di si (24/02/2017). Vediamo...
+
 #+BEGIN_SRC emacs-lisp
 (defun moo-json-mode-hooks ()
   (flycheck-mode +1)
@@ -1029,7 +1057,7 @@ compatibile con flycheck.
   (eldoc-mode +1))
 
 (use-package json-mode
-  :ensure t
+  :pin melpa-stable  
   :config
   (add-hook 'json-mode-hook 'moo-json-mode-hooks))
 #+END_SRC
@@ -1140,6 +1168,9 @@ trying to understand if I like it.
 *NOTE* Helm leaves buffers around for the =resume= function (=C-x c
 b=); you should not worry about them. See also issue [[https://github.com/emacs-helm/helm/issues/271][#271]].
 
+*NOTE 2*: Please ensure that helm-core is also the stable version. At
+the moment I don't know how to pin it to stable.
+
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :ensure t
@@ -1242,8 +1273,8 @@ And also [[https://github.com/ShingoFukuyama/helm-swoop][helm-swoop]] seems inte
 
 #+BEGIN_SRC emacs-lisp
 (use-package helm-swoop
-  :ensure t
   :config
+  :disabled t
   (global-set-key (kbd "C-c o") 'helm-swoop))
 #+END_SRC
 
