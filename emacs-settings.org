@@ -1307,7 +1307,14 @@ Nice keybinding to switch frame using shift or alt + arrows:
 #+BEGIN_SRC emacs-lisp
 (use-package windmove
   :config
-  (windmove-default-keybindings 'meta))
+  (windmove-default-keybindings 'meta)
+  :bind
+  ; Bind attional keys (other than the default meta+arrows) for modes where
+  ; the default keys conflicts.
+  ("C-x <up>" . windmove-up)
+  ("C-x <down>" . windmove-down)
+  ("C-x <left>" . windmove-left)
+  ("C-x <right>" . windmove-right))
 #+END_SRC
 
 **** transpose-frame
