@@ -193,7 +193,8 @@ Configure garbage collection for a faster emacs startup:
 
 #+BEGIN_SRC emacs-lisp
 ;;; don't GC so often
-(setq-default gc-cons-threshold 10000000)
+; 24/03/2017 - Is this really needed? 
+; (setq-default gc-cons-threshold 10000000)
 #+END_SRC
 
 *** Packages
@@ -1879,8 +1880,9 @@ Use terminal-notifier to notify stuff.
 
 **** smart-mode-line
 
-I'm trying [[https://github.com/Malabarba/smart-mode-line][smart-mode-line]] just to have a better visual of the current
-active window.
++I'm trying [[https://github.com/Malabarba/smart-mode-line][smart-mode-line]] just to have a better visual of the current active window.+
+
+See spaceline below.
 
 #+BEGIN_SRC emacs-lisp
 (use-package smart-mode-line
