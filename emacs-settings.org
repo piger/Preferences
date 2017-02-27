@@ -1904,14 +1904,15 @@ See spaceline below.
 
 **** spaceline
 
-Meglio di smart-modeline, sembra...
+Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per emacs normale.
 
 #+BEGIN_SRC emacs-lisp
 (use-package spaceline-config
   :ensure spaceline
   :config
   (setq powerline-default-separator 'zigzag)
-  (spaceline-emacs-theme))
+  (spaceline-spacemacs-theme)
+  (spaceline-helm-mode))
 #+END_SRC
 
 **** dtrt-indent                                                        :new:
