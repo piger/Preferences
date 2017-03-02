@@ -1696,7 +1696,10 @@ things telling you how many matches was found for the current search.
   (global-anzu-mode +1)
   (set-face-attribute 'anzu-mode-line nil
                       :foreground "orange" :weight 'bold)
-  (setq anzu-minimum-input-length 3))
+  (setq anzu-minimum-input-length 3)
+  ; https://github.com/TheBB/spaceline/issues/130
+  ; hide anzu modeline [i.e. (x/X matches)]
+  (setq anzu-cons-mode-line-p nil))
 #+END_SRC
 
 **** Spellcheck and flyspell settings
@@ -1902,6 +1905,19 @@ See spaceline below.
   (sml/setup))
 #+END_SRC
 
+**** window-numbering
+
+Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
+
+*NOTE*: this must be configured BEFORE spaceline: https://github.com/TheBB/spaceline/issues/68
+
+#+BEGIN_SRC emacs-lisp
+(use-package "window-numbering"
+  :ensure t
+  :config (window-numbering-mode))
+#+END_SRC
+
+
 **** spaceline
 
 Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per emacs normale.
@@ -1936,16 +1952,6 @@ example I can press =C-c= and then read the list of org bindings.
   :disabled t
   :diminish which-key-mode
   :config (which-key-mode))
-#+END_SRC
-
-**** window-numbering
-
-Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
-
-#+BEGIN_SRC emacs-lisp
-(use-package "window-numbering"
-  :ensure t
-  :config (window-numbering-mode))
 #+END_SRC
 
 **** dash-at-point
