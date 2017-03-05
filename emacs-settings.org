@@ -1790,12 +1790,29 @@ con "SET UTF-8".
 **** ace-jump                                                           :new:
 Quick jump to a word.
 
+Sembra che sia "vecchio"? (ho letto in giro "deprecated"). Vedi "avy".
+
 #+BEGIN_SRC emacs-lisp
 (use-package ace-jump-mode
+  :disabled
   :bind ("C-c SPC" . ace-jump-mode))
 #+END_SRC
 
 ***** TODO C-c SPC binding conflicts with org
+
+**** avy
+
+Jump to char.
+
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :bind
+  (("C-:" . avy-goto-char)
+   ("C-'" . avy-goto-char-2)
+   ("M-g f" . avy-goto-line)
+   ("M-g w" . avy-goto-word-1)
+   ("M-g e" . avy-goto-word-0)))
+#+END_SRC
 
 **** org
 
