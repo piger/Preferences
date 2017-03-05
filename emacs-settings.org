@@ -855,6 +855,19 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
   :init (global-flycheck-mode))
 #+END_SRC
 
+**** ediff
+
+Provo questa configurazione trovata in giro.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ediff
+  :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq-default ediff-highlight-all-diffs 'nil)
+  ; ignore all white spaces
+  (setq ediff-diff-options "-w"))
+#+END_SRC
+
 **** Shell
 Not much configuration for shell scripting at the moment. I prefer to
 let emacs guess the indentation level. I disable flycheck to avoid
