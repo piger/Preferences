@@ -440,9 +440,6 @@ To actually set the default font on GUI emacs:
 ;; non c'e' puro testo, emacs rompe il paste.
 ;; (setq save-interprogram-paste-before-kill t)
 
-;; If non-nil, mouse yank commands yank at point instead of at click.
-(setq mouse-yank-at-point t)
-
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -517,6 +514,7 @@ To actually set the default font on GUI emacs:
 (setq-default save-place t)
 
 (setq apropos-do-all t
+      ;; If non-nil, mouse yank commands yank at point instead of at click.
       mouse-yank-at-point t
       visible-bell t
       load-prefer-newer t
@@ -1199,8 +1197,10 @@ the moment I don't know how to pin it to stable.
    ;; Max length of buffer names before truncate.
    helm-buffer-max-length 40)
   (helm-mode 1)
+  ;; Enable "adaptive" (i.e. most frequent) sorting in Helm
   (helm-adaptive-mode 1)
-  (helm-push-mark-mode 1)
+  ;; What does this do??
+  ; (helm-push-mark-mode 1)
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("M-x" . helm-M-x)
@@ -1403,6 +1403,17 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
 (use-package gitignore-mode
   :ensure t
   :mode ("\\.gitignore" . gitignore-mode))
+#+END_SRC
+
+***** magit-gh-pulls
+
+To handle Github pull requests. Disabled because it doesn't work :(
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit-gh-pulls
+  :disabled
+  :config
+  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 #+END_SRC
 
 **** dired-x
@@ -1675,11 +1686,10 @@ Keep track of recent used files.
 **** undo-tree
 
 #+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :ensure t
-    :diminish undo-tree-mode
-    :config
-    (global-undo-tree-mode +1))
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode +1))
 #+END_SRC
 
 **** winner
@@ -1854,46 +1864,6 @@ Use terminal-notifier to notify stuff.
                  "terminal-notifier"
                  "-title" title
                  "-message" message))
-
-(use-package alert
-  :config
-  (progn
-    (alert-define-style 'terminal-notifier
-                        :title "terminal-notifier"
-                        :notifier
-                        (lambda (info)
-                          (my/terminal-notifier-notify
-                           (plist-get info :title)
-                           (plist-get info :message))
-                          ;; The :category of the alert
-                          (plist-get info :category)
-                          ;; The major-mode this alert relates to
-                          (plist-get info :mode)
-                          ;; The buffer the alert relates to
-                          (plist-get info :buffer)
-                          ;; Severity of the alert.  It is one of:
-                          ;;   `urgent'
-                          ;;   `high'
-                          ;;   `moderate'
-                          ;;   `normal'
-                          ;;   `low'
-                          ;;   `trivial'
-                          (plist-get info :severity)
-                          ;; Whether this alert should persist, or fade away
-                          (plist-get info :persistent)
-                          ;; Data which was passed to `alert'.  Can be
-                          ;; anything.
-                          (plist-get info :data))
-
-                        ;; Removers are optional.  Their job is to remove
-                        ;; the visual or auditory effect of the alert.
-                        :remover
-                        (lambda (info)
-                          ;; It is the same property list that was passed to
-                          ;; the notifier function.
-                          ))
-    (if (eq (window-system) 'ns)
-        (setq alert-default-style 'terminal-notifier))))
 #+END_SRC
 
 **** smart-mode-line
@@ -1933,9 +1903,12 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
 (use-package spaceline-config
   :ensure spaceline
   :config
-  (setq powerline-default-separator 'zigzag)
+  (setq powerline-default-separator 'arrow
+        spaceline-window-numbers-unicode t
+        spaceline-workspace-numbers-unicode t)
   (spaceline-spacemacs-theme)
-  (spaceline-helm-mode))
+  (spaceline-helm-mode)
+  (spaceline-info-mode))
 #+END_SRC
 
 **** dtrt-indent                                                        :new:
@@ -1956,7 +1929,6 @@ example I can press =C-c= and then read the list of org bindings.
 
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
-  :disabled t
   :diminish which-key-mode
   :config (which-key-mode))
 #+END_SRC
