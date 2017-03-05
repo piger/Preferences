@@ -1300,6 +1300,44 @@ And also [[https://github.com/ShingoFukuyama/helm-swoop][helm-swoop]] seems inte
   (global-set-key (kbd "C-c o") 'helm-swoop))
 #+END_SRC
 
+**** ivy / swiper / counsel
+
+Alternative lightweight a Helm. Pero' serve un sacco di configurazione
+per rimpiazzare Helm, e alcune cose (tra le poche che uso) mancano.
+
+Mancano molte cose, tra cui semplicemente un sostituto di helm-mini
+che e' comodissimo. ciaone.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package ivy
+  :diminish ivy-mode
+  :bind
+  (("C-x C-r" . ivy-recentf)
+   ("C-c C-r" . ivy-resume))
+  :config
+  (ivy-mode 1)
+  :init
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) "))
+
+(use-package counsel
+  :bind
+  (("M-x"     . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("C-h f"   . counsel-describe-function)
+   ("C-h v"   . counsel-describe-variable)
+   ("M-y"     . counsel-yank-pop)))
+
+(use-package swiper
+  :bind
+  (("C-s" . swiper)
+   ("C-r" . swiper)))
+
+(use-package smex
+  :config
+  (smex-initialize))
+#+END_SRC
+
 **** ibuffer
 Provides a better interface to open buffers.
 
