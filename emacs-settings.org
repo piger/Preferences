@@ -563,9 +563,13 @@ Including indent-buffer, which should not be called automatically on save."
     "Press <j u> in Magit to jump to unstaged files"
     "disable-theme can unload a theme"
     "In helm-mini you can search for a @pattern inside a file; M-s to see context"
-    "C-c SPC to ace-jump to a word"
-    "C-x j to switch window layout (transpose-frame)"
-    "C-h l or view-lossage is the command to know How Did I Get There?"
+    "<C-:> is avy (the new ace-jump)"
+    "<M-s o> is helm-occur which is a nice thing to use"
+    "<C-c p s s> runs helm-projectile-ag"
+    "<C-x j> to switch window layout (transpose-frame)"
+    "<C-h l> or view-lossage is the command to know How Did I Get There?"
+    "(inf-ruby) is nicer than opening irb in a terminal window"
+    "(yari) to browse Ruby documentation"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
@@ -686,33 +690,6 @@ Search Wikipedia using =eww=:
   (interactive (list (read-string "Wiki for: ")))
   (eww (format "https://en.wikipedia.org/wiki/Special:Search?search=%s"
                 (url-encode-url text))))
-#+END_SRC
-
-Easily insert RST links (from Fabrizio Furnari):
-
-#+BEGIN_SRC emacs-lisp
-(defun insert-rst-reference (url)
-  "Inserts footnote link in rst format"
-  (interactive "sURL: ")
-  (if (use-region-p)
-      (let (
-            (beg (region-beginning))
-            (end (region-end))
-            (name (buffer-substring-no-properties (region-beginning) (region-end))))
-
-        (goto-char beg)
-        (insert "`")
-        (goto-char end)
-        (forward-char)
-        (insert "`_")
-        (deactivate-mark)
-        (save-excursion
-          (goto-char (point-max))
-          (newline)
-          (insert ".. _" name ": " url))))
-  (error "No region selected!"))
-
-(global-set-key (kbd "C-c l") 'insert-rst-reference)
 #+END_SRC
 
 Ansi colors (for console dumps from samson, for example):
@@ -852,6 +829,7 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :ensure t
+  :diminish (flycheck . "Fc")
   :init (global-flycheck-mode))
 #+END_SRC
 
@@ -973,7 +951,6 @@ Sembra interessante
   :interpreter ("ruby" . enh-ruby-mode)
   :mode
   (("\\.rb\\'" . enh-ruby-mode)
-   ("\\Rakefile\\'" . enh-ruby-mode)
    ("Gemfile\\'" . enh-ruby-mode)
    ("Berksfile\\'" . enh-ruby-mode)
    ("Rakefile\\'" . enh-ruby-mode)
@@ -986,7 +963,13 @@ Sembra interessante
   :config
   (add-hook 'enh-ruby-mode-hook 'moo-enh-ruby-mode-defaults))
 
-(use-package rbenv)
+(use-package rbenv
+  :demand t
+  :init
+  ;; rbenv installed via homebrew
+  (setq rbenv-executable "/usr/local/bin/rbenv")
+  :config
+  (global-rbenv-mode))
 #+END_SRC
 
 **** CSS
@@ -1637,7 +1620,7 @@ This configuration is more "on-demand":
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :diminish (company-mode . " ç"))
+  :diminish (company-mode . "©"))
 #+END_SRC
 
 For python you need:
