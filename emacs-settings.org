@@ -1900,6 +1900,13 @@ Jump to char.
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+;; Disable flycheck in org src blocks
+;; http://emacs.stackexchange.com/questions/16766/how-to-turn-off-emacs-lisp-checkdoc-of-flycheck-when-edit-source-block-in-org
+(defun piger/disable-flycheck-in-org-src-block ()
+  (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+
+(add-hook 'org-src-mode-hook 'piger/disable-flycheck-in-org-src-block)
+
 ;; TODO states
 ;; the first letter is the quick key
 ;; ! means "add timestamp"
