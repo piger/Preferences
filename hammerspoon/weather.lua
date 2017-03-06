@@ -61,11 +61,16 @@ local function getForecast()
          hs.notify.show("Hammerspoon", "Error", "JSON decode failed (nil)")
          return
       end
-      setWeatherIcon(forecast["currently"]["icon"])
+
+      -- TODO: Shall we use "current" or "minute" forecast?
+      -- setWeatherIcon(forecast["currently"]["icon"])
+      setWeatherIcon(forecast["minutely"]["icon"])
+      weatherMenu:setTooltip("Temp: " .. forecast["currently"]["temperature"])
    end
 
    local url = "https://api.darksky.net/forecast/" .. DARKSKY_TOKEN .. "/" ..
-      location["latitude"] .. "," .. location["longitude"]
+      location["latitude"] .. "," .. location["longitude"] ..
+      "?units=si"
    hs.http.asyncGet(url, nil, callback)
 end
 
