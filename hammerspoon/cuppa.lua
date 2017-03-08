@@ -10,11 +10,11 @@ local cuppaTimer = nil
 local cuppaTimerTimer = nil
 
 -- stolen from Cuppa.app
-local pourSound = hs.sound.getByFile(HOME .. "/Preferences/hammerspoon/pour.aiff")
-local spoonSound = hs.sound.getByFile(HOME .. "/Preferences/hammerspoon/spoon.aiff")
+local pourSound = hs.sound.getByFile(HOME .. "/.hammerspoon/pour.aiff")
+local spoonSound = hs.sound.getByFile(HOME .. "/.hammerspoon/spoon.aiff")
 
 -- for notification center
-local cuppaImage = hs.image.imageFromPath(HOME .. "/Preferences/hammerspoon/cuppa.jpg")
+local cuppaImage = hs.image.imageFromPath(HOME .. "/.hammerspoon/cuppa.jpg")
 
 
 -- set the title of the menubar
