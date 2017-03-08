@@ -17,16 +17,20 @@ local EXTERNAL_MONITOR = "Thunderbolt Display"
 
 
 local function hasExternalMonitor()
-   for _, screen in pairs(hs.screen.allScreens()) do
-      if screen:name() == EXTERNAL_MONITOR then
-         return true
-      end
+   if hs.screen.find(EXTERNAL_MONITOR) then
+      return true
    end
    return false
 end
 
 -- Grid configuration
-hs.grid.setGrid("3x3", BUILTIN_MONITOR)
+hs.grid.setGrid("6x4", BUILTIN_MONITOR)
+if hasExternalMonitor() then
+   hs.grid.setGrid("8x6", EXTERNAL_MONITOR)
+end
+
+-- credo serva anche questo:
+hs.grid.setMargins("0x0")
 
 -- no animation pls
 hs.window.animationDuration = 0
@@ -50,6 +54,8 @@ hs.hotkey.bind(mash, "left", hs.grid.pushWindowLeft)
 hs.hotkey.bind(mash, "right", hs.grid.pushWindowRight)
 hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end)
 hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
+
+hs.hotkey.bind(mod4, "g", function() hs.grid.show() end)
 
 -- Window layouts
 local layouts = {
@@ -125,9 +131,13 @@ local function tellEmacsToChangeFont()
 end
 
 local function displayWatcherCallback()
+   -- Change the font in Emacs every time there's a change with the monitor(s).
    tellEmacsToChangeFont()
 
    if hasExternalMonitor() then
+      -- Set the grid on the external monitor
+      hs.grid.setGrid("8x6", EXTERNAL_MONITOR)
+
       setIterm2Profile("iTerm2_Dynamic_12.json")
    else
       setIterm2Profile("iTerm2_Dynamic_11.json")
@@ -189,7 +199,8 @@ setToggleAudioIcon()
 --- external modules
 require("weather")
 -- require("music_menu")
-
+require("cheatsheet")
+-- require("calendar")
 
 -- reload hammerspoon (and stop all the running watchers) --
 ------------------------------------------------------------
