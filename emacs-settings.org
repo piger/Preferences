@@ -458,6 +458,12 @@ To actually set the default font on GUI emacs:
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
+(use-package fortune-cookie
+  :config
+  (setq fortune-cookie-fortune-args (expand-file-name "~/Dropbox/fortunes")
+        fortune-cookie-cowsay-enable nil)
+  (fortune-cookie-mode))
+
 ;; line num
 ;; (global-linum-mode +1)
 
@@ -732,14 +738,14 @@ Set a larger font when a Thunderbolt Display is connected.
 (defun set-the-right-font ()
   "Set the right font according to the connected displays"
   (interactive)
-  (let ((monitors (shell-command-to-string "system_profiler  SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
+  (let ((monitors (shell-command-to-string "system_profiler SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
         (hasExternal nil))
     (dolist (monitor (split-string monitors "\n"))
       (when (string= monitor "Thunderbolt Display")
         (setq hasExternal t)))
     (if hasExternal
         (set-default-font "Fira Mono-12")
-      (set-default-font "Fira Mono-11"))))
+      (set-default-font "Fira Mono-10"))))
 #+END_SRC
 
 *** Keyboard bindings
@@ -807,7 +813,6 @@ layout which permits accented characters.
 
   ; nagios-mode (da elisp locale)
   (autoload 'nagios-mode "nagios-mode" nil t))
-
 #+END_SRC
 
 ** Configuration
@@ -829,8 +834,10 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :ensure t
-  :diminish (flycheck . "Fc")
-  :init (global-flycheck-mode))
+  :init (global-flycheck-mode)
+  :config
+  ;; spaceline provides his own indicator for that
+  (setq-default flycheck-mode-line nil))
 #+END_SRC
 
 **** ediff
@@ -866,6 +873,7 @@ NOTA: provo ad usare =shellcheck=.
   (subword-mode +1)
   (show-paren-mode +1)
   (flycheck-mode +1)
+  (company-mode +1)
   ;; unfuck electric indentation
   (setq electric-indent-chars '(?\n)))
 
@@ -926,7 +934,7 @@ e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
 
 Sembra interessante
 
-**** Ruby
+j**** Ruby
 
 #+BEGIN_SRC emacs-lisp
 ;; Collection of handy functions for ruby-mode
@@ -944,6 +952,7 @@ Sembra interessante
 (defun moo-enh-ruby-mode-defaults ()
   (ruby-tools-mode +1)
   (flycheck-mode +1)
+  (company-mode +1)
   (subword-mode +1))
 
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
@@ -970,6 +979,12 @@ Sembra interessante
   (setq rbenv-executable "/usr/local/bin/rbenv")
   :config
   (global-rbenv-mode))
+
+(use-package bundler)
+(use-package rake
+  :config
+  (setq rake-completion-system 'helm))
+(use-package rspec-mode)
 #+END_SRC
 
 **** CSS
@@ -1186,9 +1201,12 @@ the moment I don't know how to pin it to stable.
    ;; Limit candidate number globally.
    helm-candidate-number-limit 100
    ;; open helm buffer inside current window, not occupy whole other window.
-   helm-split-window-in-side-p t
+   ;; Maybe it's better to use the other half of the screen, it will contain more elements
+   ;; than the minibuffer popup.
+   ; helm-split-window-in-side-p t
    ;; skip files which you usually don't want to open
-   helm-ff-skip-boring-files t
+   ;; NO! this will make impossible to edit anything in .git/ !
+   ;; helm-ff-skip-boring-files t
    helm-ff-file-name-history-use-recentf t
    ;; Max length of buffer names before truncate.
    helm-buffer-max-length 40)
@@ -1450,6 +1468,15 @@ To handle Github pull requests. Disabled because it doesn't work :(
   (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 #+END_SRC
 
+***** gist
+
+This is nice.
+
+#+BEGIN_SRC emacs-lisp
+(use-package gist
+  :defer t)
+#+END_SRC
+
 **** dired-x
 
 I've followed the installation [[http://www.gnu.org/software/emacs/manual/html_node/dired-x/Installation.html#Installation][guide]].
@@ -1506,7 +1533,13 @@ Because Vim is the best text editor.
 
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "markdown"))
 #+END_SRC
 
 **** RestructuredText
@@ -1963,7 +1996,8 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
   :config
   (setq powerline-default-separator 'arrow
         spaceline-window-numbers-unicode t
-        spaceline-workspace-numbers-unicode t)
+        spaceline-workspace-numbers-unicode t
+        spaceline-flycheck-bullet "❖ %s")
   (spaceline-spacemacs-theme)
   (spaceline-helm-mode)
   (spaceline-info-mode))
