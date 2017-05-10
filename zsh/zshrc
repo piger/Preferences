@@ -204,11 +204,11 @@ set_hostname_color
 
 # PROMPT='${FG[$hostname_color]}%n@%m$FX[reset] $'
 
-PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_} ${rbenv_prompt}
+PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
 ${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
 
 # Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
-RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b)'
+RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b) ${rbenv_prompt}'
 
 # define an empty list of "precmd" functions so it's easier to conditionally
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
@@ -455,9 +455,9 @@ zle -N self-insert url-quote-magic
 # VCS informations in the shell prompt
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' actionformats \
-    '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f %m%u%c'
+    '%F{64}[%F{70}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
 zstyle ':vcs_info:*' formats \
-    '%F{5}[%F{2}%b%F{5}]%f %m%u%c'
+    '%F{64}[%F{70}%b%F{64}]%f %m%u%c'
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 zstyle ':vcs_info:*' enable git svn
 zstyle ':vcs_info:*' check-for-changes true
@@ -490,8 +490,9 @@ lazy_vcs_info() {
     fi
 }
 if exists vcs_info; then
-    # precmd_functions+=vcs_info
-    precmd_functions+=lazy_vcs_info
+    # 10/03/2017 - not needed anymore? SSD!
+    precmd_functions+=vcs_info
+    # precmd_functions+=lazy_vcs_info
 fi
 
 # Add rbenv informations to the prompt
@@ -499,13 +500,10 @@ fi
 rbenv_prompt=""
 
 update_rbenv_prompt() {
-    if [[ -n $RBENV_VERSION ]]; then
-        rbenv_prompt="(ruby: $RBENV_VERSION)"
-    else
-        rbenv_prompt=""
-    fi
+    rbenv_prompt="${FG[022]}[${FG[024]}$(rbenv version-name)${FG[022]}]${FX[reset]}"
 }
-precmd_functions+=update_rbenv_prompt
+# 10/03/17 do I really need this?
+# precmd_functions+=update_rbenv_prompt
 # }}}
 
 # OS SPECIFIC {{{
