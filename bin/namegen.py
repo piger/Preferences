@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os
+from __future__ import print_function
 import sys
 import random
 
@@ -58,6 +58,7 @@ RIGHT = [
 
 
 def main():
+    random.seed()
     result = "{}_{}".format(random.choice(LEFT), random.choice(RIGHT))
     print(result)
     sys.exit(0)
