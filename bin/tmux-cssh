@@ -34,10 +34,11 @@ ssh_options=()
 do_log=0
 do_force=0
 do_dry_run=0
+do_bg=0
 pods=()
 session_names=()
 
-while getopts ":r:p:q:l:LPvfnh" opt; do
+while getopts ":r:p:q:l:LPbvfnh" opt; do
     case $opt in
         L)
             do_log=1
@@ -52,6 +53,9 @@ while getopts ":r:p:q:l:LPvfnh" opt; do
             ;;
         P)
             query+='chef_environment:*production*'
+            ;;
+        b)
+            do_bg=1
             ;;
         q)
             user_query="$OPTARG"
@@ -79,6 +83,7 @@ while getopts ":r:p:q:l:LPvfnh" opt; do
             phelp "-L" "Capture each pane output to a file"
             phelp "-p <pod>" "Search by Pod number (can be specified multiple times)"
             phelp "-P" "Limit the search to '*production*' nodes"
+            phelp "-b" "Do not switch to the created tmux session"
             phelp "-q <query>" "Specify a custom knife search query"
             phelp "-r <role>" "Search by hostgroup role (without the 'hg_' prefix)"
             phelp "-f" "Suppress the error when more than $HOSTLIMIT hosts are matched"
@@ -176,4 +181,8 @@ done
 
 tmux setw -t $WINDOW status on
 tmux setw -t $WINDOW synchronize-panes on
-tmux switch-client -t $SESSION
+tmux set-hook -t $SESSION pane-exited "select-layout tiled"
+
+if [[ $do_bg = 0 ]]; then
+    tmux switch-client -t $SESSION
+fi
