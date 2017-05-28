@@ -763,13 +763,15 @@ layout which permits accented characters.
 
   ;; Disable OS X clipboard integration (kill-ring, yank-ring, ...)
   (setq interprogram-cut-function nil
-        interprogram-paste-function nil)
-  ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
-  (use-package simpleclip
-    :ensure t
-    :config
-    (simpleclip-mode +1))
-  )
+        interprogram-paste-function nil))
+
+;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
+;; NOTE: using my fork.
+(use-package simpleclip
+  :load-path "/Users/dkertesz/dev/simpleclip/"
+  :if (eq system-type 'darwin)
+  :config
+  (simpleclip-mode +1))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -947,7 +949,17 @@ j**** Ruby
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
-  :ensure t)
+  :ensure t
+  :init
+  (add-hook 'after-init-hook 'inf-ruby-switch-setup)
+  :bind
+  (("C-c r r" . inf-ruby)))
+
+(use-package robe
+  :defer t
+  :init
+  (add-hook 'enh-ruby-mode-hook 'robe-mode)
+  (with-eval-after-load 'company (add-to-list 'company-backends 'company-robe)))
 
 (defun moo-enh-ruby-mode-defaults ()
   (ruby-tools-mode +1)
@@ -981,10 +993,20 @@ j**** Ruby
   (global-rbenv-mode))
 
 (use-package bundler)
+
 (use-package rake
   :config
   (setq rake-completion-system 'helm))
-(use-package rspec-mode)
+
+(use-package rspec-mode
+  :mode "_spec.rb$")
+
+(use-package ruby-end
+  :defer t
+  :diminish
+  :init
+  (add-hook 'enh-ruby-mode-hook #'ruby-end-mode))
+
 #+END_SRC
 
 **** CSS
@@ -1418,17 +1440,39 @@ Editor di regexp che evita la pazzia dei backslash
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :pin melpa-stable
-  :bind ("C-x g" . magit-status)
+  :bind
+  (("C-x g" . magit-status)
+   ("C-x M-g" . magit-dispatch-popup))
   :config
   (setq magit-diff-refine-hunk 'all
         git-commit-turn-on-flyspell t
         git-commit-turn-on-auto-fill t
         git-commit-fill-column 72
         git-commit-summary-max-length 70)
+  (global-magit-file-mode 1)
 
   (use-package git-commit
     :ensure t
     :pin melpa-stable))
+
+; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
+; NOTA: questa e' la mia versione "patchata".
+(defun endless/visit-pull-request-url ()
+  "Visit the current branch's PR on Github."
+  (interactive)
+  (browse-url
+   (format "https://github.com/%s/pull/new/%s"
+           (replace-regexp-in-string
+            "\\`.+github\\.com:\\(.+\\)\\.git\\'" "\\1"
+            (magit-get "remote"
+                       (magit-get-remote)
+                       "url"))
+           (or (magit-get-current-branch)
+                    (user-error "No remote branch")))))
+
+(eval-after-load 'magit
+  '(define-key magit-mode-map "v"
+     #'endless/visit-pull-request-url))
 #+END_SRC
 
 ***** git-gutter
@@ -1579,7 +1623,7 @@ Because Vim is the best text editor.
 (defun moo-prog-mode-defaults ()
   "Default coding hook, useful with any programming language"
   (rainbow-delimiters-mode t)
-  ;; (company-mode t)
+  (company-mode t)
   (prelude-font-lock-comment-annotations)
   (subword-mode t)
   (which-function-mode t)
@@ -1631,6 +1675,14 @@ Because Vim is the best text editor.
   :ensure t
   :config
   (helm-projectile-on))
+
+(use-package ibuffer-projectile
+  :config
+  (add-hook 'ibuffer-hook
+            (lambda ()
+              (ibuffer-projectile-set-filter-groups)
+              (unless (eq ibuffer-sorting-mode 'alphabetic)
+                (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 
 **** company (completion)
@@ -1776,6 +1828,10 @@ things telling you how many matches was found for the current search.
 #+BEGIN_SRC emacs-lisp
 (use-package anzu
   :diminish anzu-mode
+  :bind
+  (("C-%" . anzu-query-replace-at-cursor)
+   ("M-%" . anzu-query-replace)
+   ("C-M-%" . anzu-query-replace-regexp))
   :config
   (global-anzu-mode +1)
   (set-face-attribute 'anzu-mode-line nil
@@ -1866,20 +1922,6 @@ Sembra che sia "vecchio"? (ho letto in giro "deprecated"). Vedi "avy".
 #+END_SRC
 
 ***** TODO C-c SPC binding conflicts with org
-
-**** avy
-
-Jump to char.
-
-#+BEGIN_SRC emacs-lisp
-(use-package avy
-  :bind
-  (("C-:" . avy-goto-char)
-   ("C-'" . avy-goto-char-2)
-   ("M-g f" . avy-goto-line)
-   ("M-g w" . avy-goto-word-1)
-   ("M-g e" . avy-goto-word-0)))
-#+END_SRC
 
 **** org
 
@@ -2092,6 +2134,40 @@ https://github.com/purcell/whitespace-cleanup-mode
 (use-package whitespace-cleanup-mode
   :ensure t
   :diminish 'whitespace-cleanup-mode)
+#+END_SRC
+
+*** Packages in prova
+
+osx-dictionary, hydra, helm-descbinds, popwin
+
+**** digit-groups
+
+#+BEGIN_QUOTE
+The ‘digit-groups‘ Emacs package adds the ‘digit-groups-mode‘
+minor mode, which makes it easier to read large numbers by
+highlighting digits at selected place-value positions (e.g.,
+thousands place, millions place, billions place, etc.).
+#+END_QUOTE
+
+*NOTE*: it breaks magit if enabled via =digit-groups-global-mode=!
+
+*NOTE2*: ... and so I don't trust it anymore, let's keep it disabled.
+
+#+BEGIN_SRC emacs-lisp
+(use-package digit-groups
+  :disabled
+  :config
+  (digit-groups-global-mode))
+
+#+END_SRC
+
+**** neotree
+
+Nerdtree lookalike.
+
+#+BEGIN_SRC emacs-lisp
+(use-package neotree
+  :bind ([f8] . neotree-toggle))
 #+END_SRC
 
 *** Aliases
