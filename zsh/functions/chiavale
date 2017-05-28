@@ -1,3 +1,0 @@
-# chiavale() {
-keychain -q --inherit local ~/.ssh/*.pub(:r)
-# }
