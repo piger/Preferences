@@ -2067,6 +2067,17 @@ example I can press =C-c= and then read the list of org bindings.
   :config (which-key-mode))
 #+END_SRC
 
+**** discover-my-major
+
+Help discovering major mode bindings, very nice.
+
+#+BEGIN_SRC emacs-lisp
+(use-package discover-my-major
+  :ensure t
+  :bind
+  ("C-h C-m" . discover-my-major))
+#+END_SRC
+
 **** dash-at-point
 
 Per usare dash su OS X
