@@ -197,11 +197,11 @@ hs.audiodevice.watcher.start()
 setToggleAudioIcon()
 
 --- external modules
-require("weather")
+-- require("weather")
 -- require("music_menu")
 require("cheatsheet")
 -- require("calendar")
-require("expose")
+-- require("expose")
 
 -- reload hammerspoon (and stop all the running watchers) --
 ------------------------------------------------------------
