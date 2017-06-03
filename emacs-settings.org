@@ -1481,7 +1481,7 @@ Editor di regexp che evita la pazzia dei backslash
 sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
 
 #+BEGIN_SRC emacs-lisp
-(use-package git-gutter
+(use-package git-gutter-fringe
   :ensure t
   :diminish git-gutter-mode
   :config
