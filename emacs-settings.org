@@ -251,7 +251,7 @@ environment variables, like *go-mode*.
     :ensure t
     :config
     (setq exec-path-from-shell-variables
-          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH"))
+          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH" "JAVA_HOME"))
     (exec-path-from-shell-initialize))
 
   ;; To fix 'foodcritic' (flycheck)
@@ -936,7 +936,7 @@ e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
 
 Sembra interessante
 
-j**** Ruby
+**** Ruby
 
 #+BEGIN_SRC emacs-lisp
 ;; Collection of handy functions for ruby-mode
@@ -1876,9 +1876,16 @@ con "SET UTF-8".
   (when (file-exists-p lt-jar)
     (use-package langtool
       :ensure t
+      :bind (("C-x 4w" . langtool-check)
+             ("C-x 4W" . langtool-check-done)
+             ("C-x 4l" . langtool-switch-default-language)
+             ("C-x 44" . langtool-show-message-at-point)
+             ("C-x 4c" . langtool-correct-buffer))
       :config
       (setq langtool-language-tool-jar lt-jar
-            langtool-mother-tongue "en"
+            langtool-java-bin "/usr/bin/java"
+            ;; this is used to check for false friends; must be your native tongue!
+            langtool-mother-tongue "it"
             langtool-disabled-rules '("WHITESPACE_RULE"
                                       "EN_UNPAIRED_BRACKETS"
                                       "COMMA_PARENTHESIS_WHITESPACE"
