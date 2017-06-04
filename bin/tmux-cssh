@@ -6,14 +6,15 @@
 # compdef _hosts tmux-cssh
 
 set -e
+autoload colors; colors
 
 function fatal() {
-    echo "ERROR: $@" >&2
+    echo "$fg_bold[red]ERROR${reset_color}: $@" >&2
     exit 1
 }
 
 function warn() {
-    echo "WARNING: $@" >&2
+    echo "$fg_bold[yellow]WARNING${reset_color}: $@" >&2
 }
 
 function phelp() {
@@ -76,7 +77,7 @@ while getopts ":r:p:q:l:LPbvfnh" opt; do
             do_dry_run=1
             ;;
         h)
-            printf "Usage: $(basename $0) [-LPvh] [-p pod] [-q query] [-r role] [-l user] [host ...]\n"
+            printf "Usage: $(basename $0) [-nLPbfvh] [-p pod] [-q query] [-r role] [-l user] [host ...]\n"
             printf "NOTE: hostnames will be read from stdin when no arguments are specified.\n\n"
             phelp "-n" "Dry run: Print the results of 'knife search', do not execute ssh"
             phelp "-l <user>" "Specifies the user to log in as on the remote machines"
@@ -153,7 +154,11 @@ fi
 if [[ $#hosts = 0 ]]; then
     fatal "No hosts matched your query or you gave me an empty list"
 elif (( $#hosts > $HOSTLIMIT )) && [[ $do_force = 0 ]]; then
-    fatal "Too many hosts matched ($#hosts); please refine your search query"
+    echo -n "Too many hosts matched ($#hosts); are you sure you want to continue? [y/N]"
+    if ! read -sq; then
+        exit 1
+    fi
+    echo
 fi
 
 SESSION="cssh-$$"
