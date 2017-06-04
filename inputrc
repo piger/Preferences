@@ -1,0 +1,26 @@
+# inputrc
+# https://www.gnu.org/software/bash/manual/html_node/Readline-Init-File-Syntax.html
+
+# do not bell on tab-completion
+# set bell-style none
+set bell-style visible
+
+# If set to ‘on’, Readline performs filename matching and completion in a case-insensitive
+# fashion. The default value is ‘off’.
+set completion-ignore-case On
+
+# If set to ‘on’, and completion-ignore-case is enabled, Readline treats hyphens (‘-’) and
+# underscores (‘_’) as equivalent when performing case-insensitive filename matching and completion.
+set completion-map-case on
+
+# If set to ‘on’, when listing completions, Readline displays the
+# common prefix of the set of possible completions using a different
+# color. The color definitions are taken from the value of the
+# LS_COLORS environment variable. The default is ‘off’.
+set colored-completion-prefix on
+
+# When set to ‘On’, Readline will configure the terminal in a way that will enable it to insert each
+# paste into the editing buffer as a single string of characters, instead of treating each character
+# as if it had been read from the keyboard. This can prevent pasted characters from being
+# interpreted as editing commands. The default is ‘off’.
+set enable-bracketed-paste on
