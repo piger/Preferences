@@ -1,0 +1,40 @@
+# piger's prompt
+# Daniel Kertesz <daniel@spatof.org>
+#
+# Requires:
+# - vcs_info
+# - zsh color spectrum: http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
+
+prompt_piger_help() {
+    cat <<EOH
+This prompt takes advantage of 'vcs_info' to display useful VCS informations in the prompt.
+Make sure to call 'vcs_info' in a 'precmd' hook.
+EOH
+}
+
+# hash the system's hostname letters to generate a color
+prompt_piger_hostname_color() {
+    local chash=0
+    foreach letter (${(ws::)HOST[(ws:.:)1]}) (( chash+=#letter )) end
+    printf "%03d" $(( $chash % 255 ))
+}
+
+prompt_piger_setup() {
+    # <timestamp> <current directory> [git branch] [git repository status]
+    # <username@hostname> $
+    PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
+${FG[$(prompt_piger_hostname_color)]}%n${FX[reset]}@${FG[$(prompt_piger_hostname_color)]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
+
+    # Use RPROMPT to display the exit status of the last executed command when non-zero.
+    RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b) ${rbenv_prompt}'
+
+    # Spell checker prompt.
+    # default: correct 'mano' to 'nano' [nyae]?
+    SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+}
+
+prompt_piger_preview() {
+    prompt_preview_theme piger "$@"
+}
+
+prompt_piger_setup "$@"

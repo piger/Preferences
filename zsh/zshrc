@@ -191,32 +191,11 @@ done
 # }}}
 
 # PROMPT {{{
-typeset -g hostname_color
-
-function set_hostname_color() {
-    local chash=0
-    foreach letter ( ${(ws::)HOST[(ws:.:)1]} )
-        (( chash+=#letter ))
-    end
-    hostname_color=$(printf "%03d" $(( $chash % 255 )))
-}
-set_hostname_color
-
-# PROMPT='${FG[$hostname_color]}%n@%m$FX[reset] $'
-
-PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
-${FG[$hostname_color]}%n${FX[reset]}@${FG[$hostname_color]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
-
-# Metto in RPROMPT l'exit value dell'ultimo comando se non e' 0
-RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b) ${rbenv_prompt}'
 
 # define an empty list of "precmd" functions so it's easier to conditionally
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
 typeset -a precmd_functions
 
-# Il prompt per lo spelling
-# default: correct 'mano' to 'nano' [nyae]?
-SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
 # }}}
 
 
@@ -429,18 +408,12 @@ fi
 # }}}
 
 # AUTOLOADS {{{
-# Include in fpath e fa l'autoload delle funzioni zsh "locali". (da /usr/share/doc/zsh)
+# Add my own functions collections to fpath, for autoload to work.
+# See also:
 # http://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 typeset -U fpath
-
-do_autoload () {
-    [[ ! -d "$1" ]] && return
-    fpath+=$1
-    autoload -Uz $1/*(:t)
-}
-
-do_autoload ~/Preferences/zsh/scripts
-do_autoload ~/Preferences/zsh/functions
+[[ -d ~/Preferences/zsh/scripts ]] && fpath+=~/Preferences/zsh/scripts
+[[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
@@ -451,6 +424,14 @@ do_autoload ~/Preferences/zsh/functions
 autoload -Uz zcalc zmv zargs
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+
+# }}}
+
+# PROMPT {{{
+
+# define an empty list of "precmd" functions so it's easier to conditionally
+# add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
+typeset -a precmd_functions
 
 # VCS informations in the shell prompt
 autoload -Uz vcs_info
@@ -465,8 +446,6 @@ zstyle ':vcs_info:*' unstagedstr ' %F{3}★%f'
 zstyle ':vcs_info:*' stagedstr ' %F{2}●%f'
 zstyle ':vcs_info:*' use-quilt true
 
-# add VCS informations to the prompt
-# ----------------------------------
 # vcs_info() needs to be called also when *leaving* a VCS directory:
 vcs_info_needs_bye=0
 
@@ -489,6 +468,7 @@ lazy_vcs_info() {
         vcs_info_needs_bye=0
     fi
 }
+
 if exists vcs_info; then
     # 10/03/2017 - not needed anymore? SSD!
     precmd_functions+=vcs_info
@@ -504,6 +484,13 @@ update_rbenv_prompt() {
 }
 # 10/03/17 do I really need this?
 # precmd_functions+=update_rbenv_prompt
+
+# Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
+autoload -U promptinit
+promptinit
+
+autoload -Uz prompt_piger_setup
+prompt piger
 # }}}
 
 # OS SPECIFIC {{{
