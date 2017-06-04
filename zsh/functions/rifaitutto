@@ -4,17 +4,7 @@
 # rallenta di molto lo startup della shell.
 autoload -U zrecompile
 zrecompile -qp \
-    -R ${ZDOTDIR}/.zshrc -- \
-    -R ${HOME}/.zshenv -- \
-    -R ${ZDOTDIR}/bind -- \
-    -R ${ZDOTDIR}/cose -- \
-    -R ${ZDOTDIR}/os/darwin -- \
-    -R ${ZDOTDIR}/os/linux -- \
-    -R ${ZDOTDIR}/os/openbsd -- \
-    -R ${ZDOTDIR}/os/solaris -- \
-    -R ${ZDOTDIR}/zcomp -- \
-    -R ${ZDOTDIR}/alias -- \
-    -R ${ZDOTDIR}/zfunc -- \
-    -R ${ZDOTDIR}/welcome -- \
-    -M ${ZDOTDIR}/.zcompdump
+    -R ~/.zshrc -- \
+    -R ~/.zshenv -- \
+    -M ~/.zcompdump --
 # }

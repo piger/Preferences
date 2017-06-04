@@ -415,6 +415,10 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/scripts ]] && fpath+=~/Preferences/zsh/scripts
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
+# Autoload any custom function that I really use
+useful_autoloads=(bssh ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen)
+for fn in $useful_autoloads; do autoload -Uz $fn; done
+
 # autoload mini-help
 # -U also causes alias expansion to be suppressed  when  the  function is loaded
 # The -k and -z flags make the function be loaded using  ksh-style  or
