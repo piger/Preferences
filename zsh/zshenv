@@ -67,6 +67,12 @@ foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
   fi
 done
 
+# on macOS /etz/profile will call /usr/libexec/path_helper which will fuck PATH ignoring
+# everything done so far.
+# Also if we ever need to have this feature we can just read files in /etc/paths.d and /etc/manpaths.d by
+# ourselves; see man 'path_helper'.
+setopt no_GLOBAL_RCS
+
 # Load local zshenv
 [[ -f $HOME/.zshenv.local ]] && source $HOME/.zshenv.local
 
