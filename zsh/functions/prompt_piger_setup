@@ -28,6 +28,8 @@ prompt_piger_precmd() {
     # virtualenv
     if [[ ! -z $VIRTUAL_ENV ]]; then
         psvar[1]="${VIRTUAL_ENV:t}"
+    else
+        psvar[1]=""
     fi
 }
 
@@ -72,7 +74,7 @@ prompt_piger_setup() {
     PROMPT+='%F{$(prompt_piger_hostname_color)}%(!.#.${PIGER_PROMPT_SYMBOL:-❯})%f '
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
-    RPROMPT=$'%(?..%B%F{124}✘%f %?%b) ${rbenv_prompt}'
+    RPROMPT='%(?..%B%F{124}✘%f %?%b)'
 
     # Spell checker prompt.
     # default: correct 'mano' to 'nano' [nyae]?
