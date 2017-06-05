@@ -1,14 +1,11 @@
 # piger's prompt
 # Daniel Kertesz <daniel@spatof.org>
-#
-# Requires:
-# - vcs_info
-# - zsh color spectrum: http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
 
 prompt_piger_help() {
     cat <<EOH
 This prompt takes advantage of 'vcs_info' to display useful VCS informations in the prompt.
-Make sure to call 'vcs_info' in a 'precmd' hook.
+You can chose between the short and the extended format, where the latter will also display
+the typical "username@hostname" part of the prompt.
 EOH
 }
 
@@ -20,17 +17,44 @@ prompt_piger_hostname_color() {
 }
 
 prompt_piger_setup() {
-    # <timestamp> <current directory> [git branch] [git repository status]
-    # <username@hostname> $
-    PROMPT='${FG[027]}[%T] ${FG[208]}%3~ ${vcs_info_msg_0_}
-${FG[$(prompt_piger_hostname_color)]}%n${FX[reset]}@${FG[$(prompt_piger_hostname_color)]}%m${FX[reset]}%(1j.|%j.) %(!.#.$) '
+    local extended=$1
+
+    # this is usually defined by 'promptinit'
+    [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
+
+    autoload -Uz add-zsh-hook
+    autoload -Uz vcs_info
+
+    zstyle ':vcs_info:*' actionformats \
+           '%F{64}[%F{70}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
+    zstyle ':vcs_info:*' formats \
+           '%F{64}[%F{70}%b%F{64}]%f %m%u%c'
+    zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+    zstyle ':vcs_info:*' enable git svn
+    zstyle ':vcs_info:*' check-for-changes true
+    zstyle ':vcs_info:*' unstagedstr ' %F{3}★%f'
+    zstyle ':vcs_info:*' stagedstr ' %F{2}●%f'
+    zstyle ':vcs_info:*' use-quilt true
+
+    add-zsh-hook precmd vcs_info
+
+    PROMPT='%F{027}[%T] %F{208}%3~ ${vcs_info_msg_0_}${prompt_newline}'
+    if [[ $SSH_CONNECTION != "" || $UID -eq 0 || $extended != "" ]]; then
+        PROMPT+='%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f%(1j.|%j.) '
+    else
+        PROMPT+='%(1j.|%j.)'
+    fi
+    PROMPT+='%F{$(prompt_piger_hostname_color)}%(!.#.${PIGER_PROMPT_SYMBOL:-❯})%f '
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
-    RPROMPT=$'%(?..%B${FG[124]}✘${FX[reset]} %?%b) ${rbenv_prompt}'
+    RPROMPT=$'%(?..%B%F{124}✘%f %?%b) ${rbenv_prompt}'
 
     # Spell checker prompt.
     # default: correct 'mano' to 'nano' [nyae]?
     SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+
+    # set prompt options through promptinit
+    prompt_opts=(cr subst percent)
 }
 
 prompt_piger_preview() {
