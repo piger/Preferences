@@ -171,25 +171,6 @@ teprego() {
 }
 # }}}
 
-# COLOR SPECTRUM {{{
-# http://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
-typeset -Ag FX FG BG
-
-FX=(
-    reset     "%{[00m%}"
-    bold      "%{[01m%}" no-bold      "%{[22m%}"
-    italic    "%{[03m%}" no-italic    "%{[23m%}"
-    underline "%{[04m%}" no-underline "%{[24m%}"
-    blink     "%{[05m%}" no-blink     "%{[25m%}"
-    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
-)
-
-for color in {000..255}; do
-    FG[$color]="%{[38;5;${color}m%}"
-    BG[$color]="%{[48;5;${color}m%}"
-done
-# }}}
-
 # ENVIRONMENT {{{
 # Queste variabili d'ambiente servono solo in modalita' interattiva
 # Binda le seguenti variabili d'ambiente ai loro rispettivi array (ex: $perl5lib[@] )
@@ -416,8 +397,15 @@ for fn in $useful_autoloads; do autoload -Uz $fn; done
 ### autoload -Uz compinit
 ### compinit
 autoload -Uz zcalc zmv zargs
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
+
+# url-quote-magic
+# Will automatically quote a URL as you type/paste.
+# This conflicts with the bracketed paste support, see:
+# https://github.com/robbyrussell/oh-my-zsh/blob/291e96dcd034750fbe7473482508c08833b168e3/lib/misc.zsh
+# autoload -Uz url-quote-magic
+# zle -N self-insert url-quote-magic
+# NOTE: there's a fix but probably I prefer to disable this entirely. URLs must be shell-quoted and
+# that's it.
 
 # }}}
 
@@ -426,19 +414,6 @@ zle -N self-insert url-quote-magic
 # define an empty list of "precmd" functions so it's easier to conditionally
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
 typeset -a precmd_functions
-
-# VCS informations in the shell prompt
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' actionformats \
-    '%F{64}[%F{70}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
-zstyle ':vcs_info:*' formats \
-    '%F{64}[%F{70}%b%F{64}]%f %m%u%c'
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-zstyle ':vcs_info:*' enable git svn
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr ' %F{3}★%f'
-zstyle ':vcs_info:*' stagedstr ' %F{2}●%f'
-zstyle ':vcs_info:*' use-quilt true
 
 # vcs_info() needs to be called also when *leaving* a VCS directory:
 vcs_info_needs_bye=0
@@ -463,21 +438,11 @@ lazy_vcs_info() {
     fi
 }
 
-if exists vcs_info; then
-    # 10/03/2017 - not needed anymore? SSD!
-    precmd_functions+=vcs_info
-    # precmd_functions+=lazy_vcs_info
-fi
-
-# Add rbenv informations to the prompt
-# ------------------------------------
-rbenv_prompt=""
-
-update_rbenv_prompt() {
-    rbenv_prompt="${FG[022]}[${FG[024]}$(rbenv version-name)${FG[022]}]${FX[reset]}"
-}
-# 10/03/17 do I really need this?
-# precmd_functions+=update_rbenv_prompt
+# NOTE: both of the following are disabled because we're now using a proper "promptinit" theme.
+# if exists vcs_info; then
+#     precmd_functions+=vcs_info
+#     # precmd_functions+=lazy_vcs_info
+# fi
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
