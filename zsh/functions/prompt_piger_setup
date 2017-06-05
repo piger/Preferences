@@ -5,7 +5,15 @@ prompt_piger_help() {
     cat <<EOH
 This prompt takes advantage of 'vcs_info' to display useful VCS informations in the prompt.
 You can chose between the short and the extended format, where the latter will also display
-the typical "username@hostname" part of the prompt.
+the typical "username@hostname" part of the prompt:
+
+$ prompt piger extended
+
+or
+
+$ prompt piger
+
+Set "PIGER_PROMPT_SYMBOL" to override the default shell symbol.
 EOH
 }
 
@@ -16,11 +24,21 @@ prompt_piger_hostname_color() {
     printf "%03d" $(( $chash % 255 ))
 }
 
+prompt_piger_precmd() {
+    # virtualenv
+    if [[ ! -z $VIRTUAL_ENV ]]; then
+        psvar[1]="${VIRTUAL_ENV:t}"
+    fi
+}
+
 prompt_piger_setup() {
     local extended=$1
 
     # this is usually defined by 'promptinit'
     [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
+
+    # disallow python virtualenvs from updating the prompt
+    export VIRTUAL_ENV_DISABLE_PROMPT=1
 
     autoload -Uz add-zsh-hook
     autoload -Uz vcs_info
@@ -37,13 +55,20 @@ prompt_piger_setup() {
     zstyle ':vcs_info:*' use-quilt true
 
     add-zsh-hook precmd vcs_info
+    add-zsh-hook precmd prompt_piger_precmd
 
-    PROMPT='%F{027}[%T] %F{208}%3~ ${vcs_info_msg_0_}${prompt_newline}'
+    # Build our prompt
+    # timestamp, optional virtualenv name, current directory, vcs_info, newline
+    PROMPT='%F{027}[%T] %(1V.%F{205}(%1v)%f .)%F{208}%~ ${vcs_info_msg_0_}${prompt_newline}'
+
+    # username and hostname, background jobs
     if [[ $SSH_CONNECTION != "" || $UID -eq 0 || $extended != "" ]]; then
         PROMPT+='%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f%(1j.|%j.) '
     else
         PROMPT+='%(1j.|%j.)'
     fi
+
+    # final prompt
     PROMPT+='%F{$(prompt_piger_hostname_color)}%(!.#.${PIGER_PROMPT_SYMBOL:-❯})%f '
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
