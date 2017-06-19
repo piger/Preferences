@@ -832,9 +832,8 @@ bindkey '^X^X' hist-complete
 add_chef_nodes_to_hosts_completion() {
     zmodload zsh/mapfile
     local _ssh_hosts
-    # XXX why the following line is needed?
     zstyle -s ':completion:*:hosts' hosts _ssh_hosts
-    _ssh_hosts=("${(f@)mapfile[$HOME/.chef_hosts]}")
+    _ssh_hosts+=("${(f@)mapfile[$HOME/.chef_hosts]}")
     zstyle ':completion:*:hosts' hosts $_ssh_hosts
 }
 
