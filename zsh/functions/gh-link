@@ -1,0 +1,41 @@
+# Display the GitHub URL for a given file or directory. Also open it in your browser.
+# gh-link() {
+if [[ ! -s $1 ]]; then
+    echo "Usage: gh-link <filename>"
+    exit 1
+fi
+
+local filename="$1"
+
+my-readlink() {
+    (
+        cd $(dirname $1)
+        echo $PWD/$(basename $1)
+    )
+}
+
+local github_url
+github_url=$(git remote get-url origin)
+github_url=${github_url##*@}
+github_url=${github_url/:/\/}
+github_url=${github_url%.git}
+
+local repo_root
+repo_root=$(git rev-parse --show-toplevel)
+
+local abs_filename
+if type -p greadlink >/dev/null; then
+    abs_filename=$(greadlink -f $filename)
+else
+    abs_filename=$(my-readlink $filename)
+fi
+
+local gh_type="blob"
+if [[ -d $filename ]]; then
+    gh_type="tree"
+fi
+
+local file_url=$(printf "https://${github_url}/${gh_type}/master%s\n" ${abs_filename:$#repo_root})
+echo $file_url
+open $file_url
+# }
