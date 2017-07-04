@@ -45,7 +45,11 @@ while getopts ":r:p:q:l:LPbvfnh" opt; do
             do_log=1
             ;;
         r)
-            query+="role:hg_$OPTARG"
+            if [[ $OPTARG = hg_* ]]; then
+                query+="role:$OPTARG"
+            else
+                query+="role:hg_$OPTARG"
+            fi
             session_names+="$OPTARG"
             ;;
         p)
