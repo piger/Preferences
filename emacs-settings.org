@@ -772,10 +772,10 @@ layout which permits accented characters.
         interprogram-paste-function nil))
 
 ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
-;; NOTE: using my fork.
 (use-package simpleclip
-  :load-path "/Users/dkertesz/dev/simpleclip/"
   :if (eq system-type 'darwin)
+  :init
+  (setq simpleclip-unmark-on-copy t)
   :config
   (simpleclip-mode +1))
 #+END_SRC
