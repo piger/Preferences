@@ -8,6 +8,11 @@
 set -e
 autoload colors; colors
 
+# configuration
+# 12 servers can be viewed in a 3x4 split window
+HOSTLIMIT=12
+
+# code
 function fatal() {
     echo "$fg_bold[red]ERROR${reset_color}: $@" >&2
     exit 1
@@ -26,8 +31,9 @@ function sort_hosts() {
     sort -t '.' -k 3,3 -k 2,2 -k 1,1
 }
 
-# 12 servers can be viewed in a 3x4 split window
-HOSTLIMIT=12
+if ! type set_pane_title >/dev/null; then
+    fatal "set_pane_title is required for this script to work."
+fi
 
 user_query=""
 query=()
@@ -165,33 +171,38 @@ elif (( $#hosts > $HOSTLIMIT )) && [[ $do_force = 0 ]]; then
     echo
 fi
 
-SESSION="cssh-$$"
+session="cssh-$$"
 if (( $#session_names > 0 )); then
-    SESSION="$SESSION-${(j:-:)session_names}"
+    session="$session-${(j:-:)session_names}"
 fi
-WINDOW="${SESSION}:1"
+window="${session}:{start}"
 
 now=$(date +"%d-%m-%Y-%H:%M")
 logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
 
+# i iterates over hosts (zsh arrays starts from 1)
 i=1
+# pane iterates over tmux panes
+pane=$(tmux show-options -g -w -v pane-base-index)
 
-tmux new-session -d -s $SESSION -P -F "tmux session: #{session_name}" \
+tmux new-session -d -s $session -P -F "tmux session: #{session_name}" \
      "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
-[[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
+[[ $do_log = 1 ]] && tmux pipe-pane -t ${window}.$pane "cat >> ${logname/HOST/$hosts[$i]}"
 i=$((i+1))
+pane=$((pane+1))
 
 while [[ $i -le $#hosts ]]; do
-    tmux split-window -t $WINDOW "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
-    tmux select-layout -t $WINDOW tiled
-    [[ $do_log = 1 ]] && tmux pipe-pane -t ${WINDOW}.$i "cat >> ${logname/HOST/$hosts[$i]}"
+    tmux split-window -t $window "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
+    tmux select-layout -t $window tiled
+    [[ $do_log = 1 ]] && tmux pipe-pane -t ${window}.$pane "cat >> ${logname/HOST/$hosts[$i]}"
     i=$((i+1))
+    pane=$((pane+1))
 done
 
-tmux setw -t $WINDOW status on
-tmux setw -t $WINDOW synchronize-panes on
-tmux set-hook -t $SESSION pane-exited "select-layout tiled"
+tmux setw -t $window status on
+tmux setw -t $window synchronize-panes on
+tmux set-hook -t $session pane-exited "select-layout tiled"
 
 if [[ $do_bg = 0 ]]; then
-    tmux switch-client -t $SESSION
+    tmux switch-client -t $session
 fi
