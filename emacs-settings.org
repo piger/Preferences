@@ -845,7 +845,20 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
   :init (global-flycheck-mode)
   :config
   ;; spaceline provides his own indicator for that
-  (setq-default flycheck-mode-line nil))
+  (setq-default flycheck-mode-line nil)
+  (flycheck-define-checker chef-foodcritic
+    "A Chef cookbooks syntax checker using Foodcritic."
+    :command ("foodcritic" source)
+    :error-patterns
+    ((error line-start (message) ": " (file-name) ":" line line-end))
+    :modes (enh-ruby-mode ruby-mode)
+    :predicate
+    (lambda ()
+      (let ((parent-dir (file-name-directory (buffer-file-name))))
+        (or
+         (locate-dominating-file parent-dir "recipes")
+         (locate-dominating-file parent-dir "cookbooks"))))
+    :next-checkers ((warnings-only . ruby-rubocop))))
 #+END_SRC
 
 **** ediff
@@ -967,11 +980,12 @@ Sembra interessante
   (add-hook 'enh-ruby-mode-hook 'robe-mode)
   (with-eval-after-load 'company (add-to-list 'company-backends 'company-robe)))
 
-(defun moo-enh-ruby-mode-defaults ()
+(defun piger/ruby-mode-hooks ()
   (ruby-tools-mode +1)
   (flycheck-mode +1)
   (company-mode +1)
-  (subword-mode +1))
+  (subword-mode +1)
+  (rubocop-mode +1))
 
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
