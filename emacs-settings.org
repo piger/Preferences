@@ -1181,6 +1181,18 @@ Configure indentation for logstash-conf-mode:
   (custom-set-variables '(logstash-indent 2)))
 #+END_SRC
 
+**** C and C++
+
+Ebbene si. Uset his by calling =c-set-style=.
+
+#+BEGIN_SRC emacs-lisp
+(defconst piger-cc-style
+  '("cc-mode"
+    (c-offsets-alist . ((innamespace . [0])))))
+
+(c-add-style "piger-cc-style" piger-cc-style)
+#+END_SRC
+
 *** Modes configuration
 
 **** A note on C programming
