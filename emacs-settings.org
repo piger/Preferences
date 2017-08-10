@@ -1746,6 +1746,7 @@ Because Vim is the best text editor.
   (helm-projectile-on))
 
 (use-package ibuffer-projectile
+  :disabled
   :config
   (add-hook 'ibuffer-hook
             (lambda ()
