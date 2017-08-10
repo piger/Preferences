@@ -1205,6 +1205,31 @@ Ebbene si. Uset his by calling =c-set-style=.
 (c-add-style "piger-cc-style" piger-cc-style)
 #+END_SRC
 
+**** C# (c sharp)
+
+*NOTE*: this doesn't seem to work for projects which consists of a bunch of =.cs= files in a
+directory, but works for Unity projects.
+
+#+BEGIN_SRC emacs-lisp
+(defun piger/csharp-mode-hook ()
+  (electric-pair-local-mode 1)
+  (eldoc-mode)
+  (flycheck-mode)
+  (company-mode 1))
+
+(use-package csharp-mode
+  :mode
+  (("\\.cs\\'" . csharp-mode))
+  :config
+  (add-hook 'csharp-mode-hook 'piger/csharp-mode-hook))
+
+(use-package omnisharp
+  :config
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (eval-after-load 'company
+    '(add-to-list 'company-backends 'company-omnisharp)))
+#+END_SRC
+
 *** Modes configuration
 
 **** A note on C programming
