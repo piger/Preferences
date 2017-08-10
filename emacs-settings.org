@@ -905,7 +905,7 @@ NOTA: provo ad usare =shellcheck=.
   (add-hook 'python-mode-hook 'moo-python-mode-hooks))
 #+END_SRC
 
-**** Go
+**** Go - Golang
 
 Per l'auto completion serve gocode:
 
@@ -915,40 +915,52 @@ go get -u github.com/nsf/gocode
 
 e =GOPATH= deve essere *importata* da emacs con exec-path-from-shell.
 
+More goodies to install:
+
+#+BEGIN_EXAMPLE
+go get -u golang.org/x/tools/cmd/...
+go get -u github.com/rogpeppe/godef/...
+go get -u github.com/nsf/gocode
+go get -u golang.org/x/tools/cmd/goimports
+go get -u golang.org/x/tools/cmd/guru
+go get -u github.com/dougm/goflymake
+#+END_EXAMPLE
+
 #+BEGIN_SRC emacs-lisp
 ; Those env variables should be inherithed using exec-path-from-shell
 ; (setenv "GOPATH" (expand-file-name "~/dev/go"))
 ; (setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
 ; (setq exec-path (append exec-path (list (expand-file-name "~/dev/go/bin"))))
 
+(defun piger/go-mode-defaults ()
+  "Defaults for go-mode."
+  (add-hook 'before-save-hook 'gofmt-before-save nil t)
+  (set (make-local-variable 'company-backends) '(company-go))
+  (go-eldoc-setup)
+  (setq tab-width 2)
+  (local-set-key (kbd "C-c C-k") 'godoc)
+  (subword-mode +1)
+  ;; (company-mode)
+  (flycheck-mode)
+  (go-guru-hl-identifier-mode)
+  ;; (local-set-key (kbd "M-.") 'godef-jump)
+  (diminish 'subword-mode))
+
 (use-package go-mode
   :ensure t
   :config
-  (defun piger/go-mode-defaults ()
-    "Defaults for go-mode."
-    (add-hook 'before-save-hook 'gofmt-before-save nil t)
-       (set (make-local-variable 'company-backends) '(company-go))
-       (go-eldoc-setup)
-       (setq tab-width 2)
-       (local-set-key (kbd "C-c C-k") 'godoc)
-       (subword-mode +1)
-       ;; (company-mode)
-       (flycheck-mode)
-       ; (local-set-key (kbd "M-.") 'godef-jump)
-       (diminish 'subword-mode))
+
   (setq piger-go-mode-hook 'piger/go-mode-defaults)
   (add-hook 'go-mode-hook (lambda ()
-                            (run-hooks 'piger-go-mode-hook)))
-     ;; Enable go-oracle-mode if available
-     (let ((oracle (executable-find "oracle")))
-       (when oracle
-         (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el"))))
+                            (run-hooks 'piger-go-mode-hook))))
 
 (use-package go-eldoc
   :ensure t)
 
 (use-package gotest
   :ensure t)
+
+(use-package go-guru)
 #+END_SRC
 
 ***** TODO goimports
