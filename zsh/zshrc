@@ -492,12 +492,6 @@ if [[ $OSTYPE = darwin* ]]; then
     # Supporto per la struttura di directory "local" (il --user di setup.py) su OSX
     [[ -e ~/Library/Python/2.7/bin ]] && export PATH=~/Library/Python/2.7/bin:$PATH
 
-    # Aggiunge /usr/local/lib/python a PYTHONPATH per PyQt4 (installato tramite brew)
-    # export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
-    if [[ -d /usr/local/lib/python2.7/site-packages ]]; then
-            export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
-    fi
-
     # Node.js / NPM
     # After installing, add the following path to your NODE_PATH environment
     # variable to have npm libraries picked up:
