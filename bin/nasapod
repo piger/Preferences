@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+_haz() {
+  command -v "$1" > /dev/null 2>&1
+}
+
+_haz gm && convert="gm convert"
+_haz convert && convert=convert
+test -z "$convert" && exit 1
+! _haz wget && exit 1
+! _haz curl && exit 1
+! _haz grep && exit 1
+#! _haz xrandr && exit 1
+! _haz awk && exit 1
+
+base="https://apod.nasa.gov/apod/"
+base_dir="$HOME/Pictures/nasa/"
+wallpapers="$HOME/Pictures/Wallpapers/"
+img_name="$(date '+%Y%m%d')_nasa_pod.jpg"
+#monitor_size=$(xrandr -q | awk -F',' 'NR==1 {split($2, a, " "); print a[2]"x"a[4]}')
+monitor_size="2880x1800"
+
+img=$(curl -s $base | awk '/jpg/ {split($0, a, "\""); print a[2]; exit}')
+
+mkdir -p "$base_dir"
+mkdir -p "$wallpapers"
+
+if [[ "$img" == http* ]]; then
+  wget -O "${base_dir}${img_name}" "${img}" --quiet
+else
+  wget -O "${base_dir}${img_name}" "${base}${img}" --quiet
+fi
+
+$convert "${base_dir}${img_name}" -resize $monitor_size "${wallpapers}${img_name}"
