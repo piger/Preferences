@@ -1,5 +1,10 @@
 -- hammerspoon init.lua
 -- NOTE: When you reload your configuration you keep all the old "watchers" running!
+local grid = require("hs.grid")
+local window = require("hs.window")
+local hotkey = require("hs.hotkey")
+local alert = require("hs.alert")
+local layout = require("hs.layout")
 local utils = require("utils")
 
 
@@ -24,16 +29,16 @@ local function hasExternalMonitor()
 end
 
 -- Grid configuration
-hs.grid.setGrid("6x4", BUILTIN_MONITOR)
+grid.setGrid("4x2", BUILTIN_MONITOR)
 if hasExternalMonitor() then
-   hs.grid.setGrid("8x6", EXTERNAL_MONITOR)
+   grid.setGrid("4x2`", EXTERNAL_MONITOR)
 end
 
 -- credo serva anche questo:
-hs.grid.setMargins("0x0")
+grid.setMargins("0x0")
 
 -- no animation pls
-hs.window.animationDuration = 0
+window.animationDuration = 0
 
 local mash = {"cmd", "alt", "ctrl"}
 -- local mod1 = {"alt", "shift"}
@@ -41,40 +46,67 @@ local mash = {"cmd", "alt", "ctrl"}
 -- local mod3 = {"cmd", "ctrl"}
 local mod4 = {"cmd", "shift"} -- usa lo shift di destra, e' piu' comodo!
 
-hs.hotkey.bind(mash, "M", function() hs.window.focusedWindow():maximize() end)
-hs.hotkey.bind(mash, "space", hs.spotify.displayCurrentTrack)
-hs.hotkey.bind(mash, "delete", function() hs.caffeinate.startScreensaver() end)
-hs.hotkey.bind(mash, "h", hs.grid.resizeWindowThinner)
-hs.hotkey.bind(mash, "l", hs.grid.resizeWindowWider)
-hs.hotkey.bind(mash, "j", hs.grid.resizeWindowTaller)
-hs.hotkey.bind(mash, "k", hs.grid.resizeWindowShorter)
-hs.hotkey.bind(mash, "up", hs.grid.pushWindowUp)
-hs.hotkey.bind(mash, "down", hs.grid.pushWindowDown)
-hs.hotkey.bind(mash, "left", hs.grid.pushWindowLeft)
-hs.hotkey.bind(mash, "right", hs.grid.pushWindowRight)
-hs.hotkey.bind(mash, ";", function() hs.grid.snap(hs.window.focusedWindow()) end)
-hs.hotkey.bind(mash, "'", function() hs.fnutils.map(hs.window.visibleWindows(), hs.grid.snap) end)
+local function centerpoint()
+   local current = grid.getGrid()
+   return { x = 1, y = 0, w = current.w / 2, h = current.h / 2 }
+end
 
-hs.hotkey.bind(mod4, "g", function() hs.grid.show() end)
+local function cutLeft(width)
+   return { x = 0, y = 0, w = width, h = grid.getGrid().h }
+end
+
+local function cutRight(width)
+   local current = grid.getGrid()
+   return { x = current.w - width, y = 0, w = width, h = current.h }
+end
+
+local bindings = {
+   ["1"] = function() grid.set(window.focusedWindow(), cutLeft(1), window.focusedWindow():screen()) alert.show("1") end,
+   ["2"] = function() grid.set(window.focusedWindow(), cutLeft(2), window.focusedWindow():screen()) alert.show("2") end,
+   ["3"] = function() grid.set(window.focusedWindow(), cutLeft(3), window.focusedWindow():screen()) alert.show("3") end,
+   ["9"] = function() grid.set(window.focusedWindow(), cutRight(3), window.focusedWindow():screen()) alert.show("9") end,
+   ["0"] = function() grid.set(window.focusedWindow(), cutRight(2), window.focusedWindow():screen()) alert.show("0") end,
+   ["-"] = function() grid.set(window.focusedWindow(), cutRight(1), window.focusedWindow():screen()) alert.show("-") end,
+   ["m"] = function() window.focusedWindow():maximize() end,
+   ["space"] = function() hs.spotify.displayCurrentTrack() end,
+   ["delete"] = function() hs.caffeinate.startScreensaver() end,
+   ["h"] = function() grid.resizeWindowThinner() end,
+   ["l"] = function() grid.resizeWindowWider() end,
+   ["j"] = function() grid.resizeWindowTaller() end,
+   ["k"] = function() grid.resizeWindowShorter() end,
+   ["up"] = function() grid.pushWindowUp() end,
+   ["down"] = function() grid.pushWindowDown() end,
+   ["left"] = function() grid.pushWindowLeft() end,
+   ["right"] = function() grid.pushWindowRight() end,
+   [";"] = function() grid.snap(window.focusedWindow()) end,
+   ["'"] = function() hs.fnutils.map(window.visibleWindows(), grid.snap) end,
+}
+
+for key, func in pairs(bindings) do
+   hotkey.bind(mash, key, func)
+end
+
+
+hotkey.bind(mod4, "g", function() grid.show() end)
 
 -- Window layouts
 local layouts = {
    work = {
-      { "Spotify", nil, BUILTIN_MONITOR, hs.layout.maximized, nil, nil },
-      { "Emacs", nil, EXTERNAL_MONITOR, hs.layout.maximized, nil, nil },
-      { "Google Chrome", nil, EXTERNAL_MONITOR, hs.layout.maximized, nil, nil },
-      { "iTerm2", nil, EXTERNAL_MONITOR, hs.layout.maximized, nil, nil },
+      { "Spotify", nil, BUILTIN_MONITOR, layout.maximized, nil, nil },
+      { "Emacs", nil, EXTERNAL_MONITOR, layout.maximized, nil, nil },
+      { "Google Chrome", nil, EXTERNAL_MONITOR, layout.maximized, nil, nil },
+      { "iTerm2", nil, EXTERNAL_MONITOR, layout.maximized, nil, nil },
    },
    home = {
-      { "Spotify", nil, BUILTIN_MONITOR, hs.layout.maximized, nil, nil },
-      { "Emacs", nil, BUILTIN_MONITOR, hs.layout.maximized, nil, nil },
-      { "Google Chrome", nil, BUILTIN_MONITOR, hs.layout.maximized, nil, nil },
-      { "iTerm2", nil, BUILTIN_MONITOR, hs.layout.maximized, nil, nil },
+      { "Spotify", nil, BUILTIN_MONITOR, layout.maximized, nil, nil },
+      { "Emacs", nil, BUILTIN_MONITOR, layout.maximized, nil, nil },
+      { "Google Chrome", nil, BUILTIN_MONITOR, layout.maximized, nil, nil },
+      { "iTerm2", nil, BUILTIN_MONITOR, layout.maximized, nil, nil },
    }
 }
 
-hs.hotkey.bind(mod4, "1", function() if hasExternalMonitor() then hs.layout.apply(layouts["work"]) end end)
-hs.hotkey.bind(mod4, "2", function() hs.layout.apply(layouts["home"]) end)
+hotkey.bind(mod4, "1", function() if hasExternalMonitor() then layout.apply(layouts["work"]) end end)
+hotkey.bind(mod4, "2", function() layout.apply(layouts["home"]) end)
 
 -- WiFi Watcher --
 ------------------
@@ -136,7 +168,7 @@ local function displayWatcherCallback()
 
    if hasExternalMonitor() then
       -- Set the grid on the external monitor
-      hs.grid.setGrid("8x6", EXTERNAL_MONITOR)
+      grid.setGrid("8x6", EXTERNAL_MONITOR)
 
       setIterm2Profile("iTerm2_Dynamic_12.json")
    else
@@ -170,7 +202,7 @@ local function toggleAudioDevice(modifier)
    local fioOutput = hs.audiodevice.findOutputByName(AUDIO_EXTERNAL_NAME)
 
    if not builtinOut or not fioOutput then
-      hs.alert.show("Cannot find output devices, or FIO is not plugged in")
+      alert.show("Cannot find output devices, or FIO is not plugged in")
       setToggleAudioIcon()
       return
    end
@@ -202,6 +234,8 @@ setToggleAudioIcon()
 require("cheatsheet")
 -- require("calendar")
 -- require("expose")
+local anycomplete = require("anycomplete")
+anycomplete.registerDefaultBindings()
 
 -- reload hammerspoon (and stop all the running watchers) --
 ------------------------------------------------------------
@@ -212,8 +246,8 @@ local function reloadHammerspoon()
    hs.audiodevice.watcher.stop()
    hs.reload()
 end
-hs.hotkey.bind(mash, "R", reloadHammerspoon)
+hotkey.bind(mash, "R", reloadHammerspoon)
 
 
 --- ole'
-hs.alert.show("Hammerspoon 💩 loaded!")
+alert.show("Hammerspoon 💩 loaded!")
