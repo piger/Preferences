@@ -2259,6 +2259,27 @@ Nerdtree lookalike.
   :bind ([f8] . neotree-toggle))
 #+END_SRC
 
+**** editorconfig
+
+[[http://editorconfig.org/][EditorConfig]] support.
+
+#+BEGIN_SRC emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+#+END_SRC
+
+**** nv-delete
+
+"Modern" delete, according to the author.
+
+#+BEGIN_SRC emacs-lisp
+(use-package nv-delete
+  :bind (("C-<backspace>" . nv-delete-back-all)
+         ("M-<backspace>" . nv-delete-back))
+
+#+END_SRC
 *** Aliases
 I'd like to have more aliases... :)
 
