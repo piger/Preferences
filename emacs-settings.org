@@ -846,18 +846,19 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
   :config
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
+  (defun flycheck-foodcritic-porcodio ()
+    "avoid issue with use-package macro expansion."
+    (let ((parent-dir (f-parent default-directory)))
+        (or
+         (locate-dominating-file parent-dir "recipes")
+         (locate-dominating-file parent-dir "cookbooks"))))
   (flycheck-define-checker chef-foodcritic
     "A Chef cookbooks syntax checker using Foodcritic."
     :command ("foodcritic" source)
     :error-patterns
     ((error line-start (message) ": " (file-name) ":" line line-end))
     :modes (enh-ruby-mode ruby-mode)
-    :predicate
-    (lambda ()
-      (let ((parent-dir (file-name-directory (buffer-file-name))))
-        (or
-         (locate-dominating-file parent-dir "recipes")
-         (locate-dominating-file parent-dir "cookbooks"))))
+    :predicate flycheck-foodcritic-porcodio
     :next-checkers ((warnings-only . ruby-rubocop))))
 #+END_SRC
 
