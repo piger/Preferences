@@ -2225,6 +2225,34 @@ https://github.com/purcell/whitespace-cleanup-mode
   :diminish 'whitespace-cleanup-mode)
 #+END_SRC
 
+**** smartscan-mode
+
+Jump with M-n and M-p.
+
+https://github.com/mickeynp/smart-scan
+
+#+BEGIN_SRC emacs-lisp
+(use-package smartscan
+  :config
+  (add-hook 'prog-mode-hook 'smartscan-mode))
+#+END_SRC
+
+**** hideshow
+
+#+BEGIN_SRC emacs-lisp
+(use-package hideshow
+  :init
+  (add-hook #'prog-mode-hook #'hs-minor-mode)
+  :diminish hs-minor-mode
+  :config
+  (setq hs-special-modes-alist
+        (mapcar 'purecopy
+                '((c-mode "{" "}" "/[*/]" nil nil)
+                  (json-mode "{" "}" "/[*/]" nil)
+                  (js-mode "{" "}" "/[*/]" nil)
+                  (javascript-mode "{" "}" "/[*/]" nil)))))
+#+END_SRC
+
 *** Packages in prova
 
 osx-dictionary, hydra, helm-descbinds, popwin
