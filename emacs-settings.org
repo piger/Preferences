@@ -904,6 +904,15 @@ NOTA: provo ad usare =shellcheck=.
   :interpreter ("python" . python-mode)
   :config
   (add-hook 'python-mode-hook 'moo-python-mode-hooks))
+
+(use-package anaconda-mode
+  :config
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+(use-package company-anaconda
+  :config
+  (add-to-list 'company-backends 'company-anaconda))
 #+END_SRC
 
 **** Go - Golang
@@ -1015,13 +1024,15 @@ Sembra interessante
   (setq enh-ruby-indent-level 2
         enh-ruby-deep-indent-paren nil)
   :config
-  (add-hook 'enh-ruby-mode-hook 'moo-enh-ruby-mode-defaults))
+  (add-hook 'enh-ruby-mode-hook 'piger/ruby-mode-hooks))
 
 (use-package rbenv
   :demand t
   :init
   ;; rbenv installed via homebrew
   (setq rbenv-executable "/usr/local/bin/rbenv")
+  (setq rbenv-modeline-function 'rbenv--modeline-plain)
+  (setq rbenv-show-active-ruby-in-modeline nil)
   :config
   (global-rbenv-mode))
 
@@ -1031,8 +1042,7 @@ Sembra interessante
   :config
   (setq rake-completion-system 'helm))
 
-(use-package rspec-mode
-  :mode "_spec.rb$")
+(use-package rspec-mode)
 
 (use-package ruby-end
   :defer t
@@ -1778,7 +1788,14 @@ This configuration is more "on-demand":
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :diminish (company-mode . "©"))
+  :diminish (company-mode . "©")
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  (setq company-transformers '(company-sort-by-occurrence)))
+
+  ;; (use-package company-quickhelp
+  ;;   :config
+  ;;   (company-quickhelp-mode 1)))
 #+END_SRC
 
 For python you need:
@@ -1855,10 +1872,10 @@ For web:
 ;; (eval-after-load "volatile-highlights" '(diminish 'volatile-highlights-mode))
 
 (use-package volatile-highlights
-  :disabled t
+  ;; :disabled t
   :diminish volatile-highlights-mode
   :config
-  (volatile-highlights-mode +!))
+  (volatile-highlights-mode t))
 #+END_SRC
 
 **** recentf
