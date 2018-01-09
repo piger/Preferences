@@ -1485,6 +1485,7 @@ give you an horizontal split.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
   :ensure t
+  :disabled t
   :config
   (setq yas-snippet-dirs (append yas-snippet-dirs
                                  '("~/Preferences/emacs/snippets")))
@@ -1555,6 +1556,7 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
   :ensure t
   :diminish git-gutter-mode
   :config
+  :disabled t
   ;(git-gutter:linum-setup)
   (add-hook 'prog-mode-hook 'git-gutter-mode))
 #+END_SRC
