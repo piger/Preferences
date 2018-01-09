@@ -735,10 +735,10 @@ Per joinare una /region/:
 Set a larger font when a Thunderbolt Display is connected.
 
 #+BEGIN_SRC emacs-lisp
-(defvar piger/font-small "Operator Mono-11"
+(defvar piger/font-small "Mononoki-11"
   "The font to use when there is no external monitor connected.")
 
-(defvar piger/font-large "Operator Mono-13"
+(defvar piger/font-large "Mononoki-13"
   "The font to use when there is an external monitor connected.")
 
 (defun set-the-right-font ()
