@@ -1603,6 +1603,17 @@ This is nice.
   :defer t)
 #+END_SRC
 
+***** diff-hl
+
+Let's try diff-hl since git-gutter leave stale indicators on the windows.
+
+#+BEGIN_SRC emacs-lisp
+(use-package diff-hl
+  :config
+  (add-hook 'prog-mode-hook 'diff-hl-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+#+END_SRC
+
 **** dired-x
 
 I've followed the installation [[http://www.gnu.org/software/emacs/manual/html_node/dired-x/Installation.html#Installation][guide]].
@@ -2182,6 +2193,7 @@ Per usare dash su OS X
 #+BEGIN_SRC emacs-lisp
 (when (eq system-type 'darwin)
   (use-package "dash-at-point"
+    :disabled t
     :ensure t))
 #+END_SRC
 
@@ -2323,10 +2335,50 @@ Nerdtree lookalike.
 
 #+BEGIN_SRC emacs-lisp
 (use-package nv-delete
+  :disabled t
   :bind (("C-<backspace>" . nv-delete-back-all)
-         ("M-<backspace>" . nv-delete-back))
+         ("M-<backspace>" . nv-delete-back)))
 
 #+END_SRC
+
+shitta.
+
+**** Highlight-indent-guides
+
+Highlight indentation with coloured bars.
+
+*NOTE* its color autodetection code has some sort of bugs that triggers on init, while displaying
+the scratch buffer (which do uses prog-mode) *while* the theme is still loading (i.e. still not
+being displayed to the user):
+
+#+BEGIN_QUOTE
+color-values: Wrong type argument: stringp, nil
+#+END_QUOTE
+
+The "fix", since I only ever use one single theme nowadays, is to cheat: inspect the variables set
+by the autodetect code and hardcode them in the configuration.
+
+To get the current face color use this:
+
+#+BEGIN_EXAMPLE
+(face-attribute 'highlight-indent-guides-character-face :background)
+#+END_EXAMPLE
+
+Replace =:background= with =:foreground= when needed.
+
+#+BEGIN_SRC emacs-lisp
+(use-package highlight-indent-guides
+  :config
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-auto-odd-face-perc 5
+        highlight-indent-guides-auto-even-face-perc 10
+        highlight-indent-guides-auto-character-face-perc 10
+        highlight-indent-guides-auto-enabled nil)
+  (set-face-background 'highlight-indent-guides-odd-face "#f5efda")
+  (set-face-background 'highlight-indent-guides-even-face "#f0e6c6")
+  (set-face-foreground 'highlight-indent-guides-character-face "#f0e6c6"))
+#+END_SRC
+
 *** Aliases
 I'd like to have more aliases... :)
 
