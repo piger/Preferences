@@ -189,12 +189,12 @@ completion backend like =company=.
 
 ** Initialization
 
-Configure garbage collection for a faster emacs startup:
+Configure garbage collection for a faster emacs:
 
 #+BEGIN_SRC emacs-lisp
-;;; don't GC so often
-; 24/03/2017 - Is this really needed? 
-; (setq-default gc-cons-threshold 10000000)
+;; reduce the frequency of garbage collection by making it happen on
+;; each 50MB of allocated data (the default is on every 0.76MB)
+(setq gc-cons-threshold 50000000)
 #+END_SRC
 
 *** Packages
@@ -234,6 +234,11 @@ list.
   (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
+
+(use-package use-package-chords
+  :ensure t
+  :config
+  (key-chord-mode +1))
 #+END_SRC
 
 **** run execute-path-from-shell early as possible
@@ -468,9 +473,9 @@ To actually set the default font on GUI emacs:
 ;; (global-linum-mode +1)
 
 ;; nice scrolling ???
-;; (setq scroll-margin 0
-;;       scroll-conservatively 100000
-;;       scroll-preserve-screen-position 1)
+(setq scroll-margin 0
+      scroll-conservatively 100000
+      scroll-preserve-screen-position 1)
 
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
@@ -529,6 +534,9 @@ To actually set the default font on GUI emacs:
       minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
+
+;; warn when opening files bigger than 100MB
+(setq large-file-warning-threshold 100000000)
 #+END_SRC
 
 *** Custom functions
@@ -1014,6 +1022,9 @@ Sembra interessante
   :interpreter ("ruby" . enh-ruby-mode)
   :mode
   (("\\.rb\\'" . enh-ruby-mode)
+   ("\\.ru\\'" . enh-ruby-mode)
+   ("\\.rake\\'" . enh-ruby-mode)
+   ("\\.gemspec\\'" . enh-ruby-mode)
    ("Gemfile\\'" . enh-ruby-mode)
    ("Berksfile\\'" . enh-ruby-mode)
    ("Rakefile\\'" . enh-ruby-mode)
@@ -1024,7 +1035,9 @@ Sembra interessante
   (setq enh-ruby-indent-level 2
         enh-ruby-deep-indent-paren nil)
   :config
-  (add-hook 'enh-ruby-mode-hook 'piger/ruby-mode-hooks))
+  (add-hook 'enh-ruby-mode-hook 'piger/ruby-mode-hooks)
+  ;; We never want to edit Rubinius bytecode
+  (add-to-list 'completion-ignored-extensions ".rbc"))
 
 (use-package rbenv
   :demand t
@@ -1075,8 +1088,9 @@ Sembra interessante
 #+BEGIN_SRC emacs-lisp
 (defun moo-js2-mode-hooks ()
   (subword-mode +1)
-  (set-variable 'indent-tabs-mode nil)
-  (setq js2-basic-offset 4))
+  ;;; (set-variable 'indent-tabs-mode nil)
+  (setq js-indent-level 4
+        js2-basic-offset 4))
 
 ;; I used this while working with Ember.js
 (defun moo-ember-js2-hook ()
@@ -1092,10 +1106,19 @@ Sembra interessante
   :ensure t
   :mode ("\\.js$" . js2-mode)
   :interpreter ("node" . js2-mode)
+  :disabled t
   :config
   (add-hook 'js2-mode-hook 'moo-js2-mode-hooks)
   (setq-default js2-global-externs
                 '("module", "require", "console", "jQuery", "$")))
+
+(use-package rjsx-mode
+  :ensure t
+  :mode ("\\.js\\'" . rjsx-mode)
+  :interpreter ("node" . rjsx-mode)
+  :config
+  (add-hook 'rjsx-mode-hook 'moo-js2-mode-hooks))
+
 #+END_SRC
 
 **** json
@@ -1577,7 +1600,7 @@ sarebbe piu' comodo attivarlo solo coi /mode/ programmosi...
 (use-package gitconfig-mode
   :ensure t
   :mode ("\\.?gitconfig\\'" . gitconfig-mode))
-  
+
 (use-package gitignore-mode
   :ensure t
   :mode ("\\.gitignore" . gitignore-mode))
@@ -1610,8 +1633,30 @@ Let's try diff-hl since git-gutter leave stale indicators on the windows.
 #+BEGIN_SRC emacs-lisp
 (use-package diff-hl
   :config
-  (add-hook 'prog-mode-hook 'diff-hl-mode)
+  (add-hook 'prog-mode-hook 'diff-hl-flydiff-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+#+END_SRC
+
+***** git-timemachine
+
+#+BEGIN_SRC emacs-lisp
+(use-package git-timemachine
+  :ensure t
+  :bind (("C-x v t" . git-timemachine)))
+#+END_SRC
+
+***** github-clone
+
+#+BEGIN_SRC emacs-lisp
+(use-package github-clone
+  :bind (("C-x v c" . github-clone)))
+#+END_SRC
+
+***** git-link
+
+#+BEGIN_SRC emacs-lisp
+(use-package git-link
+  :bind (("C-x v b" . git-link)))
 #+END_SRC
 
 **** dired-x
@@ -1676,7 +1721,9 @@ Because Vim is the best text editor.
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init
-  (setq markdown-command "markdown"))
+  (setq markdown-command "markdown")
+  :config
+  (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
 #+END_SRC
 
 **** RestructuredText
@@ -1908,6 +1955,7 @@ Keep track of recent used files.
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :diminish undo-tree-mode
+  :chords (("uu" . undo-tree-visualize))
   :config
   (global-undo-tree-mode +1))
 #+END_SRC
