@@ -15,9 +15,6 @@
 [difftool "icdiff"]
     cmd = /Users/dkertesz/tmp/venvs/icdiff/bin/icdiff --line-numbers $LOCAL $REMOTE
 
-[log]
-    decorate = short
-
 [color]
     ui = auto
 
