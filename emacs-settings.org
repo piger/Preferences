@@ -1051,7 +1051,6 @@ Sembra interessante
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
 (use-package rbenv
-  :demand t
   :init
   ;; rbenv installed via homebrew
   (setq rbenv-executable "/usr/local/bin/rbenv")
@@ -1845,7 +1844,7 @@ company-mode in textual modes like org.
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package company
   :ensure t
-  :diminish (company-mode . " ç")
+  :diminish
   :config
   (define-key company-mode-map [remap hippie-expand] 'company-complete)
   (define-key company-active-map [remap hippie-expand] 'company-complete)
@@ -1857,7 +1856,7 @@ This configuration is more "on-demand":
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :diminish (company-mode . "©")
+  :diminish
   :config
   (add-hook 'prog-mode-hook 'company-mode)
   (setq company-transformers '(company-sort-by-occurrence)))
@@ -2089,6 +2088,18 @@ Sembra che sia "vecchio"? (ho letto in giro "deprecated"). Vedi "avy".
 #+END_SRC
 
 ***** TODO C-c SPC binding conflicts with org
+
+**** avy
+
+Replace ace-jump, which I never used...
+
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :bind (("C-:" . avy-goto-char)
+         ("C-'" . avy-goto-char-2)
+         ("M-g w" . avy-goto-word-1))
+  :chords (("jj" . avy-goto-word-1)))
+#+END_SRC
 
 **** org
 
@@ -2384,6 +2395,7 @@ Nerdtree lookalike.
 #+BEGIN_SRC emacs-lisp
 (use-package editorconfig
   :ensure t
+  :diminish
   :config
   (editorconfig-mode 1))
 #+END_SRC
@@ -2436,6 +2448,16 @@ Replace =:background= with =:foreground= when needed.
   (set-face-background 'highlight-indent-guides-odd-face "#f5efda")
   (set-face-background 'highlight-indent-guides-even-face "#f0e6c6")
   (set-face-foreground 'highlight-indent-guides-character-face "#f0e6c6"))
+#+END_SRC
+
+**** all-the-icons
+
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons)
+
+(use-package all-the-icons-dired
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+END_SRC
 
 *** Aliases

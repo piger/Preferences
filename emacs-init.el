@@ -21,3 +21,6 @@
 ;; display loading time
 (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
   (message "Settings loaded in %.3fs" elapsed))
+
+;;; to help troubleshooting:
+;;; (setq debug-on-error t)
