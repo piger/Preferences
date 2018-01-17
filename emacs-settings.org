@@ -865,6 +865,12 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
   :config
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
+  (setq flycheck-indication-mode 'right-fringe)
+  ;; make the flycheck arrow look like an exclamation point.
+  ;; but only do it when emacs runs in a window, not terminal
+  (when window-system
+    (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+      [0 24 24 24 24 24 24 0 0 24 24 0 0 0 0 0 0]))
   (defun flycheck-foodcritic-porcodio ()
     "avoid issue with use-package macro expansion."
     (let ((parent-dir (f-parent default-directory)))
