@@ -10,20 +10,25 @@
     # let's try the new *experimental* heuristic engine for diffs
     # https://github.com/blog/2188-git-2-9-has-been-released
     compactionHeuristic = true
+    tool = icdiff
+
+[difftool]
+    prompt = false
+
+[difftool "icdiff"]
+    cmd = /Users/dkertesz/tmp/venvs/icdiff/bin/icdiff --line-numbers $LOCAL $REMOTE
 
 [log]
     decorate = short
 
-#[help]
-#    # correction stile zsh :P dopo 3 secondi esegue il comando
-#    autocorrect = 30
-
 [color]
     ui = auto
+
 [color "branch"]
     current = magenta reverse
     local = yellow
     remote = green
+
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
@@ -36,10 +41,14 @@
 # [status]
 #       showUntrackedFiles = all
 
+# this is a hidden gem
 [pager]
     log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
     show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
     diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+
+[interactive]
+        diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
 
 [alias]
     br = branch
@@ -68,7 +77,6 @@
     unstage = reset HEAD --
     w = whatchanged
 
-
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
     helper = osxkeychain
@@ -77,10 +85,22 @@
 [push]
     default = simple
 
-# Example "user" configuration:
-# [user]
-# name = Daniel Kertesz
-# email = daniel@spatof.org
+[user]
+    name = Daniel Kertesz
+    email = daniel@spatof.org
 
+[commit]
+    gpgsign = false
+
+# tokens and stuff
 [include]
-path = ~/.gitconfig.local
+    path = ~/.gitconfig.local
+
+[includeIf "gitdir:~/src/"]
+    path = ~/.gitconfig.work
+
+[includeIf "gitdir:~/src_apps/"]
+    path = ~/.gitconfig.work
+
+[includeIf "gitdir:~/dev.ai/"]
+    path = ~/.gitconfig.ai
