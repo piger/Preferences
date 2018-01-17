@@ -502,15 +502,26 @@ To actually set the default font on GUI emacs:
 ;;           '(nil "\\`root\\'" "/ssh:%h:"))
 ;; (add-to-list 'tramp-default-proxies-alist
 ;;           '((regexp-quote (system-name)) nil nil))
-(require 'tramp)
+(defun hostnames-from-file (filename)
+  (split-string
+   (with-temp-buffer
+     (insert-file-contents filename)
+     (buffer-substring-no-properties
+      (point-min)
+      (point-max))) "\n" t))
+
+(use-package tramp
+  :config
+  (setq tramp-default-method "ssh")
+  (tramp-set-completion-function "ssh"
+                                 '((tramp-parse-sconfig "/etc/ssh/ssh_config")
+                                   (tramp-parse-sconfig "~/.ssh/config")
+                                   (tramp-parse-hosts "/etc/hosts"))))
 ;; (setq tramp-default-method "ssh")
 
 ;; 08/04/2015 - mi stai sul cazzo porcodio, ti commento
 ;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
 
-;; reduce the frequency of garbage collection by making it happen on
-;; each 50MB of allocated data (the default is on every 0.76MB)
-;; (setq gc-cons-threshold 50000000)
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
