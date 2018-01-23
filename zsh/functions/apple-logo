@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+autoload colors
+colors
+
+cat <<EOF
+
+${fg[green]}                 ###                  ${fg[default]}
+${fg[green]}               ####                   ${fg[default]}
+${fg[green]}               ###                    ${fg[default]}
+${fg[green]}       #######    #######             ${fg[default]}
+${fg[yellow]}     ######################           ${fg[default]}
+${fg[yellow]}    #####################             ${fg[default]}
+${fg[red]}    ####################              ${fg[default]}
+${fg[red]}    ####################              ${fg[default]}
+${fg[red]}    #####################             ${fg[default]}
+${fg[magenta]}     ######################           ${fg[default]}
+${fg[magenta]}      ####################            ${fg[default]}
+${fg[blue]}        ################              ${fg[default]}
+${fg[blue]}         ####     #####               ${fg[default]}
+
+EOF

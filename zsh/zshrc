@@ -387,7 +387,7 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen)
+useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen vpn_status apple-logo)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help
@@ -832,8 +832,10 @@ if [[ -s $HOME/.chef_hosts ]]; then
     add_chef_nodes_to_hosts_completion
 
     # check if the chef host file is stale
-    if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
-        echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours"
+    if vpn_status >/dev/null; then
+        if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
+            echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours"
+        fi
     fi
 fi
 
@@ -882,6 +884,9 @@ compctl -K _pip_completion pip
 # }}}
 
 # WELCOME {{{
+# Fancy logo first
+apple-logo
+
 # fortune -e serve per scegliere equamente tra tutti i fortune file
 # presenti, a prescindere dalla dimensione.
 if [[ $FORTUNE_GREETING == 1 ]] && (( $+commands[fortune] )); then
