@@ -194,7 +194,8 @@ Configure garbage collection for a faster emacs:
 #+BEGIN_SRC emacs-lisp
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold 50000000)
+;(setq gc-cons-threshold 50000000)
+;; see https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core.el#L154
 #+END_SRC
 
 *** Packages
@@ -228,7 +229,6 @@ list.
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
 
 (eval-when-compile
   (require 'use-package))
@@ -278,27 +278,12 @@ environment variables, like *go-mode*.
 
 #+BEGIN_SRC emacs-lisp
 (use-package base16-theme
-  :ensure t)
-#+END_SRC
-
-**** install diminish
-
-#+BEGIN_SRC emacs-lisp
-(use-package diminish
+  :disabled
   :ensure t)
 #+END_SRC
 
 ** Settings
 *** Basic settings
-
-**** Load custom settings
-
-This should be the place where customization goes.
-
-#+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
-#+END_SRC
 
 **** General settings
 Define some constants and variables:
@@ -320,11 +305,17 @@ load path:
 Always use UTF-8:
 
 #+BEGIN_SRC emacs-lisp
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
 (set-language-environment "UTF-8")
-(prefer-coding-system 'utf-8)
+
+;; from emacs-doom
+(when (fboundp 'set-charset-priority)
+  (set-charset-priority 'unicode))     ; pretty
+(prefer-coding-system        'utf-8)   ; pretty
+(set-terminal-coding-system  'utf-8)   ; pretty
+(set-keyboard-coding-system  'utf-8)   ; pretty
+(set-selection-coding-system 'utf-8)   ; perdy
+(setq locale-coding-system   'utf-8)   ; please
+(setq-default buffer-file-coding-system 'utf-8) ; with sugar on top
 #+END_SRC
 
 Disable scrollbars, menu bars etc:
@@ -378,7 +369,7 @@ Here we could setup fonts; interesting list:
 To actually set the default font on GUI emacs:
 
 #+BEGIN_SRC emacs-lisp :tangle no
-(set-default-font "Droid Sans Mono for Powerline-12")
+(set-default-font "Mononoki-12")
 #+END_SRC
 
 **** Miscellaneous configuration
@@ -640,40 +631,6 @@ This functions should be added to the hooks of major modes for programming."
           1 '((:foreground "#d7a3ad") (:weight bold)) t))))
 #+END_SRC
 
-Remap =C-a= to a smarter function that go to the beginning of the line
-or the first word on the line.
-
-#+BEGIN_SRC emacs-lisp
-; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
-; (prelude)
-(defun smarter-move-beginning-of-line (arg)
-  "Move point back to indentation of beginning of line.
-
-Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line.
-
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
-  (interactive "^p")
-  (setq arg (or arg 1))
-
-  ;; Move lines first
-  (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
-
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
-
-;; remap C-a to `smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                'smarter-move-beginning-of-line)
-#+END_SRC
-
 Use this command to create a new terminal buffer; use =C-x C-j= to
 switch to =term-line-mode=, where you can select text and =C-c C-k= to
 switch back to =character-mode=.
@@ -793,9 +750,8 @@ layout which permits accented characters.
 ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
 (use-package simpleclip
   :if (eq system-type 'darwin)
-  :init
-  (setq simpleclip-unmark-on-copy t)
   :config
+  (setq simpleclip-unmark-on-copy t)
   (simpleclip-mode +1))
 #+END_SRC
 
@@ -818,7 +774,7 @@ layout which permits accented characters.
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-;;; browser con M-o
+;;; browser con M-o (I think this one is covered by crux?)
 (global-set-key "\M-o" 'browse-url-generic)
 (if (and (eq window-system 'x) (eq system-type 'gnu/linux))
     (setq browse-url-generic-program "gvfs-open"))
@@ -844,6 +800,10 @@ layout which permits accented characters.
 
 ** Configuration
 *** Programming
+
+(diminish 'subword-mode)
+(diminish 'abbrev-mode)
+
 **** auto-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -861,7 +821,6 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode)
   :config
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
@@ -884,7 +843,8 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
     ((error line-start (message) ": " (file-name) ":" line line-end))
     :modes (enh-ruby-mode ruby-mode)
     :predicate flycheck-foodcritic-porcodio
-    :next-checkers ((warnings-only . ruby-rubocop))))
+    :next-checkers ((warnings-only . ruby-rubocop)))
+  (global-flycheck-mode))
 #+END_SRC
 
 **** ediff
@@ -893,6 +853,7 @@ Provo questa configurazione trovata in giro.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ediff
+  :commands ediff
   :config
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   (setq-default ediff-highlight-all-diffs 'nil)
@@ -936,6 +897,7 @@ NOTA: provo ad usare =shellcheck=.
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package company-anaconda
+  :requires anaconda-mode
   :config
   (add-to-list 'company-backends 'company-anaconda))
 #+END_SRC
@@ -983,19 +945,22 @@ go get -u github.com/dougm/goflymake
 
 (use-package go-mode
   :ensure t
+  :mode "\\.go\\'"
   :config
-
   (setq piger-go-mode-hook 'piger/go-mode-defaults)
   (add-hook 'go-mode-hook (lambda ()
                             (run-hooks 'piger-go-mode-hook))))
 
 (use-package go-eldoc
+  :requires go-mode
   :ensure t)
 
 (use-package gotest
+  :requires go-mode
   :ensure t)
 
-(use-package go-guru)
+(use-package go-guru
+  :requires go-mode)
 #+END_SRC
 
 ***** TODO goimports
@@ -1008,9 +973,13 @@ Sembra interessante
 ;; Collection of handy functions for ruby-mode
 ;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
+  :requires enh-ruby-mode
+  :diminish ruby-tools-mode
   :ensure t)
 
 (use-package rubocop
+  :requires enh-ruby-mode
+  :diminish
   :ensure t)
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
@@ -1022,10 +991,10 @@ Sembra interessante
   (("C-c r r" . inf-ruby)))
 
 (use-package robe
-  :defer t
-  :init
-  (add-hook 'enh-ruby-mode-hook 'robe-mode)
-  (with-eval-after-load 'company (add-to-list 'company-backends 'company-robe)))
+  :requires (enh-ruby-mode company-mode)
+  :hook enh-ruby-mode
+  :config
+  (add-to-list 'company-backends 'company-robe))
 
 (defun piger/ruby-mode-hooks ()
   (ruby-tools-mode +1)
@@ -1065,20 +1034,20 @@ Sembra interessante
   :config
   (global-rbenv-mode))
 
-(use-package bundler)
+(use-package bundler
+  :requires enh-ruby-mode)
 
 (use-package rake
+  :requires enh-ruby-mode
   :config
   (setq rake-completion-system 'helm))
 
-(use-package rspec-mode)
+(use-package rspec-mode
+  :requires enh-ruby-mode)
 
 (use-package ruby-end
-  :defer t
   :diminish
-  :init
-  (add-hook 'enh-ruby-mode-hook #'ruby-end-mode))
-
+  :hook (enh-ruby-mode . ruby-end-mode))
 #+END_SRC
 
 **** CSS
@@ -1086,6 +1055,7 @@ Sembra interessante
 #+BEGIN_SRC emacs-lisp
 (use-package css-mode
   :ensure t
+  :mode "\\.css\\'"
   :config
   (setq css-indent-offset 2)
   (rainbow-mode +1)
@@ -1093,9 +1063,11 @@ Sembra interessante
   (diminish 'subword-mode))
 
 (use-package rainbow-mode
+  :requires css-mode
   :ensure t)
 
 (use-package less-css-mode
+  :requires css-mode
   :ensure t)
 #+END_SRC
 
@@ -1130,11 +1102,10 @@ Sembra interessante
 
 (use-package rjsx-mode
   :ensure t
-  :mode ("\\.js\\'" . rjsx-mode)
+  :mode "\\.js\\'"
   :interpreter ("node" . rjsx-mode)
   :config
   (add-hook 'rjsx-mode-hook 'moo-js2-mode-hooks))
-
 #+END_SRC
 
 **** json
@@ -1180,6 +1151,7 @@ per ora PARE di si (24/02/2017). Vediamo...
 
 (use-package json-mode
   :ensure t
+  :mode "\\.json\\'"
   :config
   (add-hook 'json-mode-hook 'moo-json-mode-hooks))
 #+END_SRC
@@ -1239,8 +1211,10 @@ Configure indentation for logstash-conf-mode:
 #+BEGIN_SRC emacs-lisp
 (use-package logstash-conf
   :ensure t
+  :commands logstash-conf-mode
   :config
-  (custom-set-variables '(logstash-indent 2)))
+  (setq logstash-indent 2))
+  ;;(custom-set-variables '(logstash-indent 2)))
 #+END_SRC
 
 **** C and C++
@@ -1268,14 +1242,14 @@ directory, but works for Unity projects.
   (company-mode 1))
 
 (use-package csharp-mode
-  :mode
-  (("\\.cs\\'" . csharp-mode))
+  :mode "\\.cs\\'"
   :config
   (add-hook 'csharp-mode-hook 'piger/csharp-mode-hook))
 
 (use-package omnisharp
+  :requires (csharp-mode company-mode)
+  :hook (csharp-mode . omnisharp-mode)
   :config
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
   (eval-after-load 'company
     '(add-to-list 'company-backends 'company-omnisharp)))
 #+END_SRC
@@ -1334,7 +1308,7 @@ the moment I don't know how to pin it to stable.
 (use-package helm
   :ensure t
   :pin melpa-stable
-  :demand t
+  :disabled t
   :config
   (require 'helm-config)
 
@@ -1423,6 +1397,7 @@ Let's try one of the suggested extensions:
 
 #+BEGIN_SRC emacs-lisp
 (use-package helm-ls-git
+  :disabled t
   :ensure t)
 #+END_SRC
 
@@ -1430,6 +1405,8 @@ Let's also use the silver searcher:
 
 #+BEGIN_SRC emacs-lisp
 (use-package helm-ag
+  :disabled t
+  :requires helm
   :ensure t)
 #+END_SRC
 
@@ -1450,11 +1427,11 @@ per rimpiazzare Helm, e alcune cose (tra le poche che uso) mancano.
 Mancano molte cose, tra cui semplicemente un sostituto di helm-mini
 che e' comodissimo. ciaone.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
 (use-package ivy
   :diminish ivy-mode
   :bind
-  (("C-x C-r" . ivy-recentf)
+  (("C-x C-r" . counsel-recentf)
    ("C-c C-r" . ivy-resume))
   :config
   (ivy-mode 1)
@@ -1506,15 +1483,14 @@ Nice keybinding to switch frame using shift or alt + arrows:
 
 #+BEGIN_SRC emacs-lisp
 (use-package windmove
-  :config
-  (windmove-default-keybindings 'meta)
-  :bind
-  ; Bind attional keys (other than the default meta+arrows) for modes where
+  ; Bind additional keys (other than the default meta+arrows) for modes where
   ; the default keys conflicts.
-  ("C-x <up>" . windmove-up)
-  ("C-x <down>" . windmove-down)
-  ("C-x <left>" . windmove-left)
-  ("C-x <right>" . windmove-right))
+  :bind (("C-x <up>" . windmove-up)
+         ("C-x <down>" . windmove-down)
+         ("C-x <left>" . windmove-left)
+         ("C-x <right>" . windmove-right))
+  :config
+  (windmove-default-keybindings 'meta))
 #+END_SRC
 
 **** transpose-frame
@@ -1547,6 +1523,7 @@ Editor di regexp che evita la pazzia dei backslash
 
 #+BEGIN_SRC emacs-lisp
 (use-package re-builder
+  :disabled t
   :config
   (setq reb-re-syntax 'string))
 #+END_SRC
@@ -1572,6 +1549,7 @@ Editor di regexp che evita la pazzia dei backslash
   (global-magit-file-mode 1)
 
   (use-package git-commit
+    :requires magit
     :ensure t
     :pin melpa-stable))
 
@@ -1714,11 +1692,11 @@ inside a quoted string or inside some parenthesis.
 Because Vim is the best text editor.
 
 #+BEGIN_SRC emacs-lisp
-;; enable scroll-down with C-u
-(setq evil-want-C-u-scroll t)
-
 (use-package evil
   :ensure t
+  :commands evil-mode
+  :init
+  (setq evil-want-C-u-scroll t) ; enable scroll-down with C-u
   :config
   (setq evil-emacs-state-cursor  '("red" box)
         evil-normal-state-cursor '("gray" box)
@@ -1757,6 +1735,7 @@ Because Vim is the best text editor.
 
 (use-package yaml-mode
   :ensure t
+  :mode "\\.ya?ml\\'"
   :config
   (add-hook 'yaml-mode-hook 'moo-yaml-mode-hooks))
 #+END_SRC
@@ -1863,8 +1842,8 @@ This configuration is more "on-demand":
 (use-package company
   :ensure t
   :diminish
+  :hook (prog-mode . company-mode)
   :config
-  (add-hook 'prog-mode-hook 'company-mode)
   (setq company-transformers '(company-sort-by-occurrence)))
 
   ;; (use-package company-quickhelp
@@ -1889,6 +1868,7 @@ For go:
 
 #+BEGIN_SRC emacs-lisp
 (use-package company-go
+  :requires company
   :ensure t)
 #+END_SRC
 
@@ -1896,6 +1876,7 @@ For web:
 
 #+BEGIN_SRC emacs-lisp
 (use-package company-web
+  :requires company
   :ensure t)
 #+END_SRC
 
@@ -2069,12 +2050,15 @@ con "SET UTF-8".
 (setq ispell-personal-dictionary (expand-file-name "~/Preferences/emacs/flyspell.dict"))
 ; (setq ispell-extra-args '("--sug-mode=normal" "--ignore=3")
 
+;; https://github.com/rolandwalker/flyspell-lazy
 (use-package flyspell-lazy
   :ensure t
+  :disabled t
   :config
   (flyspell-lazy-mode +1))
 
 (use-package flyspell
+  :commands flyspell-mode
   :config
   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "M-.") 'ispell-word)
@@ -2089,7 +2073,7 @@ Sembra che sia "vecchio"? (ho letto in giro "deprecated"). Vedi "avy".
 
 #+BEGIN_SRC emacs-lisp
 (use-package ace-jump-mode
-  :disabled
+  :disabled t
   :bind ("C-c SPC" . ace-jump-mode))
 #+END_SRC
 
@@ -2224,9 +2208,18 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
         spaceline-window-numbers-unicode t
         spaceline-workspace-numbers-unicode t
         spaceline-flycheck-bullet "❖ %s")
-  (spaceline-spacemacs-theme)
-  (spaceline-helm-mode)
-  (spaceline-info-mode))
+  (spaceline-define-segment venv-el
+    "Support for my venv.el"
+    (when (and active
+               (eq 'python-mode major-mode)
+               (bound-and-true-p venv-current-name))
+      (propertize venv-current-name
+                  'face 'spaceline-python-venv
+                  'help-echo (format "Virtual environment via venv.el"))))
+  ;;;(spaceline-compile)
+  (spaceline-emacs-theme '(venv-el))
+  ;;(spaceline-helm-mode)
+  )
 #+END_SRC
 
 **** dtrt-indent                                                        :new:
@@ -2236,6 +2229,7 @@ source file and adjust the corresponding configuration in Emacs.
 
 #+BEGIN_SRC emacs-lisp
 (use-package dtrt-indent
+  :commands drt-indent-mode
   :ensure t)
 #+END_SRC
 
@@ -2248,7 +2242,8 @@ example I can press =C-c= and then read the list of org bindings.
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
   :diminish which-key-mode
-  :config (which-key-mode))
+  :config
+  (which-key-mode))
 #+END_SRC
 
 **** discover-my-major
@@ -2267,10 +2262,10 @@ Help discovering major mode bindings, very nice.
 Per usare dash su OS X
 
 #+BEGIN_SRC emacs-lisp
-(when (eq system-type 'darwin)
-  (use-package "dash-at-point"
-    :disabled t
-    :ensure t))
+(use-package "dash-at-point"
+  :if *is-a-mac*
+  :disabled t
+  :ensure t)
 #+END_SRC
 
 **** highlight-symbol
@@ -2281,14 +2276,14 @@ Potrebbe essere utile.
 (use-package highlight-symbol
   :ensure t
   :diminish highlight-symbol-mode
-  :config
-  (add-hook 'prog-mode-hook 'highlight-symbol-mode))
+  :hook (prog-mode . highlight-symbol-mode))
 #+END_SRC
 
 **** nginx-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package nginx-mode
+  :commands nginx-mode
   :ensure t)
 #+END_SRC
 
@@ -2296,6 +2291,7 @@ Potrebbe essere utile.
 
 #+BEGIN_SRC emacs-lisp
 (use-package php-mode
+  :mode "\\.php\\'"
   :ensure t)
 #+END_SRC
 
@@ -2303,6 +2299,7 @@ Potrebbe essere utile.
 
 #+BEGIN_SRC emacs-lisp
 (use-package buffer-move
+  :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
   :ensure t)
 #+END_SRC
 
@@ -2311,14 +2308,14 @@ Potrebbe essere utile.
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
   :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 **** TODO unfill
 
 #+BEGIN_SRC emacs-lisp
 (use-package unfill
+  :commands (unfill-paragraph unfill-region)
   :ensure t)
 #+END_SRC
 
@@ -2329,6 +2326,7 @@ https://github.com/purcell/whitespace-cleanup-mode
 #+BEGIN_SRC emacs-lisp
 (use-package whitespace-cleanup-mode
   :ensure t
+  :commands whitespace-cleanup-mode
   :diminish 'whitespace-cleanup-mode)
 #+END_SRC
 
@@ -2340,17 +2338,17 @@ https://github.com/mickeynp/smart-scan
 
 #+BEGIN_SRC emacs-lisp
 (use-package smartscan
-  :config
-  (add-hook 'prog-mode-hook 'smartscan-mode))
+  :hook (prog-mode . smartscan-mode))
 #+END_SRC
 
 **** hideshow
 
+Minor mode to selectively hide/show code and comment blocks.
+
 #+BEGIN_SRC emacs-lisp
 (use-package hideshow
-  :init
-  (add-hook #'prog-mode-hook #'hs-minor-mode)
   :diminish hs-minor-mode
+  :hook (prog-mode . hs-minor-mode)
   :config
   (setq hs-special-modes-alist
         (mapcar 'purecopy
@@ -2360,11 +2358,21 @@ https://github.com/mickeynp/smart-scan
                   (javascript-mode "{" "}" "/[*/]" nil)))))
 #+END_SRC
 
+**** crux (emacs utilities)
+
+#+BEGIN_SRC emacs-lisp
+(use-package crux
+  :ensure t
+  :config
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
+  (global-set-key (kbd "C-c o") #'crux-open-with))
+#+END_SRC
+
 *** Packages in prova
 
 osx-dictionary, hydra, helm-descbinds, popwin
 
-**** digit-groups
+**** TODO digit-groups
 
 #+BEGIN_QUOTE
 The ‘digit-groups‘ Emacs package adds the ‘digit-groups-mode‘
@@ -2379,10 +2387,7 @@ thousands place, millions place, billions place, etc.).
 
 #+BEGIN_SRC emacs-lisp
 (use-package digit-groups
-  :disabled
-  :config
-  (digit-groups-global-mode))
-
+  :commands digit-groups-global-mode)
 #+END_SRC
 
 **** neotree
@@ -2445,8 +2450,8 @@ Replace =:background= with =:foreground= when needed.
 
 #+BEGIN_SRC emacs-lisp
 (use-package highlight-indent-guides
+  :hook (prog-mode . highlight-indent-guides-mode)
   :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   (setq highlight-indent-guides-auto-odd-face-perc 5
         highlight-indent-guides-auto-even-face-perc 10
         highlight-indent-guides-auto-character-face-perc 10
@@ -2462,8 +2467,7 @@ Replace =:background= with =:foreground= when needed.
 (use-package all-the-icons)
 
 (use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode))
 #+END_SRC
 
 *** Aliases
