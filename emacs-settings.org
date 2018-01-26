@@ -1804,15 +1804,25 @@ Because Vim is the best text editor.
   :ensure t
   :config
   (projectile-global-mode +1)
-  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))))
+  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name))))
+
+  ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
+  ;; Projectile root-searching functions can cause an infinite loop on TRAMP
+  ;; connections, so disable them.
+  (defun doom*projectile-locate-dominating-file (orig-fn &rest args)
+    "Don't traverse the file system if on a remote connection."
+    (unless (file-remote-p default-directory)
+      (apply orig-fn args)))
+  (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
 (use-package helm-projectile
+  :disabled t
   :ensure t
   :config
   (helm-projectile-on))
 
 (use-package ibuffer-projectile
-  :disabled
+  :disabled t
   :config
   (add-hook 'ibuffer-hook
             (lambda ()
