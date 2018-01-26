@@ -2382,24 +2382,6 @@ Minor mode to selectively hide/show code and comment blocks.
 
 osx-dictionary, hydra, helm-descbinds, popwin
 
-**** TODO digit-groups
-
-#+BEGIN_QUOTE
-The ‘digit-groups‘ Emacs package adds the ‘digit-groups-mode‘
-minor mode, which makes it easier to read large numbers by
-highlighting digits at selected place-value positions (e.g.,
-thousands place, millions place, billions place, etc.).
-#+END_QUOTE
-
-*NOTE*: it breaks magit if enabled via =digit-groups-global-mode=!
-
-*NOTE2*: ... and so I don't trust it anymore, let's keep it disabled.
-
-#+BEGIN_SRC emacs-lisp
-(use-package digit-groups
-  :commands digit-groups-global-mode)
-#+END_SRC
-
 **** neotree
 
 Nerdtree lookalike.
