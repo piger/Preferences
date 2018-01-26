@@ -1449,8 +1449,8 @@ che e' comodissimo. ciaone.
 
 (use-package swiper
   :bind
-  (("C-s" . swiper)
-   ("C-r" . swiper)))
+  (("C-M-s" . swiper)
+   ("C-M-r" . swiper)))
 
 (use-package smex
   :config
