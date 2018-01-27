@@ -1177,7 +1177,9 @@ per ora PARE di si (24/02/2017). Vediamo...
   :config
   (add-hook 'web-mode-hook 'moo-web-mode-hooks)
   (setq web-mode-enable-current-element-highlight t
-        web-mode-enable-auto-quoting -1))
+        web-mode-enable-auto-quoting -1
+        web-mode-code-indent-offset 4
+        web-mode-markup-indent-offset 4))
 #+END_SRC
 
 ***** Aggiungere una regola per impostare l'engine automaticamente
@@ -1453,6 +1455,9 @@ che e' comodissimo. ciaone.
    ("C-M-r" . swiper)))
 
 (use-package smex
+  :bind (("M-x" . smex)
+         ("M-X" . smex-major-mode-commands)
+         ("C-c C-c M-x" . execute-extended-command))
   :config
   (smex-initialize))
 #+END_SRC
@@ -1537,9 +1542,8 @@ Editor di regexp che evita la pazzia dei backslash
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :pin melpa-stable
-  :bind
-  (("C-x g" . magit-status)
-   ("C-x M-g" . magit-dispatch-popup))
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch-popup))
   :config
   (setq magit-diff-refine-hunk 'all
         git-commit-turn-on-flyspell t
@@ -1714,9 +1718,11 @@ Because Vim is the best text editor.
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "markdown")
   :config
+  (setq markdown-command "markdown")
+  (set-face-attribute 'markdown-pre-face nil :inherit 'markdown-markup-face)
+  ;; (custom-set-faces
+  ;;  '(markdown-pre-face ((t (:inherit markdown-markup-face)))))
   (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
 #+END_SRC
 
@@ -1804,8 +1810,8 @@ Because Vim is the best text editor.
   :ensure t
   :config
   (projectile-global-mode +1)
-  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name))))
-
+  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
+        projectile-globally-ignored-directories (quote (".git" ".tox" "Godeps" "build")))
   ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
   ;; Projectile root-searching functions can cause an infinite loop on TRAMP
   ;; connections, so disable them.
@@ -2462,8 +2468,22 @@ Replace =:background= with =:foreground= when needed.
   :hook (dired-mode . all-the-icons-dired-mode))
 #+END_SRC
 
+**** helpful
+
+[[https://github.com/Wilfred/helpful][Helpful]] is an alternative to the built-in Emacs help that provides much more contextual information.
+
+#+BEGIN_SRC emacs-lisp
+(use-package helpful
+  :ensure t
+  :bind (("C-h f" . helpful-callable)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-c C-d" . helpful-at-point)
+         ("C-h F" . helpful-function)))
+#+END_SRC
+
 *** Aliases
-I'd like to have more aliases... :)
+I'd like to have more aliases.
 
 #+BEGIN_SRC emacs-lisp
 (defalias 'qrr 'query-replace-regexp)
