@@ -28,12 +28,13 @@ function phelp() {
 
 # Sort first by data-center, then by Pod, then by server id
 function sort_hosts() {
-    sort -t '.' -k 3,3 -k 2,2 -k 1,1
+    if ! which gsort >/dev/null; then
+        sort -t '.' -k 3,3 -k 2,2 -k 1,1
+    else
+        # GNU sort has "sort by version" which seem to work perfectly with hostnames.
+        gsort -V
+    fi
 }
-
-if ! type set_pane_title >/dev/null; then
-    fatal "set_pane_title is required for this script to work."
-fi
 
 user_query=""
 query=()
@@ -182,25 +183,29 @@ logname="$PWD/tmux-cssh.${now}.#P.HOST.log"
 
 # i iterates over hosts (zsh arrays starts from 1)
 i=1
-# pane iterates over tmux panes
+# $pane keep track of the number of panes created so far. It usually starts from 0
+# but some configuration may prefer to have it start from 1.
 pane=$(tmux show-options -g -w -v pane-base-index)
 
 tmux new-session -d -s $session -P -F "tmux session: #{session_name}" \
-     "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
-[[ $do_log = 1 ]] && tmux pipe-pane -t ${window}.$pane "cat >> ${logname/HOST/$hosts[$i]}"
+     ssh "$ssh_options[@]" "$hosts[$i]"
+tmux select-pane -T "$hosts[$i]" -t "${window}.${pane}"
+[[ $do_log = 1 ]] && tmux pipe-pane -t "${window}.${pane}" "cat >> ${logname/HOST/$hosts[$i]}"
 i=$((i+1))
 pane=$((pane+1))
 
 while [[ $i -le $#hosts ]]; do
-    tmux split-window -t $window "set_pane_title $hosts[$i] ; ssh $ssh_options[@] $hosts[$i]"
+    tmux split-window -t $window ssh "$ssh_options[@]" "$hosts[$i]"
+    tmux select-pane -T "$hosts[$i]" -t "${window}.${pane}"
     tmux select-layout -t $window tiled
-    [[ $do_log = 1 ]] && tmux pipe-pane -t ${window}.$pane "cat >> ${logname/HOST/$hosts[$i]}"
+    [[ $do_log = 1 ]] && tmux pipe-pane -t "${window}.${pane}" "cat >> ${logname/HOST/$hosts[$i]}"
     i=$((i+1))
     pane=$((pane+1))
 done
 
 tmux setw -t $window status on
 tmux setw -t $window synchronize-panes on
+# tmux setw -t $window remain-on-exit on
 tmux set-hook -t $session pane-exited "select-layout tiled"
 
 if [[ $do_bg = 0 ]]; then
