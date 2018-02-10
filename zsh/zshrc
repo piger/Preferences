@@ -475,6 +475,9 @@ if [[ $OSTYPE = darwin* ]]; then
     alias -s mp4=open
     alias -s png=open
 
+    # lock screen
+    alias afk="pmset displaysleepnow"
+
     # ls
     if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
         alias ls="gls --color=auto $ls_options"
