@@ -2246,7 +2246,7 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
 (use-package spaceline-config
   :ensure spaceline
   :config
-  (setq powerline-default-separator 'arrow
+  (setq powerline-default-separator 'box
         spaceline-window-numbers-unicode t
         spaceline-workspace-numbers-unicode t
         spaceline-flycheck-bullet "❖ %s")
