@@ -1044,7 +1044,8 @@ Sembra interessante
 (use-package rake
   :requires enh-ruby-mode
   :config
-  (setq rake-completion-system 'helm))
+  ;;(setq rake-completion-system 'helm))
+  )
 
 (use-package rspec-mode
   :requires enh-ruby-mode)
@@ -1436,14 +1437,15 @@ che e' comodissimo. ciaone.
 #+BEGIN_SRC emacs-lisp
 (use-package ivy
   :diminish ivy-mode
-  :bind
-  (("C-x C-r" . counsel-recentf)
-   ("C-c C-r" . ivy-resume))
+  :bind (("C-x C-r" . counsel-recentf)
+         ("C-c C-r" . ivy-resume))
   :config
   (ivy-mode 1)
   :init
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) "))
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "(%d/%d) "
+        projectile-completion-system 'ivy))
+  
 
 (use-package counsel
   :bind
@@ -1451,14 +1453,17 @@ che e' comodissimo. ciaone.
    ("C-x C-f" . counsel-find-file)
    ("C-h f"   . counsel-describe-function)
    ("C-h v"   . counsel-describe-variable)
+   ("C-c k"   . counsel-ag)
    ("M-y"     . counsel-yank-pop)))
 
 (use-package swiper
   :bind
+  ;;; NOTE: those are not the default bindings
   (("C-M-s" . swiper)
    ("C-M-r" . swiper)))
 
 (use-package smex
+  :disabled
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)
          ("C-c C-c M-x" . execute-extended-command))
@@ -1702,7 +1707,7 @@ Because Vim is the best text editor.
 #+BEGIN_SRC emacs-lisp
 (use-package evil
   :ensure t
-  :commands evil-mode
+  :commands (evil-mode evil-local-mode)
   :init
   (setq evil-want-C-u-scroll t) ; enable scroll-down with C-u
   :config
@@ -1748,6 +1753,15 @@ Because Vim is the best text editor.
   :mode "\\.ya?ml\\'"
   :config
   (add-hook 'yaml-mode-hook 'moo-yaml-mode-hooks))
+#+END_SRC
+
+**** toml-mode
+
+Because why not add another format to the universe?
+
+#+BEGIN_SRC emacs-lisp
+(use-package toml-mode
+  :mode "\\.toml\\'")
 #+END_SRC
 
 **** po-mode & i18n
@@ -1826,7 +1840,7 @@ Because Vim is the best text editor.
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
 (use-package helm-projectile
-  :disabled t
+  :disabled
   :ensure t
   :config
   (helm-projectile-on))
@@ -1839,6 +1853,10 @@ Because Vim is the best text editor.
               (ibuffer-projectile-set-filter-groups)
               (unless (eq ibuffer-sorting-mode 'alphabetic)
                 (ibuffer-do-sort-by-alphabetic)))))
+
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode))
 #+END_SRC
 
 **** company (completion)
