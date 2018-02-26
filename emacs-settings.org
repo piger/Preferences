@@ -801,8 +801,15 @@ layout which permits accented characters.
 ** Configuration
 *** Programming
 
-(diminish 'subword-mode)
-(diminish 'abbrev-mode)
+#+BEGIN_SRC emacs-lisp
+(use-package subword
+  :commands subword-mode
+  :diminish subword-mode)
+
+(use-package abbrev
+  :commands abbrev-mode
+  :diminish abbrev-mode)
+#+END_SRC
 
 **** auto-mode
 
@@ -977,14 +984,15 @@ Sembra interessante
 ;; Collection of handy functions for ruby-mode
 ;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
-  :requires enh-ruby-mode
   :diminish ruby-tools-mode
-  :ensure t)
+  :init
+  (add-hook 'enh-ruby-mode-hook #'ruby-tools-mode))
 
 (use-package rubocop
-  :requires enh-ruby-mode
-  :diminish
-  :ensure t)
+  :commands rubocop-mode
+  :diminish rubocop-mode
+  :init
+  (add-hook 'enh-ruby-mode-hook #'rubocop-mode))
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
@@ -1001,11 +1009,7 @@ Sembra interessante
   (add-to-list 'company-backends 'company-robe))
 
 (defun piger/ruby-mode-hooks ()
-  (ruby-tools-mode +1)
-  (flycheck-mode +1)
-  (company-mode +1)
-  (subword-mode +1)
-  (rubocop-mode +1))
+  (subword-mode +1))
 
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
