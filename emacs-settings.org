@@ -882,6 +882,7 @@ NOTA: provo ad usare =shellcheck=.
   (show-paren-mode +1)
   (flycheck-mode +1)
   (company-mode +1)
+  (eldoc-mode +1)
   ;; unfuck electric indentation
   (setq electric-indent-chars '(?\n)))
 
@@ -897,7 +898,8 @@ NOTA: provo ad usare =shellcheck=.
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package company-anaconda
-  :requires anaconda-mode
+  ;;; :requires (anaconda-mode company-mode)
+  :after (company anaconda-mode)
   :config
   (add-to-list 'company-backends 'company-anaconda))
 #+END_SRC
@@ -953,6 +955,7 @@ go get -u github.com/dougm/goflymake
 
 (use-package go-eldoc
   :requires go-mode
+  :commands (go-eldoc-setup)
   :ensure t)
 
 (use-package gotest
@@ -960,6 +963,7 @@ go get -u github.com/dougm/goflymake
   :ensure t)
 
 (use-package go-guru
+  :commands (go-guru-hl-identifier-mode)
   :requires go-mode)
 #+END_SRC
 
