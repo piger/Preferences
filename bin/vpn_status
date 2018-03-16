@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+zparseopts -A opts -- q s
+
+vpn_status=$(ifconfig | egrep '10\..* --> 10\.')
+if [[ $vpn_status != "" ]]; then
+    if (( ${+opts[-q]} )); then
+        echo "◼"
+    else
+        echo "VPN is UP: $vpn_status"
+    fi
+    ret=0
+else
+    if (( ${+opts[-q]} )); then
+        echo "◻"
+    else
+        echo "VPN is DOWN"
+    fi
+    ret=1
+fi
+
+exit $ret
