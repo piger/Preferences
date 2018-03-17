@@ -134,12 +134,13 @@ fi
 
 # Build our knife search query
 # NOTE: do not redirect knife stderr, we need to see errors.
+# XXX: workaround for 'knife search' broken: https://github.com/chef/chef/pull/6742
 if [[ $#query > 0 ]]; then
     # using knife search
-    hosts=($(knife search node -i "${(j: AND :)query}"))
+    hosts=($(knife search node -i "${(j: AND :)query}" | cut -d: -f1))
 elif [[ ! -z $user_query ]]; then
     # using custom user knife search
-    hosts=($(knife search node -i "$user_query"))
+    hosts=($(knife search node -i "$user_query" | cut -d: -f1))
 elif [[ $# == 0 ]]; then
     # reading hosts from stdin
     warn "Reading server list from stdin"
