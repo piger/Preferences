@@ -234,11 +234,6 @@ list.
   (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
-
-(use-package use-package-chords
-  :ensure t
-  :config
-  (key-chord-mode +1))
 #+END_SRC
 
 **** run execute-path-from-shell early as possible
@@ -2004,7 +1999,6 @@ Keep track of recent used files.
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :diminish undo-tree-mode
-  :chords (("uu" . undo-tree-visualize))
   :config
   (global-undo-tree-mode +1))
 #+END_SRC
@@ -2139,8 +2133,7 @@ Replace ace-jump, which I never used...
 (use-package avy
   :bind (("C-:" . avy-goto-char)
          ("C-'" . avy-goto-char-2)
-         ("M-g w" . avy-goto-word-1))
-  :chords (("jj" . avy-goto-word-1)))
+         ("M-g w" . avy-goto-word-1)))
 #+END_SRC
 
 **** org
