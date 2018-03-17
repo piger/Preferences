@@ -372,6 +372,16 @@ To actually set the default font on GUI emacs:
 (set-default-font "Mononoki-12")
 #+END_SRC
 
+***** Theme
+
+#+BEGIN_SRC emacs-lisp
+(load-theme 'base16-railscasts t)
+;; ;(load-theme 'soft-morning t)
+;; (load-theme 'base16-tomorrow-night t)
+;;(load-theme 'base16-tomorrow t)
+;; (load-theme 'plan9 t)
+#+END_SRC
+
 **** Miscellaneous configuration
 
 #+BEGIN_SRC emacs-lisp
@@ -2410,7 +2420,7 @@ Minor mode to selectively hide/show code and comment blocks.
   (global-set-key (kbd "C-c o") #'crux-open-with))
 #+END_SRC
 
-*** Packages in prova
+*** Packages being tested
 
 osx-dictionary, hydra, helm-descbinds, popwin
 
@@ -2474,15 +2484,17 @@ Replace =:background= with =:foreground= when needed.
 
 #+BEGIN_SRC emacs-lisp
 (use-package highlight-indent-guides
-  :hook (prog-mode . highlight-indent-guides-mode)
+  ;;:hook (prog-mode . highlight-indent-guides-mode)
   :config
-  (setq highlight-indent-guides-auto-odd-face-perc 5
-        highlight-indent-guides-auto-even-face-perc 10
-        highlight-indent-guides-auto-character-face-perc 10
-        highlight-indent-guides-auto-enabled nil)
-  (set-face-background 'highlight-indent-guides-odd-face "#f5efda")
-  (set-face-background 'highlight-indent-guides-even-face "#f0e6c6")
-  (set-face-foreground 'highlight-indent-guides-character-face "#f0e6c6"))
+  ;; (setq highlight-indent-guides-auto-odd-face-perc 5
+  ;;       highlight-indent-guides-auto-even-face-perc 10
+  ;;       highlight-indent-guides-auto-character-face-perc 10
+  ;;       highlight-indent-guides-auto-enabled nil)
+  ;; (set-face-background 'highlight-indent-guides-odd-face "#f5efda")
+  ;; (set-face-background 'highlight-indent-guides-even-face "#f0e6c6")
+  ;; (set-face-foreground 'highlight-indent-guides-character-face "#f0e6c6"))
+  ;;(run-with-timer 10 nil 'add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+  )
 #+END_SRC
 
 **** all-the-icons
@@ -2506,6 +2518,28 @@ Replace =:background= with =:foreground= when needed.
          ("C-h k" . helpful-key)
          ("C-c C-d" . helpful-at-point)
          ("C-h F" . helpful-function)))
+#+END_SRC
+
+**** switch-window
+
+#+BEGIN_SRC emacs-lisp
+(use-package switch-window
+  :bind (("C-x o" . switch-window)
+         ("C-x 1" . switch-window-then-maximize)
+         ("C-x 2" . switch-window-then-split-below)
+         ("C-x 3" . switch-window-then-split-right)
+         ("C-x 4" . switch-window-then-delete)))
+#+END_SRC
+
+**** dimmer
+
+Dims the non-active windows.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dimmer
+  :config
+  (setq dimmer-fraction 0.30)
+  (dimmer-mode))
 #+END_SRC
 
 *** Aliases
