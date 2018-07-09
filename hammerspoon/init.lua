@@ -18,7 +18,7 @@ local AUDIO_INTERNAL_NAME = "Built-in Output"
 
 -- Screens Configuration
 local BUILTIN_MONITOR = "Color LCD"
-local EXTERNAL_MONITOR = "Thunderbolt Display"
+local EXTERNAL_MONITOR = "DELL P2715Q"
 
 
 local function hasExternalMonitor()
