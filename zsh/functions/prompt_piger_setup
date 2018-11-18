@@ -81,7 +81,7 @@ prompt_piger_setup() {
     SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
 
     # set prompt options through promptinit
-    prompt_opts=(cr subst percent)
+    prompt_opts=(cr subst percent sp)
 }
 
 prompt_piger_preview() {
