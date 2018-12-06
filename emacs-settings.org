@@ -1648,7 +1648,9 @@ Editor di regexp che evita la pazzia dei backslash
   (use-package git-commit
     :requires magit
     :ensure t
-    :pin melpa-stable))
+    :pin melpa-stable
+    :config
+    (add-hook 'git-commit-setup-hook #'git-commit-turn-on-flyspell)))
 
 ; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
 ; NOTA: questa e' la mia versione "patchata".
@@ -1935,6 +1937,8 @@ Because why not add another format to the universe?
   (projectile-global-mode +1)
   (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
         projectile-globally-ignored-directories (quote (".git" ".tox" "Godeps" "build")))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
   ;; Projectile root-searching functions can cause an infinite loop on TRAMP
   ;; connections, so disable them.
