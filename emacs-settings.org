@@ -1042,13 +1042,13 @@ Sembra interessante
 (use-package ruby-tools
   :diminish ruby-tools-mode
   :init
-  (add-hook 'enh-ruby-mode-hook #'ruby-tools-mode))
+  (add-hook 'ruby-mode-hook #'ruby-tools-mode))
 
 (use-package rubocop
   :commands rubocop-mode
   :diminish rubocop-mode
   :init
-  (add-hook 'enh-ruby-mode-hook #'rubocop-mode))
+  (add-hook 'ruby-mode-hook #'rubocop-mode))
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
@@ -1059,8 +1059,8 @@ Sembra interessante
   (("C-c r r" . inf-ruby)))
 
 (use-package robe
-  :requires (enh-ruby-mode company-mode)
-  :hook enh-ruby-mode
+  :requires (ruby-mode company-mode)
+  :hook ruby-mode
   :config
   (add-to-list 'company-backends 'company-robe))
 
@@ -1070,6 +1070,7 @@ Sembra interessante
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
   :interpreter ("ruby" . enh-ruby-mode)
+  :disabled t
   :mode
   (("\\.rb\\'" . enh-ruby-mode)
    ("\\.ru\\'" . enh-ruby-mode)
@@ -1089,6 +1090,28 @@ Sembra interessante
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
+(use-package ruby-mode
+  :interpreter ("ruby" . ruby-mode)
+  :mode
+  (("\\.rb\\'" . ruby-mode)
+   ("\\.ru\\'" . ruby-mode)
+   ("\\.rake\\'" . ruby-mode)
+   ("\\.gemspec\\'" . ruby-mode)
+   ("Gemfile\\'" . ruby-mode)
+   ("Berksfile\\'" . ruby-mode)
+   ("Rakefile\\'" . ruby-mode)
+   ("Vagrantfile\\'" . ruby-mode)
+   ("Capfile\\'" . ruby-mode))
+  :config
+  (setq ruby-insert-encoding-magic-comment nil)
+  (add-hook 'ruby-mode-hook (lambda () (subword-mode +1)))
+  ;; We never want to edit Rubinius bytecode
+  (add-to-list 'completion-ignored-extensions ".rbc"))
+
+;; (use-package ruby-electric
+;;   :disabled t
+;;   :hook (ruby-mode . ruby-electric-mode))
+
 (use-package rbenv
   :init
   ;; rbenv installed via homebrew
@@ -1096,23 +1119,24 @@ Sembra interessante
   (setq rbenv-modeline-function 'rbenv--modeline-plain)
   (setq rbenv-show-active-ruby-in-modeline nil)
   :config
-  (global-rbenv-mode))
+  (global-rbenv-mode)
+  (rbenv-use-global))
 
 (use-package bundler
-  :requires enh-ruby-mode)
+  :requires ruby-mode)
 
 (use-package rake
-  :requires enh-ruby-mode
+  :requires ruby-mode
   :config
   ;;(setq rake-completion-system 'helm))
   )
 
 (use-package rspec-mode
-  :requires enh-ruby-mode)
+  :requires ruby-mode)
 
 (use-package ruby-end
   :diminish
-  :hook (enh-ruby-mode . ruby-end-mode))
+  :hook (ruby-mode . ruby-end-mode))
 #+END_SRC
 
 **** CSS
