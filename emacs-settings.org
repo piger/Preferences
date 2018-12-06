@@ -181,11 +181,18 @@ completion backend like =company=.
 - Why no =lambda= in hooks?
   http://ergoemacs.org/emacs/emacs_avoid_lambda_in_hook.html
 
-
 *** List of interesting and ugly emacs plugins
 
 - smartparens :: non sono abituato a tutta questa comodita'
 - chef-mode :: e' praticamente inutile, aggiunge solo 2 comandi del cazzo.
+
+*** When you update Emacs
+
+Run the following, to rebuild all installed packages:
+
+#+BEGIN_EXAMPLE
+M-: (byte-recompile-directory package-user-dir nil 'force)
+#+END_EXAMPLE
 
 ** Initialization
 
@@ -370,7 +377,7 @@ To actually set the default font on GUI emacs:
 Also configure the "markup faces" (for example used by AsciiDoc); this prevents emacs from having
 crazy different font sizes for each header line.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (set-face-attribute 'markup-title-0-face nil :height 1.5)
 (set-face-attribute 'markup-title-1-face nil :height 1.4)
 (set-face-attribute 'markup-title-2-face nil :height 1.3)
@@ -384,11 +391,24 @@ crazy different font sizes for each header line.
 ***** Theme
 
 #+BEGIN_SRC emacs-lisp
-(load-theme 'base16-railscasts t)
-;; ;(load-theme 'soft-morning t)
+;; (load-theme 'base16-railscasts t)
+;; (load-theme 'spacemacs-light t)
+(load-theme 'birds-of-paradise-plus t)
+;; (load-theme 'kaolin-valley-dark t)
+;; (load-theme 'soft-morning t)
+
+;; fighetto!
 ;; (load-theme 'base16-tomorrow-night t)
-;;(load-theme 'base16-tomorrow t)
+;; (load-theme 'srcery t)
+;; (load-theme 'dracula t)
+;; dracula doesn't highlight yaml keys :(
+
+
+;; (load-theme 'base16-tomorrow t)
 ;; (load-theme 'plan9 t)
+;; (load-theme 'kaolin-aurora t)
+;; (load-theme 'ample t)
+;; (load-theme 'tao-yang t)
 #+END_SRC
 
 **** Miscellaneous configuration
@@ -554,7 +574,9 @@ crazy different font sizes for each header line.
       ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
       minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
       backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                               "backups"))))
+                                               "backups")))
+      ;; don't clutter the fs with auto-save files (they might be uploaded to chef during knife upload -_-)
+      auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
@@ -723,6 +745,14 @@ Per joinare una /region/:
         (goto-char beg)
         (while (< (point) end)
           (join-line 1)))))
+#+END_SRC
+
+To align terraform statements:
+
+#+BEGIN_SRC emacs-lisp
+(defun recker/do-fancy-equal-thingy (beg end)
+  (interactive "r")
+  (align-regexp beg end "\\(\\s-*\\)\\ =" 1 0 t))
 #+END_SRC
 
 **** Detect displays and switch font accordingly.
@@ -919,11 +949,13 @@ NOTA: provo ad usare =shellcheck=.
   (add-hook 'python-mode-hook 'moo-python-mode-hooks))
 
 (use-package anaconda-mode
+  :disabled t
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 (use-package company-anaconda
+  :disabled t
   ;;; :requires (anaconda-mode company-mode)
   :after (company anaconda-mode)
   :config
@@ -1282,7 +1314,7 @@ directory, but works for Unity projects.
   (add-hook 'csharp-mode-hook 'piger/csharp-mode-hook))
 
 (use-package omnisharp
-  :requires (csharp-mode company-mode)
+  :after csharp-mode
   :hook (csharp-mode . omnisharp-mode)
   :config
   (eval-after-load 'company
@@ -1770,6 +1802,27 @@ Because Vim is the best text editor.
 (add-hook 'rst-mode-hook 'turn-on-auto-fill)
 #+END_SRC
 
+**** AsciiDoc
+
+=adoc-mode= use those markup-faces for headers and properties, and by default those have weird
+sizes. Also you can't configure those fonts until you "activate" them, so it needs to be done in
+=:config=.
+
+#+BEGIN_SRC emacs-lisp
+(use-package adoc-mode
+  :mode "\\.adoc\\'"
+  :config
+  (set-face-attribute 'markup-title-0-face nil :height 1.5)
+  (set-face-attribute 'markup-title-1-face nil :height 1.4)
+  (set-face-attribute 'markup-title-2-face nil :height 1.3)
+  (set-face-attribute 'markup-title-3-face nil :height 1.2)
+  (set-face-attribute 'markup-title-4-face nil :height 1.1)
+  (set-face-attribute 'markup-title-5-face nil :height 1.0)
+  (set-face-attribute 'markup-secondary-text-face nil :height 1.0)
+  (set-face-attribute 'markup-meta-face nil :height 1.0)
+  (set-face-attribute 'markup-meta-hide-face nil :height 1.0))
+#+END_SRC
+
 **** yaml-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1993,7 +2046,7 @@ For web:
 ;; (eval-after-load "volatile-highlights" '(diminish 'volatile-highlights-mode))
 
 (use-package volatile-highlights
-  ;; :disabled t
+  :disabled t
   :diminish volatile-highlights-mode
   :config
   (volatile-highlights-mode t))
@@ -2540,7 +2593,8 @@ Replace =:background= with =:foreground= when needed.
          ("C-x 1" . switch-window-then-maximize)
          ("C-x 2" . switch-window-then-split-below)
          ("C-x 3" . switch-window-then-split-right)
-         ("C-x 4" . switch-window-then-delete)))
+         ("C-x 4" . switch-window-then-delete))
+  :disabled t)
 #+END_SRC
 
 **** dimmer
