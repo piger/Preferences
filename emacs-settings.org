@@ -2347,6 +2347,7 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
 
 #+BEGIN_SRC emacs-lisp
 (use-package spaceline-config
+  :disabled t
   :ensure spaceline
   :config
   (setq powerline-default-separator 'box
@@ -2365,6 +2366,15 @@ Il [[https://github.com/TheBB/spaceline][port]] della modeline di Spacemacs per 
   (spaceline-emacs-theme '(venv-el))
   ;;(spaceline-helm-mode)
   )
+#+END_SRC
+
+**** doom-modeline
+
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :defer t
+  :hook (after-init . doom-modeline-init))
 #+END_SRC
 
 **** dtrt-indent                                                        :new:
