@@ -1538,7 +1538,10 @@ che e' comodissimo. ciaone.
    ("C-h f"   . counsel-describe-function)
    ("C-h v"   . counsel-describe-variable)
    ("C-c k"   . counsel-ag)
-   ("M-y"     . counsel-yank-pop)))
+   ("M-y"     . counsel-yank-pop))
+  :config
+  ;;; ignored files in C-x C-f
+  (setq counsel-find-file-ignore-regexp "\\.pyc\\'"))
 
 (use-package swiper
   :bind
@@ -1942,6 +1945,7 @@ Because why not add another format to the universe?
   (projectile-global-mode +1)
   (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
         projectile-globally-ignored-directories (quote (".git" ".tox" "Godeps" "build")))
+  (append '(".pyc" projectile-globally-ignored-files))
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
