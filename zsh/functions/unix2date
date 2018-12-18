@@ -1,0 +1,13 @@
+# Convert a UNIX timestamp to a date.
+# Example:
+# $ unix2date 1545146449
+# Tue Dec 18 16:20:49 CET 2018
+
+# unix2date () {
+if ! which gdate > /dev/null; then
+    echo "You need gdate from coreutils!"
+    return
+fi
+
+gdate -d @$*
+# }
