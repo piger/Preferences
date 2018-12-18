@@ -70,6 +70,12 @@
     unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     unstage = reset HEAD --
     w = whatchanged
+    # semantic aliases
+    tags = tag -l
+    branches = branch -a
+    remotes = remote -v
+    uncommit = reset --soft HEAD^
+    staged = diff --cached
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
