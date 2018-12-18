@@ -888,7 +888,16 @@ compctl -K _pip_completion pip
 
 # WELCOME {{{
 # Fancy logo first
-apple-logo
+if [[ -e ~/Preferences/doc/pusheen.txt ]]; then
+    # Shows Pusheen 50% of the times
+    if [[ $(( RANDOM % 2 )) = 0 ]]; then
+        apple-logo
+    else
+        cat ~/Preferences/doc/pusheen.txt
+    fi
+else
+    apple-logo
+fi
 
 # fortune -e serve per scegliere equamente tra tutti i fortune file
 # presenti, a prescindere dalla dimensione.
