@@ -1633,8 +1633,13 @@ Editor di regexp che evita la pazzia dei backslash
 [[http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting][Perche' 70 colonne?]]
 
 #+BEGIN_SRC emacs-lisp
+(use-package magit-popup
+  :pin melpa-stable
+  :ensure t)
+
 (use-package magit
   :pin melpa-stable
+  :requires magit-popup
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
   :config
