@@ -2646,14 +2646,25 @@ Replace =:background= with =:foreground= when needed.
 
 **** dimmer
 
-Dims the non-active windows.
+Dims the non-active windows. Unfortunately it affects the command window too :(
 
 #+BEGIN_SRC emacs-lisp
 (use-package dimmer
+  :disabled t
   :config
-  (setq dimmer-fraction 0.30)
+  (setq dimmer-fraction 0.40)
   (dimmer-mode))
 #+END_SRC
+
+**** color identifiers mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package color-identifiers-mode
+  :disabled t
+  :config
+  (global-color-identifiers-mode))
+#+END_SRC
+
 
 *** Aliases
 I'd like to have more aliases.
