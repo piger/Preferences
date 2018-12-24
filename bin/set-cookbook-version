@@ -1,0 +1,40 @@
+#!/bin/bash
+# Replace (in place) a cookbook version string in a Chef environment file.
+
+set -e
+
+require() {
+    if ! command -v $1 >/dev/null; then
+        echo "You need to install '$1' for this script to work!"
+        exit 1
+    fi
+}
+
+require jq
+require sponge
+me="$(basename $0)"
+
+if [[ $# -lt 3 ]]; then
+    echo "Usage: $me <cookbook name> <version> <chef environment file>"
+    echo; echo "Example: $me postfix 1.55.3 environments/staging.json"
+    exit 1
+fi
+
+cookbook_name="$1"
+cookbook_version="$2"
+input_file="$3"
+
+if ! echo "$cookbook_version" | grep -qE '^\d+\.\d+\.\d+$'; then
+    echo "'$cookbook_version' doesn't look like a version string to me"
+    exit 1
+fi
+
+if ! test -e "$input_file"; then
+    echo "Input file does not exists"
+    exit 1
+fi
+
+jq --arg cookbook_name "$cookbook_name" \
+   --arg cookbook_version "$cookbook_version" \
+   '.cookbook_versions[$cookbook_name] = "= " + $cookbook_version' \
+   "$input_file" | sponge "$input_file"
