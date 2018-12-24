@@ -11,7 +11,6 @@
 # Settings can be customized inside ~/.zshenv.local.
 ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT=${ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT:-0}
 DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
-FORTUNE_GREETING=${FORTUNE_GREETING:-0}
 FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
 # }}}
 
@@ -387,7 +386,7 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen vpn_status apple-logo unix2date)
+useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen vpn_status apple-logo unix2date welcome)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help
@@ -887,27 +886,7 @@ compctl -K _pip_completion pip
 # }}}
 
 # WELCOME {{{
-# Fancy logo first
-if [[ -e ~/Preferences/doc/pusheen.txt ]]; then
-    # Shows Pusheen 50% of the times
-    if [[ $(( RANDOM % 2 )) = 0 ]]; then
-        apple-logo
-    else
-        cat ~/Preferences/doc/pusheen.txt
-    fi
-else
-    apple-logo
-fi
-
-# fortune -e serve per scegliere equamente tra tutti i fortune file
-# presenti, a prescindere dalla dimensione.
-if [[ $FORTUNE_GREETING == 1 ]] && (( $+commands[fortune] )); then
-    if [[ -d "$FORTUNES_DIRECTORY" ]]; then
-        print; fortune -s -e "$FORTUNES_DIRECTORY"; print
-    else
-        print; fortune -s -e -o; print
-    fi
-fi
+welcome
 # }}}
 
 # bracketed paste mode {{{

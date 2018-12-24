@@ -1,0 +1,12 @@
+# Italics in tmux on iTerm2
+
+- https://github.com/tmux/tmux/issues/377#issuecomment-212541169
+- https://github.com/tmux/tmux/blob/2.1/FAQ#L355-L383
+
+Run "tic -x tmux.terminfo", then
+
+    set -g default-terminal "tmux-256color"
+
+in .tmux.conf; set it in iTerm2 too, in the profile section.
+
+If `tic` segfaults it's because you're referencing an unexisting terminfo (e.g. "use=xterm+256setaf" on OS X).
