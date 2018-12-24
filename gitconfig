@@ -71,11 +71,14 @@
     unstage = reset HEAD --
     w = whatchanged
     # semantic aliases
-    tags = tag -l
-    branches = branch -a
+    tags = tag -l -n1
+    branches = branch -av
     remotes = remote -v
     uncommit = reset --soft HEAD^
     staged = diff --cached
+    # get the root directory of the repo
+    root = rev-parse --show-toplevel
+    current-branch = rev-parse --abbrev-ref HEAD
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
