@@ -49,6 +49,7 @@ RIGHT=(
     "reed"
     "mayweather"
     "khan"
+    "pangolin"
 )
 
 left=${LEFT[$RANDOM % ${#LEFT[@]} ] }
