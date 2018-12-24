@@ -1,0 +1,57 @@
+#!/bin/bash
+# Random names generator (Docker-like).
+
+LEFT=(
+    "mellifluo"
+    "raggiante"
+    "spilorcio"
+    "subdolo"
+    "goloso"
+    "vorace"
+    "sagace"
+    "astuto"
+    "pignolo"
+    "saputello"
+    "agile"
+    "simpatico"
+    "buffo"
+    "rotondo"
+    "insistente"
+    "ingordo"
+    "allegro"
+    "generoso"
+    "salterino"
+    "stonato"
+)
+
+RIGHT=(
+    "kirk"
+    "mccoy"
+    "scott"
+    "spock"
+    "uhura"
+    "sulu"
+    "chekov"
+    "riker"
+    "picard"
+    "laforge"
+    "troi"
+    "crusher"
+    "data"
+    "worf"
+    "obrien"
+    "guinan"
+    "sisko"
+    "janeway"
+    "archer"
+    "tpol"
+    "tucker"
+    "reed"
+    "mayweather"
+    "khan"
+)
+
+left=${LEFT[$RANDOM % ${#LEFT[@]} ] }
+right=${RIGHT[$RANDOM % ${#RIGHT[@]} ] }
+
+echo "${left}_${right}"

@@ -1,0 +1,9 @@
+#!/bin/bash
+# set the tmux session name to something non boring.
+
+set -e
+
+session_name="$(tmux display-message -p '#S')"
+if echo "$session_name" | grep -qE '^\d+$'; then
+    tmux rename-session -t "$session_name" "$(name-gen)"
+fi
