@@ -31,6 +31,12 @@ For *local* configuration sometimes you can use a `.local` file:
 - `~/.vimrc.local`
 - `~/Preferences/elisp-init/init.local.el`
 
+## Updating
+
+To update all the submodules run:
+
+    git submodule foreach git pull origin master
+
 ## Notes
 
 Some stuff is ancient, some is outdated, some I don't use anymore. Emacs, zsh and tmux are
