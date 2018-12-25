@@ -18,9 +18,9 @@ fortune-classic() {
     # presenti, a prescindere dalla dimensione.
     if (( $+commands[fortune] )); then
         if [[ -d "$FORTUNES_DIRECTORY" ]]; then
-            print; fortune -s -e "$FORTUNES_DIRECTORY"; print
+            fortune -s -e "$FORTUNES_DIRECTORY"
         else
-            print; fortune -s -e -o; print
+            fortune -s -e -o
         fi
     else
         echo "You need to install fortune!"

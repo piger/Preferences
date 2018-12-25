@@ -11,7 +11,7 @@
 # Settings can be customized inside ~/.zshenv.local.
 ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT=${ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT:-0}
 DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
-FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/Dropbox/fortunes}
+FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/dev/fortune-tvshows/fortunes}
 # }}}
 
 # NOTES {{{
