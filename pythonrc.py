@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 import sys
 import readline
 import rlcompleter
@@ -17,9 +16,11 @@ if 'libedit' in readline.__doc__:
 else:
     readline.parse_and_bind("tab: complete")
 
-# prompt colors
-sys.ps1 = "\033[0;34m>>> \033[0m"
-sys.ps2 = "\033[1;34m... \033[0m"
+# prompt colors (in a format that doesn't mess with the REPL)
+# https://stackoverflow.com/a/10953944
+# https://stackoverflow.com/a/9468954
+sys.ps1 = '\001\033[96m\002>>> \001\033[0m\002'
+sys.ps2 = '\001\033[96m\002... \001\033[0m\002'
 
 # https://docs.python.org/2/library/sys.html#sys.displayhook
 # use pprint() to print expressions
