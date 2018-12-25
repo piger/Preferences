@@ -177,7 +177,7 @@ set dictionary+=/usr/share/dict/words
 " }}}
 
 
-" GUI e colori {{{
+" GUI {{{
 " se il terminale supporta i colori, abilita sintassi colorata e ricerca
 " con highlight
 if &t_Co > 2 || has("gui_running")
@@ -192,13 +192,6 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 
-" Colori e opzioni solo per il terminale 
-if !has("gui_running")
-    " colorscheme candycode
-    " colorscheme fnaqevan
-    " colorscheme molokai
-	colorscheme xoria256
-endif
 " }}}
 
 
@@ -249,6 +242,20 @@ set rtp+=/usr/local/go/misc/vim
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
+" }}}
+
+" colori {{{
+" Vanno dopo pathogen, in caso usi pluginz
+
+if !has("gui_running")
+    " colorscheme candycode
+    " colorscheme fnaqevan
+    " colorscheme molokai
+	" colorscheme xoria256
+	set bg=dark
+	colorscheme gruvbox
+endif
+
 " }}}
 
 " Statusline {{{
