@@ -56,19 +56,21 @@ def link(dotsrc, dotdest, opts):
             if opts.force:
                 os.unlink(dest)
             else:
-                print "[*] '%s' exists and it's a symlink to '%s', not '%s'" % (
-                    dest, lpath, src)
+                print("[*] {dest} already exists and is a symlink to {lpath}, not {src}".format(
+                    dest=dest, lpath=lpath, src=src))
                 return False
         else:
             return False
     elif os.path.exists(dest):
-        print "[*] '%s' already exists" % dest
+        print("[*] '{dest}' already exists".format(dest=dest))
         return False
 
-    if not os.path.exists(os.path.dirname(dest)):
-        os.makedirs(os.path.dirname(dest), mode=0770)
+    dest_dir = os.path.dirname(dest)
+    if not os.path.exists(dest_dir):
+        print("Creating missing directory with 0770 permissions: %s" % dest_dir)
+        os.makedirs(dest_dir, mode=0770)
 
-    print "[+] %s -> %s" % (dest, src)
+    print("[+] {dest} -> {src}".format(dest=dest, src=src))
     os.symlink(src, dest)
     return True
 
@@ -90,12 +92,12 @@ def read_config(filename):
     return links
 
 def main():
+    home = os.environ.get("HOME")
     parser = optparse.OptionParser(description="Create symlinks for dotfiles.")
     parser.add_option('-f', '--force', action='store_true',
                       help="Overwrite wrong symlinks")
-    parser.add_option('-t', '--target', default=os.environ.get('HOME'),
-                      metavar='DIR',
-                      help="Destination directory (default: %s)" % os.environ.get('HOME'))
+    parser.add_option('-t', '--target', default=home, metavar='DIR',
+                      help="Destination directory (default: %s)" % home)
     parser.add_option('-s', '--source', default='.', metavar='DIR',
                       help="Source directory (default: .)")
     parser.add_option('-c', '--config', default='dotfiles.cfg', metavar='FILE',
@@ -103,7 +105,7 @@ def main():
     opts, args = parser.parse_args()
 
     if not os.path.exists(opts.config):
-        parser.error("Cannot find configuration file %s." % opts.config)
+        parser.error("Cannot find configuration file: %s" % opts.config)
 
     for dotsrc, dotdest in read_config(opts.config):
         link(dotsrc, dotdest, opts)
