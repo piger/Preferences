@@ -1737,9 +1737,10 @@ Let's try diff-hl since git-gutter leave stale indicators on the windows.
 
 #+BEGIN_SRC emacs-lisp
 (use-package diff-hl
-  :config
-  (add-hook 'prog-mode-hook 'diff-hl-flydiff-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+  :hook ((prog-mode . diff-hl-mode)
+         ;;; this enable the "live" mode, similar to flydiff.
+         (prog-mode . diff-hl-flydiff-mode)
+         (magit-post-refresh . diff-hl-magit-post-refresh)))
 #+END_SRC
 
 ***** git-timemachine
