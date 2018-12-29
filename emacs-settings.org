@@ -1528,6 +1528,8 @@ che e' comodissimo. ciaone.
   (ivy-mode 1)
   :init
   (setq ivy-use-virtual-buffers t
+        ;;; to create a directory when ivy is stubborn, either press C-M-j or enable this:
+        ivy-use-selectable-prompt t
         ivy-count-format "(%d/%d) "
         projectile-completion-system 'ivy))
   
@@ -1541,14 +1543,15 @@ che e' comodissimo. ciaone.
    ("C-c k"   . counsel-ag)
    ("M-y"     . counsel-yank-pop))
   :config
+  (counsel-mode 1)
   ;;; ignored files in C-x C-f
   (setq counsel-find-file-ignore-regexp "\\.pyc\\'"))
 
 (use-package swiper
   :bind
   ;;; NOTE: those are not the default bindings
-  (("C-M-s" . swiper)
-   ("C-M-r" . swiper)))
+  (("C-s" . swiper)
+   ("C-r" . swiper)))
 
 (use-package smex
   :disabled
