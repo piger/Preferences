@@ -615,14 +615,12 @@ Including indent-buffer, which should not be called automatically on save."
   '("Press <C-c o> to open a file with external program."
     "Access the official Emacs manual by pressing <C-h r>."
     "Press <C-x v v> to do the next logical version control operation"
-    "Press <C-c h> to run helm-mini, your main entry point for opening files"
     "Magit is available with <C-x g>"
     "Press <j u> in Magit to jump to unstaged files"
     "disable-theme can unload a theme"
-    "In helm-mini you can search for a @pattern inside a file; M-s to see context"
     "<C-:> is avy (the new ace-jump)"
-    "<M-s o> is helm-occur which is a nice thing to use"
-    "<C-c p s s> runs helm-projectile-ag"
+    "<M-s o> is occur which is a nice thing to use, especially with ivy/counsel!"
+    "<C-c p s s> runs ag on the projectile project"
     "<C-x j> to switch window layout (transpose-frame)"
     "<C-h l> or view-lossage is the command to know How Did I Get There?"
     "(inf-ruby) is nicer than opening irb in a terminal window"
@@ -1163,14 +1161,14 @@ Sembra interessante
 **** Javascript
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-js2-mode-hooks ()
+(defun piger/js2-mode-hooks ()
   (subword-mode +1)
   ;;; (set-variable 'indent-tabs-mode nil)
   (setq js-indent-level 4
         js2-basic-offset 4))
 
 ;; I used this while working with Ember.js
-(defun moo-ember-js2-hook ()
+(defun piger/ember-js2-hook ()
   (add-hook 'js2-init-hook
             (lambda ()
               (when (or (string-match-p "zAFS" (buffer-file-name))
@@ -1185,7 +1183,7 @@ Sembra interessante
   :interpreter ("node" . js2-mode)
   :disabled t
   :config
-  (add-hook 'js2-mode-hook 'moo-js2-mode-hooks)
+  (add-hook 'js2-mode-hook 'piger/js2-mode-hooks)
   (setq-default js2-global-externs
                 '("module", "require", "console", "jQuery", "$")))
 
@@ -1194,7 +1192,7 @@ Sembra interessante
   :mode "\\.js\\'"
   :interpreter ("node" . rjsx-mode)
   :config
-  (add-hook 'rjsx-mode-hook 'moo-js2-mode-hooks))
+  (add-hook 'rjsx-mode-hook 'piger/js2-mode-hooks))
 #+END_SRC
 
 **** json
@@ -1232,7 +1230,7 @@ $ npm install jsonlint -g
 per ora PARE di si (24/02/2017). Vediamo...
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-json-mode-hooks ()
+(defun piger/json-mode-hooks ()
   (flycheck-mode +1)
   ;(setq eldoc-documentation-function 'jsons-print-path)
                                         ;(eldoc-mode +1))
@@ -1242,13 +1240,13 @@ per ora PARE di si (24/02/2017). Vediamo...
   :ensure t
   :mode "\\.json\\'"
   :config
-  (add-hook 'json-mode-hook 'moo-json-mode-hooks))
+  (add-hook 'json-mode-hook 'piger/json-mode-hooks))
 #+END_SRC
 
 **** web
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-web-mode-hooks ()
+(defun piger/web-mode-hooks ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (yas-minor-mode +1)
   (whitespace-cleanup-mode +1))
@@ -1264,7 +1262,7 @@ per ora PARE di si (24/02/2017). Vediamo...
         '(("go" . "/go/src/.*\\.html\\'")
           ("django" . "/dev/.*/templates/.*\\.html\\'")))
   :config
-  (add-hook 'web-mode-hook 'moo-web-mode-hooks)
+  (add-hook 'web-mode-hook 'piger/web-mode-hooks)
   (setq web-mode-enable-current-element-highlight t
         web-mode-enable-auto-quoting -1
         web-mode-code-indent-offset 4
@@ -1860,14 +1858,14 @@ sizes. Also you can't configure those fonts until you "activate" them, so it nee
 **** yaml-mode
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-yaml-mode-hooks ()
+(defun piger/yaml-mode-hooks ()
   (flycheck-mode +1))
 
 (use-package yaml-mode
   :ensure t
   :mode "\\.ya?ml\\'"
   :config
-  (add-hook 'yaml-mode-hook 'moo-yaml-mode-hooks))
+  (add-hook 'yaml-mode-hook 'piger/yaml-mode-hooks))
 #+END_SRC
 
 **** toml-mode
@@ -1894,7 +1892,7 @@ Because why not add another format to the universe?
 ***** TODO this must be moved!
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-prog-mode-defaults ()
+(defun piger/prog-mode-defaults ()
   "Default coding hook, useful with any programming language"
   (rainbow-delimiters-mode t)
   (company-mode t)
@@ -1903,10 +1901,10 @@ Because why not add another format to the universe?
   (which-function-mode t)
   (diminish 'subword-mode))
 
-(setq moo-prog-mode-hook 'moo-prog-mode-defaults)
+(setq piger/prog-mode-hook 'piger/prog-mode-defaults)
 
 (add-hook 'prog-mode-hook (lambda ()
-                            (run-hooks 'moo-prog-mode-hooks)))
+                            (run-hooks 'piger/prog-mode-hooks)))
 
 ;; spell check comments and strings
 ; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
