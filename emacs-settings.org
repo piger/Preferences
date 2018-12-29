@@ -931,20 +931,23 @@ NOTA: provo ad usare =shellcheck=.
 **** Python
 
 #+BEGIN_SRC emacs-lisp
-(defun moo-python-mode-hooks ()
+(defun piger/python-mode-hooks ()
   (subword-mode +1)
   (show-paren-mode +1)
   (flycheck-mode +1)
   (company-mode +1)
   (eldoc-mode +1)
+  (elpy-enable)
   ;; unfuck electric indentation
   (setq electric-indent-chars '(?\n)))
+
+;;; elpy requires the 'jedi' python package
+(use-package elpy)
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :config
-  (add-hook 'python-mode-hook 'moo-python-mode-hooks))
+  :hook (python-mode . piger/python-mode-hooks))
 
 (use-package anaconda-mode
   :disabled t
