@@ -2617,10 +2617,14 @@ Replace =:background= with =:foreground= when needed.
 **** all-the-icons
 
 #+BEGIN_SRC emacs-lisp
-(use-package all-the-icons)
+(use-package all-the-icons
+  :config
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package all-the-icons-ivy
+    :config
+    (all-the-icons-ivy-setup)))
 #+END_SRC
 
 **** helpful
