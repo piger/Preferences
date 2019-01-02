@@ -28,7 +28,7 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize nil)
+(package-initialize)
 
 (when (>= emacs-major-version 25)
   (setq package-archive-priorities
@@ -73,7 +73,22 @@
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   ;; (stolen from prelude)
   (if (fboundp 'set-fontset-font)
-      (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
+      (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
+
+  ;; try to use GNU ls from coreutils (installed with homebrew)
+  (let ((gnu-ls "/usr/local/bin/gls"))
+    (when (file-exists-p gnu-ls)
+      (setq insert-directory-program gnu-ls)
+      (setq dired-listing-switches "-aBhl --group-directories-first")))
+
+  ;; non so se serve anche questo:
+  ;; (setq ls-lisp-use-insert-directory-program t)  ;; use external ls
+
+  ;; default browser
+  (setq browse-url-browser-function 'browse-url-default-macosx-browser)
+
+  ;; in dired use the trash
+  (setq delete-by-moving-to-trash t))
 
 ;; Themes
 (use-package poet
@@ -81,6 +96,20 @@
   :disabled t
   :config
   (load-theme 'poet t))
+
+(use-package base16-theme
+  :ensure t
+  :disabled t)
+
+(use-package dracula-theme
+  :ensure t
+  :disabled t)
+
+(use-package spacemacs-theme
+  :ensure t
+  :disabled t
+  :config
+  (load-theme 'spacemacs-light t))
 
 (use-package birds-of-paradise-plus-theme
   :ensure t
@@ -210,7 +239,7 @@
 
 (use-package fortune-cookie
   :config
-  (setq fortune-cookie-fortune-args (expand-file-name "~/Dropbox/fortunes")
+  (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))
         fortune-cookie-cowsay-enable nil)
   (fortune-cookie-mode))
 
@@ -575,12 +604,14 @@ buffer is not visiting a file."
   (when window-system
     (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
       [0 24 24 24 24 24 24 0 0 24 24 0 0 0 0 0 0]))
+
   (defun flycheck-foodcritic-porcodio ()
     "avoid issue with use-package macro expansion."
     (let ((parent-dir (f-parent default-directory)))
         (or
          (locate-dominating-file parent-dir "recipes")
          (locate-dominating-file parent-dir "cookbooks"))))
+
   (flycheck-define-checker chef-foodcritic
     "A Chef cookbooks syntax checker using Foodcritic."
     :command ("foodcritic" source)
@@ -589,6 +620,7 @@ buffer is not visiting a file."
     :modes (enh-ruby-mode ruby-mode)
     :predicate flycheck-foodcritic-porcodio
     :next-checkers ((warnings-only . ruby-rubocop)))
+
   (global-flycheck-mode))
 
 (use-package ediff
@@ -629,7 +661,13 @@ buffer is not visiting a file."
   ;;; :requires (anaconda-mode company-mode)
   :after (company anaconda-mode)
   :config
-  (add-to-list 'company-backends 'company-anaconda))
+  (with-eval-after-load 'company
+    '(add-to-list 'company-backends 'company-anaconda)))
+
+;; IPython / Jupiter notebook support
+;; https://github.com/millejoh/emacs-ipython-notebook
+(use-package ein
+  :commands (ein:jupyter-server-start ein:notebooklist-login))
 
 ;; go
 ;; requires a bunch of tools:
@@ -654,7 +692,8 @@ buffer is not visiting a file."
   :config
   (defun my-go-mode-hook ()
     (add-hook 'before-save-hook 'gofmt-before-save nil t)
-    (set (make-local-variable 'company-backends) '(company-go))
+    (with-eval-after-load 'company
+      '(add-to-list 'company-backends 'company-go))
     (go-eldoc-setup)
     (setq tab-width 2)
     (local-set-key (kbd "C-c C-k") 'godoc)
@@ -679,11 +718,14 @@ buffer is not visiting a file."
   :commands (go-guru-hl-identifier-mode)
   :requires go-mode)
 
+(use-package rust-mode
+  :mode "\\.rs\\'")
+
 ;; Collection of handy functions for ruby-mode
 ;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
   :diminish ruby-tools-mode
-  :hook (ruby-mode . ruby-tools-mode))
+  :hook ruby-mode)
 
 (use-package rubocop
   :commands rubocop-mode
@@ -699,29 +741,26 @@ buffer is not visiting a file."
   (("C-c r r" . inf-ruby)))
 
 (use-package robe
-  :requires (ruby-mode company-mode)
+  :after (ruby company)
   :hook ruby-mode
   :config
-  (add-to-list 'company-backends 'company-robe))
-
-(defun piger/ruby-mode-hooks ()
-  (subword-mode +1))
+  (with-eval-after-load 'company
+    '(add-to-list 'company-backends 'company-robe)))
 
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
-  :interpreter ("ruby" . enh-ruby-mode)
+  :interpreter "ruby"
   :disabled t
-  :mode
-  (("\\.rb\\'" . enh-ruby-mode)
-   ("\\.ru\\'" . enh-ruby-mode)
-   ("\\.rake\\'" . enh-ruby-mode)
-   ("\\.gemspec\\'" . enh-ruby-mode)
-   ("Gemfile\\'" . enh-ruby-mode)
-   ("Berksfile\\'" . enh-ruby-mode)
-   ("Rakefile\\'" . enh-ruby-mode)
-   ("Vagrantfile\\'" . enh-ruby-mode)
-   ("Capfile\\'" . enh-ruby-mode))
-  :hook (enh-ruby-mode . piger/ruby-mode-hooks)
+  :mode ("\\.rb\\'"
+         "\\.ru\\'"
+         "\\.rake\\'"
+         "\\.gemspec\\'"
+         "Gemfile\\'"
+         "Berksfile\\'"
+         "Rakefile\\'"
+         "Vagrantfile\\'"
+         "Capfile\\'")
+  :hook (enh-ruby-mode . subword-mode)
   :init
   (setq ruby-insert-encoding-magic-comment nil)
   (setq enh-ruby-indent-level 2
@@ -731,20 +770,20 @@ buffer is not visiting a file."
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
 (use-package ruby-mode
-  :interpreter ("ruby" . ruby-mode)
-  :mode
-  (("\\.rb\\'" . ruby-mode)
-   ("\\.ru\\'" . ruby-mode)
-   ("\\.rake\\'" . ruby-mode)
-   ("\\.gemspec\\'" . ruby-mode)
-   ("Gemfile\\'" . ruby-mode)
-   ("Berksfile\\'" . ruby-mode)
-   ("Rakefile\\'" . ruby-mode)
-   ("Vagrantfile\\'" . ruby-mode)
-   ("Capfile\\'" . ruby-mode))
-  :hook (ruby-mode . piger/ruby-mode-hooks)
+  :interpreter "ruby"
+  :mode ("\\.rb\\'"
+         "\\.ru\\'"
+         "\\.rake\\'"
+         "\\.gemspec\\'"
+         "Gemfile\\'"
+         "Berksfile\\'"
+         "Rakefile\\'"
+         "Vagrantfile\\'"
+         "Capfile\\'")
+  :hook (ruby-mode . subword-mode)
+  :custom
+  (ruby-insert-encoding-magic-comment nil)
   :config
-  (setq ruby-insert-encoding-magic-comment nil)
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
@@ -763,20 +802,17 @@ buffer is not visiting a file."
   (rbenv-use-global))
 
 (use-package bundler
-  :requires ruby-mode)
+  :commands (bundle-check bundle-open bundle-update bundle-console bundle-install))
 
 (use-package rake
-  :requires ruby-mode
-  :config
-  ;;(setq rake-completion-system 'helm))
-  )
+  :commands rake)
 
 (use-package rspec-mode
   :requires ruby-mode)
 
 (use-package ruby-end
   :diminish
-  :hook (ruby-mode . ruby-end-mode))
+  :hook ruby-mode)
 
 (use-package css-mode
   :ensure t
@@ -836,10 +872,10 @@ buffer is not visiting a file."
 
 (use-package web-mode
   :ensure t
-  :mode (("\\.erb\\'" . web-mode)
-         ("\\.hbs\\'" . web-mode)
-         ("\\.html?\\'" . web-mode)
-         ("\\.j2\\'" . web-mode))
+  :mode ("\\.erb\\'"
+         "\\.hbs\\'"
+         "\\.html?\\'"
+         "\\.j2\\'")
   :init
   (setq web-mode-engines-alist
         '(("go" . "/go/src/.*\\.html\\'")
@@ -1006,6 +1042,8 @@ buffer is not visiting a file."
   (global-set-key (kbd "C-c o") 'helm-swoop))
 
 (use-package ivy
+  :pin melpa
+  :ensure t
   :diminish
   :demand t
   :bind (("C-x b" . ivy-switch-buffer)
@@ -1020,6 +1058,8 @@ buffer is not visiting a file."
   (ivy-mode 1))
 
 (use-package counsel
+  :ensure t
+  :pin melpa
   :after ivy
   :bind
   (("M-x"     . counsel-M-x)
@@ -1098,11 +1138,11 @@ buffer is not visiting a file."
 
 (use-package magit-popup
   :pin melpa-stable
+  :defer t
   :ensure t)
 
 (use-package magit
   :pin melpa-stable
-  :requires magit-popup
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
   :config
@@ -1114,29 +1154,24 @@ buffer is not visiting a file."
   (global-magit-file-mode 1)
 
   (use-package git-commit
-    :requires magit
     :ensure t
     :pin melpa-stable
-    :hook (git-commit-setup . git-commit-turn-on-flyspell)))
+    :hook (git-commit-setup . git-commit-turn-on-flyspell))
 
-; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
-; NOTA: questa e' la mia versione "patchata".
-(defun endless/visit-pull-request-url ()
-  "Visit the current branch's PR on Github."
-  (interactive)
-  (browse-url
-   (format "https://github.com/%s/pull/new/%s"
-           (replace-regexp-in-string
-            "\\`.+github\\.com:\\(.+\\)\\.git\\'" "\\1"
-            (magit-get "remote"
-                       (magit-get-remote)
-                       "url"))
-           (or (magit-get-current-branch)
-                    (user-error "No remote branch")))))
+  ;; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
+  ;; NOTA: questa e' la mia versione "patchata".
+  (defun endless/visit-pull-request-url ()
+    "Visit the current branch's PR on Github."
+    (interactive)
+    (browse-url
+     (format "https://github.com/%s/pull/new/%s"
+             (replace-regexp-in-string
+              "\\`.+github\\.com:\\(.+\\)\\(\\.git\\)?\\'" "\\1"
+              (magit-get "remote" (magit-get-remote) "url"))
+             (or (magit-get-current-branch)
+                 (user-error "No remote branch")))))
 
-(eval-after-load 'magit
-  '(define-key magit-mode-map "v"
-     #'endless/visit-pull-request-url))
+  (define-key magit-mode-map "v" #'endless/visit-pull-request-url))
 
 (use-package git-gutter-fringe
   :diminish git-gutter-mode
@@ -1178,16 +1213,18 @@ buffer is not visiting a file."
 (use-package git-link
   :bind (("C-x v b" . git-link)))
 
-;; I've followed the installation guide:
-;; http://www.gnu.org/software/emacs/manual/html_node/dired-x/Installation.html#Installation
-(add-hook 'dired-load-hook
-          (lambda ()
-            (load "dired-x")
-            ))
-(add-hook 'dired-mode-hook
-          (lambda ()
-            (hl-line-mode +1)
-            ))
+(use-package magithub
+  :after magit
+  :disabled t
+  :config
+  (magithub-feature-autoinject t))
+
+(use-package dired
+  :bind ("C-x d" . dired)
+  :hook (dired-mode . hl-line-mode))
+
+(use-package dired-x
+  :after dired)
 
 ;; This is useful to mark /things/ inside markers, for example the text inside a quoted string or
 ;; inside some parenthesis.
@@ -1252,11 +1289,19 @@ buffer is not visiting a file."
   :hook (yaml-mode . flycheck-mode))
 
 (use-package toml-mode
+  :ensure t
   :mode "\\.toml\\'")
 
+(use-package terraform-mode
+  :mode "\\.tf\\'"
+  :hook (terraform-mode . terraform-format-on-save-mode))
+
+(use-package hcl-mode
+  :mode "\\.hcl\\'")
+
 (use-package nginx-mode
-  :commands nginx-mode
-  :ensure t)
+  :ensure t
+  :commands nginx-mode)
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
 (when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
@@ -1306,13 +1351,13 @@ buffer is not visiting a file."
   :init
   ;; like here: https://github.com/bbatsov/emacs.d/blob/8962c0f09abd261f76f00afb64408fd658eb3028/init.el#L286
   (setq projectile-completion-system 'ivy)
+  :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  (projectile-global-mode +1)
+  (projectile-mode +1)
   (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
         projectile-globally-ignored-directories (quote (".git" ".tox" "Godeps" "build")))
-  (append '(".pyc" projectile-globally-ignored-files))
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (add-to-list 'projectile-globally-ignored-files ".pyc")
+  (add-to-list 'projectile-globally-ignored-files "__pycache__")
   ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
   ;; Projectile root-searching functions can cause an infinite loop on TRAMP
   ;; connections, so disable them.
@@ -1323,7 +1368,7 @@ buffer is not visiting a file."
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
 (use-package helm-projectile
-  :disabled
+  :disabled t
   :config
   (helm-projectile-on))
 
@@ -1337,9 +1382,11 @@ buffer is not visiting a file."
                 (ibuffer-do-sort-by-alphabetic)))))
 
 (use-package counsel-projectile
+  :after (counsel projectile)
+  :pin melpa
   :ensure t
   :config
-  (counsel-projectile-mode))
+  (counsel-projectile-mode 1))
 
 (use-package company
   :ensure t
@@ -1353,11 +1400,11 @@ buffer is not visiting a file."
   ;;   (company-quickhelp-mode 1)))
 
 (use-package company-go
-  :requires company
+  :after (company go)
   :ensure t)
 
 (use-package company-web
-  :requires company
+  :after (company web)
   :ensure t)
 
 (use-package apache-mode
@@ -1507,62 +1554,55 @@ buffer is not visiting a file."
          ("M-g w" . avy-goto-word-1)))
 
 ;; Org mode
-; general setup
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-c\M-p" 'org-babel-previous-src-block)
-(global-set-key "\C-c\M-n" 'org-babel-next-src-block)
-(global-set-key "\C-cS" 'org-babel-previous-src-block)
-(global-set-key "\C-cs" 'org-babel-next-src-block)
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)
+         ("C-c M-p" . org-babel-previous-src-block)
+         ("C-c M-n" . org-babel-next-src-block)
+         ("C-c S" . org-babel-previous-src-block)
+         ("C-c s" . org-babel-next-src-block))
+  :hook (org-mode . turn-on-auto-fill)
+  :config
+  ;; capture-file
+  (setq org-directory "~/Dropbox/org"
+        org-default-notes-file (concat org-directory "/notes.org")
+        ;; org-todo-keywords '((sequence "TODO" "VERIFY" "|" "DONE" "DELEGATED")))
+        ;; add timestamp to closed TODO entries
+        org-log-done 'time
 
-; capture-file
-(setq org-directory "~/Dropbox/org")
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-;; (setq org-todo-keywords
-;;       '((sequence "TODO" "VERIFY" "|" "DONE" "DELEGATED")))
-(setq org-tags-alist
-      '((sequence "work" "personal" "computer" "blog")))
-;; mobile org
-(setq org-mobile-directory "~/Dropbox/org/mobile")
-(setq org-mobile-inbox-for-pull (concat org-directory "/index.org"))
+        ;; highlight code blocks
+        org-src-fontify-natively t
 
-;; add timestamp to closed TODO entries
-(setq org-log-done 'time)
+        ;; turn off source blocks default indentation
+        org-edit-src-content-indentation 0)
 
-;; highlight code blocks
-(setq org-src-fontify-natively t)
+  ;; Disable flycheck in org src blocks
+  ;; http://emacs.stackexchange.com/questions/16766/how-to-turn-off-emacs-lisp-checkdoc-of-flycheck-when-edit-source-block-in-org
+  (defun piger/disable-flycheck-in-org-src-block ()
+    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-;; turn off source blocks default indentation
-(setq org-edit-src-content-indentation 0)
+  (add-hook 'org-src-mode-hook 'piger/disable-flycheck-in-org-src-block)
 
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
+  ;; TODO states
+  ;; the first letter is the quick key
+  ;; ! means "add timestamp"
+  ;; @ means "add timestamp and note"
+  ;; f@/! means "add timestamp and note and timestamp when leaving this state"
+  (setq org-todo-keywords
+        (quote
+         ((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w@/!)"
+                    "|" "DONE(d!)" "DEFERRED(f@/!)" "CANCELLED(c@)"))))
 
-;; Disable flycheck in org src blocks
-;; http://emacs.stackexchange.com/questions/16766/how-to-turn-off-emacs-lisp-checkdoc-of-flycheck-when-edit-source-block-in-org
-(defun piger/disable-flycheck-in-org-src-block ()
-  (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-
-(add-hook 'org-src-mode-hook 'piger/disable-flycheck-in-org-src-block)
-
-;; TODO states
-;; the first letter is the quick key
-;; ! means "add timestamp"
-;; @ means "add timestamp and note"
-;; f@/! means "add timestamp and note and timestamp when leaving this state"
-(setq org-todo-keywords
-      (quote
-       ((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w@/!)"
-                  "|" "DONE(d!)" "DEFERRED(f@/!)" "CANCELLED(c@)"))))
-
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "brown1" :weight bold)
-              ("INPROGRESS" :foreground "deep sky blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("DEFERRED" :foreground "goldenrod" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold))))
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "brown1" :weight bold)
+                ("INPROGRESS" :foreground "deep sky blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("DEFERRED" :foreground "goldenrod" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)))))
 
 (use-package smart-mode-line
   :disabled t
@@ -1572,7 +1612,6 @@ buffer is not visiting a file."
   (sml/setup))
 
 (use-package spaceline-config
-  :disabled t
   :ensure spaceline
   :config
   (setq powerline-default-separator 'box
@@ -1590,8 +1629,11 @@ buffer is not visiting a file."
   ;;;(spaceline-compile)
   (spaceline-emacs-theme '(venv-el)))
 
+;; is this pinging github all the time??
+;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
   :ensure t
+  :disabled t
   :defer t
   :hook (after-init . doom-modeline-init))
 
@@ -1604,8 +1646,7 @@ buffer is not visiting a file."
 ;; https://github.com/jscheid/dtrt-indent is a minor mode which guesses the indentation offset of a
 ;; source file and adjust the corresponding configuration in Emacs.
 (use-package dtrt-indent
-  :commands drt-indent-mode
-  :ensure t)
+  :commands drt-indent-mode)
 
 ;; which-key whill show a list of possible completion for the key binding typed so far; it's very
 ;; useful for less used modes (like Org), for example I can press =C-c= and then read the list of
@@ -1663,11 +1704,15 @@ buffer is not visiting a file."
          ("M-<backspace>" . nv-delete-back)))
 
 (use-package all-the-icons
+  :ensure t
   :config
   (use-package all-the-icons-dired
+    :ensure t
     :hook (dired-mode . all-the-icons-dired-mode))
 
   (use-package all-the-icons-ivy
+    :ensure t
+    :after ivy
     :config
     (all-the-icons-ivy-setup)))
 
@@ -1701,22 +1746,6 @@ buffer is not visiting a file."
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
-
-(when *is-a-mac*
-  ;; try to use GNU ls from coreutils (installed with homebrew)
-  (let ((gnu-ls "/usr/local/bin/gls"))
-    (when (file-exists-p gnu-ls)
-      (setq insert-directory-program gnu-ls)
-      (setq dired-listing-switches "-aBhl --group-directories-first")))
-
-  ;; non so se serve anche questo:
-  ;; (setq ls-lisp-use-insert-directory-program t)  ;; use external ls
-
-  ;; default browser
-  (setq browse-url-browser-function 'browse-url-default-macosx-browser)
-
-  ;; in dired use the trash
-  (setq delete-by-moving-to-trash t))
 
 ;; load the local settings file
 (let ((piger/local-config
