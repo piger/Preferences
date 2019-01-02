@@ -99,10 +99,16 @@
 
 (use-package base16-theme
   :ensure t
+  :config
+  (load-theme 'base16-railscasts t)
+  ;; (load-theme 'base16-tomorrow-night t)
+  ;; (load-theme 'base16-tomorrow t)
   :disabled t)
 
 (use-package dracula-theme
   :ensure t
+  :config
+  (load-theme 'dracula t)
   :disabled t)
 
 (use-package spacemacs-theme
@@ -156,7 +162,7 @@
   (savehist-mode 1))
 
 ;; font
-(set-default-font "Mononoki-12")
+(set-frame-font "Mononoki-12")
 
 ;; save bookmarks every time a bookmark is added
 (setq bookmark-save-flag 1)
@@ -239,8 +245,9 @@
 
 (use-package fortune-cookie
   :config
-  (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))
-        fortune-cookie-cowsay-enable nil)
+  (when (file-exists-p "~/Dropbox/fortunes")
+    (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))))
+  (setq fortune-cookie-cowsay-enable nil)
   (fortune-cookie-mode))
 
 ;; line num
@@ -347,7 +354,7 @@ Including indent-buffer, which should not be called automatically on save."
 ;; shutdown emacs server
 ;; http://www.emacswiki.org/emacs/EmacsAsDaemon
 (defun shutdown-server ()
-  "Save buffers, Quit and Shutdown (kill) server"
+  "Save buffers, Quit and Shutdown (kill) server."
   (interactive)
   (save-some-buffers)
   (kill-emacs))
@@ -568,11 +575,10 @@ buffer is not visiting a file."
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; Extra scripts
-(when (file-exists-p "~/Preferences/elisp")
-  (add-to-list 'load-path "~/Preferences/elisp")
-
-  ; nagios-mode (da elisp locale)
-  (autoload 'nagios-mode "nagios-mode" nil t))
+(use-package nagios-mode
+  :commands nagios-mode
+  :load-path "~/Preferences/elisp"
+  :if (file-exists-p "~/Preferences/elisp"))
 
 ;; Programming
 (use-package subword
@@ -830,37 +836,30 @@ buffer is not visiting a file."
   :requires css-mode
   :ensure t)
 
-(defun piger/js2-mode-hooks ()
-  (subword-mode +1)
-  ;;; (set-variable 'indent-tabs-mode nil)
+(use-package js2-mode
+  :ensure t
+  :mode "\\.js\\'"
+  :interpreter "node"
+  :disabled t
+  :hook (js2-mode . subword-mode)
+  :config
+  (setq-default js2-global-externs
+                '("module", "require", "console", "jQuery", "$"))
   (setq js-indent-level 4
-        js2-basic-offset 4))
-
-;; I used this while working with Ember.js
-(defun piger/ember-js2-hook ()
+        js2-basic-offset 4)
   (add-hook 'js2-init-hook
             (lambda ()
-              (when (or (string-match-p "zAFS" (buffer-file-name))
-                        (string-match-p "LogIntelligence" (buffer-file-name)))
+              (when (or (string-match-p "ProjectName1" (buffer-file-name))
+                        (string-match-p "ProjectName2" (buffer-file-name)))
                 (mapc (lambda (x)
                         (add-to-list 'js2-additional-externs x))
                       (list "Ember" "DS" "App"))))))
 
-(use-package js2-mode
-  :ensure t
-  :mode ("\\.js$" . js2-mode)
-  :interpreter ("node" . js2-mode)
-  :disabled t
-  :hook (js2-mode . piger/js2-mode-hooks)
-  :config
-  (setq-default js2-global-externs
-                '("module", "require", "console", "jQuery", "$")))
-
 (use-package rjsx-mode
   :ensure t
   :mode "\\.js\\'"
-  :interpreter ("node" . rjsx-mode)
-  :hook (rjsx-mode . piger/js2-mode-hooks))
+  :interpreter "node"
+  :hook (rjsx-mode . subword-mode))
 
 (use-package json-mode
   :ensure t
@@ -1303,14 +1302,21 @@ buffer is not visiting a file."
   :ensure t
   :commands nginx-mode)
 
+(use-package ssh-config-mode
+  :mode "\\.ssh/config\\'"
+  :ensure t)
+
+(use-package systemd
+  :mode "\\.service\\'")
+
 ;; gettext on OS X (homebrew) ships with additional elisp files
-(when (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
-  (use-package po-mode
-    :load-path "/usr/local/opt/gettext/share/emacs/site-lisp"
-    :mode ("\\.po\\'\\|\\.po\\." . po-mode)))
+(use-package po-mode
+  :if (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
+  :load-path "/usr/local/opt/gettext/share/emacs/site-lisp"
+  :mode "\\.po\\'\\|\\.po\\.")
 
 (defun piger/prog-mode-defaults ()
-  "Default coding hook, useful with any programming language"
+  "Default coding hook, useful with any programming language."
   (rainbow-delimiters-mode t)
   (company-mode t)
   (prelude-font-lock-comment-annotations)
@@ -1743,6 +1749,9 @@ buffer is not visiting a file."
   :disabled t
   :config
   (global-color-identifiers-mode))
+
+(use-package fireplace
+  :commands fireplace)
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
