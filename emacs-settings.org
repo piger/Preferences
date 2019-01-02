@@ -803,9 +803,25 @@ layout which permits accented characters.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-;; hippie-expand al posto di dabbrev-expand
+;; hippie-expand al posto di dabbrev-expand dabbrev
 ;; <2015-07-05 Sun> lo disabilito perché mi sembra esagerato.
-;(global-set-key (kbd "M-/") 'hippie-expand)
+;; (global-set-key (kbd "M-/") 'hippie-expand)
+
+;; hippie expand is dabbrev expand on steroids
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
+
+;; use hippie-expand instead of dabbrev
+(global-set-key (kbd "M-/") #'hippie-expand)
+;; (global-set-key (kbd "s-/") #'hippie-expand)
 
 ;;; swap default search mode to regexp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
@@ -875,6 +891,9 @@ See also the [[http://www.flycheck.org/en/latest/languages.html#flycheck-languag
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :ensure t
+  :commands (flycheck-mode
+             flycheck-next-error
+             flycheck-previous-error)
   :config
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
@@ -931,23 +950,24 @@ NOTA: provo ad usare =shellcheck=.
 **** Python
 
 #+BEGIN_SRC emacs-lisp
-(defun piger/python-mode-hooks ()
-  (subword-mode +1)
-  (show-paren-mode +1)
-  (flycheck-mode +1)
-  (company-mode +1)
-  (eldoc-mode +1)
-  (elpy-enable)
-  ;; unfuck electric indentation
-  (setq electric-indent-chars '(?\n)))
-
 ;;; elpy requires the 'jedi' python package
-(use-package elpy)
+(use-package elpy
+  :commands elpy-enable)
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :hook (python-mode . piger/python-mode-hooks))
+  :hook (python-mode . my-python-mode-hook)
+  :config
+  (defun my-python-mode-hook ()
+    (subword-mode +1)
+    (show-paren-mode +1)
+    (flycheck-mode +1)
+    (company-mode +1)
+    (eldoc-mode +1)
+    (elpy-enable)
+    ;; unfuck electric indentation
+    (setq electric-indent-chars '(?\n))))
 
 (use-package anaconda-mode
   :disabled t
@@ -1042,14 +1062,12 @@ Sembra interessante
 ;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
   :diminish ruby-tools-mode
-  :init
-  (add-hook 'ruby-mode-hook #'ruby-tools-mode))
+  :hook (ruby-mode . ruby-tools-mode))
 
 (use-package rubocop
   :commands rubocop-mode
   :diminish rubocop-mode
-  :init
-  (add-hook 'ruby-mode-hook #'rubocop-mode))
+  :hook (ruby-mode . rubocop-mode))
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
@@ -1530,9 +1548,7 @@ che e' comodissimo. ciaone.
   (setq ivy-use-virtual-buffers t
         ;;; to create a directory when ivy is stubborn, either press C-M-j or enable this:
         ivy-use-selectable-prompt t
-        ivy-count-format "(%d/%d) "
-        projectile-completion-system 'ivy))
-  
+        ivy-count-format "(%d/%d) "))
 
 (use-package counsel
   :bind
@@ -1541,7 +1557,10 @@ che e' comodissimo. ciaone.
    ("C-h f"   . counsel-describe-function)
    ("C-h v"   . counsel-describe-variable)
    ("C-c k"   . counsel-ag)
+   ("C-c g"   . counsel-git)
+   ("C-c j"   . counsel-git-grep)
    ("M-y"     . counsel-yank-pop))
+  :diminish counsel-mode
   :config
   (counsel-mode 1)
   ;;; ignored files in C-x C-f
@@ -1661,8 +1680,7 @@ Editor di regexp che evita la pazzia dei backslash
     :requires magit
     :ensure t
     :pin melpa-stable
-    :config
-    (add-hook 'git-commit-setup-hook #'git-commit-turn-on-flyspell)))
+    :hook (git-commit-setup . git-commit-turn-on-flyspell)))
 
 ; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
 ; NOTA: questa e' la mia versione "patchata".
@@ -1737,6 +1755,7 @@ Let's try diff-hl since git-gutter leave stale indicators on the windows.
 
 #+BEGIN_SRC emacs-lisp
 (use-package diff-hl
+  :disabled t
   :hook ((prog-mode . diff-hl-mode)
          ;;; this enable the "live" mode, similar to flydiff.
          (prog-mode . diff-hl-flydiff-mode)
@@ -1946,6 +1965,9 @@ Because why not add another format to the universe?
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :ensure t
+  :init
+  ;; like here: https://github.com/bbatsov/emacs.d/blob/8962c0f09abd261f76f00afb64408fd658eb3028/init.el#L286
+  (setq projectile-completion-system 'ivy)
   :config
   (projectile-global-mode +1)
   (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
@@ -1988,6 +2010,7 @@ The following configuration is too aggressive: I don't like
 company-mode in textual modes like org.
 
 #+BEGIN_SRC emacs-lisp :tangle no
+; THIS IS NOT IN USE
 (use-package company
   :ensure t
   :diminish
