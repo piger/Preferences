@@ -4,10 +4,21 @@
 set -e
 
 require() {
-    if ! command -v $1 >/dev/null; then
+    if ! command -v "$1" >/dev/null; then
         echo "You need to install '$1' for this script to work!"
         exit 1
     fi
+}
+
+set_version() {
+    # arguments:
+    # $1 - cookbook name
+    # $2 - cookbook version
+    # $3 - filename
+    jq --arg cookbook_name "$1" \
+       --arg cookbook_version "$2" \
+       '.cookbook_versions[$cookbook_name] = "= " + $cookbook_version' \
+       "$3" | sponge "$3"
 }
 
 require jq
@@ -15,26 +26,26 @@ require sponge
 me="$(basename $0)"
 
 if [[ $# -lt 3 ]]; then
-    echo "Usage: $me <cookbook name> <version> <chef environment file>"
+    echo "Usage: $me <cookbook name> <version> <chef environment file> [<chef environment file>...]"
     echo; echo "Example: $me postfix 1.55.3 environments/staging.json"
     exit 1
 fi
 
 cookbook_name="$1"
 cookbook_version="$2"
-input_file="$3"
+shift 2
 
 if ! echo "$cookbook_version" | grep -qE '^\d+\.\d+\.\d+$'; then
     echo "'$cookbook_version' doesn't look like a version string to me"
     exit 1
 fi
 
-if ! test -e "$input_file"; then
-    echo "Input file does not exists"
-    exit 1
-fi
+while (( "$#" )); do
+    if ! test -e "$1"; then
+        echo "Input file '$1' does not exists"
+        exit 1
+    fi
 
-jq --arg cookbook_name "$cookbook_name" \
-   --arg cookbook_version "$cookbook_version" \
-   '.cookbook_versions[$cookbook_name] = "= " + $cookbook_version' \
-   "$input_file" | sponge "$input_file"
+    set_version "$cookbook_name" "$cookbook_version" "$1"
+    shift
+done
