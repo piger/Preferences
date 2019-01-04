@@ -386,7 +386,7 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen vpn_status apple-logo unix2date welcome)
+useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help
@@ -617,6 +617,17 @@ alias dirdu="du -Hhs *(/,@)"    # du -h di ogni dir presente
 alias ..='cd ..'
 alias ...='cd ../..'
 
+# disable spell correction
+alias rm="nocorrect rm"
+
+# disable globbing (i.e. do not expand arguments like "*" to the actual list of files)
+alias scp="noglob scp"
+
+# interactive versions
+alias rmi="rm -i"
+alias mvi="mv -i"
+alias cpi="cp -i"
+
 # alias globali, che pero' non gradisco.
 alias -g L='|less'
 alias -g H='|head'
@@ -653,6 +664,13 @@ function tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 
 # python json tool (un pretty-printer)
 alias json.tool='python -m json.tool'
+
+# quick download
+alias suggi='curl --continue-at - --location --progress-bar --remote-name --remote-time'
+
+# history stats
+# https://github.com/sorin-ionescu/prezto/blob/master/modules/history/init.zsh
+alias history-top10="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 # }}}
 
 # COMPLETION {{{
