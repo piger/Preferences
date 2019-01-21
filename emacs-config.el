@@ -91,8 +91,7 @@
   (setq delete-by-moving-to-trash t))
 
 ;; Themes
-(use-package poet
-  :ensure t
+(use-package poet-theme
   :disabled t
   :config
   (load-theme 'poet t))
@@ -109,12 +108,17 @@
   :ensure t
   :config
   (load-theme 'dracula t)
+  ;; color FIX for YAML...
+  (set-face-attribute 'font-lock-variable-name-face nil :foreground "#ab4a85")
   :disabled t)
 
+;; hack to use use-package with this theme:
+;; https://github.com/nashamri/spacemacs-theme/issues/42
 (use-package spacemacs-theme
   :ensure t
   :disabled t
-  :config
+  :defer t
+  :init
   (load-theme 'spacemacs-light t))
 
 (use-package birds-of-paradise-plus-theme
@@ -677,7 +681,6 @@ buffer is not visiting a file."
 
 ;; go
 ;; requires a bunch of tools:
-;; go get -u github.com/nsf/gocode
 ;; go get -u golang.org/x/tools/cmd/godoc
 ;; go get -u github.com/nsf/gocode
 ;; go get -u golang.org/x/tools/cmd/goimports
@@ -686,6 +689,7 @@ buffer is not visiting a file."
 ;; go get -u golang.org/x/tools/cmd/gorename
 ;; go get -u golang.org/x/tools/cmd/gomvpkg
 ;; go get -u golang.org/x/tools/cmd/godex
+;; NOTE: "oracle" waa renamed to "guru"
 ;;
 ;; Also "GOPATH" must be imported by exec-path-from-shell.
 ; Those env variables should be inherithed using exec-path-from-shell
@@ -695,13 +699,18 @@ buffer is not visiting a file."
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
+  :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
     (add-hook 'before-save-hook 'gofmt-before-save nil t)
+    (setq gofmt-command "goimports")
     (with-eval-after-load 'company
       '(add-to-list 'company-backends 'company-go))
+    (if (not (string-match "go" compile-command))
+             (set (make-local-variable 'compile-command)
+                  "go build -v && go test -v && go vet"))
     (go-eldoc-setup)
-    (setq tab-width 2)
+    (setq tab-width 4)
     (local-set-key (kbd "C-c C-k") 'godoc)
     (subword-mode +1)
     ;; (company-mode)
@@ -712,17 +721,24 @@ buffer is not visiting a file."
   :hook (go-mode . my-go-mode-hook))
 
 (use-package go-eldoc
-  :requires go-mode
   :commands (go-eldoc-setup)
   :ensure t)
 
 (use-package gotest
-  :requires go-mode
+  :after go-mode
   :ensure t)
 
 (use-package go-guru
   :commands (go-guru-hl-identifier-mode)
-  :requires go-mode)
+  :config
+  (defun projectile-guru-scope ()
+    "Set the go guru scope from the projectile root directory."
+    (interactive)
+    (unless (= (length (projectile-project-root)) 0)
+      (setq go-guru-scope (concat
+                           (replace-regexp-in-string
+                            (concat "^" (file-name-as-directory (getenv "GOPATH")) "src/") "" (projectile-project-root)) "..."))))
+  :after go-mode)
 
 (use-package rust-mode
   :mode "\\.rs\\'")
@@ -1210,7 +1226,9 @@ buffer is not visiting a file."
   :bind (("C-x v c" . github-clone)))
 
 (use-package git-link
-  :bind (("C-x v b" . git-link)))
+  :bind (("C-x v b" . git-link))
+  :config
+  (setq git-link-open-in-browser t))
 
 (use-package magithub
   :after magit
@@ -1307,7 +1325,7 @@ buffer is not visiting a file."
   :ensure t)
 
 (use-package systemd
-  :mode "\\.service\\'")
+  :mode ("\\.service\\'" . systemd-mode))
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
 (use-package po-mode
