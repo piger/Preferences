@@ -46,7 +46,7 @@ prompt_piger_setup() {
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' actionformats \
-           '%F{64}[%F{70}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
+           '%F{64}[%F{10}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
     zstyle ':vcs_info:*' formats \
            '%F{64}[%F{70}%b%F{64}]%f %m%u%c'
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
@@ -61,7 +61,7 @@ prompt_piger_setup() {
 
     # Build our prompt
     # timestamp, optional virtualenv name, current directory, vcs_info, newline
-    PROMPT='%F{027}[%T] %(1V.%F{205}(%1v)%f .)%F{208}%~ ${vcs_info_msg_0_}${prompt_newline}'
+    PROMPT='%F{033}[%T] %(1V.%F{205}(%1v)%f .)%F{208}%~ ${vcs_info_msg_0_}${prompt_newline}'
 
     # username and hostname, background jobs
     if [[ $SSH_CONNECTION != "" || $UID -eq 0 || $extended != "" ]]; then
