@@ -6,15 +6,15 @@ NO(C) Daniel Kertesz <daniel@spatof.org>
 """
 import sys
 import getopt
-import BaseHTTPServer, SimpleHTTPServer
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 def main():
     address = "127.0.0.1"
     port = 8888
     try:
         opts, args = getopt.getopt(sys.argv[1:], "a:p:h")
-    except getopt.GetoptError, e:
-        print "ERROR:", e
+    except getopt.GetoptError as exc:
+        print(f"ERROR: {exc}")
         sys.exit(1)
     for option, value in opts:
         if option == "-a":
@@ -22,13 +22,11 @@ def main():
         elif option == "-p":
             port = int(value)
         elif option == "-h":
-            print "Usage: %s [-a address] [-p port]" % sys.argv[0]
+            print(f"Usage: {sys.argv[0]} [-a address] [-p port]")
             sys.exit(0)
 
-    server = BaseHTTPServer.HTTPServer(
-        (address, port),
-        SimpleHTTPServer.SimpleHTTPRequestHandler)
-    print "Serving at http://%s:%d" % (address, port)
+    server = HTTPServer((address, port), SimpleHTTPRequestHandler)
+    print(f"Serving at http://{address}:{port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
