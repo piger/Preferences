@@ -19,7 +19,7 @@ set_window_title() {
     printf "$win_escape_start$1$escape_end"
 }
 
-local hostname=$(ssh -G "$@" | awk 'NR > 2 { exit }; /^hostname/ { print $2 }')
+local hostname=$(ssh -G "$@" | awk 'NR > 2 { exit } /^hostname/ { print $2 }')
 
 if [[ -z $hostname ]]; then
     command ssh $@
@@ -43,14 +43,15 @@ else
     # otherwise set just the pane title.
     if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
         # Use a shortened version of the hostname for the window title
-        set_window_title $short_name
+        tmux rename-window "$short_name"
         set_pane_title $hostname
     else
         set_pane_title $hostname
     fi
     command ssh $@
     if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-        set_window_title $prev_window_name
+        tmux rename-window "$prev_window_name"
+        tmux setw automatic-rename on
     fi
     set_pane_title $prev_pane_title
 fi
