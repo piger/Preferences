@@ -90,7 +90,7 @@ setopt transient_rprompt
 # Regular expression matching with the =~ operator will use
 # Perl-Compatible Regular Expressions from the PCRE library, if
 # available.
-setopt rematch_pcre
+# setopt rematch_pcre
 
 # Assume that the terminal displays combining characters
 # correctly. (i.e. UTF-8)
@@ -386,7 +386,7 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server)
+useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server quote-for-knife)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help

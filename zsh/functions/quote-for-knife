@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Enter your command:"
+python3 -c "import sys, shlex; print(shlex.quote(sys.stdin.readline().strip()))"
