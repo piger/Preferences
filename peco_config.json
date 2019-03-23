@@ -1,7 +1,16 @@
 {
-    "Style": {
-        "Basic": ["on_default", "default"],
-        "Selected": ["on_yellow", "black"],
-        "Matched": ["on_red", "black"]
-    }
+  "Keymap": {
+    "M-v": "peco.ScrollPageUp",
+    "C-v": "peco.ScrollPageDown",
+    "C-g": "peco.Cancel",
+    "M-Space": "peco.ToggleRangeMode",
+    "M-C": "peco.CancelRangeMode"
+  },
+  "Style": {
+    "Basic": ["on_default", "default"],
+    "Matched": ["green"],
+    "Query": ["default"],
+    "SavedSelection": ["on_blue", "white"],
+    "Selected": ["on_red", "default"]
+  }
 }
