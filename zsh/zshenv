@@ -26,6 +26,9 @@ if [[ -d $HOME/dev/go ]]; then
 fi
 [[ -d /usr/local/opt/go/libexec/bin ]] && path+=(/usr/local/opt/go/libexec/bin)
 
+# Rust support
+[[ -d $HOME/.cargo/bin ]] && path+=($HOME/.cargo/bin)
+
 # Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
 # instead of the PATH environment variable).
@@ -36,6 +39,12 @@ fi
 [[ -d /opt/bin ]] && path+=/opt/bin
 [[ -d /opt/local/bin ]] && path+=/opt/local/bin
 [[ -d /usr/games ]] && path+=/usr/games
+
+# Plan9
+if [[ -d /usr/local/plan9port ]]; then
+    export PLAN9=/usr/local/plan9port
+    path+=/usr/local/plan9port/bin
+fi
 # }}}
 
 

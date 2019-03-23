@@ -412,7 +412,7 @@ autoload -Uz zcalc zmv zargs
 
 # define an empty list of "precmd" functions so it's easier to conditionally
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
-typeset -a precmd_functions
+# typeset -a precmd_functions
 
 # vcs_info() needs to be called also when *leaving* a VCS directory:
 vcs_info_needs_bye=0
@@ -442,6 +442,10 @@ lazy_vcs_info() {
 #     precmd_functions+=vcs_info
 #     # precmd_functions+=lazy_vcs_info
 # fi
+
+# load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
+# to be able to access the original $? from the last command (and not from the last hook)
+source ~/dev/zsh-notify/zsh-notify.zsh
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
@@ -476,6 +480,9 @@ if [[ $OSTYPE = darwin* ]]; then
 
     # lock screen
     alias afk="pmset displaysleepnow"
+
+    # start the screensaver
+    alias screensaver='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
 
     # ls
     if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
@@ -671,6 +678,19 @@ alias suggi='curl --continue-at - --location --progress-bar --remote-name --remo
 # history stats
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/history/init.zsh
 alias history-top10="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+
+# yaml2json
+# https://twitter.com/micahhausler/status/1057064499226656768
+# alias y2j="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
+alias y2j="python -c 'import fileinput, yaml, json; y=yaml.safe_load(\"\".join(list(fileinput.input()))); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
+
+if (( $+commands[task] )); then
+    alias t='task'
+fi
+
+if [[ -x /usr/local/share/dotnet ]]; then
+    alias dotnet=/usr/local/share/dotnet
+fi
 # }}}
 
 # COMPLETION {{{
