@@ -98,11 +98,13 @@
 
 (use-package base16-theme
   :ensure t
+  :disabled t
   :config
-  (load-theme 'base16-railscasts t)
+  ;; (load-theme 'base16-railscasts t)
   ;; (load-theme 'base16-tomorrow-night t)
   ;; (load-theme 'base16-tomorrow t)
-  :disabled t)
+  ;; (load-theme 'base16-paraiso t)
+  (load-theme 'base16-gruvbox-dark-hard t))
 
 (use-package dracula-theme
   :ensure t
@@ -167,6 +169,15 @@
 
 ;; font
 (set-frame-font "Mononoki-12")
+
+;; font & cursor (put this in init-local.el)
+;; (set-face-attribute 'default nil
+;;                     :family "Operator Mono"
+;;                     :height 131
+;;                     :width 'medium
+;;                     :weight 'medium
+;;                     :slant 'normal)
+;; (set-face-attribute 'cursor nil :background "Orange")
 
 ;; save bookmarks every time a bookmark is added
 (setq bookmark-save-flag 1)
@@ -373,10 +384,11 @@ Including indent-buffer, which should not be called automatically on save."
     "<C-:> is avy (the new ace-jump)"
     "<M-s o> is occur which is a nice thing to use, especially with ivy/counsel!"
     "<C-c p s s> runs ag on the projectile project"
+    "<C-c p k> to close all the buffers of a project"
     "<C-x j> to switch window layout (transpose-frame)"
     "<C-h l> or view-lossage is the command to know How Did I Get There?"
     "(inf-ruby) is nicer than opening irb in a terminal window"
-    "(yari) to browse Ruby documentation"
+    "<C-x 4 w> to check a buffer with LangTool and <C-x 4 W> to exit"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
@@ -643,6 +655,7 @@ buffer is not visiting a file."
 
 ;;; elpy requires the 'jedi' python package
 (use-package elpy
+  :disabled t
   :commands elpy-enable)
 
 (use-package python
@@ -656,7 +669,7 @@ buffer is not visiting a file."
     (flycheck-mode +1)
     (company-mode +1)
     (eldoc-mode +1)
-    (elpy-enable)
+    ;; (elpy-enable)
     ;; unfuck electric indentation
     (setq electric-indent-chars '(?\n))))
 
@@ -1165,6 +1178,7 @@ buffer is not visiting a file."
         git-commit-turn-on-flyspell t
         git-commit-turn-on-auto-fill t
         git-commit-fill-column 72
+        magit-display-buffer-function #'magit-display-buffer-fullcolumn-most-v1
         git-commit-summary-max-length 70)
   (global-magit-file-mode 1)
 
@@ -1313,6 +1327,11 @@ buffer is not visiting a file."
   :mode "\\.tf\\'"
   :hook (terraform-mode . terraform-format-on-save-mode))
 
+(use-package company-terraform
+  :after (terraform-mode company)
+  :config
+  (company-terraform-init))
+
 (use-package hcl-mode
   :mode "\\.hcl\\'")
 
@@ -1419,9 +1438,9 @@ buffer is not visiting a file."
   :config
   (setq company-transformers '(company-sort-by-occurrence)))
 
-  ;; (use-package company-quickhelp
-  ;;   :config
-  ;;   (company-quickhelp-mode 1)))
+(use-package company-quickhelp
+  :config
+  (company-quickhelp-mode 1))
 
 (use-package company-go
   :after (company go)
@@ -1526,7 +1545,7 @@ buffer is not visiting a file."
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
-(let ((lt-jar "/usr/local/opt/languagetool/libexec/languagetool-commandline.jar"))
+(let ((lt-jar "/Users/dkertesz/Downloads/LanguageTool-4.4/languagetool-commandline.jar"))
   (when (file-exists-p lt-jar)
     (use-package langtool
       :ensure t
@@ -1637,6 +1656,7 @@ buffer is not visiting a file."
 
 (use-package spaceline-config
   :ensure spaceline
+  :disabled t
   :config
   (setq powerline-default-separator 'box
         spaceline-window-numbers-unicode t
@@ -1657,7 +1677,6 @@ buffer is not visiting a file."
 ;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
   :ensure t
-  :disabled t
   :defer t
   :hook (after-init . doom-modeline-init))
 
