@@ -1783,6 +1783,11 @@ buffer is not visiting a file."
 (use-package fireplace
   :commands fireplace)
 
+(use-package nyan-mode
+  :ensure t
+  :config
+  (nyan-mode))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
