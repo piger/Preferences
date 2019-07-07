@@ -49,7 +49,9 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+
+(use-package diminish
+  :ensure t)
 (require 'bind-key)
 
 ;; OSX stuff
@@ -122,9 +124,15 @@
   (load-theme 'spacemacs-light t))
 
 (use-package birds-of-paradise-plus-theme
+  :disabled t
   :ensure t
   :config
-  (load-theme 'birds-of-paradise-plus t))
+  ;; (load-theme 'birds-of-paradise-plus t))
+  )
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t))
 
 ;; Generic settings
 ;; from emacs-doom
@@ -247,7 +255,9 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
+;; this requires "fortune" to be installed.
 (use-package fortune-cookie
+  :ensure t
   :config
   (when (file-exists-p "~/Dropbox/fortunes")
     (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))))
@@ -527,6 +537,7 @@ buffer is not visiting a file."
 
 ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
 (use-package simpleclip
+  :ensure t
   :if *is-a-mac*
   :config
   (setq simpleclip-unmark-on-copy t)
@@ -1157,6 +1168,7 @@ buffer is not visiting a file."
   :ensure t)
 
 (use-package magit
+  :ensure t
   :pin melpa-stable
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
