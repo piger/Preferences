@@ -989,6 +989,10 @@ if [[ $ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT = 1 ]]; then
 fi
 # }}}
 
+# Emacs tramp support
+# Sets the terminal to something simple so that emacs doesn't gets confused.
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+
 # LOCAL SETTINGS {{{
 [[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
 # }}}
