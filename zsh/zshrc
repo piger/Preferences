@@ -127,8 +127,8 @@ rot13() {
         echo $@ | tr "A-Za-z" "N-ZA-Mn-za-m"
 }
 
-urlencode() { python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" $@ }
-urldecode() { python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" $@ }
+urlencode() { python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1])" $@ }
+urldecode() { python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1])" $@ }
 
 # from: grml
 ssl_hashes=( sha512 sha256 sha1 md5 )
@@ -874,7 +874,8 @@ if [[ -s $HOME/.chef_hosts ]]; then
     # check if the chef host file is stale
     if vpn_status >/dev/null; then
         if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
-            echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours"
+            echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours; refreshing now."
+            lckdo $HOME/.lock_chef $HOME/Preferences/bin/zsh_chef_completion.sh &
         fi
     fi
 fi
