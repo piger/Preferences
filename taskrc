@@ -56,5 +56,5 @@ weekstart=Monday
 # include /usr/share/doc/task/rc/solarized-dark-256.theme
 # include /usr/share/doc/task/rc/holidays.it-IT.rc
 
-include ~/.taskrc.local
+# include ~/.taskrc.local
 journal.time=on
