@@ -1788,6 +1788,17 @@ buffer is not visiting a file."
   :config
   (nyan-mode))
 
+(use-package engine-mode
+  :ensure t
+  :config
+  (defengine github-repo
+    "https://github.com/search?utf8=✓&type=Repositories&q=%s")
+  (defengine github-code
+    "https://github.com/search?utf8=✓&type=Code&q=%s")
+  (defengine google
+    "https://www.google.com/search?client=emacs&q=%s")
+  (engine-mode))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
