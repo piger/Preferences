@@ -620,6 +620,12 @@ buffer is not visiting a file."
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
   (setq flycheck-indication-mode 'right-fringe)
+
+  ;; replace flycheck's wavy underline with a straight line
+  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00"))
+  (set-face-attribute 'flycheck-warning nil :underline '(:color "#e3795c"))
+  (set-face-attribute 'flycheck-info nil :underline '(:color "ForestGreen"))
+
   ;; make the flycheck arrow look like an exclamation point.
   ;; but only do it when emacs runs in a window, not terminal
   (when window-system
