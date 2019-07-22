@@ -29,7 +29,11 @@ fortune-classic() {
 
 fortune-tips() {
     printf "\e[3m\e[1mTip of the day\e[0m\n"
-    fortune ~/dev/cli-tips-fortune/
+    if [[ -d ~/dev/cli-tips-fortune/ ]]; then
+		fortune ~/dev/cli-tips-fortune/
+	else
+		echo "no tips"
+	fi
 }
 
 printf "\n"

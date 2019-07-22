@@ -445,7 +445,7 @@ lazy_vcs_info() {
 
 # load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
 # to be able to access the original $? from the last command (and not from the last hook)
-source ~/dev/zsh-notify/zsh-notify.zsh
+[[ -d ~/dev/zsh-notify ]] && source ~/dev/zsh-notify/zsh-notify.zsh
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
@@ -989,6 +989,10 @@ if [[ $ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT = 1 ]]; then
     }
 fi
 # }}}
+
+# Emacs tramp support
+# Sets the terminal to something simple so that emacs doesn't gets confused.
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 
 # LOCAL SETTINGS {{{
 [[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
