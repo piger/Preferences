@@ -49,7 +49,9 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+
+(use-package diminish
+  :ensure t)
 (require 'bind-key)
 
 ;; OSX stuff
@@ -124,10 +126,15 @@
   (load-theme 'spacemacs-light t))
 
 (use-package birds-of-paradise-plus-theme
-  :ensure t
   :disabled t
+  :ensure t
   :config
-  (load-theme 'birds-of-paradise-plus t))
+  ;; (load-theme 'birds-of-paradise-plus t))
+  )
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t))
 
 (use-package doom-themes
   :config
@@ -263,7 +270,9 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
+;; this requires "fortune" to be installed.
 (use-package fortune-cookie
+  :ensure t
   :config
   (when (file-exists-p "~/Dropbox/fortunes")
     (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))))
@@ -550,6 +559,7 @@ buffer is not visiting a file."
 
 ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
 (use-package simpleclip
+  :ensure t
   :if *is-a-mac*
   :config
   (setq simpleclip-unmark-on-copy t)
@@ -632,6 +642,12 @@ buffer is not visiting a file."
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
   (setq flycheck-indication-mode 'right-fringe)
+
+  ;; replace flycheck's wavy underline with a straight line
+  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00"))
+  (set-face-attribute 'flycheck-warning nil :underline '(:color "#e3795c"))
+  (set-face-attribute 'flycheck-info nil :underline '(:color "ForestGreen"))
+
   ;; make the flycheck arrow look like an exclamation point.
   ;; but only do it when emacs runs in a window, not terminal
   (when window-system
@@ -1185,6 +1201,7 @@ buffer is not visiting a file."
   :ensure t)
 
 (use-package magit
+  :ensure t
   :pin melpa-stable
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
@@ -1830,6 +1847,17 @@ buffer is not visiting a file."
   :ensure t
   :config
   (nyan-mode))
+
+(use-package engine-mode
+  :ensure t
+  :config
+  (defengine github-repo
+    "https://github.com/search?utf8=✓&type=Repositories&q=%s")
+  (defengine github-code
+    "https://github.com/search?utf8=✓&type=Code&q=%s")
+  (defengine google
+    "https://www.google.com/search?client=emacs&q=%s")
+  (engine-mode))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
