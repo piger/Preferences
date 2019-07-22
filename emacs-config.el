@@ -92,8 +92,8 @@
 
 ;; Themes
 (use-package poet-theme
-  :disabled t
   :config
+  :disabled t
   (load-theme 'poet t))
 
 (use-package base16-theme
@@ -125,8 +125,13 @@
 
 (use-package birds-of-paradise-plus-theme
   :ensure t
+  :disabled t
   :config
   (load-theme 'birds-of-paradise-plus t))
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t))
 
 ;; Generic settings
 ;; from emacs-doom
@@ -527,9 +532,15 @@ buffer is not visiting a file."
 ;; Mac OS X customization. Note that you should use my modified keyboard layout which permits
 ;; accented characters.
 (when *is-a-mac*
+  ;; NOTE: this is for the emacs version "emacs-mac": https://bitbucket.org/mituharu/emacs-mac/overview
+  ;; install it with: brew cask install emacs-mac (see https://github.com/railwaycat/homebrew-emacsmacport)
+
   ;; Smart assignments of Mac specific keys
   (setq mac-option-modifier 'meta)
-  ;(setq mac-command-modifier 'hyper)
+  ;; I need this set to "super" to have simpleclip work; I think the author recommends "hyper" instead:
+  ;; https://gist.github.com/railwaycat/3498096
+  (setq mac-command-modifier 'super)
+
   ;(setq mac-function-modifier 'super)  ;; questo sposta SUPER sul tasto Fn
   (setq mac-right-option-modifier nil) ;; questo permette le accentate con ALT destro
 
@@ -760,6 +771,7 @@ buffer is not visiting a file."
 ;; https://github.com/rejeep/ruby-tools.el
 (use-package ruby-tools
   :diminish ruby-tools-mode
+  :disabled t
   :hook ruby-mode)
 
 (use-package rubocop
@@ -845,8 +857,11 @@ buffer is not visiting a file."
 (use-package rspec-mode
   :requires ruby-mode)
 
+;; File mode specification error: (error Autoloading file /Users/dkertesz/.emacs.d/elpa/ruby-end-20141215.1223/ruby-end.elc failed to define function ruby-end)
 (use-package ruby-end
   :diminish
+  :disabled t
+  :pin melpa
   :hook ruby-mode)
 
 (use-package css-mode
@@ -1201,6 +1216,19 @@ buffer is not visiting a file."
                  (user-error "No remote branch")))))
 
   (define-key magit-mode-map "v" #'endless/visit-pull-request-url))
+
+;; broken because ghub is broken
+(use-package forge
+  :pin melpa-stable
+  ;; :disabled t
+  :ensure t)
+
+;; currently rotto: https://github.com/magit/ghub/issues/81
+(use-package ghub
+  :pin melpa-stable
+  :config
+  ;;(setq ghub-use-workaround-for-emacs-bug nil))
+  )
 
 (use-package git-gutter-fringe
   :diminish git-gutter-mode
@@ -1619,6 +1647,9 @@ buffer is not visiting a file."
         ;; highlight code blocks
         org-src-fontify-natively t
 
+        ;; do not indent at the same level of the header "stars"
+        org-adapt-indentation nil
+
         ;; turn off source blocks default indentation
         org-edit-src-content-indentation 0)
 
@@ -1789,6 +1820,16 @@ buffer is not visiting a file."
 
 (use-package fireplace
   :commands fireplace)
+
+;; not really that useful
+(use-package electric-operator
+  :disabled t
+  :hook (python-mode . electric-operator-mode))
+
+(use-package nyan-mode
+  :ensure t
+  :config
+  (nyan-mode))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
