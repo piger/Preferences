@@ -8,9 +8,13 @@
 [diff]
     renames = copies
     tool = icdiff
+    algorithm = patience
 
 [difftool]
     prompt = false
+
+[log]
+   date = auto:human
 
 [difftool "icdiff"]
     cmd = /Users/dkertesz/tmp/venvs/icdiff/bin/icdiff --line-numbers $LOCAL $REMOTE
@@ -115,3 +119,5 @@ fsckObjects = true
 
 [includeIf "gitdir:~/dev/ai/"]
     path = ~/.gitconfig.ai
+[github]
+	user = piger
