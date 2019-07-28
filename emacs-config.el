@@ -999,7 +999,16 @@ buffer is not visiting a file."
 
 ;; https://github.com/mickeynp/smart-scan
 ;; Jump with M-n and M-p.
+;; TODO fix init
+;; Done (Total of 1 file compiled, 2 skipped)
+;; Settings loaded in 46.471s
+;; Saving file /Users/dkertesz/.emacs.d/custom.el...
+;; Wrote /Users/dkertesz/.emacs.d/custom.el [2 times]
+;; run-hooks: Cannot open load file: No such file or directory, smartscan
+;; Cannot open load file: No such file or directory, smartscan
+;; File mode specification error: (file-missing Cannot open load file No such file or directory smartscan)
 (use-package smartscan
+  :disabled t
   :hook (prog-mode . smartscan-mode))
 
 ;; Minor mode to selectively hide/show code and comment blocks.
