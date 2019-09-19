@@ -1205,13 +1205,11 @@ buffer is not visiting a file."
 ;; http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting
 
 (use-package magit-popup
-  :pin melpa-stable
   :defer t
   :ensure t)
 
 (use-package magit
   :ensure t
-  :pin melpa-stable
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
   :config
@@ -1225,7 +1223,6 @@ buffer is not visiting a file."
 
   (use-package git-commit
     :ensure t
-    :pin melpa-stable
     :hook (git-commit-setup . git-commit-turn-on-flyspell))
 
   ;; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
@@ -1243,18 +1240,11 @@ buffer is not visiting a file."
 
   (define-key magit-mode-map "v" #'endless/visit-pull-request-url))
 
-;; broken because ghub is broken
 (use-package forge
-  :pin melpa-stable
-  ;; :disabled t
-  :ensure t)
-
-;; currently rotto: https://github.com/magit/ghub/issues/81
-(use-package ghub
-  :pin melpa-stable
+  :after magit
+  :ensure t
   :config
-  ;;(setq ghub-use-workaround-for-emacs-bug nil))
-  )
+  (setq forge-pull-notifications nil))
 
 (use-package git-gutter-fringe
   :diminish git-gutter-mode
