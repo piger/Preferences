@@ -35,7 +35,7 @@
         '(("melpa-stable" . 30)
           ("marmalade" . 20)
           ("gnu" . 10)
-          ("melpa" . 0))))
+          ("melpa" . 40))))
 
 ; try to pin helm and helm-core (which is a dependency)
 (setq package-pinned-packages
