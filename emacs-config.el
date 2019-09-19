@@ -136,9 +136,10 @@
   :config
   (load-theme 'doom-one t))
 
-(use-package doom-themes
+(use-package chocolate-theme
+  :disabled t
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'chocolate t))
 
 ;; Generic settings
 ;; from emacs-doom
@@ -1857,6 +1858,11 @@ buffer is not visiting a file."
   (defengine google
     "https://www.google.com/search?client=emacs&q=%s")
   (engine-mode))
+
+;;; HTTP status code package.
+;;; NOTE: the command is "hc"
+(use-package httpcode
+  :commands hc)
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
