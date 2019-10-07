@@ -67,8 +67,11 @@
   (setenv "LANG" "en_GB.UTF-8")
 
   ;; use vkill on OSX because proced doesn't work (stolen from prelude)
+  ;; Update Oct 2019: https://github.com/bbatsov/prelude/issues/1170
+  ;; this package was hosted on EmacsWiki and got removed from MELPA.
   (use-package vkill
     :ensure t
+    :disabled t
     :bind
     (("C-x p" . vkill)))
 
@@ -856,6 +859,7 @@ buffer is not visiting a file."
 ;;   :hook (ruby-mode . ruby-electric-mode))
 
 (use-package rbenv
+  :ensure t
   :init
   ;; rbenv installed via homebrew
   (setq rbenv-executable "/usr/local/bin/rbenv")
@@ -1484,6 +1488,7 @@ buffer is not visiting a file."
   (setq company-transformers '(company-sort-by-occurrence)))
 
 (use-package company-quickhelp
+  :ensure t
   :config
   (company-quickhelp-mode 1))
 
