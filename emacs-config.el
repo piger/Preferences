@@ -1228,22 +1228,7 @@ buffer is not visiting a file."
 
   (use-package git-commit
     :ensure t
-    :hook (git-commit-setup . git-commit-turn-on-flyspell))
-
-  ;; http://endlessparentheses.com/easily-create-github-prs-from-magit.html
-  ;; NOTA: questa e' la mia versione "patchata".
-  (defun endless/visit-pull-request-url ()
-    "Visit the current branch's PR on Github."
-    (interactive)
-    (browse-url
-     (format "https://github.com/%s/pull/new/%s"
-             (replace-regexp-in-string
-              "\\`.+github\\.com:\\(.+\\)\\(\\.git\\)?\\'" "\\1"
-              (magit-get "remote" (magit-get-remote) "url"))
-             (or (magit-get-current-branch)
-                 (user-error "No remote branch")))))
-
-  (define-key magit-mode-map "v" #'endless/visit-pull-request-url))
+    :hook (git-commit-setup . git-commit-turn-on-flyspell)))
 
 (use-package forge
   :after magit
