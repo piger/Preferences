@@ -814,6 +814,20 @@ buffer is not visiting a file."
   (with-eval-after-load 'company
     '(add-to-list 'company-backends 'company-robe)))
 
+(defun piger/ruby-mode-hooks ()
+  "Personalised 'ruby-mode' hooks."
+  (cond ((string-match "/code/misc/zcfn/" buffer-file-name)
+         (set (make-local-variable 'comment-auto-fill-only-comments) t)
+         (setq-local fill-column 140)
+         (auto-fill-mode t)))
+  (subword-mode +1))
+
+;; alternative to the above hook.
+;; Put this in .dir-locals.el in the project root.
+;; ((ruby-mode . ((fill-column . 80)
+;;                (eval . (progn (auto-fill-mode t)
+;;                               (set (make-local-variable 'comment-auto-fill-only-comments) t))))))
+
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
   :interpreter "ruby"
@@ -833,6 +847,7 @@ buffer is not visiting a file."
   (setq enh-ruby-indent-level 2
         enh-ruby-deep-indent-paren nil)
   :config
+  (add-hook 'ruby-mode-hook 'piger/ruby-mode-hooks)
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
@@ -851,6 +866,7 @@ buffer is not visiting a file."
   :custom
   (ruby-insert-encoding-magic-comment nil)
   :config
+  (add-hook 'ruby-mode-hook 'piger/ruby-mode-hooks)
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
@@ -1235,6 +1251,10 @@ buffer is not visiting a file."
   :ensure t
   :config
   (setq forge-pull-notifications nil))
+
+(use-package github-review
+  :ensure t
+  :after forge)
 
 (use-package git-gutter-fringe
   :diminish git-gutter-mode
