@@ -541,6 +541,25 @@ buffer is not visiting a file."
                  "-title" title
                  "-message" message))
 
+(defun piger/align-vars (start end)
+  "Veritcally align stuff.
+Example:
+
+  owner 'root'
+  group 'root'
+  mode '0644'
+  source options['nginx']['key_url']
+
+becomes
+
+  owner  'root'
+  group  'root'
+  mode   '0644'
+  source options['nginx']['key_url']"
+
+  (interactive "r")
+  (align-regexp start end "\\S-+\\(\\s-+\\)" 1 2 nil))
+
 ;; Keyboard bindings
 ;; Mac OS X customization. Note that you should use my modified keyboard layout which permits
 ;; accented characters.
