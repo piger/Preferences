@@ -79,7 +79,7 @@ echo "---"
 
 # Extended summary
 # note: m/s is "meters per second"
-jq -r '"Feels like: \(.currently.apparentTemperature | tostring)°, Wind speed: \(.currently.windSpeed | tostring)m/s, Humidity: \(.currently.humidity * 100 | round | tostring)% | font=VictorMono-Bold"' "$FORECAST_FILE"
+jq -r '"Feels like: \(.currently.apparentTemperature | tostring)°, Wind speed: \(.currently.windSpeed | tostring) m/s, Humidity: \(.currently.humidity * 100 | round | tostring)% | font=VictorMono-Bold"' "$FORECAST_FILE"
 
 # Minutely forecast
 minutely="$(jq -r .minutely.summary $FORECAST_FILE)"
