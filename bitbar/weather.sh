@@ -72,10 +72,8 @@ get_forecast "$location" "$token"
 browser_url="https://darksky.net/forecast/${location}?lang=en&units=si"
 
 # print current summary in the bar
-summary="$(jq -r .currently.summary $FORECAST_FILE)"
 icon="$(get_icon "$(jq -r .currently.icon $FORECAST_FILE)")"
-temperature="$(jq -r .currently.temperature $FORECAST_FILE)"
-echo "${summary}, ${temperature} °C | templateImage=$icon"
+jq -r "\"\(.currently.summary), \(.currently.temperature) °C | templateImage=$icon\"" "$FORECAST_FILE"
 
 echo "---"
 
