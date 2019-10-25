@@ -63,12 +63,15 @@ get_icon() {
     esac
 }
 
+# get the forecast
 location="$(get_location)"
 token="$(cat $DARK_SKY_TOKEN)"
 get_forecast "$location" "$token"
 
+# set the browser url for the contextual menu
 browser_url="https://darksky.net/forecast/${location}?lang=en&units=si"
 
+# print current summary in the bar
 summary="$(jq -r .currently.summary $FORECAST_FILE)"
 icon="$(get_icon "$(jq -r .currently.icon $FORECAST_FILE)")"
 temperature="$(jq -r .currently.temperature $FORECAST_FILE)"
@@ -76,13 +79,16 @@ echo "${summary}, ${temperature} °C | templateImage=$icon"
 
 echo "---"
 
+# Extended summary
 # note: m/s is "meters per second"
 jq -r '"Feels like: \(.currently.apparentTemperature | tostring)°, Wind speed: \(.currently.windSpeed | tostring)m/s, Humidity: \(.currently.humidity * 100 | round | tostring)% | font=VictorMono-Bold"' "$FORECAST_FILE"
 
+# Minutely forecast
 minutely="$(jq -r .minutely.summary $FORECAST_FILE)"
 icon="$(get_icon "$(jq -r .minutely.icon $FORECAST_FILE)")"
 echo "Minute: $minutely | templateImage=$icon href=$browser_url"
 
+# Hourly forecast
 hourly="$(jq -r .hourly.summary $FORECAST_FILE)"
 icon="$(get_icon "$(jq -r .hourly.icon $FORECAST_FILE)")"
 echo "Hour: $hourly | templateImage=$icon href=$browser_url"
