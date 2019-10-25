@@ -1,1 +1,1 @@
-/Users/dkertesz/dev/FuzzyClock/fuzzyclock.zsh
+/Users/dkertesz/code/FuzzyClock/fuzzyclock.zsh
