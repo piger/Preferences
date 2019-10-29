@@ -1,6 +1,11 @@
 #!/bin/bash
 # Weather plugin for bitbar
 # Icons stolen from: https://raw.githubusercontent.com/matryer/bitbar-plugins/master/Weather/ForecastIO/weather.15m.py
+#
+# Requires:
+# jq: brew install jq
+# CoreLocationCLI: brew cask intsall CoreLocationCLI
+# An authentication token from https://darksky.net/dev/
 
 set -e
 
