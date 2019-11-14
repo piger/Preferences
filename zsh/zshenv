@@ -47,6 +47,8 @@ if [[ -d /usr/local/plan9port ]]; then
 fi
 # }}}
 
+# ripgrep
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
 # Use ssh for any remote operation involving CVS or rsync
 export CVS_RSH="ssh"

@@ -1,0 +1,9 @@
+# search in hidden files like .travis.yml
+--hidden
+
+# file type for erb
+--type-add
+erb:*.erb
+
+# enable smart-case search
+--smart-case
