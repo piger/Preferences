@@ -46,14 +46,14 @@ prompt_piger_setup() {
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' actionformats \
-           '%F{64}[%F{10}%b%F{3}|%F{1}%a%F{64}]%f %m%u%c'
+           ' %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c'
     zstyle ':vcs_info:*' formats \
-           '%F{64}[%F{70}%b%F{64}]%f %m%u%c'
+           ' %F{64}%F{70}%b%F{64}%f %m%u%c'
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' unstagedstr ' %F{3}★%f'
-    zstyle ':vcs_info:*' stagedstr ' %F{2}●%f'
+    zstyle ':vcs_info:*' unstagedstr '%F{3}★%f'
+    zstyle ':vcs_info:*' stagedstr '%F{2}●%f'
     zstyle ':vcs_info:*' use-quilt true
 
     add-zsh-hook precmd vcs_info
