@@ -61,7 +61,7 @@ prompt_piger_setup() {
 
     # Build our prompt
     # timestamp, optional virtualenv name, current directory, vcs_info, newline
-    PROMPT='%F{033}[%T] %(1V.%F{205}(%1v)%f .)%F{208}%~ ${vcs_info_msg_0_}${prompt_newline}'
+    PROMPT='%K{236}%F{033}%T %F{236}%K{060} %(1V.%F{205}(%1v)%f .)%F{147}%B%~%b %F{060}%K{237} ${vcs_info_msg_0_}%F{237}%k%f${prompt_newline}'
 
     # username and hostname, background jobs
     if [[ $SSH_CONNECTION != "" || $UID -eq 0 || $extended != "" ]]; then
