@@ -75,7 +75,7 @@ prompt_piger_setup() {
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
     # NOTE: "CONDITIONAL SUBSTRINGS IN PROMPTS" in zshmisc.
-    RPROMPT='%(?..%B%F{124}✘%f %?%b)%(3S. ${SECONDS}s.)'
+    RPROMPT='%(?..%B%F{124}✘%f %?%b)'
 
     # Spell checker prompt.
     # default: correct 'mano' to 'nano' [nyae]?
