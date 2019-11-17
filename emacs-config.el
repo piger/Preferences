@@ -1684,7 +1684,7 @@ becomes
          ("C-c M-n" . org-babel-next-src-block)
          ("C-c S" . org-babel-previous-src-block)
          ("C-c s" . org-babel-next-src-block))
-  :hook (org-mode . turn-on-auto-fill)
+  ;; :hook (org-mode . turn-on-auto-fill)
   :custom-face
   ;; NOTE: to change this, run "customize-face" with parameter "variable-pitch"
   (variable-pitch ((t (:family "ETBembo" :height 1.3))))
@@ -1730,6 +1730,11 @@ becomes
     (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
   (add-hook 'org-src-mode-hook 'piger/disable-flycheck-in-org-src-block)
+
+  ;; use nicer word wrapping for long lines
+  (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
+  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+
   (add-hook 'org-mode-hook
             '(lambda ()
                (setq line-spacing 0.2)
