@@ -125,7 +125,6 @@
 ;; https://github.com/nashamri/spacemacs-theme/issues/42
 (use-package spacemacs-theme
   :ensure t
-  :disabled t
   :defer t
   :init
   (load-theme 'spacemacs-light t))
@@ -138,6 +137,7 @@
   )
 
 (use-package doom-themes
+  :disabled t
   :config
   (load-theme 'doom-one t))
 
