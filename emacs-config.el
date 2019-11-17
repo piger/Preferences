@@ -1674,6 +1674,7 @@ becomes
 
 ;; Org mode
 (use-package org
+  ;;; :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c l" . org-store-link)
          ("C-c c" . org-capture)
@@ -1684,6 +1685,16 @@ becomes
          ("C-c S" . org-babel-previous-src-block)
          ("C-c s" . org-babel-next-src-block))
   :hook (org-mode . turn-on-auto-fill)
+  :custom-face
+  ;; NOTE: to change this, run "customize-face" with parameter "variable-pitch"
+  (variable-pitch ((t (:family "ETBembo" :height 1.3))))
+  (org-document-title ((t (:foreground "#171717" :weight bold :height 1.5))))
+  (org-done ((t (:background "#E8E8E8" :foreground "#0E0E0E" :strike-through t :weight bold))))
+  (org-headline-done ((t (:foreground "#171717" :strike-through t))))
+  (org-level-1 ((t (:foreground "#090909" :weight bold :height 1.5))))
+  (org-level-2 ((t (:foreground "#090909" :weight normal :height 1.4))))
+  (org-level-3 ((t (:foreground "#090909" :weight normal :height 1.3))))
+  (org-image-actual-width '(600))
   :config
   ;; capture-file
   (setq org-directory "~/Dropbox/org"
@@ -1701,12 +1712,40 @@ becomes
         ;; turn off source blocks default indentation
         org-edit-src-content-indentation 0)
 
+  ;; more ricing?
+  (setq org-startup-indented t
+        ;;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+        org-ellipsis "  " ;; folding symbol
+        org-pretty-entities t
+        org-hide-emphasis-markers t
+        ;; show actually italicized text instead of /italicized text/
+        ;; org-agenda-block-separator ""
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t)
+
   ;; Disable flycheck in org src blocks
   ;; http://emacs.stackexchange.com/questions/16766/how-to-turn-off-emacs-lisp-checkdoc-of-flycheck-when-edit-source-block-in-org
   (defun piger/disable-flycheck-in-org-src-block ()
     (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
   (add-hook 'org-src-mode-hook 'piger/disable-flycheck-in-org-src-block)
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (setq line-spacing 0.2)
+               (variable-pitch-mode 1)
+               (mapc
+                (lambda (face)
+                  (set-face-attribute face nil :inherit 'fixed-pitch))
+                (list 'org-code
+                      'org-link
+                      'org-block
+                      'org-table
+                      'org-verbatim
+                      'org-block-begin-line
+                      'org-block-end-line
+                      'org-meta-line
+                      'org-document-info-keyword))))
 
   ;; TODO states
   ;; the first letter is the quick key
@@ -1725,6 +1764,10 @@ becomes
                 ("WAITING" :foreground "orange" :weight bold)
                 ("DEFERRED" :foreground "goldenrod" :weight bold)
                 ("CANCELLED" :foreground "forest green" :weight bold)))))
+
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
 
 (use-package smart-mode-line
   :disabled t
