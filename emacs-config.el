@@ -1363,6 +1363,7 @@ becomes
          ("\\.markdown\\'" . markdown-mode))
   :config
   (setq markdown-command "markdown")
+  (setq markdown-fontify-code-blocks-natively t)
   (set-face-attribute 'markdown-pre-face nil :inherit 'markdown-markup-face)
   ;; (custom-set-faces
   ;;  '(markdown-pre-face ((t (:inherit markdown-markup-face)))))
