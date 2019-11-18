@@ -1725,6 +1725,9 @@ becomes
         org-fontify-done-headline t
         org-fontify-quote-and-verse-blocks t)
 
+  ;; I hate subscripts (the small words that you markup with "_" in front or middle of the word).
+  (setq org-use-sub-superscripts nil)
+
   ;; Disable flycheck in org src blocks
   ;; http://emacs.stackexchange.com/questions/16766/how-to-turn-off-emacs-lisp-checkdoc-of-flycheck-when-edit-source-block-in-org
   (defun piger/disable-flycheck-in-org-src-block ()
