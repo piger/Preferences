@@ -1193,11 +1193,11 @@ becomes
   (("C-s" . swiper)
    ("C-r" . swiper)))
 
+;; smex can augment counsel-M-x, adding for example the recent used commands.
 (use-package smex
-  :disabled
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command))
+  ;; :bind (("M-x" . smex)
+  ;;        ("M-X" . smex-major-mode-commands)
+  ;;        ("C-c C-c M-x" . execute-extended-command))
   :config
   (smex-initialize))
 
