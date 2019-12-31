@@ -985,7 +985,7 @@ becomes
   :config
   (defun my-web-mode-hook ()
     (local-set-key (kbd "RET") 'newline-and-indent)
-    (yas-minor-mode +1)
+    ;; (yas-minor-mode +1)
     (whitespace-cleanup-mode +1))
   (setq web-mode-enable-current-element-highlight t
         web-mode-enable-auto-quoting -1
@@ -1420,6 +1420,7 @@ becomes
   :ensure t)
 
 (use-package systemd
+  :ensure t
   :mode ("\\.service\\'" . systemd-mode))
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
@@ -1779,6 +1780,7 @@ becomes
                 ("CANCELLED" :foreground "forest green" :weight bold)))))
 
 (use-package org-bullets
+  :disabled t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
 
