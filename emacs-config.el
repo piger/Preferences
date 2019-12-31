@@ -1688,14 +1688,14 @@ becomes
   ;; :hook (org-mode . turn-on-auto-fill)
   :custom-face
   ;; NOTE: to change this, run "customize-face" with parameter "variable-pitch"
-  (variable-pitch ((t (:family "ETBembo" :height 1.3))))
-  (org-document-title ((t (:foreground "#171717" :weight bold :height 1.5))))
-  (org-done ((t (:background "#E8E8E8" :foreground "#0E0E0E" :strike-through t :weight bold))))
-  (org-headline-done ((t (:foreground "#171717" :strike-through t))))
-  (org-level-1 ((t (:foreground "#090909" :weight bold :height 1.5))))
-  (org-level-2 ((t (:foreground "#090909" :weight normal :height 1.4))))
-  (org-level-3 ((t (:foreground "#090909" :weight normal :height 1.3))))
-  (org-image-actual-width '(600))
+  ;; (variable-pitch ((t (:family "ETBembo" :height 1.3))))
+  ;; (org-document-title ((t (:foreground "#171717" :weight bold :height 1.5))))
+  ;; (org-done ((t (:background "#E8E8E8" :foreground "#0E0E0E" :strike-through t :weight bold))))
+  ;; (org-headline-done ((t (:foreground "#171717" :strike-through t))))
+  ;; (org-level-1 ((t (:foreground "#090909" :weight bold :height 1.5))))
+  ;; (org-level-2 ((t (:foreground "#090909" :weight normal :height 1.4))))
+  ;; (org-level-3 ((t (:foreground "#090909" :weight normal :height 1.3))))
+  ;; (org-image-actual-width '(600))
   :config
   ;; capture-file
   (setq org-directory "~/Dropbox/org"
@@ -1713,17 +1713,21 @@ becomes
         ;; turn off source blocks default indentation
         org-edit-src-content-indentation 0)
 
+  ;; folding symbol
+  (setq org-ellipsis "  "
+        org-pretty-entities t)
+  
   ;; more ricing?
-  (setq org-startup-indented t
-        ;;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
-        org-ellipsis "  " ;; folding symbol
-        org-pretty-entities t
-        org-hide-emphasis-markers t
-        ;; show actually italicized text instead of /italicized text/
-        ;; org-agenda-block-separator ""
-        org-fontify-whole-heading-line t
-        org-fontify-done-headline t
-        org-fontify-quote-and-verse-blocks t)
+  ;; (setq org-startup-indented t
+  ;;       ;;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+  ;;       org-ellipsis "  " ;; folding symbol
+  ;;       org-pretty-entities t
+  ;;       org-hide-emphasis-markers t
+  ;;       ;; show actually italicized text instead of /italicized text/
+  ;;       ;; org-agenda-block-separator ""
+  ;;       org-fontify-whole-heading-line t
+  ;;       org-fontify-done-headline t
+  ;;       org-fontify-quote-and-verse-blocks t)
 
   ;; I hate subscripts (the small words that you markup with "_" in front or middle of the word).
   (setq org-use-sub-superscripts nil)
@@ -1739,22 +1743,22 @@ becomes
   (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
   (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 
-  (add-hook 'org-mode-hook
-            '(lambda ()
-               (setq line-spacing 0.2)
-               (variable-pitch-mode 1)
-               (mapc
-                (lambda (face)
-                  (set-face-attribute face nil :inherit 'fixed-pitch))
-                (list 'org-code
-                      'org-link
-                      'org-block
-                      'org-table
-                      'org-verbatim
-                      'org-block-begin-line
-                      'org-block-end-line
-                      'org-meta-line
-                      'org-document-info-keyword))))
+  ;; (add-hook 'org-mode-hook
+  ;;           '(lambda ()
+  ;;              (setq line-spacing 0.2)
+  ;;              (variable-pitch-mode 1)
+  ;;              (mapc
+  ;;               (lambda (face)
+  ;;                 (set-face-attribute face nil :inherit 'fixed-pitch))
+  ;;               (list 'org-code
+  ;;                     'org-link
+  ;;                     'org-block
+  ;;                     'org-table
+  ;;                     'org-verbatim
+  ;;                     'org-block-begin-line
+  ;;                     'org-block-end-line
+  ;;                     'org-meta-line
+  ;;                     'org-document-info-keyword))))
 
   ;; TODO states
   ;; the first letter is the quick key
