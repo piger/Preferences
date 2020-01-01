@@ -1168,7 +1168,7 @@ becomes
   (ivy-mode 1))
 
 ;; fancy popup window
-(use-package ivy-postframe
+(use-package ivy-posframe
   :config
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
   (ivy-posframe-mode 1))
@@ -1176,6 +1176,7 @@ becomes
 ;; fancy descriptions in M-x
 (use-package ivy-rich
   :config
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   (ivy-rich-mode 1))
 
 (use-package counsel
