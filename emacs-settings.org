@@ -4,6 +4,8 @@
 #+STARTUP: align content
 #+LANGUAGE: en
 
+NOTE: this is replaced by =emacs-config.el=
+
 * Emacs Configuration
 This is an org document describing my Emacs configuration.
 To load it place the following lines inside =~/.emacs.d/init.el=:
