@@ -4,9 +4,6 @@
 # the output with our printf() calls.
 [[ -t 1 ]] || exec command ssh $@
 
-local prev_window_name=$(tmux display-message -p "#{window_name}")
-local prev_pane_title=$(tmux display-message -p "#{pane_title}")
-
 local win_escape_start="\033k"
 local pane_escape_start="\033]2;"
 local escape_end="\033\\"
@@ -19,39 +16,55 @@ set_window_title() {
     printf "$win_escape_start$1$escape_end"
 }
 
+set_iterm2_title() {
+    echo -ne "\033]0;"$*"\007"
+}
+
 local hostname=$(ssh -G "$@" | awk 'NR > 2 { exit } /^hostname/ { print $2 }')
+# split the hostname on "."
+local parts=(${(s:.:)hostname})
+local short_name
+
+# if the parts of the hostname are less than 3 (e.g. mail.example.com -> 3 parts) use the first part
+# only (e.g. "mail").
+if (( $#parts <= 3 )); then
+    short_name=${parts[1]}
+else
+    # othewrise show 2/3 of the hostname
+    local fraction=$(( $#parts / 3 * 2 ))
+    short_name=${(j:.:)parts[1,$fraction]}
+fi
 
 if [[ -z $hostname ]]; then
     command ssh $@
 else
-    # try to shorten the hostname
 
-    # 1) split the hostname on "."
-    local parts=(${(s:.:)hostname})
-    local short_name
+    if [[ -z $TMUX ]]; then
+        set_iterm2_title $short_name
+    else
+        local prev_window_name=$(tmux display-message -p "#{window_name}")
+        local prev_pane_title=$(tmux display-message -p "#{pane_title}")
 
-    # 2) if the parts of the hostname are less than 3 (e.g. mail.example.com -> 3 parts)
-    # use the first part only (e.g. "mail")
-    if (( $#parts <= 3 )); then
-        short_name=${parts[1]}
-    else
-        # othewrise show 2/3 of the hostname
-        local fraction=$(( $#parts / 3 * 2 ))
-        short_name=${(j:.:)parts[1,$fraction]}
+        # Set window name and pane title when there's only 1 pane (i.e. the whole window),
+        # otherwise set just the pane title.
+        if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
+            # Use a shortened version of the hostname for the window title
+            tmux rename-window "$short_name"
+            set_pane_title $hostname
+        else
+            set_pane_title $hostname
+        fi
     fi
-    # Set window name and pane title when there's only 1 pane (i.e. the whole window),
-    # otherwise set just the pane title.
-    if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-        # Use a shortened version of the hostname for the window title
-        tmux rename-window "$short_name"
-        set_pane_title $hostname
-    else
-        set_pane_title $hostname
-    fi
+
     command ssh $@
-    if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-        tmux rename-window "$prev_window_name"
-        tmux setw automatic-rename on
+
+    if [[ -z $TMUX ]]; then
+        set_iterm2_title ""
+    else
+        if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
+            tmux rename-window "$prev_window_name"
+            tmux setw automatic-rename on
+        fi
+        set_pane_title $prev_pane_title
     fi
-    set_pane_title $prev_pane_title
 fi

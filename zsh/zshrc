@@ -386,7 +386,7 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server quote-for-knife set-iterm2-title)
+useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server quote-for-knife set-iterm2-title)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help
