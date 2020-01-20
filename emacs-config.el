@@ -987,6 +987,13 @@ becomes
     (local-set-key (kbd "RET") 'newline-and-indent)
     ;; (yas-minor-mode +1)
     (whitespace-cleanup-mode +1))
+  (defun piger/web-mode-set-engine ()
+    "Set web-mode engine based on some conditions."
+    (if (and (file-exists-p (concat (projectile-project-root) "archetypes"))
+             (file-exists-p (concat (projectile-project-root) "config.toml")))
+        (web-mode-set-engine "go")))
+  (add-hook 'web-mode-hook 'piger/web-mode-set-engine)
+
   (setq web-mode-enable-current-element-highlight t
         web-mode-enable-auto-quoting -1
         web-mode-code-indent-offset 4
