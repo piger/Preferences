@@ -8,15 +8,15 @@ local win_escape_start="\033k"
 local pane_escape_start="\033]2;"
 local escape_end="\033\\"
 
-set_pane_title() {
+_ssh_wrapper_set_pane_title() {
     printf "$pane_escape_start$1$escape_end"
 }
 
-set_window_title() {
+_ssh_wrapper_set_window_title() {
     printf "$win_escape_start$1$escape_end"
 }
 
-set_iterm2_title() {
+_ssh_wrapper_set_iterm2_title() {
     echo -ne "\033]0;"$*"\007"
 }
 
@@ -40,7 +40,7 @@ if [[ -z $hostname ]]; then
 else
 
     if [[ -z $TMUX ]]; then
-        set_iterm2_title $short_name
+        _ssh_wrapper_set_iterm2_title $short_name
     else
         local prev_window_name=$(tmux display-message -p "#{window_name}")
         local prev_pane_title=$(tmux display-message -p "#{pane_title}")
@@ -50,21 +50,21 @@ else
         if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
             # Use a shortened version of the hostname for the window title
             tmux rename-window "$short_name"
-            set_pane_title $hostname
+            _ssh_wrapper_set_pane_title $hostname
         else
-            set_pane_title $hostname
+            _ssh_wrapper_set_pane_title $hostname
         fi
     fi
 
     command ssh $@
 
     if [[ -z $TMUX ]]; then
-        set_iterm2_title ""
+        _ssh_wrapper_set_iterm2_title ""
     else
         if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
             tmux rename-window "$prev_window_name"
             tmux setw automatic-rename on
         fi
-        set_pane_title $prev_pane_title
+        _ssh_wrapper_set_pane_title $prev_pane_title
     fi
 fi
