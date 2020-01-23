@@ -562,6 +562,16 @@ becomes
   (interactive "r")
   (align-regexp start end "\\S-+\\(\\s-+\\)" 1 2 nil))
 
+(defun arrayify (start end quote)
+  "Turn strings on newlines into a QUOTEd, comma-separated one-liner."
+  (interactive "r\nMQuote: ")
+  (let ((insertion
+         (mapconcat
+          (lambda (x) (format "%s%s%s" quote x quote))
+          (split-string (buffer-substring start end)) ", ")))
+    (delete-region start end)
+    (insert insertion)))
+
 ;; Keyboard bindings
 ;; Mac OS X customization. Note that you should use my modified keyboard layout which permits
 ;; accented characters.
