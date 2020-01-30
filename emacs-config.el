@@ -139,7 +139,14 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-palenight t))
+  ;; these are the package defaults; I'll leave them here in case I want to disable them in the
+  ;; future.
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'doom-palenight t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config))
 
 (use-package chocolate-theme
   :disabled t
@@ -1746,7 +1753,7 @@ becomes
   ;; folding symbol
   (setq org-ellipsis "  "
         org-pretty-entities t)
-  
+
   ;; more ricing?
   ;; (setq org-startup-indented t
   ;;       ;;; org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
