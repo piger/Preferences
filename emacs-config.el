@@ -1857,8 +1857,30 @@ becomes
 ;; Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
 ;; *NOTE*: this must be configured BEFORE spaceline: https://github.com/TheBB/spaceline/issues/68
 (use-package "window-numbering"
+  :disabled t
   :ensure t
   :config (window-numbering-mode))
+
+
+;; replaces the unmaintained "window-numbering"
+(use-package winum
+  :ensure t
+  :init
+  (setq winum-keymap
+        (let ((map (make-sparse-keymap)))
+          (define-key map (kbd "C-§") 'winum-select-window-by-number)
+          (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
+          (define-key map (kbd "M-1") 'winum-select-window-1)
+          (define-key map (kbd "M-2") 'winum-select-window-2)
+          (define-key map (kbd "M-3") 'winum-select-window-3)
+          (define-key map (kbd "M-4") 'winum-select-window-4)
+          (define-key map (kbd "M-5") 'winum-select-window-5)
+          (define-key map (kbd "M-6") 'winum-select-window-6)
+          (define-key map (kbd "M-7") 'winum-select-window-7)
+          (define-key map (kbd "M-8") 'winum-select-window-8)
+          map))
+  :config
+  (winum-mode +1))
 
 ;; https://github.com/jscheid/dtrt-indent is a minor mode which guesses the indentation offset of a
 ;; source file and adjust the corresponding configuration in Emacs.
