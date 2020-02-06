@@ -253,7 +253,8 @@
 (setq confirm-kill-emacs 'yes-or-no-p)
 
 ;;; transparency
-;; (add-to-list 'default-frame-alist '(alpha 95 80))
+;; (set-frame-parameter (selected-frame) 'alpha '(95 80))
+(add-to-list 'default-frame-alist '(alpha 95 80))
 
 ;; Save clipboard strings into kill ring before replacing them.
 ;; When one selects something in another program to paste it into Emacs,
