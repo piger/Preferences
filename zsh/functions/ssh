@@ -56,7 +56,14 @@ else
         fi
     fi
 
+    # Display iTerm2 badge
+    [[ TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=%s\a" \
+           $(echo -n "$short_name" | base64)
+
     command ssh $@
+
+    # Clear iTerm2 badge
+    [[ TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=\a"
 
     if [[ -z $TMUX ]]; then
         _ssh_wrapper_set_iterm2_title ""
