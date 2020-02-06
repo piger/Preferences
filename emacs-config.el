@@ -143,7 +143,16 @@
   ;; future.
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'doom-palenight t)
+  ;; (load-theme 'doom-palenight t)
+  ;; (load-theme 'doom-dark+ t)
+  (load-theme 'doom-peacock t)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+
+  ;; Treemacs
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config))
