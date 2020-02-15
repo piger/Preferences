@@ -32,7 +32,11 @@ fi
 # Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
 # instead of the PATH environment variable).
-[[ -d $HOME/bin ]] && path+=$HOME/bin
+if [[ -d $HOME/bin ]]; then
+    path+=$HOME/bin
+elif [[ -d $HOME/Preferences/bin ]]; then
+    path+=$HOME/Preferences/bin
+fi
 # same for ~/local
 [[ -d $HOME/local/bin ]] && path+=$HOME/local/bin
 
