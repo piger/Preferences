@@ -4,7 +4,10 @@
     "C-v": "peco.ScrollPageDown",
     "C-g": "peco.Cancel",
     "M-Space": "peco.ToggleRangeMode",
-    "M-C": "peco.CancelRangeMode"
+    "M-C": "peco.CancelRangeMode",
+    "M-b": "peco.BackwardWord",
+    "M-f": "peco.ForwardWord",
+    "M-C-8": "peco.DeleteBackwardWord"
   },
   "Style": {
     "Basic": ["on_default", "default"],
