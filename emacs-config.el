@@ -796,23 +796,24 @@ becomes
   (defun my-go-mode-hook ()
     (add-hook 'before-save-hook 'gofmt-before-save nil t)
     (setq gofmt-command "goimports")
-    (with-eval-after-load 'company
-      '(add-to-list 'company-backends 'company-go))
+    ;; (with-eval-after-load 'company
+    ;;   '(add-to-list 'company-backends 'company-go))
     (if (not (string-match "go" compile-command))
              (set (make-local-variable 'compile-command)
                   "go build -v && go test -v && go vet"))
-    (go-eldoc-setup)
+    ;; (go-eldoc-setup)
     (setq tab-width 4)
     (local-set-key (kbd "C-c C-k") 'godoc)
     (subword-mode +1)
     ;; (company-mode)
     (flycheck-mode)
-    (go-guru-hl-identifier-mode)
+    ;; (go-guru-hl-identifier-mode)
     ;; (local-set-key (kbd "M-.") 'godef-jump)
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
 (use-package go-eldoc
+  :disabled t ;;; disabled in favor of lsp + gopls
   :commands (go-eldoc-setup)
   :ensure t)
 
@@ -821,6 +822,7 @@ becomes
   :ensure t)
 
 (use-package go-guru
+  :disabled t
   :commands (go-guru-hl-identifier-mode)
   :config
   (defun projectile-guru-scope ()
@@ -2031,6 +2033,20 @@ becomes
 (use-package treemacs-projectile
   :ensure t
   :after treemacs projectile)
+
+;; LSP
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (go-mode .lsp-deferred))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
