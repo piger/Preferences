@@ -117,7 +117,5 @@ fsckObjects = true
 [includeIf "gitdir:~/code/"]
     path = ~/.gitconfig.work
 
-[includeIf "gitdir:~/dev/ai/"]
-    path = ~/.gitconfig.ai
 [github]
 	user = piger
