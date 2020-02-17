@@ -2037,8 +2037,12 @@ becomes
 ;; LSP
 (use-package lsp-mode
   :ensure t
+  :init
+  (setq lsp-keymap-prefix "s-l")
   :commands (lsp lsp-deferred)
-  :hook (go-mode .lsp-deferred))
+  :hook (
+         (go-mode . lsp-deferred)
+         (lsp-mode . lsp-enable-which-key-integration)))
 
 (use-package lsp-ui
   :ensure t
