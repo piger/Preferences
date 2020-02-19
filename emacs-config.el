@@ -713,15 +713,6 @@ becomes
          (locate-dominating-file parent-dir "recipes")
          (locate-dominating-file parent-dir "cookbooks"))))
 
-  (flycheck-define-checker chef-foodcritic
-    "A Chef cookbooks syntax checker using Foodcritic."
-    :command ("foodcritic" source)
-    :error-patterns
-    ((error line-start (message) ": " (file-name) ":" line line-end))
-    :modes (enh-ruby-mode ruby-mode)
-    :predicate flycheck-foodcritic-porcodio
-    :next-checkers ((warnings-only . ruby-rubocop)))
-
   (global-flycheck-mode))
 
 (use-package ediff
@@ -869,8 +860,6 @@ becomes
   (cond ((string-match "/code/misc/zcfn/" buffer-file-name)
          (set (make-local-variable 'comment-auto-fill-only-comments) t)
          (setq-local fill-column 140)
-         ;;; I hate foodcritic.
-         (flycheck-mode -1)
          (auto-fill-mode t)))
   (subword-mode +1))
 
