@@ -869,6 +869,8 @@ becomes
   (cond ((string-match "/code/misc/zcfn/" buffer-file-name)
          (set (make-local-variable 'comment-auto-fill-only-comments) t)
          (setq-local fill-column 140)
+         ;;; I hate foodcritic.
+         (flycheck-mode -1)
          (auto-fill-mode t)))
   (subword-mode +1))
 
