@@ -2039,6 +2039,18 @@ becomes
   :ensure t
   :after treemacs projectile)
 
+(use-package lua-mode
+  :ensure t
+  :mode "\\.lua$"
+  :interpreter "lua")
+
+(use-package lsp-lua-emmy
+  :demand
+  :load-path "~/code/others/lsp-lua-emmy"
+  :hook (lua-mode . lsp)
+  :config
+  (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory)))
+
 ;; LSP
 (use-package lsp-mode
   :ensure t
@@ -2047,7 +2059,9 @@ becomes
   :commands (lsp lsp-deferred)
   :hook (
          (go-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration)))
+         (lsp-mode . lsp-enable-which-key-integration))
+  :config
+  (setq lsp-eldoc-render-all t))
 
 (use-package lsp-ui
   :ensure t
