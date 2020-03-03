@@ -463,6 +463,9 @@ if [[ $OSTYPE = darwin* ]]; then
     alias dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox'
     alias run_dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox -conf'
 
+    # Lua Love
+    alias love="/Applications/love.app/Contents/MacOS/love"
+
     # top comodo
     alias itop="top -u -s 5 -stats pid,username,command,cpu,time,mem,vsize,ppid,state"
 
