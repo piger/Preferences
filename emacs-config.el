@@ -743,6 +743,15 @@ becomes
     ;; unfuck electric indentation
     (setq electric-indent-chars '(?\n))))
 
+(use-package lsp-python-ms
+  :ensure t
+  :demand t
+  :after lsp
+  :config
+  (setq lsp-python-ms-dir
+        (expand-file-name "~/dev/others/python-language-server/output/bin/Release/"))
+  (setq lsp-python-ms-executable "~/dev/others/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
+
 (use-package anaconda-mode
   :disabled t
   :config
