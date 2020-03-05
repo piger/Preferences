@@ -44,6 +44,9 @@ fi
 [[ -d /opt/local/bin ]] && path+=/opt/local/bin
 [[ -d /usr/games ]] && path+=/usr/games
 
+# Poetry
+[[ -d $HOME/.poetry/bin ]] && path+=$HOME/.poetry/bin
+
 # Plan9
 if [[ -d /usr/local/plan9port ]]; then
     export PLAN9=/usr/local/plan9port
