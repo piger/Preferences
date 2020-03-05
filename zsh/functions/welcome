@@ -13,12 +13,20 @@ logo() {
 }
 
 logo-alt() {
-    if [[ -x $HOME/Preferences/bin/imgcat && -e $HOME/Pictures/pusheen-sprite.png ]]; then
-        doodle="$(ls ~/Pictures/pixel-art/ | shuf -n 1)"
-        $HOME/Preferences/bin/imgcat "$HOME/Pictures/pixel-art/$doodle"
-    else
-        echo "no imgcat or pusheen-sprite found"
+    if [[ ! -x $HOME/Preferences/bin/imgcat ]]; then
+        echo "Missing imgcat"
+        apple-logo
+        return
     fi
+
+    if [[ ! -d $HOME/Pictures/pixel-art/ ]]; then
+        echo "No pixel-art directory"
+        apple-logo
+        return
+    fi
+
+    doodle=$(perl -m"List::Util" -e 'opendir($dh, "$ENV{\"HOME\"}/Pictures/pixel-art") || die "nope"; @pics = grep { /\.(?:gif|png|jpe?g)$/ } readdir($dh); @pics = List::Util::shuffle @pics; print $pics[0];')
+    $HOME/Preferences/bin/imgcat "$HOME/Pictures/pixel-art/$doodle"
 }
 
 fortune-classic() {
@@ -39,10 +47,10 @@ fortune-classic() {
 fortune-tips() {
     printf "\e[3m\e[1mTip of the day\e[0m\n"
     if [[ -d ~/dev/cli-tips-fortune/ ]]; then
-		fortune ~/dev/cli-tips-fortune/
-	else
-		echo "no tips"
-	fi
+                fortune ~/dev/cli-tips-fortune/
+        else
+                echo "no tips"
+        fi
 }
 
 printf "\n"
