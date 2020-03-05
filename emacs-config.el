@@ -2025,7 +2025,7 @@ becomes
   :commands hc
   :config
   ;; https://support.cloudflare.com/hc/en-us/articles/115003011431/
-  (setq http-codes (append
+  (setq custom-http-codes
                     '((520 ("Web server returns an unknown error" "Occurs when the origin server returns an empty, unknown, or unexpected response to Cloudflare."))
                       (521 ("Web server is down" "Occurs when the origin web server refuses connections from Cloudflare. Security solutions at your origin may block legitimate connections from certain Cloudflare IP addresses."))
                       (522 ("Connection timed out" "Occurs when Cloudflare times out contacting the origin web server."))
@@ -2034,8 +2034,7 @@ becomes
                       (525 ("SSL handshake failed" "525 errors are often caused by a configuration issue on the origin web server."))
                       (526 ("Invalid SSL certificate" "Error 526 occurs when these two conditions are true: 1) Cloudflare cannot validate the SSL certificate at your origin web server, and 2) Full SSL (Strict) SSL is set in the Overview tab of your Cloudflare SSL/TLS app."))
                       (527 ("Railgun Listener to origin error" "A 527 error indicates an interrupted connection between Cloudflare and your origin's Railgun server (rg-listener)."))
-                      (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed."))
-                      ))))
+                      (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed.")))))
 
 (use-package treemacs
   :ensure t
