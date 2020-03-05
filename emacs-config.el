@@ -2079,6 +2079,10 @@ becomes
   :ensure t
   :commands company-lsp)
 
+(use-package dockerfile-mode
+  :ensure t
+  :mode ("Dockerfile" . dockerfile-mode))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
