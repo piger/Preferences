@@ -14,7 +14,8 @@ logo() {
 
 logo-alt() {
     if [[ -x $HOME/Preferences/bin/imgcat && -e $HOME/Pictures/pusheen-sprite.png ]]; then
-        $HOME/Preferences/bin/imgcat $HOME/Pictures/pusheen-sprite.png
+        doodle="$(ls ~/Pictures/pixel-art/ | shuf -n 1)"
+        $HOME/Preferences/bin/imgcat "$HOME/Pictures/pixel-art/$doodle"
     else
         echo "no imgcat or pusheen-sprite found"
     fi
