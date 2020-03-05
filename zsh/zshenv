@@ -85,6 +85,16 @@ foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
   fi
 done
 
+# stop the insanity
+if [[ -d "$HOME/dev" ]]; then
+    PERSONAL_CODE_DIR="$HOME/dev"
+    OTHERS_CODE_DIR="$HOME/dev/others"
+else
+    PERSONAL_CODE_DIR="$HOME/code"
+    OTHERS_CODE_DIR="$HOME/code/others"
+fi
+export PERSONAL_CODE_DIR OTHERS_CODE_DIR
+
 # on macOS /etz/profile will call /usr/libexec/path_helper which will fuck PATH ignoring
 # everything done so far.
 # Also if we ever need to have this feature we can just read files in /etc/paths.d and /etc/manpaths.d by
