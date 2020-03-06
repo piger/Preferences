@@ -1,22 +1,26 @@
-#!/bin/zsh -f
+#!/bin/zsh
 
 myself=$0:A
+
+apple_logo() {
+    zsh $HOME/Preferences/zsh/functions/apple-logo
+}
 
 logo() {
     if [[ ! -x $HOME/Preferences/bin/imgcat ]]; then
         echo "Missing imgcat"
-        apple-logo
+        apple_logo
         return
     fi
 
     if [[ ! -d $HOME/Pictures/pixel-art/ ]]; then
         echo "No pixel-art directory"
-        apple-logo
+        apple_logo
         return
     fi
 
     if [[ $(( RANDOM % 2 )) = 0 ]]; then
-        apple-logo
+        apple_logo
     else
         # devilish
         doodle=$(perl -x $myself)
