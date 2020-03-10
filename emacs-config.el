@@ -1449,7 +1449,10 @@ becomes
 
 (use-package terraform-mode
   :mode "\\.tf\\'"
-  :hook (terraform-mode . terraform-format-on-save-mode))
+  ;; :hook (terraform-mode . terraform-format-on-save-mode)
+  :config
+  (when (file-exists-p (expand-file-name "~/Downloads/terraform-lsp_0.0.10_darwin_amd64"))
+    (setq lsp-terraform-server (expand-file-name "~/Downloads/terraform-lsp_0.0.10_darwin_amd64/terraform-lsp"))))
 
 (use-package company-terraform
   :after (terraform-mode company)
