@@ -2054,6 +2054,7 @@ becomes
 
 (use-package lsp-lua-emmy
   :demand
+  :if (file-exists-p "~/code/others/lsp-lua-emmy")
   :load-path "~/code/others/lsp-lua-emmy"
   :hook (lua-mode . lsp)
   :config
