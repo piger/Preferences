@@ -83,6 +83,8 @@
     # get the root directory of the repo
     root = rev-parse --show-toplevel
     current-branch = rev-parse --abbrev-ref HEAD
+    diffc = diff --color-words=.
+    showc = show --color-words=.
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
@@ -90,7 +92,7 @@
 
 # NOTE: default from git 2.0
 [push]
-    default = simple
+    default = current
 
 [user]
     name = Daniel Kertesz
