@@ -2084,6 +2084,11 @@ becomes
   :ensure t
   :mode ("Dockerfile" . dockerfile-mode))
 
+;;; trim whitespaces only on edited lines
+(use-package ws-butler
+  :ensure t
+  :hook (prog-mode . ws-butler-mode))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
