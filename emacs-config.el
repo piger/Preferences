@@ -818,8 +818,8 @@ becomes
   :ensure t)
 
 (use-package gotest
-  :after go-mode
-  :ensure t)
+  :disabled t
+  :after go-mode)
 
 (use-package go-guru
   :disabled t
@@ -1063,8 +1063,7 @@ becomes
     '(add-to-list 'company-backends 'company-omnisharp)))
 
 (use-package php-mode
-  :mode "\\.php\\'"
-  :ensure t)
+  :mode "\\.php\\'")
 
 (use-package highlight-symbol
   :ensure t
@@ -1580,7 +1579,6 @@ becomes
   :ensure t)
 
 (use-package apache-mode
-  :ensure t
   :mode (("\\.htaccess\\'" . apache-mode)
          ("/apache2?/sites-\\(available|enabled\\)/" . apache-mode)))
 
@@ -2040,14 +2038,12 @@ becomes
                       (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed.")))))
 
 (use-package treemacs
-  :ensure t
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
   :defer t)
 
 (use-package treemacs-projectile
-  :ensure t
   :after treemacs projectile)
 
 (use-package lua-mode
@@ -2066,6 +2062,7 @@ becomes
 ;; LSP
 (use-package lsp-mode
   :ensure t
+  :disabled t
   :init
   (setq lsp-keymap-prefix "s-l")
   :commands (lsp lsp-deferred)
