@@ -2051,7 +2051,9 @@ becomes
   :mode "\\.lua$"
   :interpreter "lua")
 
+;;; this is super buggy
 (use-package lsp-lua-emmy
+  :disabled t
   :demand
   :if (file-exists-p "~/code/others/lsp-lua-emmy")
   :load-path "~/code/others/lsp-lua-emmy"
