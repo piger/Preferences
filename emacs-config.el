@@ -20,7 +20,9 @@
 
 ;; tune GC
 ;; https://github.com/hlissner/doom-emacs/blob/master/core/core.el
-(setq gc-cons-threshold 402653184
+;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+(setq gc-cons-threshold 100000000
+      read-process-output-max (* 1024 1024) ;; 1mb
       gc-cons-percentage 0.6)
 
 ;; Packages
@@ -2064,7 +2066,6 @@ becomes
 ;; LSP
 (use-package lsp-mode
   :ensure t
-  :disabled t
   :init
   (setq lsp-keymap-prefix "s-l")
   :commands (lsp lsp-deferred)
@@ -2072,6 +2073,9 @@ becomes
          (go-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
+  ;; disable eldoc minibuffer since we're using lsp-ui
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-snippet nil)
   (setq lsp-eldoc-render-all t))
 
 (use-package lsp-ui
