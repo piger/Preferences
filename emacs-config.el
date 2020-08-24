@@ -307,6 +307,16 @@
 ;; line num
 ;; (global-linum-mode +1)
 
+;; add column number to the modeline
+(use-package simple
+  :ensure nil
+  :config (column-number-mode +1))
+
+;; Replace the active region just by typing text, just like modern editors.
+(use-package delsel
+  :ensure nil
+  :config (delete-selection-mode +1))
+
 ;; nice scrolling ???
 (setq scroll-margin 0
       scroll-conservatively 100000
