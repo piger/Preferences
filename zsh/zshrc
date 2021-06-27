@@ -259,7 +259,8 @@ fi
 # `grep` options
 # - grep colors (highlight verde)
 # - skippa i file device, FIFO e socket.
-export GREP_OPTIONS='--color=auto -D skip'
+# GREP_OPTIONS is deprecated, because fuck you
+# export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # ssh-askpass support
