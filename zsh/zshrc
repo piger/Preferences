@@ -375,6 +375,17 @@ if exists peco; then
     zle -N peco_select_history
     bindkey '^R' peco_select_history
 fi
+
+if exists fzf; then
+    function fzf_select_history() {
+        BUFFER=$(fc -l -n 1 | cat | fzf --tac --query "$LBUFFER")
+        CURSOR=$#BUFFER
+        zle -R -c
+    }
+
+    zle -N fzf_select_history
+    bindkey '^R' fzf_select_history
+fi
 # }}}
 
 # AUTOLOADS {{{
