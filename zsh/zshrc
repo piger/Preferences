@@ -1005,6 +1005,11 @@ fi
 # Sets the terminal to something simple so that emacs doesn't gets confused.
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 
+# PLUGINS AND STUFF {{{
+[[ -e $HOME/Preferences/zsh/keephack ]] && source $HOME/Preferences/zsh/keephack
+[[ -e $HOME/Preferences/zsh/plugins/z/z.sh ]] && source $HOME/Preferences/zsh/plugins/z/z.sh
+# }}}
+
 # LOCAL SETTINGS {{{
 [[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
 # }}}
