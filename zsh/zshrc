@@ -378,7 +378,7 @@ fi
 
 if exists fzf; then
     function fzf_select_history() {
-        BUFFER=$(fc -l -n 1 | cat | fzf --tac --query "$LBUFFER")
+        BUFFER=$(fc -l -n 1 | fzf --tac --query "$LBUFFER")
         CURSOR=$#BUFFER
         zle -R -c
     }
