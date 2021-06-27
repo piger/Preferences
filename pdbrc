@@ -1,2 +1,0 @@
-alias ph !help(%1)
-alias pl pp list(locals().keys())
