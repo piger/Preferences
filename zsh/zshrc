@@ -457,7 +457,7 @@ lazy_vcs_info() {
 
 # load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
 # to be able to access the original $? from the last command (and not from the last hook)
-[[ -d ~/dev/zsh-notify ]] && source ~/dev/zsh-notify/zsh-notify.zsh
+source_if_exists "$HOME/dev/zsh-notify/zsh-notify.zsh"
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
@@ -1007,12 +1007,12 @@ fi
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 
 # PLUGINS AND STUFF {{{
-[[ -e $HOME/Preferences/zsh/keephack ]] && source $HOME/Preferences/zsh/keephack
-[[ -e $HOME/Preferences/zsh/plugins/z/z.sh ]] && source $HOME/Preferences/zsh/plugins/z/z.sh
+source_if_exists "$HOME/Preferences/zsh/keephack"
+source_if_exists "$HOME/Preferences/zsh/plugins/z/z.sh"
 # }}}
 
 # LOCAL SETTINGS {{{
-[[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
+source_if_exists "$HOME/.zshrc.local"
 # }}}
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che

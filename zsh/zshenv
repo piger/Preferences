@@ -3,6 +3,16 @@
 # This file is always executed by zsh so it's mostly useful to set environment
 # variables used by non-interactive jobs.
 
+# Helpers {{{
+source_if_exists() {
+    if test -e "$1"; then source "$1"; fi
+}
+
+add_path_if_exists() {
+    if test -d "$1"; then path+=("$1"); fi
+}
+# }}}
+
 # PATH handling {{{
 # PATH and path refers to the same variable (tied), so as MANPATH and manpath.
 # The attribute flag -U is to keep unique values inside an array.
@@ -24,10 +34,11 @@ if [[ -d $HOME/dev/go ]]; then
     export GOPATH=$HOME/dev/go
     path+=($HOME/dev/go/bin)
 fi
-[[ -d /usr/local/opt/go/libexec/bin ]] && path+=(/usr/local/opt/go/libexec/bin)
+add_path_if_exists "/usr/local/opt/go/libexec/bin"
+add_path_if_exists "/usr/local/go/bin"
 
 # Rust support
-[[ -d $HOME/.cargo/bin ]] && path+=($HOME/.cargo/bin)
+add_path_if_exists "$HOME/.cargo/bin"
 
 # Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
@@ -38,14 +49,13 @@ elif [[ -d $HOME/Preferences/bin ]]; then
     path+=$HOME/Preferences/bin
 fi
 # same for ~/local
-[[ -d $HOME/local/bin ]] && path+=$HOME/local/bin
-
-[[ -d /opt/bin ]] && path+=/opt/bin
-[[ -d /opt/local/bin ]] && path+=/opt/local/bin
-[[ -d /usr/games ]] && path+=/usr/games
+add_path_if_exists "$HOME/local/bin"
+add_path_if_exists "/opt/bin"
+add_path_if_exists "/opt/local/bin"
+add_path_if_exists "/usr/games"
 
 # Poetry
-[[ -d $HOME/.poetry/bin ]] && path+=$HOME/.poetry/bin
+add_path_if_exists "$HOME/.poetry/bin"
 
 # Plan9
 if [[ -d /usr/local/plan9port ]]; then
@@ -102,6 +112,6 @@ export PERSONAL_CODE_DIR OTHERS_CODE_DIR
 setopt no_GLOBAL_RCS
 
 # Load local zshenv
-[[ -f $HOME/.zshenv.local ]] && source $HOME/.zshenv.local
+source_if_exists "$HOME/.zshenv.local"
 
 # vim: ft=zsh
