@@ -2,12 +2,17 @@
 
 zparseopts -A opts -- q s
 
-vpn_status=$(ifconfig | egrep '10\..* --> 10\.')
-if [[ $vpn_status != "" ]]; then
+GP_DEVICE=gpd0
+
+ifconfig -u $GP_DEVICE > /dev/null 2>&1
+vpn_status=$?
+vpn_address=$(ifconfig -u gpd0 | awk '/inet/ { print $2 }')
+
+if [[ $vpn_status = 0 ]]; then
     if (( ${+opts[-q]} )); then
         echo "◼"
     else
-        echo "VPN is UP: $vpn_status"
+        echo "VPN is UP: $vpn_address"
     fi
     ret=0
 else
