@@ -9,7 +9,6 @@
 
 # CONFIG {{{
 # Settings can be customized inside ~/.zshenv.local.
-ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT=${ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT:-0}
 DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
 FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/dev/fortune-tvshows/fortunes}
 # }}}
@@ -259,7 +258,8 @@ fi
 # `grep` options
 # - grep colors (highlight verde)
 # - skippa i file device, FIFO e socket.
-export GREP_OPTIONS='--color=auto -D skip'
+# GREP_OPTIONS is deprecated, because fuck you
+# export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # ssh-askpass support
@@ -375,6 +375,17 @@ if exists peco; then
     zle -N peco_select_history
     bindkey '^R' peco_select_history
 fi
+
+if exists fzf; then
+    function fzf_select_history() {
+        BUFFER=$(fc -l -n 1 | fzf --tac --query "$LBUFFER")
+        CURSOR=$#BUFFER
+        zle -R -c
+    }
+
+    zle -N fzf_select_history
+    bindkey '^R' fzf_select_history
+fi
 # }}}
 
 # AUTOLOADS {{{
@@ -445,7 +456,7 @@ lazy_vcs_info() {
 
 # load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
 # to be able to access the original $? from the last command (and not from the last hook)
-[[ -d ~/dev/zsh-notify ]] && source ~/dev/zsh-notify/zsh-notify.zsh
+source_if_exists "$HOME/dev/zsh-notify/zsh-notify.zsh"
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
@@ -928,74 +939,17 @@ compctl -K _pip_completion pip
 [[ -e $HOME/Preferences/bin/welcome.sh ]] && $HOME/Preferences/bin/welcome.sh
 # }}}
 
-# bracketed paste mode {{{
-# NOTE: zsh 5.1 introduced official and enabled-by-default support for bracketed paste.
-# http://zsh.sourceforge.net/releases.html
-if [[ $ENABLE_CUSTOM_BRACKETED_PASTE_SUPPORT = 1 ]]; then
-    # See also: https://cirw.in/blog/bracketed-paste
-
-    # Code from Mikael Magnusson: http://www.zsh.org/mla/users/2011/msg00367.html
-    #
-    # Requires xterm, urxvt, iTerm2 or any other terminal that supports bracketed
-    # paste mode as documented: http://www.xfree86.org/current/ctlseqs.html
-
-    # create a new keymap to use while pasting
-    bindkey -N paste
-    # make everything in this keymap call our custom widget
-    bindkey -R -M paste "^@"-"\M-^?" paste-insert
-    # these are the codes sent around the pasted text in bracketed
-    # paste mode.
-    # do the first one with both -M viins and -M vicmd in vi mode
-    bindkey '^[[200~' _start_paste
-    bindkey -M paste '^[[201~' _end_paste
-    # insert newlines rather than carriage returns when pasting newlines
-    bindkey -M paste -s '^M' '^J'
-
-    zle -N _start_paste
-    zle -N _end_paste
-    zle -N zle-line-init _zle_line_init
-    zle -N zle-line-finish _zle_line_finish
-    zle -N paste-insert _paste_insert
-
-    # switch the active keymap to paste mode
-    function _start_paste() {
-        bindkey -A paste main
-    }
-
-    # go back to our normal keymap, and insert all the pasted text in the
-    # command line. this has the nice effect of making the whole paste be
-    # a single undo/redo event.
-    function _end_paste() {
-        #use bindkey -v here with vi mode probably. maybe you want to track
-        #if you were in ins or cmd mode and restore the right one.
-        bindkey -e
-        LBUFFER+=$_paste_content
-        unset _paste_content
-    }
-
-    function _paste_insert() {
-        _paste_content+=$KEYS
-    }
-
-    function _zle_line_init() {
-        # Tell terminal to send escape codes around pastes.
-        [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004h'
-    }
-
-    function _zle_line_finish() {
-        # Tell it to stop when we leave zle, so pasting in other programs
-        # doesn't get the ^[[200~ codes around the pasted text.
-        [[ $TERM == rxvt-unicode || $TERM == xterm || $TERM = xterm-256color || $TERM = screen || $TERM = screen-256color ]] && printf '\e[?2004l'
-    }
-fi
-# }}}
-
 # Emacs tramp support
 # Sets the terminal to something simple so that emacs doesn't gets confused.
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 
+# PLUGINS AND STUFF {{{
+source_if_exists "$HOME/Preferences/zsh/keephack"
+source_if_exists "$HOME/Preferences/zsh/plugins/z/z.sh"
+# }}}
+
 # LOCAL SETTINGS {{{
-[[ -e ~/.zshrc.local ]] && source ~/.zshrc.local
+source_if_exists "$HOME/.zshrc.local"
 # }}}
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che

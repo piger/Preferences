@@ -5,5 +5,8 @@
 --type-add
 erb:*.erb
 
+--type-add
+template:*.{tmpl,erb}
+
 # enable smart-case search
 --smart-case

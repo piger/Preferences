@@ -93,7 +93,8 @@ else
     export VISUAL=vi
 fi
 
-export GREP_OPTIONS='--color=auto -D skip'
+# GREP_OPTIONS is depcreated, because fuck you
+# export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 ### Functions

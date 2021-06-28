@@ -52,8 +52,13 @@ prompt_piger_setup() {
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' unstagedstr '%F{3}★%f'
-    zstyle ':vcs_info:*' stagedstr '%F{2}●%f'
+    if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
+        zstyle ':vcs_info:*' unstagedstr '%F{3}¤%f'
+        zstyle ':vcs_info:*' stagedstr '%F{2}∷%f'
+    else
+        zstyle ':vcs_info:*' unstagedstr '%F{3}★%f'
+        zstyle ':vcs_info:*' stagedstr '%F{2}●%f'
+    fi
     zstyle ':vcs_info:*' use-quilt true
 
     add-zsh-hook precmd vcs_info
@@ -75,11 +80,19 @@ prompt_piger_setup() {
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
     # NOTE: "CONDITIONAL SUBSTRINGS IN PROMPTS" in zshmisc.
-    RPROMPT='%(?..%B%F{124}✘%f %?%b)'
+    if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
+        RPROMPT='%(?..%B%F{124}◆%f %?%b)'
+    else
+        RPROMPT='%(?..%B%F{124}✘%f %?%b)'
+    fi
 
     # Spell checker prompt.
     # default: correct 'mano' to 'nano' [nyae]?
-    SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+    if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
+        SPROMPT="≈±≈ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+    else
+        SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+    fi
 
     # set prompt options through promptinit
     prompt_opts=(cr subst percent sp)

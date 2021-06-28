@@ -1,3 +1,0 @@
-#!/bin/sh
-
-colordiff -u -L "$3" -L "$5" "$6" "$7"

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Finalmente, l'impero è arrivato.
@@ -68,7 +68,7 @@ def link(dotsrc, dotdest, opts):
     dest_dir = os.path.dirname(dest)
     if not os.path.exists(dest_dir):
         print("Creating missing directory with 0770 permissions: %s" % dest_dir)
-        os.makedirs(dest_dir, mode=0770)
+        os.makedirs(dest_dir, mode=0o0770)
 
     print("[+] {dest} -> {src}".format(dest=dest, src=src))
     os.symlink(src, dest)

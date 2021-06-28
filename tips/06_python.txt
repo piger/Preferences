@@ -1,5 +1,0 @@
->>> Cancella i file .pyc a cui non corrisponde un file .py
->>> Nella directory attuale:"
-% rm -i *.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
->>> Ricorsivo:
-% rm -i **/*.pyc(e:'[[ ! -e ${REPLY/.pyc/.py} ]]':)
