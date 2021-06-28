@@ -147,7 +147,9 @@
         doom-themes-enable-italic t)
   ;; (load-theme 'doom-palenight t)
   ;; (load-theme 'doom-dark+ t)
-  (load-theme 'doom-peacock t)
+  ;; (load-theme 'doom-peacock t)
+  ;; (load-theme 'doom-flatwhite t)
+  (load-theme 'doom-ayu-light t)
 
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
@@ -204,7 +206,7 @@
   (savehist-mode 1))
 
 ;; font
-(set-frame-font "Mononoki-12")
+;; (set-frame-font "Mononoki-12")
 
 ;; font & cursor (put this in init-local.el)
 ;; (set-face-attribute 'default nil
@@ -298,6 +300,7 @@
 ;; this requires "fortune" to be installed.
 (use-package fortune-cookie
   :ensure t
+  :disabled t
   :config
   (when (file-exists-p "~/Dropbox/fortunes")
     (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))))
@@ -780,8 +783,8 @@ becomes
 
 ;; IPython / Jupiter notebook support
 ;; https://github.com/millejoh/emacs-ipython-notebook
-(use-package ein
-  :commands (ein:jupyter-server-start ein:notebooklist-login))
+;; (use-package ein
+;;   :commands (ein:jupyter-server-start ein:notebooklist-login))
 
 ;; go
 ;; requires a bunch of tools:
@@ -869,12 +872,12 @@ becomes
   :bind
   (("C-c r r" . inf-ruby)))
 
-(use-package robe
-  :after (ruby company)
-  :hook ruby-mode
-  :config
-  (with-eval-after-load 'company
-    '(add-to-list 'company-backends 'company-robe)))
+;; (use-package robe
+;;   :after (ruby company)
+;;   :hook ruby-mode
+;;   :config
+;;   (with-eval-after-load 'company
+;;     '(add-to-list 'company-backends 'company-robe)))
 
 (defun piger/ruby-mode-hooks ()
   "Personalised 'ruby-mode' hooks."
@@ -947,14 +950,14 @@ becomes
   (global-rbenv-mode)
   (rbenv-use-global))
 
-(use-package bundler
-  :commands (bundle-check bundle-open bundle-update bundle-console bundle-install))
+;; (use-package bundler
+;;   :commands (bundle-check bundle-open bundle-update bundle-console bundle-install))
 
-(use-package rake
-  :commands rake)
+;; (use-package rake
+;;   :commands rake)
 
-(use-package rspec-mode
-  :requires ruby-mode)
+;; (use-package rspec-mode
+;;   :requires ruby-mode)
 
 ;; File mode specification error: (error Autoloading file /Users/dkertesz/.emacs.d/elpa/ruby-end-20141215.1223/ruby-end.elc failed to define function ruby-end)
 (use-package ruby-end
@@ -1058,6 +1061,7 @@ becomes
 (c-add-style "piger-cc-style" piger-cc-style)
 
 (use-package csharp-mode
+  :disabled t
   :mode "\\.cs\\'"
   :hook (csharp-mode . my-csharp-mode-hook)
   :config
@@ -1068,6 +1072,7 @@ becomes
     (company-mode 1)))
 
 (use-package omnisharp
+  :disabled t
   :after csharp-mode
   :hook (csharp-mode . omnisharp-mode)
   :config
@@ -1075,6 +1080,7 @@ becomes
     '(add-to-list 'company-backends 'company-omnisharp)))
 
 (use-package php-mode
+  :disabled t
   :mode "\\.php\\'")
 
 (use-package highlight-symbol
@@ -1216,6 +1222,7 @@ becomes
 
 ;; fancy popup window
 (use-package ivy-posframe
+  :disabled t
   :config
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
   (ivy-posframe-mode 1))
@@ -1318,13 +1325,19 @@ becomes
         git-commit-turn-on-flyspell t
         git-commit-turn-on-auto-fill t
         git-commit-fill-column 72
-        magit-display-buffer-function #'magit-display-buffer-fullcolumn-most-v1
+        ;; magit-display-buffer-function #'magit-display-buffer-fullcolumn-most-v1
         git-commit-summary-max-length 70)
-  (global-magit-file-mode 1)
+  ;; (global-magit-file-mode 1)
 
   (use-package git-commit
     :ensure t
     :hook (git-commit-setup . git-commit-turn-on-flyspell)))
+
+(use-package magit-delta
+  :after magit
+  :disabled t
+  :config
+  (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
 (use-package forge
   :after magit
@@ -1371,6 +1384,7 @@ becomes
   :bind (("C-x v t" . git-timemachine)))
 
 (use-package github-clone
+  :disabled t
   :bind (("C-x v c" . github-clone)))
 
 (use-package git-link
@@ -1429,6 +1443,7 @@ becomes
   (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
 
 (use-package rst-mode
+  :disabled t
   :mode "\\.rst\\'"
   :config
   (add-hook 'rst-mode-hook 'turn-on-auto-fill))
@@ -1437,6 +1452,7 @@ becomes
 ;; sizes. Also you can't configure those fonts until you "activate" them, so it needs to be done in
 ;; =:config=.
 (use-package adoc-mode
+  :disabled t
   :mode "\\.adoc\\'"
   :config
   (set-face-attribute 'markup-title-0-face nil :height 1.5)
@@ -1487,6 +1503,7 @@ becomes
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
 (use-package po-mode
+  :disabled t
   :if (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
   :load-path "/usr/local/opt/gettext/share/emacs/site-lisp"
   :mode "\\.po\\'\\|\\.po\\.")
@@ -1591,6 +1608,7 @@ becomes
   :ensure t)
 
 (use-package apache-mode
+  :disabled t
   :mode (("\\.htaccess\\'" . apache-mode)
          ("/apache2?/sites-\\(available|enabled\\)/" . apache-mode)))
 
@@ -1876,7 +1894,7 @@ becomes
 (use-package doom-modeline
   :ensure t
   :defer t
-  :hook (after-init . doom-modeline-init))
+  :hook (after-init . doom-modeline-mode))
 
 ;; Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
 ;; *NOTE*: this must be configured BEFORE spaceline: https://github.com/TheBB/spaceline/issues/68
@@ -1951,6 +1969,7 @@ becomes
   (global-set-key (kbd "C-c o") #'crux-open-with))
 
 (use-package neotree
+  :disabled t
   :commands neotree-toggle
   :bind ([f8] . neotree-toggle))
 
@@ -2008,6 +2027,7 @@ becomes
   (global-color-identifiers-mode))
 
 (use-package fireplace
+  :disabled t
   :commands fireplace)
 
 ;; not really that useful
@@ -2050,12 +2070,14 @@ becomes
                       (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed.")))))
 
 (use-package treemacs
+  :disabled t
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
   :defer t)
 
 (use-package treemacs-projectile
+  :disabled t
   :after treemacs projectile)
 
 (use-package lua-mode
@@ -2064,14 +2086,14 @@ becomes
   :interpreter "lua")
 
 ;;; this is super buggy
-(use-package lsp-lua-emmy
-  :disabled t
-  :demand
-  :if (file-exists-p "~/code/others/lsp-lua-emmy")
-  :load-path "~/code/others/lsp-lua-emmy"
-  :hook (lua-mode . lsp)
-  :config
-  (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory)))
+;; (use-package lsp-lua-emmy
+;;   :disabled t
+;;   :demand
+;;   :if (file-exists-p "~/code/others/lsp-lua-emmy")
+;;   :load-path "~/code/others/lsp-lua-emmy"
+;;   :hook (lua-mode . lsp)
+;;   :config
+;;   (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory)))
 
 ;; LSP
 (use-package lsp-mode
@@ -2125,3 +2147,6 @@ becomes
 
 ;;; to help troubleshooting:
 ;;; (setq debug-on-error t)
+
+;; shake fist!!
+(set-frame-font "JetBrains Mono 12" nil t)
