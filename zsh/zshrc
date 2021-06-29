@@ -363,28 +363,37 @@ zle -N insert-datestamp
 # C-e d -- insert current date dd-mm-YYYY
 bindkey '^Ed' insert-datestamp
 
-if exists peco; then
-    function peco_select_history() {
-        local tac
-        exists gtac && tac="gtac" || { exists tac && tac="tac" || { tac="tail -r" } }
-        BUFFER=$(fc -l -n 1 | eval $tac | peco --layout=bottom-up --query "$LBUFFER")
-        CURSOR=$#BUFFER         # move cursor
-        zle -R -c               # refresh
-    }
+peco_select_history() {
+    local tac
+    exists gtac && tac="gtac" || { exists tac && tac="tac" || { tac="tail -r" } }
+    BUFFER=$(fc -l -n 1 | eval $tac | peco --layout=bottom-up --query "$LBUFFER")
+    CURSOR=$#BUFFER         # move cursor
+    zle -R -c               # refresh
+}
 
-    zle -N peco_select_history
-    bindkey '^R' peco_select_history
-fi
+# https://github.com/junegunn/fzf/blob/764316a53d0eb60b315f0bbcd513de58ed57a876/shell/key-bindings.zsh
+fzf-history-widget() {
+    local selected num
+    setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+    selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
+        FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-80%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" fzf) )
+    local ret=$?
+    if [ -n "$selected" ]; then
+        num=$selected[1]
+        if [ -n "$num" ]; then
+            zle vi-fetch-history -n $num
+        fi
+    fi
+    zle reset-prompt
+    return $ret
+}
 
 if exists fzf; then
-    function fzf_select_history() {
-        BUFFER=$(fc -l -n 1 | fzf --tac --query "$LBUFFER")
-        CURSOR=$#BUFFER
-        zle -R -c
-    }
-
-    zle -N fzf_select_history
-    bindkey '^R' fzf_select_history
+    zle     -N   fzf-history-widget
+    bindkey '^R' fzf-history-widget
+elif exists peco; then
+    zle -N peco_select_history
+    bindkey '^R' peco_select_history
 fi
 # }}}
 

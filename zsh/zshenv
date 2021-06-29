@@ -115,4 +115,4 @@ setopt no_GLOBAL_RCS
 source_if_exists "$HOME/.zshenv.local"
 
 # vim: ft=zsh
-source "$HOME/.cargo/env"
+source_if_exists "$HOME/.cargo/env"
