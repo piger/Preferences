@@ -68,15 +68,6 @@
   ;; To fix 'foodcritic' (flycheck)
   (setenv "LANG" "en_GB.UTF-8")
 
-  ;; use vkill on OSX because proced doesn't work (stolen from prelude)
-  ;; Update Oct 2019: https://github.com/bbatsov/prelude/issues/1170
-  ;; this package was hosted on EmacsWiki and got removed from MELPA.
-  (use-package vkill
-    :ensure t
-    :disabled t
-    :bind
-    (("C-x p" . vkill)))
-
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   ;; (stolen from prelude)
   (if (fboundp 'set-fontset-font)
@@ -297,16 +288,6 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
-
-;; this requires "fortune" to be installed.
-(use-package fortune-cookie
-  :ensure t
-  :disabled t
-  :config
-  (when (file-exists-p "~/Dropbox/fortunes")
-    (setq fortune-cookie-fortune-args (list (expand-file-name "~/Dropbox/fortunes"))))
-  (setq fortune-cookie-cowsay-enable nil)
-  (fortune-cookie-mode))
 
 ;; line num
 ;; (global-linum-mode +1)
@@ -739,11 +720,6 @@ becomes
   ; ignore all white spaces
   (setq ediff-diff-options "-w"))
 
-;;; elpy requires the 'jedi' python package
-(use-package elpy
-  :disabled t
-  :commands elpy-enable)
-
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
@@ -767,20 +743,6 @@ becomes
   (setq lsp-python-ms-dir
         (expand-file-name "~/dev/others/python-language-server/output/bin/Release/"))
   (setq lsp-python-ms-executable "~/dev/others/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-
-(use-package anaconda-mode
-  :disabled t
-  :config
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
-
-(use-package company-anaconda
-  :disabled t
-  ;;; :requires (anaconda-mode company-mode)
-  :after (company anaconda-mode)
-  :config
-  (with-eval-after-load 'company
-    '(add-to-list 'company-backends 'company-anaconda)))
 
 ;; IPython / Jupiter notebook support
 ;; https://github.com/millejoh/emacs-ipython-notebook
@@ -852,13 +814,6 @@ becomes
 
 (use-package rust-mode
   :mode "\\.rs\\'")
-
-;; Collection of handy functions for ruby-mode
-;; https://github.com/rejeep/ruby-tools.el
-(use-package ruby-tools
-  :diminish ruby-tools-mode
-  :disabled t
-  :hook ruby-mode)
 
 (use-package rubocop
   :commands rubocop-mode
@@ -936,10 +891,6 @@ becomes
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
-;; (use-package ruby-electric
-;;   :disabled t
-;;   :hook (ruby-mode . ruby-electric-mode))
-
 (use-package rbenv
   :ensure t
   :init
@@ -959,13 +910,6 @@ becomes
 
 ;; (use-package rspec-mode
 ;;   :requires ruby-mode)
-
-;; File mode specification error: (error Autoloading file /Users/dkertesz/.emacs.d/elpa/ruby-end-20141215.1223/ruby-end.elc failed to define function ruby-end)
-(use-package ruby-end
-  :diminish
-  :disabled t
-  :pin melpa
-  :hook ruby-mode)
 
 (use-package css-mode
   :ensure t
@@ -1154,56 +1098,6 @@ becomes
 ;; Other modes
 ;; ---------------------------------------------------------------------------------------
 (ido-mode -1)
-
-(use-package helm
-  :pin melpa-stable
-  :disabled t
-  :config
-  (require 'helm-config)
-
-  (setq
-   ;; Limit candidate number globally.
-   helm-candidate-number-limit 100
-   ;; open helm buffer inside current window, not occupy whole other window.
-   ;; Maybe it's better to use the other half of the screen, it will contain more elements
-   ;; than the minibuffer popup.
-   ; helm-split-window-in-side-p t
-   ;; skip files which you usually don't want to open
-   ;; NO! this will make impossible to edit anything in .git/ !
-   ;; helm-ff-skip-boring-files t
-   helm-ff-file-name-history-use-recentf t
-   ;; Max length of buffer names before truncate.
-   helm-buffer-max-length 40)
-  (helm-mode 1)
-  ;; Enable "adaptive" (i.e. most frequent) sorting in Helm
-  (helm-adaptive-mode 1)
-  ;; What does this do??
-  ; (helm-push-mark-mode 1)
-  :diminish helm-mode
-  :bind (("C-c h"   . helm-mini)
-         ("M-x"     . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("M-x"     . helm-M-x)
-         ("M-s o"   . helm-occur)
-         ("M-y"     . helm-show-kill-ring)
-         ("C-x C-d" . helm-browse-project)
-         ("C-c i"   . helm-imenu-all-buffers)
-         ; erano
-         ; (define-key global-map (kbd "M-g a") 'helm-do-grep-ag)
-         ("M-g a"   . helm-do-grep-ag)
-         ("M-g g"   . helm-grep-do-git-grep)))
-
-(use-package helm-ls-git
-  :disabled t)
-
-(use-package helm-ag
-  :disabled t
-  :requires helm)
-
-(use-package helm-swoop
-  :config
-  :disabled t
-  (global-set-key (kbd "C-c o") 'helm-swoop))
 
 (use-package ivy
   :pin melpa
@@ -1566,11 +1460,6 @@ becomes
     (unless (file-remote-p default-directory)
       (apply orig-fn args)))
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
-
-(use-package helm-projectile
-  :disabled t
-  :config
-  (helm-projectile-on))
 
 (use-package ibuffer-projectile
   :disabled t
@@ -1944,10 +1833,6 @@ becomes
   :ensure t
   :bind
   ("C-h C-m" . discover-my-major))
-
-(use-package "dash-at-point"
-  :if *is-a-mac*
-  :disabled t)
 
 (use-package buffer-move
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
