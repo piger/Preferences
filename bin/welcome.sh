@@ -3,18 +3,20 @@
 myself=$0:A
 
 apple_logo() {
-    zsh $HOME/Preferences/zsh/functions/apple-logo
+	if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
+		neofetch --disable packages
+	else
+		zsh $HOME/Preferences/zsh/functions/apple-logo
+	fi
 }
 
 logo() {
     if [[ ! -x $HOME/Preferences/bin/imgcat ]]; then
-        echo "Missing imgcat"
         apple_logo
         return
     fi
 
     if [[ ! -d $HOME/Pictures/pixel-art/ ]]; then
-        echo "No pixel-art directory"
         apple_logo
         return
     fi
@@ -55,11 +57,9 @@ fortune-classic() {
 }
 
 fortune-tips() {
-    printf "\e[3m\e[1mTip of the day\e[0m\n"
     if [[ -d ${PERSONAL_CODE_DIR}/cli-tips-fortune/ ]]; then
+		printf "\e[3m\e[1mTip of the day\e[0m\n"
         fortune ${PERSONAL_CODE_DIR}/cli-tips-fortune/
-    else
-        echo "no tips"
     fi
 }
 
