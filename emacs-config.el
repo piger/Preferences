@@ -149,7 +149,8 @@
   ;; (load-theme 'doom-dark+ t)
   ;; (load-theme 'doom-peacock t)
   ;; (load-theme 'doom-flatwhite t)
-  (load-theme 'doom-ayu-light t)
+  ;; (load-theme 'doom-ayu-light t)
+  (load-theme 'doom-tomorrow-day t)
 
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
