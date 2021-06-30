@@ -40,31 +40,21 @@
 #       showUntrackedFiles = all
 
 [alias]
-    br = branch
     changes = log --oneline --reverse
     ci = commit
     co = checkout
     commit = commit -v
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-    istoria = log --pretty=medium --reverse --abbrev-commit --date=relative --decorate
     last = log -1 HEAD
     latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    ll = log --pretty=oneline --abbrev-commit --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr)%Creset'
     lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
     ls = ls-files
     ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
-    pullone = pull origin master:refs/heads/master
-    pushone = push origin master:refs/heads/master
     #via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
     recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
     st = status -sb
-    storia = log --pretty=medium --graph --abbrev-commit --date=relative --decorate
-    storiona = log --pretty=medium --graph --abbrev-commit --date=relative --stat --summary --decorate
     undo = reset --hard HEAD~1
     unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     unstage = reset HEAD --
-    w = whatchanged
     # semantic aliases
     tags = tag -l -n1
     branches = branch -av
