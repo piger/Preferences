@@ -39,15 +39,6 @@
 # [status]
 #       showUntrackedFiles = all
 
-# this is a hidden gem
-[pager]
-    log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-    show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-    diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-
-[interactive]
-        diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
-
 [alias]
     br = branch
     changes = log --oneline --reverse
@@ -118,6 +109,12 @@ fsckObjects = true
 
 [includeIf "gitdir:~/code/"]
     path = ~/.gitconfig.work
+
+[includeIf "gitdir:/home/"]
+    path = ~/.gitconfig-linux
+
+[includeIf "gitdir:/Users/"]
+    path = ~/.gitconfig-macos
 
 [github]
 	user = piger

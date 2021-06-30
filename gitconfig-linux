@@ -1,0 +1,11 @@
+# -*- mode: conf -*-
+# vim: ft=dosini
+
+# this is a hidden gem
+[pager]
+    log = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+    show = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+    diff = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+
+[interactive]
+    diffFilter = /usr/share/doc/git/contrib/diff-highlight/diff-highlight
