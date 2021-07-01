@@ -3,9 +3,26 @@
 
 # this is a hidden gem
 [pager]
-    log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-    show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-    diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
 
 [interactive]
-    diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
+diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
+
+[core]
+pager = delta
+
+[delta]
+# plus-color = "#012800"
+# minus-color = "#340001"
+## syntax-theme = Monokai Extended
+syntax-theme = Coldark-Dark
+side-by-side = true
+
+[interactive]
+diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
+# diffFilter = delta --color-only
+
+[pull]
+# ff = only
