@@ -39,6 +39,7 @@ add_path_if_exists "/usr/local/go/bin"
 
 # Rust support
 add_path_if_exists "$HOME/.cargo/bin"
+source_if_exists "$HOME/.cargo/env"
 
 # Other miscellaneous bin directories.
 # If you have a ~/bin directory, add it to PATH (here I use the path parameter
@@ -56,20 +57,10 @@ add_path_if_exists "/usr/games"
 
 # Poetry
 add_path_if_exists "$HOME/.poetry/bin"
-
-# Plan9
-if [[ -d /usr/local/plan9port ]]; then
-    export PLAN9=/usr/local/plan9port
-    path+=/usr/local/plan9port/bin
-fi
 # }}}
 
 # ripgrep
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
-
-# Use ssh for any remote operation involving CVS or rsync
-export CVS_RSH="ssh"
-export RSYNC_RSH="ssh"
 
 # Format string for 'time' command:
 TIMEFMT="%*E real time :: CPU: %P (%U user, %S kernel) :: %J"
@@ -84,16 +75,6 @@ fi
 # 11/06/2016
 # Not having an umask of "022" breaks tools written by the cool kids (like kitchen)
 umask 022
-
-# Alias vim and gvim to have it working inside shell functions and such.
-# See also: zsh/os/darwin
-foreach macvim (/Applications/MacVim.app ~/Applications/MacVim.app); do
-  if [[ -e $macvim ]]; then
-      alias vim="$macvim/Contents/MacOS/Vim"
-      alias gvim="$macvim/Contents/MacOS/MacVim"
-      break
-  fi
-done
 
 # stop the insanity
 if [[ -d "$HOME/dev" ]]; then
@@ -115,4 +96,3 @@ setopt no_GLOBAL_RCS
 source_if_exists "$HOME/.zshenv.local"
 
 # vim: ft=zsh
-source_if_exists "$HOME/.cargo/env"

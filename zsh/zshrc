@@ -116,11 +116,6 @@ setopt NO_rm_star_silent
 # FUNCTIONS {{{
 function exists() { which $1 &> /dev/null }
 
-# tree amanuense se non c'e' il pacchetto installato (from strcat.de)
-if (( ! $+commands[tree] )); then
-    tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
-fi
-
 # https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
 rot13() {
         echo $@ | tr "A-Za-z" "N-ZA-Mn-za-m"
@@ -128,40 +123,6 @@ rot13() {
 
 urlencode() { python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1])" $@ }
 urldecode() { python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1])" $@ }
-
-# from: grml
-ssl_hashes=( sha512 sha256 sha1 md5 )
-
-for sh in ${ssl_hashes}; do
-    eval 'ssl-cert-'${sh}'() {
-        emulate -L zsh
-        if [[ -z $1 ]] ; then
-            printf '\''usage: %s <file>\n'\'' "ssh-cert-'${sh}'"
-            return 1
-        fi
-        openssl x509 -noout -fingerprint -'${sh}' -in $1
-    }'
-done; unset sh
-
-ssl-cert-fingerprints() {
-    emulate -L zsh
-    local i
-    if [[ -z $1 ]] ; then
-        printf 'usage: ssl-cert-fingerprints <file>\n'
-        return 1
-    fi
-    for i in ${ssl_hashes}
-        do ssl-cert-$i $1;
-    done
-}
-
-ssl-cert-info() {
-    if [[ -z $1 ]]; then
-        echo "Usage: ssl-cert-info <file>"
-        exit 1
-    fi
-    openssl x509 -noout -text -in $1
-}
 
 teprego() {
     echo -e "$(tput setaf 1)sudo$(tput sgr0) → $(fc -ln -1)"
@@ -477,12 +438,6 @@ prompt piger
 
 # OS SPECIFIC {{{
 if [[ $OSTYPE = darwin* ]]; then
-    # *** OSX ***
-
-    # dosbox
-    alias dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox'
-    alias run_dosbox='/Applications/DOSBox.app/Contents/MacOS/DOSBox -conf'
-
     # Lua Love
     alias love="/Applications/love.app/Contents/MacOS/love"
 
@@ -491,15 +446,6 @@ if [[ $OSTYPE = darwin* ]]; then
 
     # spotlight
     alias spotlight-info='sudo fs_usage -w -f filesys mdworker | grep "open"'
-
-    # suffix aliases
-    # i.e. executing "*.png" will in turn execute "open *.png"
-    alias -s pdf=open
-    alias -s avi=open
-    alias -s jpeg=open
-    alias -s jpg=open
-    alias -s mp4=open
-    alias -s png=open
 
     # lock screen
     alias afk="pmset displaysleepnow"
@@ -593,8 +539,6 @@ EOF
     export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 
 elif [[ $OSTYPE = linux* ]]; then
-    # *** LINUX ***
-
     alias ls="ls --color=auto $ls_options"
 
     if (( ! $+commands[gnome-open] )); then
@@ -616,8 +560,6 @@ elif [[ $OSTYPE = linux* ]]; then
     (( $+commands[dircolors] )) && test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
 
 elif [[ $OSTYPE = openbsd* ]]; then
-    # *** OPENBSD ***
-
     if (( $+commands[gls] )); then
         alias ls="gls --color=auto $ls_options"
     else
