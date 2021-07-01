@@ -1748,37 +1748,6 @@ becomes
                 ("DEFERRED" :foreground "goldenrod" :weight bold)
                 ("CANCELLED" :foreground "forest green" :weight bold)))))
 
-(use-package org-bullets
-  :disabled t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
-
-(use-package smart-mode-line
-  :disabled t
-  :config
-  ; this is customized in custom.el
-  ; (setq sml/theme 'dark)
-  (sml/setup))
-
-(use-package spaceline-config
-  :ensure spaceline
-  :disabled t
-  :config
-  (setq powerline-default-separator 'box
-        spaceline-window-numbers-unicode t
-        spaceline-workspace-numbers-unicode t
-        spaceline-flycheck-bullet "❖ %s")
-  (spaceline-define-segment venv-el
-    "Support for my venv.el"
-    (when (and active
-               (eq 'python-mode major-mode)
-               (bound-and-true-p venv-current-name))
-      (propertize venv-current-name
-                  'face 'spaceline-python-venv
-                  'help-echo (format "Virtual environment via venv.el"))))
-  ;;;(spaceline-compile)
-  (spaceline-emacs-theme '(venv-el)))
-
 ;; is this pinging github all the time??
 ;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
@@ -1899,18 +1868,6 @@ becomes
          ("C-x 3" . switch-window-then-split-right)
          ("C-x 4" . switch-window-then-delete))
   :disabled t)
-
-;; Dims the non-active windows. Unfortunately it affects the command window too :(
-(use-package dimmer
-  :disabled t
-  :config
-  (setq dimmer-fraction 0.40)
-  (dimmer-mode))
-
-(use-package color-identifiers-mode
-  :disabled t
-  :config
-  (global-color-identifiers-mode))
 
 (use-package fireplace
   :disabled t
