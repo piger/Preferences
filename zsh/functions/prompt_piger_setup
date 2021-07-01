@@ -19,9 +19,13 @@ EOH
 
 # hash the system's hostname letters to generate a color
 prompt_piger_hostname_color() {
-    local chash=0
-    foreach letter (${(ws::)HOST[(ws:.:)1]}) (( chash+=#letter )) end
-    printf "%03d" $(( $chash % 255 ))
+    if [[ ! -z $PIGER_PROMPT_HARDCODE_COLOR ]]; then
+        echo "$PIGER_PROMPT_HARDCODE_COLOR"
+    else
+        local chash=0
+        foreach letter (${(ws::)HOST[(ws:.:)1]}) (( chash+=#letter )) end
+        printf "%03d" $(( $chash % 255 ))
+    fi
 }
 
 prompt_piger_precmd() {
