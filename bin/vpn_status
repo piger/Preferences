@@ -2,11 +2,9 @@
 
 zparseopts -A opts -- q s
 
-GP_DEVICE=gpd0
-
-ifconfig -u $GP_DEVICE > /dev/null 2>&1
+ifconfig -u | grep -E "inet 10\."
 vpn_status=$?
-vpn_address=$(ifconfig -u gpd0 | awk '/inet/ { print $2 }')
+vpn_address=$(ifconfig -u | grep -E "inet 10\." | awk '/inet / { print $2 }')
 
 if [[ $vpn_status = 0 ]]; then
     if (( ${+opts[-q]} )); then
