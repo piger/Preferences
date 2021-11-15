@@ -2,37 +2,37 @@
 # vim: ft=dosini
 
 [core]
-    excludesfile = ~/.gitignore
-    # pager = less -RSX
+excludesfile = ~/.gitignore
+# pager = less -RSX
 
 [diff]
-    renames = copies
-    tool = icdiff
-    algorithm = patience
+renames = copies
+tool = icdiff
+algorithm = patience
 
 [difftool]
-    prompt = false
+prompt = false
 
 [log]
-   date = auto:human
+date = auto:human
 
 [difftool "icdiff"]
-    cmd = /Users/dkertesz/tmp/venvs/icdiff/bin/icdiff --line-numbers $LOCAL $REMOTE
+cmd = /Users/dkertesz/tmp/venvs/icdiff/bin/icdiff --line-numbers $LOCAL $REMOTE
 
 [color]
-    ui = auto
+ui = auto
 
 [color "branch"]
-    current = magenta reverse
-    local = yellow
-    remote = green
+current = magenta reverse
+local = yellow
+remote = green
 
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red
-  new = green
-  whitespace = red reverse
+meta = yellow bold
+frag = magenta bold
+old = red
+new = green
+whitespace = red reverse
 
 # Per mostrare in 'git status' anche i file nelle directory 'untracked'
 # NOTA: determina la visibilita' anche in magit-status
@@ -40,47 +40,50 @@
 #       showUntrackedFiles = all
 
 [alias]
-    changes = log --oneline --reverse
-    ci = commit
-    co = checkout
-    commit = commit -v
-    last = log -1 HEAD
-    latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
-    lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
-    ls = ls-files
-    ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
-    #via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
-    recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
-    st = status -sb
-    undo = reset --hard HEAD~1
-    unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    unstage = reset HEAD --
-    # semantic aliases
-    tags = tag -l -n1
-    branches = branch -av
-    remotes = remote -v
-    uncommit = reset --soft HEAD^
-    staged = diff --cached
-    # get the root directory of the repo
-    root = rev-parse --show-toplevel
-    current-branch = rev-parse --abbrev-ref HEAD
-    diffc = diff --color-words=.
-    showc = show --color-words=.
+changes = log --oneline --reverse
+ci = commit
+co = checkout
+commit = commit -v
+last = log -1 HEAD
+latest = for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short) [%(committername)]'
+lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
+ls = ls-files
+ly = log --pretty='tformat:%h %an (%ar): %s' --since=yesterday
+#via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
+recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+st = status -sb
+undo = reset --hard HEAD~1
+unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+unstage = reset HEAD --
+# semantic aliases
+tags = tag -l -n1
+branches = branch -av
+remotes = remote -v
+uncommit = reset --soft HEAD^
+staged = diff --cached
+# get the root directory of the repo
+root = rev-parse --show-toplevel
+current-branch = rev-parse --abbrev-ref HEAD
+diffc = diff --color-words=.
+showc = show --color-words=.
 
 # Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
-    helper = osxkeychain
+helper = osxkeychain
 
 # NOTE: default from git 2.0
 [push]
-    default = current
+default = current
 
 [user]
-    name = Daniel Kertesz
-    email = daniel@spatof.org
+name = Daniel Kertesz
+email = daniel@spatof.org
 
 [commit]
-    gpgsign = false
+gpgsign = false
+
+# [gpg]
+# format = ssh
 
 # for $deity's sake, check that anything we're getting is complete and sane on a regular basis
 # https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
@@ -95,16 +98,16 @@ fsckObjects = true
 
 # tokens and stuff
 [include]
-    path = ~/.gitconfig.local
+path = ~/.gitconfig.local
 
 [includeIf "gitdir:~/code/"]
-    path = ~/.gitconfig.work
+path = ~/.gitconfig.work
 
 [includeIf "gitdir:/home/"]
-    path = ~/.gitconfig-linux
+path = ~/.gitconfig-linux
 
 [includeIf "gitdir:/Users/"]
-    path = ~/.gitconfig-macos
+path = ~/.gitconfig-macos
 
 [github]
-	user = piger
+user = piger
