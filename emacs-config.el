@@ -1382,6 +1382,7 @@ becomes
   (company-terraform-init))
 
 (use-package hcl-mode
+  :ensure t
   :mode "\\.hcl\\'")
 
 (use-package nginx-mode
