@@ -3,12 +3,12 @@
 
 # this is a hidden gem
 [pager]
-log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
-diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less
+log = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight | less
+show = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight | less
+diff = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight | less
 
 [interactive]
-diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
+diffFilter = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight
 
 [core]
 pager = delta
@@ -21,7 +21,7 @@ syntax-theme = Coldark-Dark
 side-by-side = true
 
 [interactive]
-diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight
+diffFilter = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight
 # diffFilter = delta --color-only
 
 [pull]
