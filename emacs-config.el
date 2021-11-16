@@ -675,9 +675,7 @@ becomes
 
 ;; Assign a specific mode for certain directories
 ;; note: you can't chain multiple paths in a single add-to-list call :(
-(add-to-list 'auto-mode-alist '("/Documents/appunti/[^/]*\\.txt\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("/Preferences/zsh/" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("/Preferences/emacs/snippets/" . snippet-mode))
 
 ;; See also: http://www.flycheck.org/en/latest/languages.html#flycheck-languages
 (use-package flycheck

@@ -1,6 +1,0 @@
-# name: for loop in Jinja2
-# contributor: Daniel Kertesz <daniel@spatof.org>
-# --
-{% for ${1:item} in ${2:collection} %}
-  $0
-{% endfor %}

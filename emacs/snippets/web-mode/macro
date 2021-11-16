@@ -1,6 +1,0 @@
-# name: macro in Jinja2
-# contributor: Daniel Kertesz <daniel@spatof.org>
-# --
-{%- macro ${1:declaration} %}
-  $0
-{% endmacro -%}

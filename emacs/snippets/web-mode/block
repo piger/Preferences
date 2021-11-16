@@ -1,6 +1,0 @@
-# name: block in Jinja2
-# contributor: Daniel Kertesz <daniel@spatof.org>
-# --
-{% block ${1:name} %}
-  $0
-{% endblock %}
