@@ -1749,6 +1749,12 @@ becomes
                 ("DEFERRED" :foreground "goldenrod" :weight bold)
                 ("CANCELLED" :foreground "forest green" :weight bold)))))
 
+;; newer org versions implemented C-c C-, to insert templates;
+;; for the old behaviour (<s <e etc.) you need to load org-tempo.
+;; ref: https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work
+(use-package org-tempo
+  :after (org))
+
 ;; is this pinging github all the time??
 ;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
