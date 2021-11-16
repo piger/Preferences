@@ -1117,6 +1117,7 @@ becomes
 
 ;; fancy descriptions in M-x
 (use-package ivy-rich
+  :ensure t
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   (ivy-rich-mode 1))
@@ -1149,6 +1150,7 @@ becomes
 
 ;; smex can augment counsel-M-x, adding for example the recent used commands.
 (use-package smex
+  :ensure t
   ;; :bind (("M-x" . smex)
   ;;        ("M-X" . smex-major-mode-commands)
   ;;        ("C-c C-c M-x" . execute-extended-command))
@@ -1532,6 +1534,7 @@ becomes
   (recentf-mode +1))
 
 (use-package undo-tree
+  :ensure t
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode +1))
@@ -1946,10 +1949,6 @@ becomes
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp)
 
 (use-package dockerfile-mode
   :ensure t
