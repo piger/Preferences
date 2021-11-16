@@ -56,8 +56,12 @@ ff = only
 name = Daniel Kertesz
 email = daniel@spatof.org
 
-[commit]
-gpgsign = false
+# Enable signing commits with an SSH key
+# [user]
+# signingKey = ~/.ssh/key.pub
+
+# [commit]
+# gpgsign = true
 
 # [gpg]
 # format = ssh
