@@ -786,27 +786,6 @@ becomes
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
-(use-package go-eldoc
-  :disabled t ;;; disabled in favor of lsp + gopls
-  :commands (go-eldoc-setup))
-
-(use-package gotest
-  :disabled t
-  :after go-mode)
-
-(use-package go-guru
-  :disabled t
-  :commands (go-guru-hl-identifier-mode)
-  :config
-  (defun projectile-guru-scope ()
-    "Set the go guru scope from the projectile root directory."
-    (interactive)
-    (unless (= (length (projectile-project-root)) 0)
-      (setq go-guru-scope (concat
-                           (replace-regexp-in-string
-                            (concat "^" (file-name-as-directory (getenv "GOPATH")) "src/") "" (projectile-project-root)) "..."))))
-  :after go-mode)
-
 (use-package rust-mode
   :mode "\\.rs\\'")
 
@@ -998,29 +977,6 @@ becomes
 
 (c-add-style "piger-cc-style" piger-cc-style)
 
-(use-package csharp-mode
-  :disabled t
-  :mode "\\.cs\\'"
-  :hook (csharp-mode . my-csharp-mode-hook)
-  :config
-  (defun my-csharp-mode-hook ()
-    (electric-pair-local-mode 1)
-    (eldoc-mode)
-    (flycheck-mode)
-    (company-mode 1)))
-
-(use-package omnisharp
-  :disabled t
-  :after csharp-mode
-  :hook (csharp-mode . omnisharp-mode)
-  :config
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-omnisharp)))
-
-(use-package php-mode
-  :disabled t
-  :mode "\\.php\\'")
-
 (use-package highlight-symbol
   :ensure t
   :diminish highlight-symbol-mode
@@ -1029,20 +985,6 @@ becomes
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
-
-;; https://github.com/mickeynp/smart-scan
-;; Jump with M-n and M-p.
-;; TODO fix init
-;; Done (Total of 1 file compiled, 2 skipped)
-;; Settings loaded in 46.471s
-;; Saving file /Users/dkertesz/.emacs.d/custom.el...
-;; Wrote /Users/dkertesz/.emacs.d/custom.el [2 times]
-;; run-hooks: Cannot open load file: No such file or directory, smartscan
-;; Cannot open load file: No such file or directory, smartscan
-;; File mode specification error: (file-missing Cannot open load file No such file or directory smartscan)
-(use-package smartscan
-  :disabled t
-  :hook (prog-mode . smartscan-mode))
 
 ;; Minor mode to selectively hide/show code and comment blocks.
 (use-package hideshow
@@ -1107,13 +1049,6 @@ becomes
   (ivy-count-format "(%d/%d) ")
   :config
   (ivy-mode 1))
-
-;; fancy popup window
-(use-package ivy-posframe
-  :disabled t
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
-  (ivy-posframe-mode 1))
 
 ;; fancy descriptions in M-x
 (use-package ivy-rich
@@ -1186,21 +1121,6 @@ becomes
   :ensure t
   :bind (("C-x j" . transpose-frame)))
 
-(use-package yasnippet
-  :disabled t
-  :config
-  (setq yas-snippet-dirs (append yas-snippet-dirs
-                                 '("~/Preferences/emacs/snippets")))
-  (yas-reload-all))
-
-(use-package re-builder
-  :disabled t
-  :config
-  (setq reb-re-syntax 'string))
-
-;; Why 70 columns?
-;; http://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting
-
 (use-package magit-popup
   :defer t
   :ensure t)
@@ -1238,25 +1158,6 @@ becomes
   :ensure t
   :after forge)
 
-(use-package git-gutter-fringe
-  :diminish git-gutter-mode
-  :config
-  :disabled t
-  ;(git-gutter:linum-setup)
-  (add-hook 'prog-mode-hook 'git-gutter-mode))
-
-(use-package diff-hl
-  :disabled t
-  :hook ((prog-mode . diff-hl-mode)
-         ;;; this enable the "live" mode, similar to flydiff.
-         (prog-mode . diff-hl-flydiff-mode)
-         (magit-post-refresh . diff-hl-magit-post-refresh)))
-
-(use-package magit-gh-pulls
-  :disabled t
-  :config
-  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
-
 (use-package gist
   :defer t)
 
@@ -1264,20 +1165,10 @@ becomes
   :ensure t
   :bind (("C-x v t" . git-timemachine)))
 
-(use-package github-clone
-  :disabled t
-  :bind (("C-x v c" . github-clone)))
-
 (use-package git-link
   :bind (("C-x v b" . git-link))
   :config
   (setq git-link-open-in-browser t))
-
-(use-package magithub
-  :after magit
-  :disabled t
-  :config
-  (magithub-feature-autoinject t))
 
 (use-package dired
   :bind ("C-x d" . dired)
@@ -1322,29 +1213,6 @@ becomes
   ;; (custom-set-faces
   ;;  '(markdown-pre-face ((t (:inherit markdown-markup-face)))))
   (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
-
-(use-package rst-mode
-  :disabled t
-  :mode "\\.rst\\'"
-  :config
-  (add-hook 'rst-mode-hook 'turn-on-auto-fill))
-
-;; =adoc-mode= use those markup-faces for headers and properties, and by default those have weird
-;; sizes. Also you can't configure those fonts until you "activate" them, so it needs to be done in
-;; =:config=.
-(use-package adoc-mode
-  :disabled t
-  :mode "\\.adoc\\'"
-  :config
-  (set-face-attribute 'markup-title-0-face nil :height 1.5)
-  (set-face-attribute 'markup-title-1-face nil :height 1.4)
-  (set-face-attribute 'markup-title-2-face nil :height 1.3)
-  (set-face-attribute 'markup-title-3-face nil :height 1.2)
-  (set-face-attribute 'markup-title-4-face nil :height 1.1)
-  (set-face-attribute 'markup-title-5-face nil :height 1.0)
-  (set-face-attribute 'markup-secondary-text-face nil :height 1.0)
-  (set-face-attribute 'markup-meta-face nil :height 1.0)
-  (set-face-attribute 'markup-meta-hide-face nil :height 1.0))
 
 (use-package yaml-mode
   :ensure t
@@ -1448,15 +1316,6 @@ becomes
       (apply orig-fn args)))
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
-(use-package ibuffer-projectile
-  :disabled t
-  :config
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-projectile-set-filter-groups)
-              (unless (eq ibuffer-sorting-mode 'alphabetic)
-                (ibuffer-do-sort-by-alphabetic)))))
-
 (use-package counsel-projectile
   :after (counsel projectile)
   :pin melpa
@@ -1483,11 +1342,6 @@ becomes
 (use-package company-web
   :after (company web)
   :ensure t)
-
-(use-package apache-mode
-  :disabled t
-  :mode (("\\.htaccess\\'" . apache-mode)
-         ("/apache2?/sites-\\(available|enabled\\)/" . apache-mode)))
 
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
@@ -1517,12 +1371,6 @@ becomes
 ;; (require 'volatile-highlights)
 ;; (volatile-highlights-mode t)
 ;; (eval-after-load "volatile-highlights" '(diminish 'volatile-highlights-mode))
-
-(use-package volatile-highlights
-  :disabled t
-  :diminish volatile-highlights-mode
-  :config
-  (volatile-highlights-mode t))
 
 (use-package recentf
   :config
@@ -1611,12 +1459,6 @@ becomes
 ; (setq-default ispell-program-name "aspell")
 (setq ispell-personal-dictionary (expand-file-name "~/Preferences/emacs/flyspell.dict"))
 ; (setq ispell-extra-args '("--sug-mode=normal" "--ignore=3")
-
-;; https://github.com/rolandwalker/flyspell-lazy
-(use-package flyspell-lazy
-  :disabled t
-  :config
-  (flyspell-lazy-mode +1))
 
 (use-package flyspell
   :commands flyspell-mode
@@ -1816,11 +1658,6 @@ becomes
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
   (global-set-key (kbd "C-c o") #'crux-open-with))
 
-(use-package neotree
-  :disabled t
-  :commands neotree-toggle
-  :bind ([f8] . neotree-toggle))
-
 (use-package editorconfig
   :ensure t
   :diminish
@@ -1862,15 +1699,6 @@ becomes
          ("C-x 4" . switch-window-then-delete))
   :disabled t)
 
-(use-package fireplace
-  :disabled t
-  :commands fireplace)
-
-;; not really that useful
-(use-package electric-operator
-  :disabled t
-  :hook (python-mode . electric-operator-mode))
-
 (use-package nyan-mode
   :ensure t
   :config
@@ -1905,31 +1733,10 @@ becomes
                       (527 ("Railgun Listener to origin error" "A 527 error indicates an interrupted connection between Cloudflare and your origin's Railgun server (rg-listener)."))
                       (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed.")))))
 
-(use-package treemacs
-  :disabled t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :defer t)
-
-(use-package treemacs-projectile
-  :disabled t
-  :after treemacs projectile)
-
 (use-package lua-mode
   :ensure t
   :mode "\\.lua$"
   :interpreter "lua")
-
-;;; this is super buggy
-;; (use-package lsp-lua-emmy
-;;   :disabled t
-;;   :demand
-;;   :if (file-exists-p "~/code/others/lsp-lua-emmy")
-;;   :load-path "~/code/others/lsp-lua-emmy"
-;;   :hook (lua-mode . lsp)
-;;   :config
-;;   (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory)))
 
 ;; LSP
 (use-package lsp-mode
