@@ -83,18 +83,21 @@ fsckobjects = true
 [receive]
 fsckObjects = true
 
-# tokens and stuff
-[include]
-path = ~/.gitconfig.local
-
-[includeIf "gitdir:~/code/"]
-path = ~/.gitconfig.work
-
+# Include files
+## platform specific configuration
 [includeIf "gitdir:/home/"]
 path = ~/.gitconfig-linux
 
 [includeIf "gitdir:/Users/"]
 path = ~/.gitconfig-macos
+
+## work specific configuration
+[includeIf "gitdir:~/code/"]
+path = ~/.gitconfig.work
+
+# local configuration overrides
+[include]
+path = ~/.gitconfig.local
 
 [github]
 user = piger
