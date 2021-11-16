@@ -128,28 +128,28 @@
   ;; (load-theme 'birds-of-paradise-plus t))
   )
 
-(use-package doom-themes
-  :config
-  ;; these are the package defaults; I'll leave them here in case I want to disable them in the
-  ;; future.
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  ;; (load-theme 'doom-palenight t)
-  ;; (load-theme 'doom-dark+ t)
-  ;; (load-theme 'doom-peacock t)
-  ;; (load-theme 'doom-flatwhite t)
-  ;; (load-theme 'doom-ayu-light t)
-  (load-theme 'doom-tomorrow-day t)
+;; (use-package doom-themes
+;;   :config
+;;   ;; these are the package defaults; I'll leave them here in case I want to disable them in the
+;;   ;; future.
+;;   (setq doom-themes-enable-bold t
+;;         doom-themes-enable-italic t)
+;;   ;; (load-theme 'doom-palenight t)
+;;   ;; (load-theme 'doom-dark+ t)
+;;   ;; (load-theme 'doom-peacock t)
+;;   ;; (load-theme 'doom-flatwhite t)
+;;   ;; (load-theme 'doom-ayu-light t)
+;;   (load-theme 'doom-tomorrow-day t)
 
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   (doom-themes-neotree-config)
 
-  ;; Treemacs
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
+;;   ;; Treemacs
+;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+;;   (doom-themes-treemacs-config)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config))
+;;   ;; Enable flashing mode-line on errors
+;;   (doom-themes-visual-bell-config))
 
 (use-package chocolate-theme
   :disabled t
