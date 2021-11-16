@@ -23,6 +23,3 @@ side-by-side = true
 [interactive]
 diffFilter = /opt/homebrew/share/git-core/contrib/diff-highlight/diff-highlight
 # diffFilter = delta --color-only
-
-[pull]
-# ff = only
