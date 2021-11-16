@@ -107,7 +107,6 @@
   (load-theme 'base16-gruvbox-dark-hard t))
 
 (use-package dracula-theme
-  :ensure t
   :config
   (load-theme 'dracula t)
   ;; color FIX for YAML...
@@ -117,7 +116,6 @@
 ;; hack to use use-package with this theme:
 ;; https://github.com/nashamri/spacemacs-theme/issues/42
 (use-package spacemacs-theme
-  :ensure t
   :disabled t
   :defer t
   :init
@@ -736,8 +734,6 @@ becomes
     (setq electric-indent-chars '(?\n))))
 
 (use-package lsp-python-ms
-  :ensure t
-  :demand t
   :after lsp
   :config
   (setq lsp-python-ms-dir
@@ -792,8 +788,7 @@ becomes
 
 (use-package go-eldoc
   :disabled t ;;; disabled in favor of lsp + gopls
-  :commands (go-eldoc-setup)
-  :ensure t)
+  :commands (go-eldoc-setup))
 
 (use-package gotest
   :disabled t
@@ -928,7 +923,6 @@ becomes
   :ensure t)
 
 (use-package js2-mode
-  :ensure t
   :mode "\\.js\\'"
   :interpreter "node"
   :disabled t
@@ -992,7 +986,6 @@ becomes
 ;; (setq web-mode-engines-alist (append '(("django" . "/sand/src/.*templates/")) web-mode-engines-alist))
 
 (use-package logstash-conf
-  :ensure t
   :commands logstash-conf-mode
   :config
   (setq logstash-indent 2))
@@ -1192,7 +1185,6 @@ becomes
   :bind (("C-x j" . transpose-frame)))
 
 (use-package yasnippet
-  :ensure t
   :disabled t
   :config
   (setq yas-snippet-dirs (append yas-snippet-dirs
@@ -1257,14 +1249,6 @@ becomes
          ;;; this enable the "live" mode, similar to flydiff.
          (prog-mode . diff-hl-flydiff-mode)
          (magit-post-refresh . diff-hl-magit-post-refresh)))
-
-(use-package gitconfig-mode
-  :ensure t
-  :mode ("\\.?gitconfig\\'" . gitconfig-mode))
-
-(use-package gitignore-mode
-  :ensure t
-  :mode ("\\.gitignore" . gitignore-mode))
 
 (use-package magit-gh-pulls
   :disabled t
@@ -1766,7 +1750,6 @@ becomes
 ;; *NOTE*: this must be configured BEFORE spaceline: https://github.com/TheBB/spaceline/issues/68
 (use-package "window-numbering"
   :disabled t
-  :ensure t
   :config (window-numbering-mode))
 
 
