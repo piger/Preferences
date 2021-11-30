@@ -835,8 +835,8 @@ if [[ -s $HOME/.chef_hosts ]]; then
 
     # check if the chef host file is stale
     if vpn_status >/dev/null; then
-        if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 7200 ]]; then
-            echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 2 hours; refreshing now."
+        if [[ $(( $(date +"%s") - $(stat -f "%m" $HOME/.chef_hosts) )) -gt 14200 ]]; then
+            echo "WARNING: the chef hosts file $HOME/.chef_hosts is older than 4 hours; refreshing now."
             lckdo $HOME/.lock_chef $HOME/Preferences/bin/zsh_chef_completion.sh &
         fi
     fi
