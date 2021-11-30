@@ -2,15 +2,14 @@
 
 zparseopts -A opts -- q s
 
-ifconfig -u | grep -E "inet 10\."
+ifconfig | grep -A 3 utun | grep -qE "10\..*-->"
 vpn_status=$?
-vpn_address=$(ifconfig -u | grep -E "inet 10\." | awk '/inet / { print $2 }')
 
 if [[ $vpn_status = 0 ]]; then
     if (( ${+opts[-q]} )); then
         echo "◼"
     else
-        echo "VPN is UP: $vpn_address"
+        echo "VPN is UP"
     fi
     ret=0
 else
