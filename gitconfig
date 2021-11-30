@@ -18,6 +18,12 @@ date = auto:human
 # [status]
 #       showUntrackedFiles = all
 
+[color "status"]
+  added = green bold
+  changed = red bold
+  untracked = cyan
+  branch = yellow black bold ul
+
 [alias]
 changes = log --oneline --reverse
 ci = commit
