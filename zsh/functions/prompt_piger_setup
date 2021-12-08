@@ -17,6 +17,21 @@ Set "PIGER_PROMPT_SYMBOL" to override the default shell symbol.
 EOH
 }
 
+# The "right arrow" symbol (Powerline special character):
+SEGMENT_SEPARATOR=$'\ue0b0'
+# U+2718 : HEAVY BALLOT X
+ERROR_SYMBOL=$'\u2718'
+# U+276F : HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT
+PROMPT_SYMBOL=$'\u276f'
+
+prompt_segment() {
+    local bg fg next
+    bg="%K{$1}"
+    fg="%F{$2}"
+    next="%F{$1}%K{$3}"
+    echo -n "${bg}${fg}$4 ${next}${SEGMENT_SEPARATOR}"
+}
+
 # hash the system's hostname letters to generate a color
 prompt_piger_hostname_color() {
     if [[ ! -z $PIGER_PROMPT_HARDCODE_COLOR ]]; then
@@ -29,7 +44,8 @@ prompt_piger_hostname_color() {
 }
 
 prompt_piger_precmd() {
-    # virtualenv
+    # Use "psvar" to store the value of the $VIRTUAL_ENV variable; this is refreshed
+    # every prompt since this function is a precmd.
     if [[ ! -z $VIRTUAL_ENV ]]; then
         psvar[1]="${VIRTUAL_ENV:t}"
     else
@@ -66,37 +82,49 @@ prompt_piger_setup() {
     zstyle ':vcs_info:*' use-quilt true
 
     add-zsh-hook precmd vcs_info
-    add-zsh-hook precmd prompt_piger_precmd
+    # add-zsh-hook precmd prompt_piger_precmd
 
-    # Build our prompt
-    # timestamp, optional virtualenv name, current directory, vcs_info, newline
-    PROMPT='%K{236}%F{033}%T %F{236}%K{060} %(1V.%F{205}(%1v)%f .)%F{147}%B%~%b %F{060}%K{237} ${vcs_info_msg_0_}%F{237}%k%f${prompt_newline}'
+    # First line of the prompt:
 
-    # username and hostname, background jobs
-    if [[ $SSH_CONNECTION != "" || $UID -eq 0 || $extended != "" ]]; then
-        PROMPT+='%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f%(1j.|%j.) '
-    else
-        PROMPT+='%(1j.|%j.)'
+    # NOTE: see 'SIMPLE PROMPT ESCAPES' in the man page.
+
+    PROMPT=''
+
+    # time:
+    PROMPT+='$(prompt_segment 236 033 60 %T) '
+
+    # virtual env
+    # %(1V.%F{205}(%1v)%f .)
+
+    # current directory
+    PROMPT+='$(prompt_segment 60 147 230 %~) '
+
+    # git status
+    PROMPT+='$(prompt_segment 230 20 0 ${vcs_info_msg_0_}) '
+
+    # reset colors and print newline
+    PROMPT+='%k%f${prompt_newline}'
+
+    # Second line of the prompt:
+
+    # Show user@hostname if this is a SSH connection
+    if [[ $SSH_CONNECTION != "" ]]; then
+        PROMPT+='%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f '
     fi
 
-    # final prompt
-    PROMPT+='%F{$(prompt_piger_hostname_color)}%(!.#.${PIGER_PROMPT_SYMBOL:-❯})%f '
+    # Show background jobs:
+    PROMPT+='%(1j.|%j.)'
+
+    # Add '#' for root shells or $PROMPT_SYMBOL for regular users:
+    PROMPT+='%F{030}%(!.#.${PROMPT_SYMBOL})%f '
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
     # NOTE: "CONDITIONAL SUBSTRINGS IN PROMPTS" in zshmisc.
-    if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
-        RPROMPT='%(?..%B%F{124}◆%f %?%b)'
-    else
-        RPROMPT='%(?..%B%F{124}✘%f %?%b)'
-    fi
+    # read: if the exit code of the last command was 0, show an empty string, otherwise show it (%?) with colors and bold
+    RPROMPT='%(?..%B%F{124}${ERROR_SYMBOL}%f %?%b)'
 
-    # Spell checker prompt.
-    # default: correct 'mano' to 'nano' [nyae]?
-    if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
-        SPROMPT="≈±≈ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
-    else
-        SPROMPT="٩(͡๏̯͡๏)۶ correct '%R' to '%r' ? ([Y]es/[N]o/[E]dit/[A]bort) "
-    fi
+    # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
+    SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
 
     # set prompt options through promptinit
     prompt_opts=(cr subst percent sp)
