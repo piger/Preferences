@@ -324,14 +324,6 @@ zle -N insert-datestamp
 # C-e d -- insert current date dd-mm-YYYY
 bindkey '^Ed' insert-datestamp
 
-peco_select_history() {
-    local tac
-    exists gtac && tac="gtac" || { exists tac && tac="tac" || { tac="tail -r" } }
-    BUFFER=$(fc -l -n 1 | eval $tac | peco --layout=bottom-up --query "$LBUFFER")
-    CURSOR=$#BUFFER         # move cursor
-    zle -R -c               # refresh
-}
-
 # https://github.com/junegunn/fzf/blob/764316a53d0eb60b315f0bbcd513de58ed57a876/shell/key-bindings.zsh
 fzf-history-widget() {
     local selected num
@@ -352,9 +344,6 @@ fzf-history-widget() {
 if exists fzf; then
     zle     -N   fzf-history-widget
     bindkey '^R' fzf-history-widget
-elif exists peco; then
-    zle -N peco_select_history
-    bindkey '^R' peco_select_history
 fi
 # }}}
 
