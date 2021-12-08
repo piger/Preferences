@@ -22,9 +22,10 @@ SEGMENT_SEPARATOR=$'\ue0b0'
 # U+2718 : HEAVY BALLOT X
 ERROR_SYMBOL=$'\u2718'
 # U+276F : HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT
-PROMPT_SYMBOL=$'\u276f'
+# PROMPT_SYMBOL=$'\u276f'
+PROMPT_SYMBOL='$'
 
-prompt_segment() {
+prompt_piger_segment() {
     local bg fg next
     bg="%K{$1}"
     fg="%F{$2}"
@@ -79,7 +80,6 @@ prompt_piger_setup() {
         zstyle ':vcs_info:*' unstagedstr '%F{3}●%f'
         zstyle ':vcs_info:*' stagedstr '%F{2}✚%f'
     fi
-    zstyle ':vcs_info:*' use-quilt true
 
     add-zsh-hook precmd vcs_info
     # add-zsh-hook precmd prompt_piger_precmd
@@ -91,16 +91,16 @@ prompt_piger_setup() {
     PROMPT=''
 
     # time:
-    PROMPT+='$(prompt_segment 236 033 60 %T) '
+    PROMPT+='$(prompt_piger_segment 236 033 60 %T) '
 
     # virtual env
     # %(1V.%F{205}(%1v)%f .)
 
     # current directory
-    PROMPT+='$(prompt_segment 60 147 230 %~) '
+    PROMPT+='$(prompt_piger_segment 60 147 230 %~) '
 
     # git status
-    PROMPT+='$(prompt_segment 230 20 0 ${vcs_info_msg_0_}) '
+    PROMPT+='$(prompt_piger_segment 230 20 0 ${vcs_info_msg_0_}) '
 
     # reset colors and print newline
     PROMPT+='%k%f${prompt_newline}'
