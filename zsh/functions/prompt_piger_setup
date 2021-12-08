@@ -87,41 +87,45 @@ prompt_piger_setup() {
     # First line of the prompt:
 
     # NOTE: see 'SIMPLE PROMPT ESCAPES' in the man page.
+    # WARNING: be very careful about single and double quotes.
+    # WARNING: remember that $(something) execute the function "something" in a subshell, so you
+    # can't change global variables from within that function.
 
-    PROMPT=''
+    PROMPT=""
 
     # time:
-    PROMPT+='$(prompt_piger_segment 236 033 60 %T) '
+    PROMPT+="$(prompt_piger_segment 236 033 60 %T) "
 
     # virtual env
     # %(1V.%F{205}(%1v)%f .)
 
     # current directory
-    PROMPT+='$(prompt_piger_segment 60 147 230 %~) '
+    PROMPT+="$(prompt_piger_segment 60 147 230 %~) "
 
     # git status
-    PROMPT+='$(prompt_piger_segment 230 20 0 ${vcs_info_msg_0_}) '
+    # NOTE: ${vcs_info_msg_0_} must be passed literally (i.e. not expanded).
+    PROMPT+="$(prompt_piger_segment 230 20 0 '${vcs_info_msg_0_}') "
 
     # reset colors and print newline
-    PROMPT+='%k%f${prompt_newline}'
+    PROMPT+="%k%f${prompt_newline}"
 
     # Second line of the prompt:
 
     # Show user@hostname if this is a SSH connection
     if [[ $SSH_CONNECTION != "" ]]; then
-        PROMPT+='%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f '
+        PROMPT+="%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f "
     fi
 
     # Show background jobs:
-    PROMPT+='%(1j.|%j.)'
+    PROMPT+="%(1j.|%j.)"
 
     # Add '#' for root shells or $PROMPT_SYMBOL for regular users:
-    PROMPT+='%F{030}%(!.#.${PROMPT_SYMBOL})%f '
+    PROMPT+="%F{030}%(!.#.${PROMPT_SYMBOL})%f "
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
     # NOTE: "CONDITIONAL SUBSTRINGS IN PROMPTS" in zshmisc.
     # read: if the exit code of the last command was 0, show an empty string, otherwise show it (%?) with colors and bold
-    RPROMPT='%(?..%B%F{124}${ERROR_SYMBOL}%f %?%b)'
+    RPROMPT="%(?..%B%F{124}${ERROR_SYMBOL}%f %?%b)"
 
     # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
     SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
