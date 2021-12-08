@@ -404,14 +404,8 @@ prompt piger
 
 # OS SPECIFIC {{{
 if [[ $OSTYPE = darwin* ]]; then
-    # Lua Love
-    alias love="/Applications/love.app/Contents/MacOS/love"
-
     # top comodo
     alias itop="top -u -s 5 -stats pid,username,command,cpu,time,mem,vsize,ppid,state"
-
-    # spotlight
-    alias spotlight-info='sudo fs_usage -w -f filesys mdworker | grep "open"'
 
     # lock screen
     alias afk="pmset displaysleepnow"
@@ -426,17 +420,6 @@ if [[ $OSTYPE = darwin* ]]; then
     fi
 
     export CLICOLOR=1
-
-    # Node.js / NPM
-    # After installing, add the following path to your NODE_PATH environment
-    # variable to have npm libraries picked up:
-    #   /usr/local/lib/node_modules
-    [[ -d /usr/local/lib/node_modules ]] && export NODE_PATH=/usr/local/lib/node_modules
-
-    # da oh-my-zsh
-    function quick-look() {
-        (( $# > 0 )) && qlmanage -p $* &>/dev/null &
-    }
 
     # Trasforma la man page in PDF e la apre con Preview, votamazzen.
     function man-preview() {
@@ -485,11 +468,6 @@ EOF
 
     # Flush DNS cache
     alias flush_dns_cache='dscacheutil -flushcache'
-
-    # fix per gcc e clang da CLI developer tools apple (e non da Xcode)
-    # in teoria con Xcode /usr/bin/gcc e' un symlink a clang, invece installando
-    # i CLI no... boh?
-    # export CC=/usr/bin/clang
 
     # xcode 5.1
     # http://kaspermunck.github.io/2014/03/fixing-clang-error/
