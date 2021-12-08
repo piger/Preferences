@@ -223,9 +223,6 @@ fi
 # export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
-# ssh-askpass support
-(( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$commands[ssh-askpass]
-
 # LS OPTIONS
 ls_options='--classify=auto --group-directories-first'
 [[ $UID = 0 ]] && ls_options+='A'
