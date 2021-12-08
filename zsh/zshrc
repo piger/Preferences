@@ -384,29 +384,6 @@ autoload -Uz zcalc zmv zargs
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
 # typeset -a precmd_functions
 
-# vcs_info() needs to be called also when *leaving* a VCS directory:
-vcs_info_needs_bye=0
-
-# This is really slow on a non SSD encrypted hard drive so I wrote
-# this wrapper that enable 'vcs_info' only on selected directory roots.
-lazy_vcs_info() {
-    local dev_dirs d
-    dev_dirs=(~/dev ~/src ~/Preferences)
-
-    for d in $dev_dirs; do
-        if [[ $PWD = ${d}* ]]; then
-            vcs_info
-            vcs_info_needs_bye=1
-            return
-        fi
-    done
-
-    if (( vcs_info_needs_bye )); then
-        vcs_info
-        vcs_info_needs_bye=0
-    fi
-}
-
 # NOTE: both of the following are disabled because we're now using a proper "promptinit" theme.
 # if exists vcs_info; then
 #     precmd_functions+=vcs_info
