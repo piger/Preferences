@@ -227,7 +227,7 @@ export GREP_COLOR='1;32'
 (( $+commands[ssh-askpass] )) && export SSH_ASKPASS=$commands[ssh-askpass]
 
 # LS OPTIONS
-ls_options='-F'
+ls_options='--classify=auto --group-directories-first'
 [[ $UID = 0 ]] && ls_options+='A'
 # }}}
 
@@ -454,21 +454,12 @@ if [[ $OSTYPE = darwin* ]]; then
     alias screensaver='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
 
     # ls
-    if [[ -x /usr/local/bin/gls && "$TERM" != dumb ]]; then
+    if exists gls && [[ "$TERM" != dumb ]]; then
         alias ls="gls --color=auto $ls_options"
-        alias lss="gls --color=auto $ls_options --group-directories-first --sort=extension -B"
         (( $+commands[gdircolors] )) && test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
     fi
 
-    [[ -x /usr/libexec/ssh-askpass ]] && export SSH_ASKPASS=/usr/libexec/ssh-askpass
-
     export CLICOLOR=1
-
-    # fix per i locale sbagliati di default su osx lion (?)
-    [[ $LC_CTYPE == "UTF-8" ]] && export LC_CTYPE="en_US.UTF-8"
-
-    # Supporto per la struttura di directory "local" (il --user di setup.py) su OSX
-    [[ -e ~/Library/Python/2.7/bin ]] && export PATH=~/Library/Python/2.7/bin:$PATH
 
     # Node.js / NPM
     # After installing, add the following path to your NODE_PATH environment
