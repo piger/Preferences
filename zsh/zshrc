@@ -571,18 +571,10 @@ alias json.tool='python -m json.tool'
 # quick download
 alias suggi='curl --continue-at - --location --progress-bar --remote-name --remote-time'
 
-# history stats
-# https://github.com/sorin-ionescu/prezto/blob/master/modules/history/init.zsh
-alias history-top10="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
-
 # yaml2json
 # https://twitter.com/micahhausler/status/1057064499226656768
 # alias y2j="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
 alias y2j="python -c 'import fileinput, yaml, json; y=yaml.safe_load(\"\".join(list(fileinput.input()))); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
-
-if (( $+commands[task] )); then
-    alias t='task'
-fi
 
 # }}}
 
@@ -615,11 +607,6 @@ zle -N expand-or-complete-prefix-with-indicator
 # [[ -n "$keyinfo[Control]" ]] && \
 #     bindkey -M "emacs" "$keyinfo[Control]I" \
 #     expand-or-complete-prefix-with-indicator
-
-# Completion per task warrior
-# NOTA: fpath va modificato PRIMA di chiamare 'compinit'.
-[[ -e /usr/local/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/local/share/doc/task/scripts/zsh/)
-[[ -e /usr/share/doc/task/scripts/zsh/_task ]] && fpath=($fpath /usr/share/doc/task/scripts/zsh/)
 
 # zsh-completions
 # OS X: install with "brew install zsh-completions"
