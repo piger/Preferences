@@ -3,11 +3,11 @@
 myself=$0:A
 
 apple_logo() {
-	if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
-		neofetch --disable packages
-	else
-		zsh $HOME/Preferences/zsh/functions/apple-logo
-	fi
+    if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
+	neofetch --disable packages
+    else
+	zsh $HOME/Preferences/zsh/functions/apple-logo
+    fi
 }
 
 logo() {
@@ -58,7 +58,7 @@ fortune-classic() {
 
 fortune-tips() {
     if [[ -d ${PERSONAL_CODE_DIR}/cli-tips-fortune/ ]]; then
-		printf "\e[3m\e[1mTip of the day\e[0m\n"
+	printf "\e[3m\e[1mTip of the day\e[0m\n"
         fortune ${PERSONAL_CODE_DIR}/cli-tips-fortune/
     fi
 }
