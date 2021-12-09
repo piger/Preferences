@@ -25,14 +25,6 @@ ERROR_SYMBOL=$'\u2718'
 # PROMPT_SYMBOL=$'\u276f'
 PROMPT_SYMBOL='$'
 
-prompt_piger_segment() {
-    local bg fg next
-    bg="%K{$1}"
-    fg="%F{$2}"
-    next="%F{$1}%K{$3}"
-    echo -n "${bg}${fg}$4 ${next}${SEGMENT_SEPARATOR}"
-}
-
 # hash the system's hostname letters to generate a color
 prompt_piger_hostname_color() {
     if [[ ! -z $PIGER_PROMPT_HARDCODE_COLOR ]]; then
@@ -66,10 +58,14 @@ prompt_piger_setup() {
     autoload -Uz add-zsh-hook
     autoload -Uz vcs_info
 
+    # the following 3 styles control the rendering of the "git" prompt segment; in particular the first and last chunks
+    # renders the closing of the previous segment and the final prompt segment (the one with "0" background).
+    # The colors used here must match the colors of the previous segment, which in this case is the current directory segment.
     zstyle ':vcs_info:*' actionformats \
-           ' %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c'
+           "%K{230}%F{60}$SEGMENT_SEPARATOR %F{20} %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c %K{0}%F{230}$SEGMENT_SEPARATOR"
+    zstyle ':vcs_info:*' nvcsformats "%K{0}%F{60}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:*' formats \
-           ' %F{64}%F{70}%b%F{64}%f %m%u%c'
+           "%K{230}%F{60}$SEGMENT_SEPARATOR %F{20} %F{64}%F{70}%b%F{64}%f %m%u%c %K{0}%F{230}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
@@ -82,7 +78,7 @@ prompt_piger_setup() {
     fi
 
     add-zsh-hook precmd vcs_info
-    # add-zsh-hook precmd prompt_piger_precmd
+    add-zsh-hook precmd prompt_piger_precmd
 
     # First line of the prompt:
 
@@ -94,25 +90,26 @@ prompt_piger_setup() {
     PROMPT=""
 
     # time:
-    PROMPT+="$(prompt_piger_segment 236 033 60 %T) "
-
-    # virtual env
-    # %(1V.%F{205}(%1v)%f .)
+    PROMPT+="%K{236}%F{33}%T "
+    PROMPT+="%K{60}%F{236}$SEGMENT_SEPARATOR "
 
     # current directory
-    PROMPT+="$(prompt_piger_segment 60 147 230 %~) "
+    PROMPT+="%K{60}%F{147}%~ "
 
     # git status
     # NOTE: ${vcs_info_msg_0_} must be passed literally (i.e. not expanded).
-    PROMPT+="$(prompt_piger_segment 230 20 0 '${vcs_info_msg_0_}') "
+    PROMPT+='${vcs_info_msg_0_}'
 
     # reset colors and print newline
     PROMPT+="%k%f${prompt_newline}"
 
     # Second line of the prompt:
 
+    # Show the current virtualenv as set in psvar[1]
+    PROMPT+='%(1V.%F{205}(%1v)%f .)'
+
     # Show user@hostname if this is a SSH connection
-    if [[ $SSH_CONNECTION != "" ]]; then
+    if [[ $SSH_CONNECTION != "" || ! -z $extended ]]; then
         PROMPT+="%F{$(prompt_piger_hostname_color)}%n%f@%F{$(prompt_piger_hostname_color)}%m%f "
     fi
 
