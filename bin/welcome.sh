@@ -49,7 +49,7 @@ fortune-classic() {
         if [[ -d "$FORTUNES_DIRECTORY" ]]; then
             fortune -s -e "$FORTUNES_DIRECTORY"
         else
-            fortune -s -e -o
+            fortune -s -e
         fi
     else
         echo "You need to install fortune!"
