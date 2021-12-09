@@ -1,58 +1,25 @@
 #!/bin/zsh
 
-myself=$0:A
-
-apple_logo() {
+os_logo() {
     if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
 	neofetch --disable packages
-    else
+    fi
+
+    if [[ $OSTYPE = darwin* ]]; then
 	zsh $HOME/Preferences/zsh/functions/apple-logo
     fi
 }
 
-logo() {
-    if [[ ! -x $HOME/Preferences/bin/imgcat ]]; then
-        apple_logo
-        return
-    fi
-
-    if [[ ! -d $HOME/Pictures/pixel-art/ ]]; then
-        apple_logo
-        return
-    fi
-
-    if [[ $(( RANDOM % 2 )) = 0 ]]; then
-        apple_logo
-    else
-        # devilish
-        doodle=$(perl -x $myself)
-        $HOME/Preferences/bin/imgcat "$HOME/Pictures/pixel-art/$doodle"
-    fi
-}
-
-# THIS IS DEVILISH
-echo <<'__END__' > /dev/null
-#!/usr/bin/perl -w
-use List::Util qw/shuffle/;
-
-opendir($dh, "$ENV{\"HOME\"}/Pictures/pixel-art") || die "Cannot open the pixel-art directory";
-@pics = grep { /\.(?:gif|png|jpe?g)$/ } readdir($dh);
-@pics = shuffle @pics;
-print $pics[0];
-__END__
-
 fortune-classic() {
-    printf "\e[3m\e[1mQuote of the day\e[0m\n"
-    # fortune -e serve per scegliere equamente tra tutti i fortune file
-    # presenti, a prescindere dalla dimensione.
     if (( $+commands[fortune] )); then
+        printf "\e[3m\e[1mQuote of the day\e[0m\n"
+
         if [[ -d "$FORTUNES_DIRECTORY" ]]; then
             fortune -s -e "$FORTUNES_DIRECTORY"
         else
             fortune -s -e
         fi
-    else
-        echo "You need to install fortune!"
+        echo ""
     fi
 }
 
@@ -60,12 +27,10 @@ fortune-tips() {
     if [[ -d ${PERSONAL_CODE_DIR}/cli-tips-fortune/ ]]; then
 	printf "\e[3m\e[1mTip of the day\e[0m\n"
         fortune ${PERSONAL_CODE_DIR}/cli-tips-fortune/
+        echo ""
     fi
 }
 
-printf "\n"
-logo
-fortune-classic; echo; fortune-tips
-# pr -mts'	' <(logo | sed '/^$/d') <(fortune-classic; printf "\n"; fortune-tips)
-printf "\n"
-# }
+os_logo
+fortune-classic
+fortune-tips
