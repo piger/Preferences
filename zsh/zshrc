@@ -9,8 +9,8 @@
 
 # CONFIG {{{
 # Settings can be customized inside ~/.zshenv.local.
-DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/dircolors-solarized/dircolors.256dark}
-FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/dev/fortune-tvshows/fortunes}
+export DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/plugins/LS_COLORS/LS_COLORS}
+export FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/code/fortune-tvshows/fortunes}
 # }}}
 
 # NOTES {{{
