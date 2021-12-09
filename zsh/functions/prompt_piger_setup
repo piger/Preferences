@@ -112,6 +112,11 @@ prompt_piger_setup() {
     # Show background jobs:
     PROMPT+="%(1j.|%j.)"
 
+    # Print the mark used by iTerm2's shell integration.
+    if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
+        PROMPT+="%{$(iterm2_prompt_mark)%}"
+    fi
+
     # Add '#' for root shells or $PROMPT_SYMBOL for regular users:
     PROMPT+="%F{030}%(!.#.${PROMPT_SYMBOL})%f "
 

@@ -395,6 +395,13 @@ source_if_exists "$HOME/dev/zsh-notify/zsh-notify.zsh"
 autoload -U promptinit
 promptinit
 
+# iTerm2 shell integration
+# Needs to be loaded before the prompt since it do stuff with it.
+if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
+    export ITERM2_SQUELCH_MARK=1
+    source $HOME/.iterm2_shell_integration.zsh
+fi
+
 autoload -Uz prompt_piger_setup
 prompt piger
 # }}}
