@@ -25,9 +25,12 @@ local hostname=$(ssh -G "$@" | awk 'NR > 2 { exit } /^hostname/ { print $2 }')
 local parts=(${(s:.:)hostname})
 local short_name
 
+# if it's an IP don't shorten it and use it as it is
+if echo $hostname | grep -qE "^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$"; then
+    short_name=$hostname
 # if the parts of the hostname are less than 3 (e.g. mail.example.com -> 3 parts) use the first part
 # only (e.g. "mail").
-if (( $#parts <= 3 )); then
+elif (( $#parts <= 3 )); then
     short_name=${parts[1]}
 else
     # othewrise show 2/3 of the hostname
