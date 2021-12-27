@@ -101,6 +101,13 @@ prompt_piger_setup() {
 
     # Second line of the prompt:
 
+    # Print the mark used by iTerm2's shell integration.
+    # NOTE: this must be the first "element" of the prompt's second line, otherwise
+    # it will add an extra newline.
+    if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
+        PROMPT+="%{$(iterm2_prompt_mark)%}"
+    fi
+
     # Show the current virtualenv as set in psvar[1]
     PROMPT+='%(1V.%F{205}(%1v)%f .)'
 
@@ -111,11 +118,6 @@ prompt_piger_setup() {
 
     # Show background jobs:
     PROMPT+="%(1j.|%j.)"
-
-    # Print the mark used by iTerm2's shell integration.
-    if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
-        PROMPT+="%{$(iterm2_prompt_mark)%}"
-    fi
 
     # Add '#' for root shells or $PROMPT_SYMBOL for regular users:
     PROMPT+="%F{030}%(!.#.${PROMPT_SYMBOL})%f "
