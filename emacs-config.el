@@ -188,6 +188,15 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 
+;; Consider a period followed by a single space to be end of sentence.
+(setq sentence-end-double-space nil)
+
+;; show buffer boundaries in the fringe
+(setq-default indicate-buffer-boundaries 'left)
+
+;; show empty lines at the bottom of the buffer, kinda like Vim.
+;; (setq-default indicate-empty-lines t)
+
 ;; minibuffer history
 (use-package savehist
   :init
