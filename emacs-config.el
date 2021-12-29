@@ -1324,7 +1324,9 @@ becomes
       (apply orig-fn args)))
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
+;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
 (use-package counsel-projectile
+  :disabled t
   :after (counsel projectile)
   :pin melpa
   :ensure t
