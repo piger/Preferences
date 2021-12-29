@@ -1,5 +1,10 @@
 ;;; emacs-config.el --- main emacs configuration file -*- lexical-binding: t; -*-
 
+;; NOTE
+;; On macOS (12.1) it's better to use the Mituharu mac port packaged by railwaycat: https://github.com/railwaycat/homebrew-emacsmacport
+;; brew tap railwaycat/emacsmacport
+;; brew install --cask emacs-mac
+
 ;; Main configuration file.
 
 (defconst emacs-start-time (current-time)
