@@ -1680,6 +1680,7 @@ becomes
   :bind (("C-<backspace>" . nv-delete-back-all)
          ("M-<backspace>" . nv-delete-back)))
 
+;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
 (use-package all-the-icons
   :ensure t
   :config
