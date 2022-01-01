@@ -756,11 +756,6 @@ becomes
         (expand-file-name "~/dev/others/python-language-server/output/bin/Release/"))
   (setq lsp-python-ms-executable "~/dev/others/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
 
-;; IPython / Jupiter notebook support
-;; https://github.com/millejoh/emacs-ipython-notebook
-;; (use-package ein
-;;   :commands (ein:jupyter-server-start ein:notebooklist-login))
-
 ;; go
 ;; requires a bunch of tools:
 ;; go get -u golang.org/x/tools/cmd/godoc
