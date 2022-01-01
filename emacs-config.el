@@ -1636,6 +1636,7 @@ becomes
 ;; useful for less used modes (like Org), for example I can press =C-c= and then read the list of
 ;; org bindings.
 (use-package which-key
+  :ensure t
   :diminish
   :defer 5
   :commands which-key-mode
