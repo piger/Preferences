@@ -364,7 +364,7 @@
                                    (tramp-parse-hosts "/etc/hosts"))))
 ;; (setq tramp-default-method "ssh")
 
-;; 08/04/2015 - mi stai sul cazzo porcodio, ti commento
+;; 08/04/2015 - I don't really like flyspell-mode...
 ;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
 
 
@@ -749,6 +749,7 @@ becomes
     (setq electric-indent-chars '(?\n))))
 
 (use-package lsp-python-ms
+  :disabled t
   :after lsp
   :config
   (setq lsp-python-ms-dir
