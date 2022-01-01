@@ -163,22 +163,24 @@
   (load-theme 'chocolate t))
 
 ;; Generic settings
-;; from emacs-doom
+;; (some of them coming from from emacs-doom)
 (set-language-environment "UTF-8")
 
-;; from emacs-doom
+;; from emacs-doom: set UTF-8 as default, everywhere.
 (when (fboundp 'set-charset-priority)
-  (set-charset-priority 'unicode))     ; pretty
-(prefer-coding-system        'utf-8)   ; pretty
-(set-terminal-coding-system  'utf-8)   ; pretty
-(set-keyboard-coding-system  'utf-8)   ; pretty
-(set-selection-coding-system 'utf-8)   ; perdy
-(setq locale-coding-system   'utf-8)   ; please
-(setq-default buffer-file-coding-system 'utf-8) ; with sugar on top
+  (set-charset-priority 'unicode))
+(prefer-coding-system        'utf-8)
+(set-terminal-coding-system  'utf-8)
+(set-keyboard-coding-system  'utf-8)
+(set-selection-coding-system 'utf-8)
+(setq locale-coding-system   'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
 
-;; disable scroll bars, toll bars, etc...
-(when (functionp 'set-scroll-bar-mode)
-  (set-scroll-bar-mode 'nil))
+;; uncomment to disable the scrollbar
+;; (when (functionp 'set-scroll-bar-mode)
+;;   (set-scroll-bar-mode 'nil))
+
+;; disable the toolbar and the blinking cursor
 (when (functionp 'tool-bar-mode)
   (tool-bar-mode -1))
 (when (functionp 'blink-cursor-mode)
