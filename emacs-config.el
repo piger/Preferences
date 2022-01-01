@@ -189,12 +189,12 @@
 ;; disable bell
 (setq ring-bell-function #'ignore)
 
-;; smooth mouse scrolling
+;; smooth mouse scrolling - 2022-01-01: this is really not necessary.
 ;; http://www.emacswiki.org/emacs/SmoothScrolling
-(setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-(setq scroll-step 1) ;; keyboard scroll one line at a time
+;; (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; one line at a time
+;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; (setq scroll-step 1) ;; keyboard scroll one line at a time
 
 ;; Consider a period followed by a single space to be end of sentence.
 (setq sentence-end-double-space nil)
@@ -317,10 +317,10 @@
   :ensure nil
   :config (delete-selection-mode +1))
 
-;; nice scrolling ???
-(setq scroll-margin 0
-      scroll-conservatively 100000
-      scroll-preserve-screen-position 1)
+;; nice scrolling - 2022-01-01: not necessary
+;; (setq scroll-margin 0
+;;       scroll-conservatively 100000
+;;       scroll-preserve-screen-position 1)
 
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
