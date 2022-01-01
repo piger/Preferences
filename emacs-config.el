@@ -317,6 +317,17 @@
   :ensure nil
   :config (delete-selection-mode +1))
 
+;; SVG tags!
+;; NOTE: needs to be enabled via a hook in each mode where you want to use this.
+(use-package svg-tag-mode
+  :ensure t
+  :init
+  (setq svg-tag-tags
+        '((":TODO:" . (svg-tag-make))
+          ;; replace "// TODO: " with an SVG tag (useful for code)
+          ("// \\(TODO:\\|XXX:\\) " . ((lambda (tag)
+                                         (svg-tag-make tag :end -1)))))))
+
 ;; nice scrolling - 2022-01-01: not necessary
 ;; (setq scroll-margin 0
 ;;       scroll-conservatively 100000
