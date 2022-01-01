@@ -267,7 +267,7 @@
 ;; make the fringe (gutter) smaller
 ;; the argument is a width in pixels (the default is 8)
 (if (fboundp 'fringe-mode)
-    (fringe-mode 8))
+    (fringe-mode 12))
 
 ;; ask for confirmation before exiting emacs
 (setq confirm-kill-emacs 'yes-or-no-p)
