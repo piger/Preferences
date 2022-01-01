@@ -1770,6 +1770,15 @@ becomes
   :ensure t
   :hook (prog-mode . ws-butler-mode))
 
+;; re-builder can be useful
+;; https://www.masteringemacs.org/article/re-builder-interactive-regexp-builder
+;; C-c C-w copies the regex in the clipboard, in emacs syntax (re-introducing double escaping).
+;; C-c C-q exits from re-builder
+(use-package re-builder
+  :config
+  ;; set the syntax to the normal syntax (i.e. you don't need double escaping)
+  (setq reb-re-syntax 'string))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
