@@ -892,15 +892,6 @@ becomes
   (global-rbenv-mode)
   (rbenv-use-global))
 
-;; (use-package bundler
-;;   :commands (bundle-check bundle-open bundle-update bundle-console bundle-install))
-
-;; (use-package rake
-;;   :commands rake)
-
-;; (use-package rspec-mode
-;;   :requires ruby-mode)
-
 (use-package css-mode
   :ensure t
   :mode "\\.css\\'"
@@ -979,12 +970,6 @@ becomes
 
 ;; To edit the engine list:
 ;; (setq web-mode-engines-alist (append '(("django" . "/sand/src/.*templates/")) web-mode-engines-alist))
-
-(use-package logstash-conf
-  :commands logstash-conf-mode
-  :config
-  (setq logstash-indent 2))
-  ;;(custom-set-variables '(logstash-indent 2)))
 
 ;; use this by calling "c-set-style"
 (defconst piger-cc-style
@@ -1446,7 +1431,7 @@ becomes
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
-(let ((lt-jar "/Users/dkertesz/Downloads/LanguageTool-4.4/languagetool-commandline.jar"))
+(let ((lt-jar "~/Downloads/LanguageTool-4.4/languagetool-commandline.jar"))
   (when (file-exists-p lt-jar)
     (use-package langtool
       :ensure t
@@ -1681,12 +1666,6 @@ becomes
   :diminish
   :config
   (editorconfig-mode 1))
-
-;; "modern" delete
-(use-package nv-delete
-  :disabled t
-  :bind (("C-<backspace>" . nv-delete-back-all)
-         ("M-<backspace>" . nv-delete-back)))
 
 ;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
 (use-package all-the-icons
