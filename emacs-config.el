@@ -1517,7 +1517,7 @@ becomes
         org-edit-src-content-indentation 0)
 
   ;; folding symbol
-  (setq org-ellipsis "  "
+  (setq org-ellipsis "⤵"
         org-pretty-entities t)
 
   ;; more ricing?
