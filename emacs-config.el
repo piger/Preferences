@@ -326,7 +326,7 @@
         '((":TODO:" . (svg-tag-make))
           ;; replace "// TODO: " with an SVG tag (useful for code)
           ("// \\(TODO:\\|XXX:\\) " . ((lambda (tag)
-                                         (svg-tag-make tag :end -1)))))))
+                                         (svg-tag-make tag :end -1 :inverse t)))))))
 
 ;; nice scrolling - 2022-01-01: not necessary
 ;; (setq scroll-margin 0
