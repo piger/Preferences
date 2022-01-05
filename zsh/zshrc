@@ -352,6 +352,11 @@ typeset -U fpath
 [[ -d ~/Preferences/zsh/scripts ]] && fpath+=~/Preferences/zsh/scripts
 [[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
 
+# if there's a local functions dir, prepend it to fpath to override the custom zsh functions.
+if [[ -d ~/.zsh-work/functions ]]; then
+    fpath=(~/.zsh-work/functions $fpath)
+fi
+
 # Autoload any custom function that I really use
 useful_autoloads=(bssh gh-link ssh ssh_master_shutdown sfortune suca ssh_bg whatwhen apple-logo unix2date welcome dut http-server quote-for-knife set-iterm2-title)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
