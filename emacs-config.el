@@ -1552,6 +1552,14 @@ becomes
   (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
   (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 
+  ;; custom link example
+  ;; (defun org-open-jira-link (ticket-id)
+  ;;   "Open the Jira ticket TICKET-ID in the browser."
+  ;;   (browse-url (concat "https://jira.atlassian.net/browse/" ticket-id)))
+
+  ;; (org-link-set-parameters "jira"
+  ;;                          :follow #'org-open-jira-link)
+
   ;; (add-hook 'org-mode-hook
   ;;           '(lambda ()
   ;;              (setq line-spacing 0.2)
