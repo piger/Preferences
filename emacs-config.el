@@ -1807,7 +1807,7 @@ becomes
   (message "Settings loaded in %.3fs" elapsed))
 
 ;;; to help troubleshooting:
-;;; (setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; shake fist!!
 (set-frame-font "JetBrains Mono 12" nil t)
