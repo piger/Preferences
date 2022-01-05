@@ -177,8 +177,8 @@
 (setq-default buffer-file-coding-system 'utf-8)
 
 ;; uncomment to disable the scrollbar
-;; (when (functionp 'set-scroll-bar-mode)
-;;   (set-scroll-bar-mode 'nil))
+(when (functionp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode 'nil))
 
 ;; disable the toolbar and the blinking cursor
 (when (functionp 'tool-bar-mode)
