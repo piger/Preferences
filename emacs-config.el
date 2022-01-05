@@ -1252,7 +1252,9 @@ becomes
 
 (use-package ssh-config-mode
   :mode "\\.ssh/config\\'"
-  :ensure t)
+  :ensure t
+  :config
+  (setq ssh-config-mode-indent 4))
 
 (use-package systemd
   :ensure t
