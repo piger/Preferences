@@ -38,43 +38,45 @@ else
     short_name=${(j:.:)parts[1,$fraction]}
 fi
 
+# if we failed to parse the hostname or we didn't get any just pass the command-line to ssh as it is.
 if [[ -z $hostname ]]; then
-    command ssh $@
+    exec command ssh $@
+fi
+
+# and if instead we managed to get here, now we're wrapping ssh.
+if [[ -z $TMUX ]]; then
+    _ssh_wrapper_set_iterm2_title $short_name
 else
+    local prev_window_name=$(tmux display-message -p "#{window_name}")
+    local prev_pane_title=$(tmux display-message -p "#{pane_title}")
 
-    if [[ -z $TMUX ]]; then
-        _ssh_wrapper_set_iterm2_title $short_name
+    # Set window name and pane title when there's only 1 pane (i.e. the whole window),
+    # otherwise set just the pane title.
+    if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
+        # Use a shortened version of the hostname for the window title
+        tmux rename-window "$short_name"
+        _ssh_wrapper_set_pane_title $hostname
     else
-        local prev_window_name=$(tmux display-message -p "#{window_name}")
-        local prev_pane_title=$(tmux display-message -p "#{pane_title}")
-
-        # Set window name and pane title when there's only 1 pane (i.e. the whole window),
-        # otherwise set just the pane title.
-        if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-            # Use a shortened version of the hostname for the window title
-            tmux rename-window "$short_name"
-            _ssh_wrapper_set_pane_title $hostname
-        else
-            _ssh_wrapper_set_pane_title $hostname
-        fi
+        _ssh_wrapper_set_pane_title $hostname
     fi
+fi
 
-    # Display iTerm2 badge
-    [[ $TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=%s\a" \
-           $(echo -n "$short_name" | base64)
+# Display iTerm2 badge
+[[ $TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=%s\a" \
+       $(echo -n "$short_name" | base64)
 
-    command ssh $@
+# change this line if you need to add anything to the execution of ssh.
+command ssh $@
 
-    # Clear iTerm2 badge
-    [[ $TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=\a"
+# Clear iTerm2 badge
+[[ $TERM_PROGRAM = iTerm.app ]] && printf "\e]1337;SetBadgeFormat=\a"
 
-    if [[ -z $TMUX ]]; then
-        _ssh_wrapper_set_iterm2_title ""
-    else
-        if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
-            tmux rename-window "$prev_window_name"
-            tmux setw automatic-rename on
-        fi
-        _ssh_wrapper_set_pane_title $prev_pane_title
+if [[ -z $TMUX ]]; then
+    _ssh_wrapper_set_iterm2_title ""
+else
+    if [[ $(tmux display-message -p "#{window_panes}") == 1 ]]; then
+        tmux rename-window "$prev_window_name"
+        tmux setw automatic-rename on
     fi
+    _ssh_wrapper_set_pane_title $prev_pane_title
 fi
