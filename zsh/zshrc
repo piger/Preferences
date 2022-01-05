@@ -224,7 +224,7 @@ fi
 export GREP_COLOR='1;32'
 
 # LS OPTIONS
-ls_options='--classify=auto --group-directories-first'
+ls_options='--group-directories-first'
 [[ $UID = 0 ]] && ls_options+='A'
 # }}}
 
