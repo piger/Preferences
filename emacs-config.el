@@ -1326,6 +1326,10 @@ becomes
       (apply orig-fn args)))
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
+;; required by the command projectile-ripgrep
+(use-package rg
+  :ensure t)
+
 ;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
 (use-package counsel-projectile
   :disabled t
