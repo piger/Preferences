@@ -805,6 +805,7 @@ becomes
     (flycheck-mode)
     ;; (go-guru-hl-identifier-mode)
     ;; (local-set-key (kbd "M-.") 'godef-jump)
+    (svg-tag-mode t)
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
