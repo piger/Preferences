@@ -99,6 +99,14 @@ export PERSONAL_CODE_DIR OTHERS_CODE_DIR
 # ourselves; see man 'path_helper'.
 setopt no_GLOBAL_RCS
 
+# Manually add paths from /etc/paths.d on macOS rather than calling path_helper; this is used for things like Go
+# installed in /opt/go.
+if [[ -d /etc/paths.d ]]; then
+    for f in /etc/paths.d/*; do
+	path+="$(cat $f)"
+    done
+fi
+
 # Load local zshenv
 source_if_exists "$HOME/.zshenv.local"
 
