@@ -3,16 +3,22 @@
 
 set -e
 
+which pv >/dev/null || exit
+
 ARCH="$(uname -m)"
 
-VERSION=$(curl -sSL https://go.dev/dl/ | perl -nl -e '/go(\d+\.\d+\.\d+)\.darwin-arm64\.tar\.gz/ && print "$1\n"' | head -n1)
+if [[ $ARCH == "x86_64" ]]; then
+    ARCH="amd64"
+fi
+
+VERSION=$(curl -sSL https://go.dev/dl/ | perl -nl -e '/go(\d+\.\d+)(\.\d+)?\.darwin-arm64\.tar\.gz/ && print "$1$2\n"' | head -n1)
 
 read -p "Latest version is ${VERSION}; continue? [yn] " -n 1 -r
 echo
 
 [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, nevermind"; exit; }
 
-echo "Downloading go $VERSION"
+echo "Downloading go ${VERSION}: https://go.dev/dl/go${VERSION}.darwin-${ARCH}.tar.gz"
 curl -# -SL -O "https://go.dev/dl/go${VERSION}.darwin-${ARCH}.tar.gz"
 
 echo "Extracting go $VERSION in /opt/go"
