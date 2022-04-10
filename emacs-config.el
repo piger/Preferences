@@ -686,12 +686,6 @@ becomes
 ;;; RETURN -> indent (come fa C-j)
 ; (define-key global-map (kbd "RET") 'newline-and-indent)
 
-;; Extra scripts
-(use-package nagios-mode
-  :commands nagios-mode
-  :load-path "~/Preferences/elisp"
-  :if (file-exists-p "~/Preferences/elisp"))
-
 ;; Programming
 (use-package subword
   :commands subword-mode
