@@ -358,7 +358,7 @@ if [[ -d ~/.zsh-work/functions ]]; then
 fi
 
 # Autoload any custom function that I really use
-useful_autoloads=(bssh gh-link ssh ssh_master_shutdown whatwhen apple-logo unix2date http-server quote-for-knife set-iterm2-title github-whoami)
+useful_autoloads=(gh-link ssh ssh_master_shutdown whatwhen apple-logo unix2date http-server quote-for-knife set-iterm2-title github-whoami)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # autoload mini-help
