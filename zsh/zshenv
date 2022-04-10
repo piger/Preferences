@@ -102,8 +102,8 @@ setopt no_GLOBAL_RCS
 # Manually add paths from /etc/paths.d on macOS rather than calling path_helper; this is used for things like Go
 # installed in /opt/go.
 if [[ -d /etc/paths.d ]]; then
-    for f in /etc/paths.d/*; do
-	path+="$(cat $f)"
+    for f in $(find /etc/paths.d -type f); do
+        path+="$(cat $f)"
     done
 fi
 
