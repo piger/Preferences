@@ -1,3 +1,0 @@
-# function stelline() {
-n=16;for r in $(seq 0 $n 255);do echo "$(for c in $(seq $n);do tput setaf $(($r + $c - 1)) && echo -ne '\xE2\x98\x85 ';done)";done
-# }

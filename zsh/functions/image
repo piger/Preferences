@@ -1,5 +1,0 @@
-# Display image with tput
-# https://gist.github.com/heptal/6052573
-# function image() {
-convert "$1" -resize 40 txt:-|sed -E 's/://;s/\( ? ?//;s/, ? ?/,/g;s/\)//;s/(\w,\w,\w),\w/\1/g;/mage/d'|awk '{print $1,$2}'|python -c "import sys;f=sys.stdin.read().split('\n');f=filter(None,f);print 'tput rev;'+''.join([''.join(map(str,('echo;' if x.split(' ')[0].split(',')[0] is '0' else '','tput setaf '+str(sum(p*q for p,q in zip([36,6,1],[int(min(int(c),254)/42.5) for c in x.split(' ')[1].split(',')]))+16)+';echo -n \"  \";'))) for x in f])+'echo;tput sgr0'"|bash
-# }

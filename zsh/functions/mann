@@ -1,3 +1,0 @@
-#mann () {
-vim -c "runtime ftplugin/man.vim" -c "Man ${1-man}" +"wincmd o"
-#}

@@ -1,8 +1,0 @@
-# Displays the grand total disk usage using human readable units.
-# https://github.com/sorin-ionescu/prezto/blob/master/modules/utility/functions/dut
-#
-# dut() {
-(( $# == 0 )) && set -- *
-du -khsc "$@" | sort -h -r
-# }
-

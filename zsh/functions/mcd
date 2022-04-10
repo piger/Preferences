@@ -1,4 +1,0 @@
-# dopo anni, mkdir && cd ;-P
-# mcd () {
-mkdir -p "$@" && cd "$@"
-# }

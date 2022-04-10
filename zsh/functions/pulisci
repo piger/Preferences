@@ -1,6 +1,0 @@
-# pulisci() {
-echo "Deleting: (press enter or ctrl+c)"
-echo *~(.UGrw)
-read
-rm -f *~(.UGrw)
-# }

@@ -1,8 +1,0 @@
-# mirror un sito web
-# suca() {
-if [[ -z "$1" ]]; then
-    echo "$0 <url>"
-    return 1
-fi
-wget -krmnp "$1"
-# }
