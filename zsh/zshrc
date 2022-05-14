@@ -382,6 +382,7 @@ compgen_fn() {
 fzf-dir-completion() {
     local cmd tokens lbuf tail trigger prefix dir leftover base
 
+    # Split the result of the expansion into words using shell parsing to find the words (man zshexpn)
     tokens=(${(z)LBUFFER})
     if [ ${#tokens} -lt 1 ]; then
         zle expand-or-complete
@@ -397,46 +398,49 @@ fzf-dir-completion() {
 
     trigger="**"
     lbuf=$LBUFFER
+    # grab the "tail" of $LBUFFER; the syntax is "${name:offset}" in zshexpn. Basically it gets
+    # a string of the length of $trigger (i.e. "**") from the end of $LBUFFER.
     tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
 
-    # only do things if the trigger was found
+    # only do things if there's at least 1 token and the trigger was found
     if [ ${#tokens} -gt 1 -a "$tail" = "$trigger" ]; then
+        # set $prefix to the last token without including the $trigger string
         prefix=${tokens[-1]:0:-${#trigger}}
-        # ???
+        # if the length of the last token is non-zero then sets $lbuf to $lbuf minus the length of the last token;
+        # essentially it strips the last token from $lbuf.
         [ -n "${tokens[-1]}" ] && lbuf=${lbuf:0:-${#tokens[-1]}}
-        if [[ "$cmd" == "cd" ]]; then
-            # ok...
-            # echo "prefix=<$prefix> cmd=<$cmd> lbuf=<$lbuf>"
-            # $ cd aa** => prefix=<aa> lbuf=<cd >
-            base="$prefix"
-            suffix="/"
-            tail=""
 
-            setopt local_options no_nomatch
-            # ???
-            eval "base=$base"
-            [[ $base = *"/"* ]] && dir="$base"
-            while [ 1 ]; do
-                if [[ -z "$dir" || -d ${dir} ]]; then
-                    leftover=${base/#"$dir"}
-                    leftover=${leftover/#\/}
-                    [ -z "$dir" ] && dir='.'
-                    [ "$dir" != "/" ] && dir="${dir/%\//}"
-                    matches=$(eval "compgen_fn $(printf %q "$dir")" | fzf --height 40% --reverse --bind=ctrl-z:ignore -q "$leftover" | while read item; do echo -n "${(q)item}$suffix "; done)
-                    # see "PARAMETER EXPANSION", ${name%pattern} and ${name%%pattern}
-                    matches=${matches% }
-                    if [ -n "$matches" ]; then
-                        LBUFFER="$lbuf$matches$tail"
-                    fi
-                    zle reset-prompt
-                    break
+        base="$prefix"
+        suffix="/"
+        tail=""
+
+        setopt local_options no_nomatch
+        # ???
+        eval "base=$base"
+        [[ $base = *"/"* ]] && dir="$base"
+        while [ 1 ]; do
+            if [[ -z "$dir" || -d ${dir} ]]; then
+                # this is the "${name/pattern/repl}" syntax in zshexpn; also note that "repl" can be empty and in that case you can omit the final "/".
+                # sets $leftover to $base with $dir stripped from the start of the string.
+                leftover=${base/#"$dir"}
+                # strip initial "/" from $leftover
+                leftover=${leftover/#\/}
+
+                [ -z "$dir" ] && dir='.'
+                # if $dir is not "/" then strip "/" from the end of $dir
+                [ "$dir" != "/" ] && dir="${dir/%\//}"
+                matches=$(eval "compgen_fn $(printf %q "$dir")" | fzf --height 40% --reverse --bind=ctrl-z:ignore -q "$leftover" | while read item; do echo -n "${(q)item}$suffix "; done)
+                # remove empty spaces from the end of $matches; see "PARAMETER EXPANSION", ${name%pattern} and ${name%%pattern}
+                matches=${matches% }
+                if [ -n "$matches" ]; then
+                    LBUFFER="$lbuf$matches$tail"
                 fi
-                dir=$(dirname "$dir")
-                dir=${dir%/}/
-            done
-        else
-            zle expand-or-complete
-        fi
+                zle reset-prompt
+                break
+            fi
+            dir=$(dirname "$dir")
+            dir=${dir%/}/
+        done
     else
         zle expand-or-complete
     fi
