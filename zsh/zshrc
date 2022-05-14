@@ -342,6 +342,112 @@ if exists fzf; then
     zle     -N   fzf-history-widget
     bindkey '^R' fzf-history-widget
 fi
+
+# extracts the command part of a command line.
+# from: https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
+fzf-extract-command() {
+    local token tokens
+    tokens=(${(z)1})
+    for token in $tokens; do
+        token=${(Q)token}
+        if [[ "$token" =~ [[:alnum:]] && ! "$token" =~ "=" ]]; then
+            echo "$token"
+            return
+        fi
+    done
+    echo "${tokens[1]}"
+}
+
+# generates completion candidates for commands that expects a directory.
+# correspond to '_fzf_compgen_dir' from https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
+compgen_fn() {
+    if exists fd; then
+        # 'fd' is much smarter than find in dealing with ignored files, VCS directories and so on.
+        # NOTE: I might need to use the "-L" flag, like in the 'find' command below.
+        fd --type directory '.*' "$1" | sed 's@^\./@@'
+    else
+        command find -L "$1" \
+            -name .git -prune -o \
+            -name .hg -prune -o \
+            -name .svn -prune -o \
+            -name venv -prune -o \
+            -type d -a \
+            -not -path "$1" -print 2> /dev/null | sed 's@^\./@@'
+    fi
+}
+
+# completion function that only works on directories; it's a mish mash of several functions from
+# https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
+# _fzf_dir_completion, __fzf_generic_path_completion, fzf-completion
+fzf-dir-completion() {
+    local cmd tokens lbuf tail trigger prefix dir leftover base
+
+    tokens=(${(z)LBUFFER})
+    if [ ${#tokens} -lt 1 ]; then
+        zle expand-or-complete
+        return
+    fi
+
+    cmd=$(fzf-extract-command "$LBUFFER")
+    if [[ "$cmd" != "cd" ]]; then
+        # default completion
+        zle expand-or-complete
+        return
+    fi
+
+    trigger="**"
+    lbuf=$LBUFFER
+    tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
+
+    # only do things if the trigger was found
+    if [ ${#tokens} -gt 1 -a "$tail" = "$trigger" ]; then
+        prefix=${tokens[-1]:0:-${#trigger}}
+        # ???
+        [ -n "${tokens[-1]}" ] && lbuf=${lbuf:0:-${#tokens[-1]}}
+        if [[ "$cmd" == "cd" ]]; then
+            # ok...
+            # echo "prefix=<$prefix> cmd=<$cmd> lbuf=<$lbuf>"
+            # $ cd aa** => prefix=<aa> lbuf=<cd >
+            base="$prefix"
+            suffix="/"
+            tail=""
+
+            setopt local_options no_nomatch
+            # ???
+            eval "base=$base"
+            [[ $base = *"/"* ]] && dir="$base"
+            while [ 1 ]; do
+                if [[ -z "$dir" || -d ${dir} ]]; then
+                    leftover=${base/#"$dir"}
+                    leftover=${leftover/#\/}
+                    [ -z "$dir" ] && dir='.'
+                    [ "$dir" != "/" ] && dir="${dir/%\//}"
+                    matches=$(eval "compgen_fn $(printf %q "$dir")" | fzf --height 40% --reverse --bind=ctrl-z:ignore -q "$leftover" | while read item; do echo -n "${(q)item}$suffix "; done)
+                    # see "PARAMETER EXPANSION", ${name%pattern} and ${name%%pattern}
+                    matches=${matches% }
+                    if [ -n "$matches" ]; then
+                        LBUFFER="$lbuf$matches$tail"
+                    fi
+                    zle reset-prompt
+                    break
+                fi
+                dir=$(dirname "$dir")
+                dir=${dir%/}/
+            done
+        else
+            zle expand-or-complete
+        fi
+    else
+        zle expand-or-complete
+    fi
+}
+
+if exists fzf; then
+    # creates a user defined widget
+    zle -N fzf-dir-completion
+    # bind TAB to it
+    bindkey '^I' fzf-dir-completion
+fi
 # }}}
 
 # AUTOLOADS {{{
