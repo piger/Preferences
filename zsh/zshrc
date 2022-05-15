@@ -415,7 +415,8 @@ fzf-dir-completion() {
         tail=""
 
         setopt local_options no_nomatch
-        # ???
+        # Evaluate completion prefix (examples: $HOME**, ~username**, ~username/foo**)
+        # https://github.com/junegunn/fzf/commit/2b19c0bc685fc2f726b977d161e6ce720a4d04a8
         eval "base=$base"
         [[ $base = *"/"* ]] && dir="$base"
         while [ 1 ]; do
