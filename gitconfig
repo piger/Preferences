@@ -101,3 +101,6 @@ path = ~/.gitconfig.local
 
 [github]
 user = piger
+
+[init]
+defaultBranch = master
