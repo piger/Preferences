@@ -588,14 +588,6 @@ compinit
 autoload -Uz bashcompinit
 bashcompinit
 
-# Force a `rehash` when completion doesn't match anything.
-# http://zshwiki.org/home/examples/compquickstart?s=rehash
-_force_rehash() {
-    (( CURRENT == 1 )) && rehash
-    return 1    # Because we didn't really complete anything.
-}
-
-# Automatic rehash; is this preferred over `_force_rehash`?
 zstyle ':completion:*' rehash true
 
 # group completions by tag
@@ -618,7 +610,7 @@ bindkey -M listscroll q send-break
 
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 # NOTE: _prefix must appear before _approximate
-zstyle ':completion:*:' completer _force_rehash _complete _prefix _approximate _ignored
+zstyle ':completion:*:' completer _complete _prefix _approximate _ignored
 # allow 1 error per 3 characters typed:
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Complete things like: gzip _-d -> gzip --decompress
