@@ -465,6 +465,9 @@ if [[ $OSTYPE = darwin* ]]; then
     # lock screen
     alias afk="pmset displaysleepnow"
 
+    # disable the "log" builtin command, to not conflict with /usr/bin/log
+    disable log
+
     # start the screensaver
     alias screensaver='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
 
