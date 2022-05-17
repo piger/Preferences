@@ -659,6 +659,7 @@ bindkey -M listscroll q send-break      # binda 'q' per uscire dal pager
 # Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+# allow 1 error per 3 characters typed:
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Completa cose tipo: gzip _-d -> gzip --decompress
 zstyle ':completion::approximate*:*' prefix-needed false
