@@ -1,24 +1,23 @@
-# -*- mode: shell-script; eval: (outline-minor-mode t) -*-
+# -*- mode: shell-script  -*-
+#
+# NOTE: emacs call this header line "file variables"
+# https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html
 
 # Uncomment here and at the bottom of this file to profile this file
 # zmodload zsh/zprof
 
-#
-# ┻━┻︵ \(°□°)/ ︵ ┻━┻
-# FLIP ALL DEM TABLEZ!
-
-# CONFIG {{{
+### Local configuration
 # Settings can be customized inside ~/.zshenv.local.
 export DIRCOLORS_FILE=${DIRCOLORS_FILE:-$HOME/Preferences/zsh/plugins/LS_COLORS/LS_COLORS}
 export FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/code/fortune-tvshows/fortunes}
-# }}}
 
-# NOTES {{{
-# According to http://bewatermyfriend.org/p/2012/003/ 'autoload -Uz <name>' is
-# "the right thing"[tm] almost always.
-# }}}
+### NOTES
+#
+# About `autoload -Uz`: it means to disable alias expansion while loading the function and to force
+# zsh emulation. I don't see why zsh emulation shouldn't be used by default though.
+# See also: http://bewatermyfriend.org/p/2012/003/
 
-# OPTIONS {{{
+### OPTIONS
 
 # If a command is issued that can't be executed as a normal command,
 # and the command is the name of a directory, perform the cd command
@@ -111,9 +110,7 @@ setopt NO_hup
 # Query the user before executing `rm *' or `rm path/*'.
 setopt NO_rm_star_silent
 
-# }}}
-
-# FUNCTIONS {{{
+### FUNCTIONS
 function exists() { which $1 &> /dev/null }
 
 # https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
@@ -128,9 +125,8 @@ teprego() {
     echo -e "$(tput setaf 1)sudo$(tput sgr0) → $(fc -ln -1)"
     eval "sudo $(fc -ln -1)"
 }
-# }}}
 
-# ENVIRONMENT {{{
+### ENVIRONMENT
 # Queste variabili d'ambiente servono solo in modalita' interattiva
 # Binda le seguenti variabili d'ambiente ai loro rispettivi array (ex: $perl5lib[@] )
 declare -T LD_LIBRARY_PATH ld_library_path
@@ -155,9 +151,8 @@ WATCHFMT='%n %a %l from %m at %t.'
 # PRIVACY - disattiva history del client mysql
 export MYSQL_HISTFILE=/dev/null
 export LESSHISTFILE=/dev/null
-# }}}
 
-# HISTORY {{{
+### HISTORY
 # Appende al file $HISTORY, invece di sovrascrivere.
 setopt append_history
 # Salva i timestamp nella history.
@@ -181,9 +176,8 @@ HISTSIZE=12000
 
 # set the history file
 HISTFILE=$HOME/.history
-# }}}
 
-# COMMANDS CONFIGURATION {{{
+### COMMANDS CONFIGURATION
 # Opzioni per less
 # -c    : pulisce lo schermo prima di mostrare il file
 # -i    : ignore case (ma una ricerca uppercase annulla l'opzione)
@@ -226,9 +220,8 @@ export GREP_COLOR='1;32'
 # LS OPTIONS
 ls_options='--group-directories-first'
 [[ $UID = 0 ]] && ls_options+='A'
-# }}}
 
-# ZSH MODULES {{{
+### ZSH MODULES
 # The zsh/complist module offers three extensions to completion
 # listings: the ability to highlight matches in such a list, the
 # ability to scroll through long lists and a different style of menu
@@ -267,9 +260,8 @@ keyinfo=(
   'Right'     "$terminfo[kcuf1]"
   'BackTab'   "$terminfo[kcbt]"
 )
-# }}}
 
-# BINDINGS {{{
+### BINDINGS
 # META+delete come in bash, invece che settare WORDCHARS
 autoload -Uz select-word-style
 select-word-style bash
@@ -453,9 +445,8 @@ if exists fzf; then
     # bind TAB to it
     bindkey '^I' fzf-dir-completion
 fi
-# }}}
 
-# AUTOLOADS {{{
+### AUTOLOADS
 # Add my own functions collections to fpath, for autoload to work.
 # See also:
 # http://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
@@ -489,9 +480,7 @@ autoload -Uz zcalc zmv zargs
 # NOTE: there's a fix but probably I prefer to disable this entirely. URLs must be shell-quoted and
 # that's it.
 
-# }}}
-
-# PROMPT {{{
+### PROMPT
 
 # define an empty list of "precmd" functions so it's easier to conditionally
 # add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
@@ -520,9 +509,8 @@ fi
 
 autoload -Uz prompt_piger_setup
 prompt piger
-# }}}
 
-# OS SPECIFIC {{{
+### OS SPECIFIC
 if [[ $OSTYPE = darwin* ]]; then
     # top comodo
     alias itop="top -u -s 5 -stats pid,username,command,cpu,time,mem,vsize,ppid,state"
@@ -621,9 +609,8 @@ elif [[ $OSTYPE = openbsd* ]]; then
     alias pfrerules="pfctl -F rules -R -f /etc/pf.conf"
     alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
 fi # end if $OSTYPE = ...
-# }}}
 
-# ALIASES {{{
+### ALIASES
 # Aliases e altri comandi che non uso mai perche' sono SCEMO
 # ----------------------------------------------------------
 # man zshexpn -> search Glob Qualifier
@@ -696,9 +683,7 @@ alias suggi='curl --continue-at - --location --progress-bar --remote-name --remo
 # alias y2j="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
 alias y2j="python -c 'import fileinput, yaml, json; y=yaml.safe_load(\"\".join(list(fileinput.input()))); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
 
-# }}}
-
-# COMPLETION {{{
+### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
 #
@@ -912,24 +897,19 @@ _complete_screen_display() {
 bindkey -r "^XS"
 compdef -k _complete_screen_display complete-word '^XS'
 
-# }}}
-
-# WELCOME {{{
+### WELCOME
 [[ -e $HOME/Preferences/bin/welcome.sh ]] && $HOME/Preferences/bin/welcome.sh
-# }}}
 
 # Emacs tramp support
 # Sets the terminal to something simple so that emacs doesn't gets confused.
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 
-# PLUGINS AND STUFF {{{
+### PLUGINS AND STUFF
 source_if_exists "$HOME/Preferences/zsh/keephack"
 source_if_exists "$HOME/Preferences/zsh/plugins/z/z.sh"
-# }}}
 
-# LOCAL SETTINGS {{{
+### LOCAL SETTINGS
 source_if_exists "$HOME/.zshrc.local"
-# }}}
 
 # Invece di `return 0` alla fine del file ci metto questo assignment, che
 # dovrebbe essere equivalente in termini di "return OK".
