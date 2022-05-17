@@ -220,11 +220,10 @@ select-word-style bash
 # emacs bindings for ZLE.
 bindkey -e
 
-bindkey  '\e[5~' up-history             # PageUp -> history up
-bindkey  '\e[6~' down-history           # PageDown -> history down
-bindkey  '[Z' reverse-menu-complete   # SHIFT+TAB per il tab "all'indietro"
-
-# CTRL, ALT & co.
+bindkey "${keyinfo[PageUp]}" up-line-or-history
+bindkey "${keyinfo[PageDown]}" down-line-or-history
+# shift+tab: like TAB but backwards.
+bindkey  '[Z' reverse-menu-complete
 bindkey  '^z' undo                      # CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
@@ -408,27 +407,7 @@ for fn in $useful_autoloads; do autoload -Uz $fn; done
 # Autoload some nice zsh functions.
 autoload -Uz zcalc zmv zargs
 
-# url-quote-magic
-# Will automatically quote a URL as you type/paste.
-# This conflicts with the bracketed paste support, see:
-# https://github.com/robbyrussell/oh-my-zsh/blob/291e96dcd034750fbe7473482508c08833b168e3/lib/misc.zsh
-# autoload -Uz url-quote-magic
-# zle -N self-insert url-quote-magic
-# NOTE: there's a fix but probably I prefer to disable this entirely. URLs must be shell-quoted and
-# that's it.
-
 ### PROMPT
-
-# define an empty list of "precmd" functions so it's easier to conditionally
-# add functionalities like 'vcs_info'; see "Hook Functions" in zshmisc(1).
-# typeset -a precmd_functions
-
-# NOTE: both of the following are disabled because we're now using a proper "promptinit" theme.
-# if exists vcs_info; then
-#     precmd_functions+=vcs_info
-#     # precmd_functions+=lazy_vcs_info
-# fi
-
 # load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
 # to be able to access the original $? from the last command (and not from the last hook)
 source_if_exists "$HOME/dev/zsh-notify/zsh-notify.zsh"
@@ -439,7 +418,7 @@ promptinit
 
 # iTerm2 shell integration
 # Needs to be loaded before the prompt since it do stuff with it.
-if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
+if [[ $TERM_PROGRAM == "iTerm.app" && -e $HOME/.iterm2_shell_integration.zsh ]]; then
     export ITERM2_SQUELCH_MARK=1
     source $HOME/.iterm2_shell_integration.zsh
 fi
@@ -470,12 +449,10 @@ if [[ $OSTYPE = darwin* ]]; then
     export CLICOLOR=1
 
     # Trasforma la man page in PDF e la apre con Preview, votamazzen.
-    function man-preview() {
-        man -t "$@" | open -f -a Preview
-    }
+    man-preview() { man -t "$@" | open -f -a Preview }
 
     # print Finder directory
-    function pfd() {
+    pfd() {
         osascript 2>/dev/null <<EOF
     tell application "Finder"
             return POSIX path of (target of window 1 as alias)
@@ -487,7 +464,7 @@ EOF
     cdf() { eval cd "$(osascript -e 'tell app "Finder" to return the quoted form of the POSIX path of (target of window 1 as alias)' 2>/dev/null)" }
 
     # print Finder selection
-    function pfs() {
+    pfs() {
         osascript 2>/dev/null <<EOF
         set output to ""
         tell application "Finder" to set the_selection to selection
@@ -571,8 +548,7 @@ alias pwgen_strong='pwgen -y1 15 20'
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
 
-# oggi
-alias oggi='date "+%d-%m-%Y"'
+today() { date "+%Y-%m-%d" }
 
 # emacsclient + newframe
 alias e='emacsclient -c'
@@ -580,9 +556,9 @@ alias e='emacsclient -c'
 # ruby merda
 alias be='bundle exec'
 
-function tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
+tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 
-# python json tool (un pretty-printer)
+# Use Python to pretty-print JSON.
 alias json.tool='python -m json.tool'
 
 ### COMPLETION
