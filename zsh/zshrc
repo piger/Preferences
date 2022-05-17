@@ -568,8 +568,11 @@ alias json.tool='python -m json.tool'
 # :completion:function:completer:command:argument:tag
 
 # zsh-completions
-# OS X: install with "brew install zsh-completions"
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+# homebrew completion
+[[ -d $HOMEBREW_PREFIX/completions/zsh ]] && fpath+="$HOMEBREW_PREFIX/completions/zsh"
+# completions installed by homebrew
+[[ -d $HOMEBREW_PREFIX/share/zsh/site-functions ]] && fpath+="$HOMEBREW_PREFIX/share/zsh/site-functions"
 
 # compinstall, dilemma TODO
 zstyle :compinstall filename '~/.zshrc'
