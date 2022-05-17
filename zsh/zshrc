@@ -19,17 +19,11 @@ export FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/code/fortune-tvshows/fortu
 
 ### OPTIONS
 
-# If a command is issued that can't be executed as a normal command,
-# and the command is the name of a directory, perform the cd command
-# to that directory.
-setopt auto_cd
-
 # Make cd push the old directory onto the directory stack.
 setopt auto_pushd
 
-# Report the status of background and suspended jobs before exiting a
-# shell with job control; a second attempt to exit the shell will
-# succeed.
+# Report the status of background and suspended jobs before exiting a shell with job control; a
+# second attempt to exit the shell will succeed.
 setopt check_jobs
 
 # 03/08/2016 - This causes errors with "chef" hostname completion :(
@@ -44,64 +38,57 @@ setopt correct
 # Perform = filename expansion (e.g. echo =ssh -> /usr/bin/ssh)
 setopt equals
 
-# Treat the `#', `~' and `^' characters as part of patterns for
-# filename generation, etc.
+# Treat the `#', `~' and `^' characters as part of patterns for filename generation, etc.
 setopt extended_glob
 
-# Try to make the completion list smaller (occupying less lines) by
-# printing the matches in columns with different widths.
+# Try to make the completion list smaller (occupying less lines) by printing the matches in columns
+# with different widths.
 setopt list_packed
 
 # List jobs in the long format by default.
 setopt long_list_jobs
 
-# Report the status of background jobs immediately, rather than
-# waiting until just before printing a prompt.
+# Report the status of background jobs immediately, rather than waiting until just before printing a
+# prompt.
 setopt notify
 
-# If numeric filenames are matched by a filename generation pattern,
-# sort the filenames numerically rather than lexicographically.
+# If numeric filenames are matched by a filename generation pattern, sort the filenames numerically
+# rather than lexicographically.
 setopt numeric_glob_sort
 
 # Print the exit value of programs with non-zero exit status.
 setopt print_exit_value
 
-# Parameter expansion, command substitution and arithmetic expansion
-# are performed in prompts.
+# Parameter expansion, command substitution and arithmetic expansion are performed in prompts.
 setopt prompt_subst
 
-# Don't push multiple copies of the same directory onto the directory
-# stack.
+# Don't push multiple copies of the same directory onto the directory stack.
 setopt pushd_ignore_dups
 
-# Allow the short forms of for, repeat, select, if, and function
-# constructs.
+# Allow the short forms of for, repeat, select, if, and function constructs.
 setopt short_loops
 
 # Allow comments even in interactive shells.
 setopt interactive_comments
 
-# Remove any right prompt from display when accepting a command line.
-# This may be useful with terminals with other cut/paste methods.
+# Remove any right prompt from display when accepting a command line. This may be useful with
+# terminals with other cut/paste methods.
 setopt transient_rprompt
 
-# Regular expression matching with the =~ operator will use
-# Perl-Compatible Regular Expressions from the PCRE library, if
-# available.
+# Regular expression matching with the =~ operator will use Perl-Compatible Regular Expressions from
+# the PCRE library, if available.
 # setopt rematch_pcre
 
-# Assume that the terminal displays combining characters
-# correctly. (i.e. UTF-8)
+# Assume that the terminal displays combining characters correctly. (i.e. UTF-8)
 [[ $ZSH_VERSION == <5->.* ]] && setopt combining_chars
 
-# Disabled options
-# ----------------
+#### Disabled options
 
 # Disable bell alert
 setopt NO_beep
 
-# Output flow control via start/stop characters (usually assigned to
-# ^S/^Q) is disabled in the shell's editor.
+# Output flow control via start/stop characters (usually assigned to ^S/^Q) is disabled in the
+# shell's editor.
 setopt NO_flow_control
 
 # Do not send the HUP signal to running jobs when the shell exits.
