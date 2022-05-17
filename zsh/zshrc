@@ -145,20 +145,10 @@ HISTSIZE=12000
 HISTFILE=$HOME/.history
 
 ### COMMANDS CONFIGURATION
-# Opzioni per less
-# -c    : pulisce lo schermo prima di mostrare il file
-# -i    : ignore case (ma una ricerca uppercase annulla l'opzione)
-# -M    : mostra percentuale del file ed e' piu' verboso di more
-# -R    : attiva i colori ANSI
-# -x<n> : lunghezza del tab
-# -w    : Temporarily highlights the first "new" line after a forward movement of a full page.
-# -J    : Mostra una 'status column' che indica la posizione dei match della ricerca.
-# -z-5  : Scrolling mantenendo 5 righe.
-LESS="-ciMRx4wJ -z-5"
-PAGER=less
-export LESS PAGER
+export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=5"
+export PAGER="less"
 
-# man page colorate SENZA usare most! ;-P
+# Colors in man pages, without having to use `most`.
 # http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
