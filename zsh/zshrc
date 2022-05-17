@@ -580,52 +580,48 @@ fi
 # compinstall, dilemma TODO
 zstyle :compinstall filename '~/.zshrc'
 
-# questo va all'inizio, altrimenti poi non ho `compdef` o altri comandi.
+# enable the completion subsystem
 autoload -Uz compinit
 compinit
 
-# supporto bash completion (da chiamare DOPO 'compinit')
+# add bash completion support
 autoload -Uz bashcompinit
 bashcompinit
 
-# Forza il rehash per ogni uso della completion (ie: premi tab).
+# Force a `rehash` when completion doesn't match anything.
 # http://zshwiki.org/home/examples/compquickstart?s=rehash
 _force_rehash() {
     (( CURRENT == 1 )) && rehash
     return 1    # Because we didn't really complete anything.
 }
-zstyle ':completion:*' rehash true      # rehash automatico, ma non sembra funzionare... TODO
 
-# raggruppa l'output
+# Automatic rehash; is this preferred over `_force_rehash`?
+zstyle ':completion:*' rehash true
+
+# group completions by tag
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '-->'
-# Non completare i nomi delle funzioni che iniziano per '_'
+# Do not complete function names that starts with "_"
 zstyle ':completion:*:functions' ignored-patterns '_*'
 
-# separa i man per sezione
+# separate man completions by section
 zstyle ':completion:*:manuals' separate-sections true
 
-# Mostra le descrizioni per cio' che viene completato, ad esempio le opzioni di ls;
-# quando manca la descrizione, prova a "indovinare"
+# show descriptions of comletion suggestions.
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' auto-description 'specify: %d'
 
-# Utilizza un pager interno quando i risultati della completion sono troppi
+# use a pager when there's too many completion suggestions.
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-bindkey -M listscroll q send-break      # binda 'q' per uscire dal pager
+# bind "q" to exit the internal pager
+bindkey -M listscroll q send-break
 
-# Limit this fuckung "zsh: do you wish to see all NNN possibilities (NNN
-# lines)?" downward (default is 100). Only ask before displaying
-# completions if doing so would scroll. (strcat.de)
-#LISTMAX=0
-
-# Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
 # NOTE: _prefix must appear before _approximate
 zstyle ':completion:*:' completer _force_rehash _complete _prefix _approximate _ignored
 # allow 1 error per 3 characters typed:
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
-# Completa cose tipo: gzip _-d -> gzip --decompress
+# Complete things like: gzip _-d -> gzip --decompress
 zstyle ':completion::approximate*:*' prefix-needed false
 
 # Case insensitive: converte solo le minuscole in maiuscole, perche' come dicono
@@ -637,7 +633,7 @@ zstyle ':completion::approximate*:*' prefix-needed false
 zstyle ':completion:*:(^approximate):*' matcher-list \
         'r:|[/]=* r:|=* m:{a-z}={A-Z}'
 
-# titoli [from: https://github.com/seebi/zshrc]
+# fancy completion headers [from: https://github.com/seebi/zshrc]
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
 zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
@@ -656,45 +652,29 @@ zstyle ':completion:*:prefix:*' add-space true  # aggiunge anche uno spazio
 # Avendo '_ignored' tra i completer, le seguenti regole verranno ignorate nel caso
 # in cui non ci sia altro da completare
 zstyle ':completion:*:*:cd:*' ignored-patterns '(*/|)(CVS)'
-# Evita di completare cio' che e' gia' sulla command line
-# Questo e' AAAH, sputtana la completion e il Tab non cycla piu' tra i possibili match :-(
-#zstyle ':completion:*:(rm|rmdir|grep|vim|vi):*' ignore-line true
-# Non completare le directory se la completion "non ha senso" (../$PWD non ha senso)
-#zstyle ':completion:*' ignore-parents parent pwd
-# meglio?
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
-# Per abilitare la completion di "cd ../"
 zstyle ':completion:*' special-dirs true
 
 # Completa cio' che non ESISTE, UN FILM DI ZARRO SUCUNI
 zstyle ':completion::*:(-command-|export):*' fake-parameters DISPLAY:scalar \
-    LD_LIBRARY_PATH:array COLUMNS:scalar LANG:scalar LC_ALL:scalar CVSROOT:scalar \
-    PERL5LIB:array PYTHONPATH:array DJANGO_SETTINGS_MODULE:scalar \
-    SSH_AUTH_SOCK:scalar DYLD_LIBRARY_PATH:array DYLD_FALLBACK_LIBRARY_PATH:array
+    LD_LIBRARY_PATH:array COLUMNS:scalar LANG:scalar LC_ALL:scalar \
+    PYTHONPATH:array SSH_AUTH_SOCK:scalar DYLD_LIBRARY_PATH:array DYLD_FALLBACK_LIBRARY_PATH:array
 
-# Completion per `kill`: mostra una lista di processi con la percentuale di CPU
-# utilizzata, e su linux come bonus mostra i processi come un albero
-# gerarchico.
+# Completion for `kill`.
 if [[ $OSTYPE == linux* ]]; then
     zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,%mem,cmd'
 else
     # -r -- sort by CPU usage
     zstyle ':completion:*:processes' command 'ps x -U $USER -r -o pid,%cpu,%mem,tt,args'
 fi
-# ... e ovviamente i colori. [from: https://github.com/seebi/zshrc]
 zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
 
 # cache
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 
-# Completion con i colori di ls
+# Use $LS_COLORS in completion.
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# completion from history [ https://github.com/seebi/zshrc/blob/master/options.zsh ]
-zle -C hist-complete complete-word _generic
-zstyle ':completion:hist-complete:*' completer _history
-bindkey '^X^X' hist-complete
 
 # extend ssh host completion with chef nodes. Just create a list of hostnames in ~/.chef_hosts
 add_chef_nodes_to_hosts_completion() {
