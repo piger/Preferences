@@ -223,7 +223,7 @@ bindkey -e
 bindkey "${keyinfo[PageUp]}" up-line-or-history
 bindkey "${keyinfo[PageDown]}" down-line-or-history
 # shift+tab: like TAB but backwards.
-bindkey  '[Z' reverse-menu-complete
+bindkey "${keyinfo[BackTab]}" reverse-menu-complete
 bindkey  '^z' undo                      # CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
