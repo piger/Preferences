@@ -77,6 +77,7 @@ setopt transient_rprompt
 
 # Regular expression matching with the =~ operator will use Perl-Compatible Regular Expressions from
 # the PCRE library, if available.
+# Doesn't work on macOS Monterey's version of zsh.
 # setopt rematch_pcre
 
 # Assume that the terminal displays combining characters correctly. (i.e. UTF-8)
@@ -100,13 +101,8 @@ setopt NO_rm_star_silent
 ### FUNCTIONS
 function exists() { which $1 &> /dev/null }
 
-# https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh
-rot13() {
-        echo $@ | tr "A-Za-z" "N-ZA-Mn-za-m"
-}
-
-urlencode() { python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1])" $@ }
-urldecode() { python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1])" $@ }
+urlencode() { python3 -c "import sys, urllib.parse; print(urllib.parse.quote_plus(sys.argv[1]))" $@ }
+urldecode() { python3 -c "import sys, urllib.parse; print(urllib.parse.unquote_plus(sys.argv[1]))" $@ }
 
 teprego() {
     echo -e "$(tput setaf 1)sudo$(tput sgr0) → $(fc -ln -1)"
@@ -114,50 +110,34 @@ teprego() {
 }
 
 ### ENVIRONMENT
-# Queste variabili d'ambiente servono solo in modalita' interattiva
-# Binda le seguenti variabili d'ambiente ai loro rispettivi array (ex: $perl5lib[@] )
+# Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
 declare -T PERL5LIB perl5lib
 declare -T PYTHONPATH pythonpath
 
-# Ansible pls
+# Ansible pls.
 export ANSIBLE_NOCOWS=1
 
-# FTP in passive mode (CPAN)
-export FTP_PASSIVE=1
-
-# Controllo accessi al server
+# Send a notifications when someone logs in into the same machine.
 watch=(notme)
 LOGCHECK=300            # check every 5 min for login/logout activity
 WATCHFMT='%n %a %l from %m at %t.'
 
-# report about cpu-/system-/user-time of command if running longer than
-# 5 seconds
+# report about cpu-/system-/user-time of command if running longer than 5 seconds.
 # REPORTTIME=5
 
-# PRIVACY - disattiva history del client mysql
+# Disable history files for mysql client and less.
 export MYSQL_HISTFILE=/dev/null
 export LESSHISTFILE=/dev/null
 
 ### HISTORY
-# Appende al file $HISTORY, invece di sovrascrivere.
 setopt append_history
-# Salva i timestamp nella history.
 setopt extended_history
-# se il comando e' uguale al precedente non metterlo nella history.
 setopt hist_ignore_dups
-# non salvare nella history i comandi "history".
 setopt hist_no_store
-# quando si usa la history expansion non esegue direttamente, cosi'
-# vedi che stai per fare.
 setopt hist_verify
-# non salva nella history le command line che iniziano con uno spazio
-# (utile quando si inseriscono pw)
 setopt hist_ignore_space
-# cerca di cancellare dalla history i duplicati prima degli eventi unici.
 setopt hist_expire_dups_first
-# February 21, 2013 - 2000 di history è troppo poco, proviamo 12000 e vediamo
-# che accade (che tra l'altro è più di prima :-)
 SAVEHIST=10000
 HISTSIZE=12000
 
@@ -188,20 +168,15 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# Cthulhu ^(;,;)^ hates the nano editor!
+# Sets vim or vi as the default editor.
 if (( $+commands[vim] )); then
     export EDITOR=vim
     export VISUAL=vim
-else
+elif (( $+commands[vi] )); then
     export EDITOR=vi
     export VISUAL=vi
 fi
 
-# `grep` options
-# - grep colors (highlight verde)
-# - skippa i file device, FIFO e socket.
-# GREP_OPTIONS is deprecated, because fuck you
-# export GREP_OPTIONS='--color=auto -D skip'
 export GREP_COLOR='1;32'
 
 # LS OPTIONS
@@ -209,9 +184,8 @@ ls_options='--group-directories-first'
 [[ $UID = 0 ]] && ls_options+='A'
 
 ### ZSH MODULES
-# The zsh/complist module offers three extensions to completion
-# listings: the ability to highlight matches in such a list, the
-# ability to scroll through long lists and a different style of menu
+# The zsh/complist module offers three extensions to completion listings: the ability to highlight
+# matches in such a list, the ability to scroll through long lists and a different style of menu
 # completion.
 zmodload zsh/complist
 
@@ -249,11 +223,11 @@ keyinfo=(
 )
 
 ### BINDINGS
-# META+delete come in bash, invece che settare WORDCHARS
+# Set META+delete to work like it does in Bash.
 autoload -Uz select-word-style
 select-word-style bash
 
-# emacs bindings (odio la modalita' vi)
+# emacs bindings for ZLE.
 bindkey -e
 
 bindkey  '\e[5~' up-history             # PageUp -> history up
@@ -264,27 +238,18 @@ bindkey  '[Z' reverse-menu-complete   # SHIFT+TAB per il tab "all'indietro"
 bindkey  '^z' undo                      # CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
-# predict
-# [NOTA: non è per niente comodo...]
-# autoload -Uz predict-on
-# zle -N predict-on
-# zle -N predict-off
-# bindkey "^X^Z" predict-on     # CTRL+X CTRL+Z per attivare il predict
-# bindkey "^Z" predict-off      # CTRL+Z per disattivare il predict
-
 # sudo
-# Binda ALT+s a 'metti-sudo-all'inizio-della-riga'
+# META+s to prefix "sudo" to the current command-line.
 _add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
 zle -N add-sudo _add-sudo
-# ALT+s per inserire 'sudo' a inizio cmdline.
 bindkey '\es' add-sudo
 
-# Edita la linea di comando con $EDITOR
+# META+e to edit the current command-line with $EDITOR.
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey '\ee' edit-command-line         # ALT+e per editare la cmdline
+bindkey '\ee' edit-command-line
 
-# Alt+m copia la parola precedente, comodo per i file rename.
+# META+M copies the previous word in the current command-line.
 bindkey "^[m" copy-prev-shell-word
 
 # autoload -U zkbd
@@ -450,12 +415,7 @@ fi
 useful_autoloads=(gh-link ssh ssh_master_shutdown whatwhen apple-logo unix2date http-server quote-for-knife set-iterm2-title github-whoami)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
-# autoload mini-help
-# -U also causes alias expansion to be suppressed  when  the  function is loaded
-# The -k and -z flags make the function be loaded using  ksh-style  or
-# zsh-style autoloading  respectively
-### autoload -Uz compinit
-### compinit
+# Autoload some nice zsh functions.
 autoload -Uz zcalc zmv zargs
 
 # url-quote-magic
@@ -573,15 +533,6 @@ elif [[ $OSTYPE = linux* ]]; then
 
     alias grep='grep --color=auto'
 
-    if [ -e /etc/debian_version ]; then
-        alias search="apt-cache search"
-        alias show="apt-cache show"
-        alias i="sudo aptitude install"
-        # alias backports="sudo aptitude -t lenny-backports"
-        # list installed packages by size
-        alias large_packages="dpkg-query -Wf '\${Installed-Size}\t\${Package}\n' | sort -n"
-    fi
-
     # LS_COLORS
     (( $+commands[dircolors] )) && test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
 
@@ -602,14 +553,6 @@ fi # end if $OSTYPE = ...
 # ----------------------------------------------------------
 # man zshexpn -> search Glob Qualifier
 alias h='fc -l -t "%d/%m/%Y %H:%M" -D'
-alias la="ls -a"
-alias lsd="ls -ld *(-/)"                # ls delle sole directory
-alias lsa="ls -ld .*"                   # ls dei soli file nascosti
-alias lsgrandi="ls -fl *(.oL)"  # ls -lrh --sort=size
-alias lsuid="ls -l *(s,S,t)"    # ls solo di file suid/setgid/sticky
-alias dirvuote="ls -ld *(/^F)"  # ls solo delle directory vuote
-alias lsnodot="ls *~*.*(.)"             # ls dei file senza estenzione
-alias lsoggi="ls *(m0)"                 # ls dei file modificati oggi
 alias dirdu="du -Hhs *(/,@)"    # du -h di ogni dir presente
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -627,29 +570,16 @@ alias cpi="cp -i"
 
 # alias globali, che pero' non gradisco.
 alias -g L='|less'
-alias -g H='|head'
-alias -g T='|tail'
-
-# suffix aliases
-alias -s asc='gpg'
+# alias -g H='|head'
+# alias -g T='|tail'
 
 alias pwgen_strong='pwgen -y1 15 20'
-
-# alias simpatici
-alias suco='sudo'
-# per poter fare 'mortacci tua kill -9 31337'
-alias mortacci=";"
-alias tua=";"
-alias shitdown="shutdown"
 
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
 
 # oggi
 alias oggi='date "+%d-%m-%Y"'
-
-# rsync verso un filesystem FAT32
-alias rsync_fat32='rsync --modify-window=1'
 
 # emacsclient + newframe
 alias e='emacsclient -c'
@@ -662,43 +592,11 @@ function tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 # python json tool (un pretty-printer)
 alias json.tool='python -m json.tool'
 
-# quick download
-alias suggi='curl --continue-at - --location --progress-bar --remote-name --remote-time'
-
-# yaml2json
-# https://twitter.com/micahhausler/status/1057064499226656768
-# alias y2j="python -c 'import sys, yaml, json; y=yaml.safe_load(sys.stdin.read()); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
-alias y2j="python -c 'import fileinput, yaml, json; y=yaml.safe_load(\"\".join(list(fileinput.input()))); print(json.dumps(y, default=lambda obj: obj.isoformat() if hasattr(obj, \"isoformat\") else obj))'"
-
 ### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
 #
 # :completion:function:completer:command:argument:tag
-
-# completion indicator
-# source: https://github.com/mattjj/my-oh-my-zsh/blob/master/keyboard.zsh
-zstyle ':omz:completion' indicator '...'
-
-function expand-or-complete-prefix-with-indicator() {
-  local indicator
-  zstyle -s ':omz:completion' indicator 'indicator'
-  print -Pn "$indicator"
-  zle expand-or-complete-prefix
-  zle redisplay
-}
-zle -N expand-or-complete-prefix-with-indicator
-
-# 02/12/2015 - middle word completion doesn't work well with the chef hostname completion.
-
-# Complete in the middle of word.
-# [[ -n "$keyinfo[Control]" ]] && \
-#     bindkey -M "emacs" "$keyinfo[Control]I" expand-or-complete-prefix
-
-# Complete in the middle of word and show indicator. (remember to comment previous binding)
-# [[ -n "$keyinfo[Control]" ]] && \
-#     bindkey -M "emacs" "$keyinfo[Control]I" \
-#     expand-or-complete-prefix-with-indicator
 
 # zsh-completions
 # OS X: install with "brew install zsh-completions"
@@ -708,10 +606,12 @@ zle -N expand-or-complete-prefix-with-indicator
 zstyle :compinstall filename '~/.zshrc'
 
 # questo va all'inizio, altrimenti poi non ho `compdef` o altri comandi.
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+compinit
 
 # supporto bash completion (da chiamare DOPO 'compinit')
-autoload -Uz bashcompinit && bashcompinit
+autoload -Uz bashcompinit
+bashcompinit
 
 # Lista di completers
 # _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
@@ -857,33 +757,6 @@ compdef _hosts tmux-cssh
 # and also for bssh
 compdef _hosts bssh
 
-# Ctrl-X - SHIFT+S
-# Completa usando le parole della schermata attuale di tmux.
-# da zsh-lovers.
-_complete_screen_display() {
-    #[[ "$TERM" != screen* ]] && return 1
-
-    if (( $+commands[gmktemp] )); then
-        local TMPFILE=$(gmktemp)
-    else
-        local TMPFILE=$(mktemp)
-    fi
-    local -U -a _screen_display_wordlist
-    trap "rm -f $TMPFILE" EXIT
-
-    if ((${+TMUX})); then
-        tmux capture-pane -b zshcomp \; save-buffer -b zshcomp $TMPFILE \; delete-buffer -b zshcomp </dev/null
-    else
-        echo "ahi ahi ahi no tmux"
-        return
-    fi
-    _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
-    _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
-    compadd -a _screen_display_wordlist
-}
-bindkey -r "^XS"
-compdef -k _complete_screen_display complete-word '^XS'
-
 ### WELCOME
 [[ -e $HOME/Preferences/bin/welcome.sh ]] && $HOME/Preferences/bin/welcome.sh
 
@@ -897,11 +770,5 @@ source_if_exists "$HOME/Preferences/zsh/plugins/z/z.sh"
 
 ### LOCAL SETTINGS
 source_if_exists "$HOME/.zshrc.local"
-
-# Invece di `return 0` alla fine del file ci metto questo assignment, che
-# dovrebbe essere equivalente in termini di "return OK".
-FOO="grosso peto che esce dalle chiappe roboanti"
-# Se per caso questo file esce con un valore diverso da zero, sara' PANDEMONIO!
-# return 0
 
 # zprof
