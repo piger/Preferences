@@ -588,11 +588,6 @@ compinit
 autoload -Uz bashcompinit
 bashcompinit
 
-# Lista di completers
-# _prefix deve stare prima di _approximate, senno' e' OLOCAUSTO
-# _ignored completa file/dir che per altre impostazioni verrebbero ignorati
-#zstyle ':completion:::::' completer _complete _prefix _approximate _ignored
-
 # Forza il rehash per ogni uso della completion (ie: premi tab).
 # http://zshwiki.org/home/examples/compquickstart?s=rehash
 _force_rehash() {
@@ -601,17 +596,10 @@ _force_rehash() {
 }
 zstyle ':completion:*' rehash true      # rehash automatico, ma non sembra funzionare... TODO
 
-# Abilita i messaggi della completion, aggiunge bold ad alcune stringhe
-# e raggruppa i risultati per tipologia (fidati, e' MEGLIO COSI')
-zstyle ':completion:*:messages' format %d
-zstyle ':completion:*:warnings' format '%BNo matches%b: %d'
-zstyle ':completion:*:descriptions' format '%B%d%b'
-# raggrouppa l'output
+# raggruppa l'output
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '-->'
 # Non completare i nomi delle funzioni che iniziano per '_'
-#zstyle ':completion::complete:*:functions' ignored-patterns '_*'
-# che sia cosi'?
 zstyle ':completion:*:functions' ignored-patterns '_*'
 
 # separa i man per sezione
@@ -633,7 +621,8 @@ bindkey -M listscroll q send-break      # binda 'q' per uscire dal pager
 
 # Completion approssimativa, permette un errore ogni 3 caratteri
 zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:::::' completer _force_rehash _complete _prefix _approximate _ignored
+# NOTE: _prefix must appear before _approximate
+zstyle ':completion:*:' completer _force_rehash _complete _prefix _approximate _ignored
 # allow 1 error per 3 characters typed:
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
 # Completa cose tipo: gzip _-d -> gzip --decompress
