@@ -7,7 +7,12 @@ excludesfile = ~/.gitignore
 
 [diff]
 renames = copies
-algorithm = patience
+algorithm = histogram
+colormoved = zebra
+colorMovedWS = ignore-space-change
+
+[merge]
+conflictStyle = zdiff3
 
 [log]
 # show dates in "human" format, but only if the pager is in use.
@@ -101,6 +106,10 @@ path = ~/.gitconfig.local
 
 [github]
 user = piger
-
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 [init]
 defaultBranch = master
