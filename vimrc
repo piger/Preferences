@@ -194,6 +194,10 @@ filetype plugin indent on
 " colori {{{
 " Vanno dopo pathogen, in caso usi pluginz
 
+if has("termguicolors")
+	set termguicolors
+endif
+
 if !has("gui_running")
     " colorscheme candycode
     " colorscheme fnaqevan
