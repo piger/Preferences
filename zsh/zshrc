@@ -251,10 +251,9 @@ bindkey "^[m" copy-prev-shell-word
 #    [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
 #    # etc.
 
-# idea from: zsh-lovers
-insert-datestamp() { LBUFFER+=${(%):-'%D{%d-%m-%Y}'}; }
+# Ctrl-e + 'd' to insert the current date in the current command-line.
+insert-datestamp() { LBUFFER+=${(%):-'%D{%Y-%m-%d}'}; }
 zle -N insert-datestamp
-# C-e d -- insert current date dd-mm-YYYY
 bindkey '^Ed' insert-datestamp
 
 # https://github.com/junegunn/fzf/blob/764316a53d0eb60b315f0bbcd513de58ed57a876/shell/key-bindings.zsh
