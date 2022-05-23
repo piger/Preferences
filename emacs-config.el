@@ -1713,11 +1713,6 @@ becomes
          ("C-x 4" . switch-window-then-delete))
   :disabled t)
 
-(use-package nyan-mode
-  :ensure t
-  :config
-  (nyan-mode))
-
 (use-package engine-mode
   :ensure t
   :config
