@@ -1,9 +1,12 @@
 # search in hidden files like .travis.yml
---hidden
+# --hidden
 
 # file type for erb
 --type-add
 erb:*.erb
+
+--type-add
+jsonnet:*.jsonnet
 
 --type-add
 template:*.{tmpl,erb}
