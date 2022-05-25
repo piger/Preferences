@@ -71,9 +71,9 @@ prompt_piger_setup() {
     # The colors used here must match the colors of the previous segment, which in this case is the current directory segment.
     zstyle ':vcs_info:*' nvcsformats "%k%F{$dir_bg}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:*' formats \
-           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{64}%F{70}%b%F{64}%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
+           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{70}%b%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:*' actionformats \
-           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
+           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{10}%b%F{3}|%F{1}%a%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
