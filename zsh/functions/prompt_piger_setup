@@ -5,15 +5,14 @@ prompt_piger_help() {
     cat <<EOH
 This prompt takes advantage of 'vcs_info' to display useful VCS informations in the prompt.
 You can chose between the short and the extended format, where the latter will also display
-the typical "username@hostname" part of the prompt:
+the typical "username@hostname" part of the prompt.
 
-$ prompt piger extended
+This theme offers some variants: base and autumn.
 
-or
+Usage:
 
-$ prompt piger
+$ prompt piger [<variant> [extended]]
 
-Set "PIGER_PROMPT_SYMBOL" to override the default shell symbol.
 EOH
 }
 
@@ -43,7 +42,8 @@ prompt_piger_precmd() {
 }
 
 prompt_piger_setup() {
-    local extended=$1
+    local variant="${1:-base}"
+    local extended="$2"
 
     # this is usually defined by 'promptinit'
     [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
@@ -54,19 +54,33 @@ prompt_piger_setup() {
     autoload -Uz add-zsh-hook
     autoload -Uz vcs_info
 
-    # colors
-    local time_bg="236" \
-          time_fg="33" \
-          dir_bg="60" \
-          dir_fg="147" \
-          symbol_fg="30" \
-          vcs_bg="230" \
-          vcs_fg="70" \
-          vcs_logo="20" \
-          vcs_staged_fg="2" \
-          vcs_unstaged_fg="3" \
-          err_fg="124" \
-          venv_fg="205"
+    if [[ $variant = "base" ]]; then
+        local time_bg="236" \
+              time_fg="33" \
+              dir_bg="60" \
+              dir_fg="147" \
+              symbol_fg="30" \
+              vcs_bg="230" \
+              vcs_fg="70" \
+              vcs_logo="20" \
+              vcs_staged_fg="2" \
+              vcs_unstaged_fg="3" \
+              err_fg="124" \
+              venv_fg="205"
+    elif [[ $variant = "autumn" ]]; then
+        local time_bg="#520120" \
+              time_fg="#e5989b" \
+              dir_bg="#08403E" \
+              dir_fg="#83c5be" \
+              symbol_fg="30" \
+              vcs_bg="#706513" \
+              vcs_fg="#ffb703" \
+              vcs_logo="20" \
+              vcs_staged_fg="2" \
+              vcs_unstaged_fg="3" \
+              err_fg="124" \
+              venv_fg="205"
+    fi
 
     # the following 3 styles control the rendering of the "git" prompt segment; in particular the first and last chunks
     # renders the closing of the previous segment and the final prompt segment (the one that reset the background, %k).
