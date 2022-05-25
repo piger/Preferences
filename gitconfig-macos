@@ -1,7 +1,5 @@
 # -*- mode: conf -*-
-# vim: ft=dosini
 
-# this is a hidden gem
 [pager]
 log = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | less
 show = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | less
@@ -10,16 +8,5 @@ diff = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight |
 [interactive]
 diffFilter = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight
 
-[core]
-pager = delta
-
-[delta]
-# plus-style = syntax #012800
-# minus-style = normal #340001
-## syntax-theme = Monokai Extended
-syntax-theme = Coldark-Dark
-side-by-side = true
-
 [interactive]
 diffFilter = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight
-# diffFilter = delta --color-only
