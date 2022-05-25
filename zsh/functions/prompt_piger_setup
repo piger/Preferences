@@ -98,7 +98,7 @@ prompt_piger_setup() {
     PROMPT=""
 
     # time:
-    PROMPT+="%K{$time_bg}%F{$time_fg}%T "
+    PROMPT+="%K{$time_bg}%F{$time_fg} %T "
     PROMPT+="%K{$dir_bg}%F{$time_bg}$SEGMENT_SEPARATOR "
 
     # current directory
