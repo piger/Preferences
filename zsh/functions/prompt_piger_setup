@@ -54,32 +54,36 @@ prompt_piger_setup() {
     autoload -Uz add-zsh-hook
     autoload -Uz vcs_info
 
-    if [[ $variant = "base" ]]; then
-        local time_bg="236" \
-              time_fg="33" \
-              dir_bg="60" \
-              dir_fg="147" \
-              symbol_fg="30" \
-              vcs_bg="230" \
-              vcs_fg="70" \
-              vcs_logo="20" \
-              vcs_staged_fg="2" \
-              vcs_unstaged_fg="3" \
-              err_fg="124" \
-              venv_fg="205"
-    elif [[ $variant = "autumn" ]]; then
-        local time_bg="#520120" \
-              time_fg="#e5989b" \
-              dir_bg="#08403E" \
-              dir_fg="#83c5be" \
-              symbol_fg="30" \
-              vcs_bg="#706513" \
-              vcs_fg="#ffb703" \
-              vcs_logo="20" \
-              vcs_staged_fg="2" \
-              vcs_unstaged_fg="3" \
-              err_fg="124" \
-              venv_fg="205"
+    # variables to make easier to change colors and make variants
+    local time_bg time_fg dir_bg dir_fg symbol_fg vcs_bg vcs_fg vcs_logo \
+          vcs_staged_fg vcs_unstaged_fg err_fg venv_fg
+
+    if [[ $variant = "autumn" ]]; then
+        time_bg="#520120"
+        time_fg="#e5989b"
+        dir_bg="#08403E"
+        dir_fg="#83c5be"
+        symbol_fg="30"
+        vcs_bg="#706513"
+        vcs_fg="#ffb703"
+        vcs_logo="20"
+        vcs_staged_fg="2"
+        vcs_unstaged_fg="3"
+        err_fg="124"
+        venv_fg="205"
+    else
+        time_bg="236"
+        time_fg="33"
+        dir_bg="60"
+        dir_fg="147"
+        symbol_fg="30"
+        vcs_bg="230"
+        vcs_fg="70"
+        vcs_logo="20"
+        vcs_staged_fg="2"
+        vcs_unstaged_fg="3"
+        err_fg="124"
+        venv_fg="205"
     fi
 
     # the following 3 styles control the rendering of the "git" prompt segment; in particular the first and last chunks
