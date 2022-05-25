@@ -63,6 +63,8 @@ prompt_piger_setup() {
           vcs_bg="230" \
           vcs_fg="70" \
           vcs_logo="20" \
+          vcs_staged_fg="2" \
+          vcs_unstaged_fg="3" \
           err_fg="124" \
           venv_fg="205"
 
@@ -78,11 +80,11 @@ prompt_piger_setup() {
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
     if [[ $PIGER_PROMPT_SIMPLE_FONT = 1 ]]; then
-        zstyle ':vcs_info:*' unstagedstr '%F{3}¤%f'
-        zstyle ':vcs_info:*' stagedstr '%F{2}∷%f'
+        zstyle ':vcs_info:*' unstagedstr "%F{$vcs_unstaged_fg}¤%f"
+        zstyle ':vcs_info:*' stagedstr "%F{$vcs_staged_fg}∷%f"
     else
-        zstyle ':vcs_info:*' unstagedstr '%F{3}●%f'
-        zstyle ':vcs_info:*' stagedstr '%F{2}✚%f'
+        zstyle ':vcs_info:*' unstagedstr "%F{$vcs_unstaged_fg}●%f"
+        zstyle ':vcs_info:*' stagedstr "%F{$vcs_staged_fg}✚%f"
     fi
 
     add-zsh-hook precmd vcs_info
