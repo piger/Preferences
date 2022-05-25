@@ -54,14 +54,26 @@ prompt_piger_setup() {
     autoload -Uz add-zsh-hook
     autoload -Uz vcs_info
 
+    # colors
+    local time_bg="236" \
+          time_fg="33" \
+          dir_bg="60" \
+          dir_fg="147" \
+          symbol_fg="30" \
+          vcs_bg="230" \
+          vcs_fg="" \
+          vcs_logo="20" \
+          err_fg="124" \
+          venv_fg="205"
+
     # the following 3 styles control the rendering of the "git" prompt segment; in particular the first and last chunks
     # renders the closing of the previous segment and the final prompt segment (the one that reset the background, %k).
     # The colors used here must match the colors of the previous segment, which in this case is the current directory segment.
     zstyle ':vcs_info:*' actionformats \
-           "%K{230}%F{60}$SEGMENT_SEPARATOR %F{20} %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c %k%F{230}$SEGMENT_SEPARATOR"
-    zstyle ':vcs_info:*' nvcsformats "%k%F{60}$SEGMENT_SEPARATOR"
+           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{64}%F{10}%b%F{3}|%F{1}%a%F{64}%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
+    zstyle ':vcs_info:*' nvcsformats "%k%F{$dir_bg}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:*' formats \
-           "%K{230}%F{60}$SEGMENT_SEPARATOR %F{20} %F{64}%F{70}%b%F{64}%f %m%u%c %k%F{230}$SEGMENT_SEPARATOR"
+           "%K{$vcs_bg}%F{$dir_bg}$SEGMENT_SEPARATOR %F{$vcs_logo} %F{64}%F{70}%b%F{64}%f %m%u%c %k%F{$vcs_bg}$SEGMENT_SEPARATOR"
     zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
     zstyle ':vcs_info:*' enable git svn
     zstyle ':vcs_info:*' check-for-changes true
@@ -86,11 +98,11 @@ prompt_piger_setup() {
     PROMPT=""
 
     # time:
-    PROMPT+="%K{236}%F{33}%T "
-    PROMPT+="%K{60}%F{236}$SEGMENT_SEPARATOR "
+    PROMPT+="%K{$time_bg}%F{$time_fg}%T "
+    PROMPT+="%K{$dir_bg}%F{$time_bg}$SEGMENT_SEPARATOR "
 
     # current directory
-    PROMPT+="%K{60}%F{147}%~ "
+    PROMPT+="%K{$dir_bg}%F{$dir_fg}%~ "
 
     # git status
     # NOTE: ${vcs_info_msg_0_} must be passed literally (i.e. not expanded).
@@ -109,7 +121,7 @@ prompt_piger_setup() {
     fi
 
     # Show the current virtualenv as set in psvar[1]
-    PROMPT+='%(1V.%F{205}(%1v)%f .)'
+    PROMPT+='%(1V.%F{$venv_fg}(%1v)%f .)'
 
     # Show user@hostname if this is a SSH connection
     if [[ $SSH_CONNECTION != "" || ! -z $extended ]]; then
@@ -120,12 +132,12 @@ prompt_piger_setup() {
     PROMPT+="%(1j.|%j.)"
 
     # Add '#' for root shells or $PROMPT_SYMBOL for regular users:
-    PROMPT+="%F{030}%(!.#.${PROMPT_SYMBOL})%f "
+    PROMPT+="%F{$symbol_fg}%(!.#.${PROMPT_SYMBOL})%f "
 
     # Use RPROMPT to display the exit status of the last executed command when non-zero.
     # NOTE: "CONDITIONAL SUBSTRINGS IN PROMPTS" in zshmisc.
     # read: if the exit code of the last command was 0, show an empty string, otherwise show it (%?) with colors and bold
-    RPROMPT="%(?..%B%F{124}${ERROR_SYMBOL}%f %?%b)"
+    RPROMPT="%(?..%B%F{$err_fg}${ERROR_SYMBOL}%f %?%b)"
 
     # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
     SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
