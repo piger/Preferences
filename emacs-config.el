@@ -1150,6 +1150,10 @@ becomes
   :config
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
+(use-package gitattributes-mode)
+(use-package gitconfig-mode)
+(use-package gitignore-mode)
+
 (use-package forge
   :after magit
   :ensure t
