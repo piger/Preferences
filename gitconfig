@@ -1,115 +1,125 @@
-# -*- mode: conf -*-
-# vim: ft=dosini
+; -*- mode: gitconfig -*-
+; vim: ft=dosini
+
+[init]
+	defaultBranch = master
 
 [core]
-excludesfile = ~/.gitignore
-# pager = less -RSX
+	excludesfile = ~/.gitignore
+	; pager = less -RSX
 
 [diff]
-renames = copies
-algorithm = histogram
-colormoved = zebra
-colorMovedWS = ignore-space-change
+	renames = copies
+	algorithm = histogram
+	colormoved = zebra
+	colorMovedWS = ignore-space-change
 
 [merge]
-conflictStyle = zdiff3
+	conflictStyle = zdiff3
 
 [log]
-# show dates in "human" format, but only if the pager is in use.
-date = auto:human
+	; show dates in "human" format, but only if the pager is in use.
+	date = auto:human
 
-# Per mostrare in 'git status' anche i file nelle directory 'untracked'
-# NOTA: determina la visibilita' anche in magit-status
-# [status]
-#       showUntrackedFiles = all
+; Per mostrare in 'git status' anche i file nelle directory 'untracked'
+; NOTA: determina la visibilita' anche in magit-status
+; [status]
+;       showUntrackedFiles = all
+
+[color]
+	ui = auto
 
 [color "status"]
-  added = green bold
-  changed = red bold
-  untracked = cyan
-  branch = yellow black bold ul
+	added = green bold
+	changed = red bold
+	untracked = cyan
+	branch = yellow black bold ul
 
 [alias]
-changes = log --oneline --reverse
-ci = commit
-co = checkout
-commit = commit -v
-#via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
-recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
-st = status -sb
-undo = reset --hard HEAD~1
-unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-unstage = reset HEAD --
-# semantic aliases
-tags = tag -l -n1
-branches = branch -av
-remotes = remote -v
-uncommit = reset --soft HEAD^
-staged = diff --cached
-# get the root directory of the repo
-root = rev-parse --show-toplevel
-current-branch = rev-parse --abbrev-ref HEAD
-diffc = diff --color-words=.
-showc = show --color-words=.
+	co = checkout
+	commit = commit -v
+	; via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
+	recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+	st = status -sb
+	undo = reset HEAD~1
+	unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	unstage = reset HEAD --
+	; semantic aliases
+	tags = tag -l -n1
+	branches = branch -av
+	remotes = remote -v
+	uncommit = reset --soft HEAD^
+	staged = diff --cached
+	; get the root directory of the repo
+	root = rev-parse --show-toplevel
+	current-branch = rev-parse --abbrev-ref HEAD
+	diffc = diff --color-words=.
+	showc = show --color-words=.
 
-# Questo e' per OSX ma su Linux non crea conflitti.
+; Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
-helper = osxkeychain
+	helper = osxkeychain
 
-# NOTE: default from git 2.0
+; NOTE: default from git 2.0
 [push]
-default = current
+	default = current
 
 [pull]
-ff = only
+	ff = only
 
 [user]
-name = Daniel Kertesz
-email = daniel@spatof.org
+	name = Daniel Kertesz
+	email = daniel@spatof.org
 
-# Enable signing commits with an SSH key
-# [user]
-# signingKey = ~/.ssh/key.pub
+; Enable signing commits with an SSH key
+; [user]
+; signingKey = ~/.ssh/key.pub
 
-# [commit]
-# gpgsign = true
+; [commit]
+; gpgsign = true
 
-# [gpg]
-# format = ssh
+; [gpg]
+; format = ssh
 
-# for $deity's sake, check that anything we're getting is complete and sane on a regular basis
-# https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
+; for $deity's sake, check that anything we're getting is complete and sane on a regular basis
+; https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
 [transfer]
-fsckobjects = true
+	; actually verify the hashes
+	fsckobjects = true
 
 [fetch]
-fsckobjects = true
+	; actually verify the hashes
+	fsckobjects = true
+	; automatically drop branches that are deleted on the remotes
+	prune = true
+	; fetch remotes in parallel
+	parallel = 0
 
 [receive]
-fsckObjects = true
-
-# Include files
-## platform specific configuration
-[includeIf "gitdir:/home/"]
-path = ~/.gitconfig-linux
-
-[includeIf "gitdir:/Users/"]
-path = ~/.gitconfig-macos
-
-## work specific configuration
-[includeIf "gitdir:~/code/"]
-path = ~/.gitconfig.work
-
-# local configuration overrides
-[include]
-path = ~/.gitconfig.local
+	; actually verify the hashes
+	fsckObjects = true
 
 [github]
-user = piger
+	user = piger
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
-[init]
-defaultBranch = master
+
+; Include files
+; platform specific configuration
+[includeIf "gitdir:/home/"]
+	path = ~/.gitconfig-linux
+
+[includeIf "gitdir:/Users/"]
+	path = ~/.gitconfig-macos
+
+; work specific configuration
+[includeIf "gitdir:~/code/"]
+	path = ~/.gitconfig.work
+
+; local configuration overrides
+[include]
+	path = ~/.gitconfig.local
