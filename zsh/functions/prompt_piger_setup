@@ -136,7 +136,7 @@ prompt_piger_setup() {
     # Print the mark used by iTerm2's shell integration.
     # NOTE: this must be the first "element" of the prompt's second line, otherwise
     # it will add an extra newline.
-    if [[ -e $HOME/.iterm2_shell_integration.zsh ]]; then
+    if [[ -e $HOME/.iterm2_shell_integration.zsh && "$TERM_PROGRAM" == "iTerm.app" ]]; then
         PROMPT+="%{$(iterm2_prompt_mark)%}"
     fi
 
