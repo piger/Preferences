@@ -511,8 +511,10 @@ elif [[ $OSTYPE = linux* ]]; then
 elif [[ $OSTYPE = openbsd* ]]; then
     if (( $+commands[gls] )); then
         alias ls="gls --color=auto $ls_options"
+    elif (( $+commands[colorls] )); then
+        alias ls="colorls -F -G"
     else
-        alias ls="ls $ls_options"
+        alias ls="ls -F"
     fi
 
     alias pfdump="tcpdump -n -e -ttt -i pflog0"

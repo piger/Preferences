@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 os_logo() {
     if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
