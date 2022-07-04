@@ -1,5 +1,5 @@
 # search in hidden files like .travis.yml
-# --hidden
+--hidden
 
 # file type for erb
 --type-add
