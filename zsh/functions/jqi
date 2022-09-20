@@ -1,0 +1,8 @@
+# Interactive jq, stolen from a comment on HN.
+# jqi() {
+if [[ -z "$1" ]]; then
+    echo "Usage: jqi <filename>"
+    return
+fi
+echo "" | fzf --preview "jq {q} < \"$1\""
+# }
