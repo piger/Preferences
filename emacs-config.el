@@ -784,8 +784,9 @@ becomes
   :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
-    (add-hook 'before-save-hook 'gofmt-before-save nil t)
-    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t)
+    ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
     (if (not (string-match "go" compile-command))
