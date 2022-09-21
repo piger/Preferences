@@ -1398,6 +1398,9 @@ becomes
   :ensure t
   :diminish undo-tree-mode
   :config
+  ;;; until I figure out if I want undo-history I don't want this damn backup files
+  ;;; scattered EVERYWHERE.
+  (setq undo-tree-auto-save-history nil)
   (global-undo-tree-mode +1))
 
 ;; Keep track of window layouts.
