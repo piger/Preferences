@@ -698,6 +698,11 @@ compdef _hosts tmux-cssh
 # and also for bssh
 compdef _hosts bssh
 
+# 1Password CLI
+if (( $+commands[op] )); then
+    eval "$(op completion zsh)"; compdef _op op
+fi
+
 ### WELCOME
 [[ -e $HOME/Preferences/bin/welcome.sh ]] && $HOME/Preferences/bin/welcome.sh
 
