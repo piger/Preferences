@@ -1,5 +1,23 @@
+# Configuration for ripgrep.
+# Documentation: man rg
+
+## Hidden and ignored files.
+
+# The two following options are the one most likely to require to be toggled
+# on or off depending on the situation.
+
 # search in hidden files like .travis.yml
---hidden
+# --hidden
+
+# do not skip files listed in gitignore
+--no-ignore
+
+## Generic options.
+
+# enable smart-case search
+--smart-case
+
+## File type associations.
 
 # file type for erb
 --type-add
@@ -10,6 +28,3 @@ jsonnet:*.jsonnet
 
 --type-add
 template:*.{tmpl,erb}
-
-# enable smart-case search
---smart-case
