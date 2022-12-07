@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install the latest version of Go in /opt/go
+# Install the latest version of Go in /opt/go.
 
 set -e
 
@@ -14,8 +14,18 @@ elif [[ $ARCH == "armv7l" ]]; then
     ARCH="armv6l" # 32bit rpi4
 fi
 
-# Get the latest version available; doesn't matter here that we're grepping for "darwin-arm64"!
-VERSION=$(curl -sSL https://go.dev/dl/ | perl -nl -e '/go(\d+\.\d+)(\.\d+)?\.darwin-arm64\.tar\.gz/ && print "$1$2\n"' | head -n1)
+# LATEST will contain a string like "go1.19.4".
+LATEST="$(curl -sSL 'https://go.dev/VERSION?m=text')"
+# INSTALLED will contain a string similar to $LATEST, but containing the installed version.
+INSTALLED="$(go version | awk '{ print $3 }')"
+
+if [[ "$LATEST" == "$INSTALLED" ]]; then
+    echo "Latest version $LATEST already installed."
+    exit
+fi
+
+# VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
+VERSION="${LATEST#go}"
 
 read -p "Latest version is ${VERSION}; continue? [yn] " -n 1 -r
 echo
