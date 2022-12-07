@@ -425,8 +425,12 @@ if [[ $TERM_PROGRAM == "iTerm.app" && -e $HOME/.iterm2_shell_integration.zsh ]];
     source $HOME/.iterm2_shell_integration.zsh
 fi
 
-autoload -Uz prompt_piger_setup
-prompt piger
+# this prompt use fancy characters which might not be available in some configurations
+# (like raspbian).
+if [[ $TERM != "dumb" ]]; then
+    autoload -Uz prompt_piger_setup
+    prompt piger
+fi
 
 ### OS SPECIFIC
 if [[ $OSTYPE = darwin* ]]; then
