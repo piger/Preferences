@@ -135,6 +135,7 @@
   )
 
 ;; (use-package doom-themes
+     :ensure t
 ;;   :config
 ;;   ;; these are the package defaults; I'll leave them here in case I want to disable them in the
 ;;   ;; future.
@@ -810,6 +811,7 @@ becomes
 (use-package rubocop
   :commands rubocop-mode
   :diminish rubocop-mode
+  :disabled t
   :hook (ruby-mode . rubocop-mode))
 
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
@@ -1151,8 +1153,13 @@ becomes
   :config
   (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
 
-(use-package gitconfig-mode)
-(use-package gitignore-mode)
+;; can't use ensure here for some reasson
+;; (use-package gitconfig-mode
+;;   :ensure t)
+
+;; can't use ensure here for some reasson
+;; (use-package gitignore-mode
+;;   :ensure t)
 
 (use-package forge
   :after magit
@@ -1161,7 +1168,7 @@ becomes
   (setq forge-pull-notifications nil))
 
 (use-package github-review
-  :ensure t
+  :disabled t
   :after forge)
 
 (use-package gist
@@ -1238,6 +1245,7 @@ becomes
 
 (use-package company-terraform
   :after (terraform-mode company)
+  :disabled t
   :config
   (company-terraform-init))
 
@@ -1351,11 +1359,11 @@ becomes
 
 (use-package company-go
   :after (company go)
-  :ensure t)
+  :disabled t)
 
 (use-package company-web
   :after (company web)
-  :ensure t)
+  :disabled t)
 
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
@@ -1692,14 +1700,14 @@ becomes
 
 ;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
 (use-package all-the-icons
-  :ensure t
+  :disabled t
   :config
   (use-package all-the-icons-dired
     :ensure t
     :hook (dired-mode . all-the-icons-dired-mode))
 
   (use-package all-the-icons-ivy
-    :ensure t
+    :disabled t
     :after ivy
     :config
     (all-the-icons-ivy-setup)))
