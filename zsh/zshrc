@@ -551,7 +551,7 @@ alias -g L='|less'
 # alias -g H='|head'
 # alias -g T='|tail'
 
-alias pwgen_strong='pwgen -y1 15 20'
+alias pwgen_strong="pwgen --capitalize --numerals --secure --symbols --remove-chars='\\/\`~' 30 1"
 
 # stampa la penultima riga di un input
 penultima() { awk '{ lines[NR] = $0 } END { print lines[NR-1] }' }
