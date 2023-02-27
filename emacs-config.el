@@ -1801,6 +1801,15 @@ becomes
   ;; set the syntax to the normal syntax (i.e. you don't need double escaping)
   (setq reb-re-syntax 'string))
 
+;; https://github.com/magnars/multiple-cursors.el
+;; See also:
+;; - mc/edit-beginnings-of-lines
+;; - mc/edit-ends-of-lines
+;; - mc/mark-next-like-this, mc/mark-previous-like-this, mc/mark-all-like-this
+(use-package multiple-cursors
+  :ensure t
+  :bind ("C-S-c C-S-c" . mc/edit-lines))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
