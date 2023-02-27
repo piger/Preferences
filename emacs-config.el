@@ -1003,6 +1003,9 @@ becomes
                   (js-mode "{" "}" "/[*/]" nil)
                   (javascript-mode "{" "}" "/[*/]" nil)))))
 
+(use-package jsonnet-mode
+  :ensure t)
+
 ;; Highlight indentation with coloured bars.
 
 ;; *NOTE* its color autodetection code has some sort of bugs that triggers on init, while displaying
