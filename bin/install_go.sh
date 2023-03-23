@@ -12,6 +12,8 @@ if [[ $ARCH == "x86_64" ]]; then
     ARCH="amd64"
 elif [[ $ARCH == "armv7l" ]]; then
     ARCH="armv6l" # 32bit rpi4
+elif [[ $ARCH == "aarch64" ]]; then
+    ARCH="arm64"
 fi
 
 # LATEST will contain a string like "go1.19.4".
