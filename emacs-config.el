@@ -1407,7 +1407,7 @@ becomes
   (recentf-mode +1))
 
 (use-package undo-tree
-  :ensure t
+  :disabled t
   :diminish undo-tree-mode
   :config
   ;;; until I figure out if I want undo-history I don't want this damn backup files
