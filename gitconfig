@@ -64,9 +64,6 @@
 [push]
 	default = current
 
-[pull]
-	ff = only
-
 [user]
 	name = Daniel Kertesz
 	email = daniel@spatof.org
