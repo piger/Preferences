@@ -1847,4 +1847,4 @@ becomes
 (setq debug-on-error nil)
 
 ;; shake fist!!
-(set-frame-font "MonoLisa 12" nil t)
+(set-frame-font "JetBrains Mono 14" nil t)
