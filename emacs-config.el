@@ -754,25 +754,18 @@ becomes
     ;; unfuck electric indentation
     (setq electric-indent-chars '(?\n))))
 
-(use-package lsp-python-ms
-  :disabled t
-  :after lsp
-  :config
-  (setq lsp-python-ms-dir
-        (expand-file-name "~/dev/others/python-language-server/output/bin/Release/"))
-  (setq lsp-python-ms-executable "~/dev/others/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
-
 ;; go
 ;; requires a bunch of tools:
-;; go get -u golang.org/x/tools/cmd/godoc
-;; go get -u github.com/nsf/gocode
-;; go get -u golang.org/x/tools/cmd/goimports
-;; go get -u golang.org/x/tools/cmd/guru
-;; go get -u golang.org/x/tools/cmd/gotype
-;; go get -u golang.org/x/tools/cmd/gorename
-;; go get -u golang.org/x/tools/cmd/gomvpkg
-;; go get -u golang.org/x/tools/cmd/godex
-;; NOTE: "oracle" waa renamed to "guru"
+;; go install golang.org/x/tools/cmd/godoc@latest
+;; go install github.com/nsf/gocode@latest
+;; go install golang.org/x/tools/cmd/goimports@latest
+;; go install golang.org/x/tools/cmd/guru@latest
+;; go install golang.org/x/tools/cmd/gotype@latest
+;; go install golang.org/x/tools/cmd/gorename@latest
+;; go install golang.org/x/tools/cmd/gomvpkg@latest
+;; go install golang.org/x/tools/cmd/godex@latest
+;; NOTE: "oracle" was renamed to "guru"
+;; NOTE2: not sure how many of these are actually useful nowadays!
 ;;
 ;; Also "GOPATH" must be imported by exec-path-from-shell.
 ; Those env variables should be inherithed using exec-path-from-shell
@@ -782,11 +775,11 @@ becomes
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
-  :bind ("M-." . godef-jump)
+  ;; :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t)
+    ;;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    ;;; (add-hook 'before-save-hook #'lsp-organize-imports t t)
     ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
@@ -795,7 +788,7 @@ becomes
                   "go build -v && go test -v && go vet"))
     ;; (go-eldoc-setup)
     (setq tab-width 4)
-    (local-set-key (kbd "C-c C-k") 'godoc)
+    (local-set-key (kbd "C-c C-k") 'eldoc)
     (subword-mode +1)
     ;; (company-mode)
     (flycheck-mode)
@@ -1767,25 +1760,6 @@ becomes
   :mode "\\.lua$"
   :interpreter "lua")
 
-;; LSP
-(use-package lsp-mode
-  :ensure t
-  :init
-  (setq lsp-keymap-prefix "s-l")
-  :commands (lsp lsp-deferred)
-  :hook (
-         (go-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :config
-  ;; disable eldoc minibuffer since we're using lsp-ui
-  (setq lsp-eldoc-hook nil)
-  (setq lsp-enable-snippet nil)
-  (setq lsp-eldoc-render-all t))
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
 (use-package dockerfile-mode
   :ensure t
   :mode ("Dockerfile" . dockerfile-mode))
@@ -1824,6 +1798,12 @@ becomes
   :disabled t
   :hook (emacs-startup . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
+
+;; eglot
+;; https://github.com/joaotavora/eglot
+;; An alternative to lsp-mode.
+(use-package eglot
+  :hook (go-mode . eglot-ensure))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
