@@ -100,7 +100,19 @@
   (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 
   ;; in dired use the trash
-  (setq delete-by-moving-to-trash t))
+  (setq delete-by-moving-to-trash t)
+
+  ;; bind cmd-z to undo
+  (global-set-key (kbd "s-z") 'undo)
+
+  ;; bind cmd-s to save
+  (global-set-key (kbd "s-s") 'save-buffer)
+
+  ;; bind cmd-o to open a file
+  (global-set-key (kbd "s-o") 'find-file)
+
+  ;; bind cmd-shift-z to redo (doesn't work!)
+  (global-set-key (kbd "S-s-z") 'undo-redo))
 
 ;; Themes
 (use-package poet-theme
