@@ -1250,12 +1250,12 @@ becomes
   :ensure t
   :mode "\\.toml\\'")
 
+;; brew install hashicorp/tap/terraform-ls
+;; NOTE: not sure if it's a problem with eglot or terraform-ls, but eldoc gives
+;; pretty much NOTHING useful.
 (use-package terraform-mode
   :mode "\\.tf\\'"
-  ;; :hook (terraform-mode . terraform-format-on-save-mode)
-  :config
-  (when (file-exists-p (expand-file-name "~/Downloads/terraform-lsp_0.0.10_darwin_amd64"))
-    (setq lsp-terraform-server (expand-file-name "~/Downloads/terraform-lsp_0.0.10_darwin_amd64/terraform-lsp"))))
+  :hook (terraform-mode . eglot-ensure))
 
 (use-package company-terraform
   :after (terraform-mode company)
@@ -1821,6 +1821,8 @@ becomes
 ;; https://github.com/joaotavora/eglot
 ;; An alternative to lsp-mode.
 (use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   :hook (go-mode . eglot-ensure))
 
 ;; Aliases
