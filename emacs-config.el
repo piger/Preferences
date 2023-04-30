@@ -65,9 +65,15 @@
 (when *is-a-mac*
   (use-package exec-path-from-shell
     :ensure t
-    :config
+    :init
+    ;; since my shell configuration properly sets up environment variables in zshenv, I shouldn't
+    ;; need exec-path-from-shell to invoke a login AND interactive shell (-l -i).
+    ;; see also: https://github.com/purcell/exec-path-from-shell/tree/master#setting-up-your-shell-startup-files-correctly
+    (setq exec-path-from-shell-arguments nil)
+    ;; (setq exec-path-from-shell-debug t)
     (setq exec-path-from-shell-variables
           '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH" "JAVA_HOME"))
+    :config
     (exec-path-from-shell-initialize))
 
   ;; To fix 'foodcritic' (flycheck)
