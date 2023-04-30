@@ -1813,6 +1813,18 @@ becomes
   :ensure t
   :bind ("C-S-c C-S-c" . mc/edit-lines))
 
+;; spell checking
+;; NOTE:
+;; brew install enchant pkg-config
+;; NOTE:
+;; it just crash on emacs 28.2 on macOS 13.3.1
+;; railwaycat/emacsmacport/emacs-mac: stable emacs-28.2-mac-9.1
+;; see also: https://github.com/minad/jinx/issues/48
+(use-package jinx
+  :disabled t
+  :hook (emacs-startup . global-jinx-mode)
+  :bind ([remap ispell-word] . jinx-correct))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
