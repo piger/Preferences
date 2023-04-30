@@ -749,6 +749,12 @@ becomes
 
   (global-flycheck-mode))
 
+;; direnv
+;; https://github.com/wbolster/emacs-direnv
+(use-package direnv
+  :config
+  (direnv-mode))
+
 ;; eldoc and eldoc-box
 ;; https://github.com/casouri/eldoc-box
 (use-package eldoc
