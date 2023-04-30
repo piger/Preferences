@@ -7,6 +7,14 @@
 source_if_exists() { if test -e "$1"; then source "$1"; fi }
 add_path_if_exists() { if test -d "$1"; then path+=("$1"); fi }
 
+# unfuck $PATH broken by /etc/paths.d/10-cryptex, which adds multiple paths in the same
+# file, breaking EVERYTHING. These are two possible solutions:
+# export PATH=${PATH//$'\n'/:}
+
+# for ((i = 1; i <= $#path; i++)); do
+#     path[$i]=${path[$i]//$'\n'/}
+# done
+
 ### PATH handling
 # PATH and path refers to the same variable (tied), so as MANPATH and manpath.
 # The attribute flag -U is to keep unique values inside an array.
@@ -72,7 +80,7 @@ else
 fi
 export PERSONAL_CODE_DIR OTHERS_CODE_DIR
 
-# on macOS /etz/profile will call /usr/libexec/path_helper which will fuck PATH ignoring
+# on macOS /etc/profile will call /usr/libexec/path_helper which will fuck PATH ignoring
 # everything done so far.
 # Also if we ever need to have this feature we can just read files in /etc/paths.d and /etc/manpaths.d by
 # ourselves; see man 'path_helper'.
@@ -81,8 +89,11 @@ setopt no_GLOBAL_RCS
 # Manually add paths from /etc/paths.d on macOS rather than calling path_helper; this is used for things like Go
 # installed in /opt/go.
 if [[ -d /etc/paths.d ]]; then
-    for f in $(find /etc/paths.d -type f); do
-        path+="$(cat $f)"
+    # 2023-04-30: skip 10-cryptex because it contains multiple paths and breaks things.
+    for f in $(find /etc/paths.d -type f ! -name 10-cryptex); do
+        for line in $(cat $f); do
+            path+="$line"
+        done
     done
 fi
 
