@@ -788,44 +788,32 @@ becomes
 
 ;; go
 ;; requires a bunch of tools:
+;; go install golang.org/x/tools/gopls@latest
 ;; go install golang.org/x/tools/cmd/godoc@latest
-;; go install github.com/nsf/gocode@latest
 ;; go install golang.org/x/tools/cmd/goimports@latest
-;; go install golang.org/x/tools/cmd/guru@latest
-;; go install golang.org/x/tools/cmd/gotype@latest
 ;; go install golang.org/x/tools/cmd/gorename@latest
 ;; go install golang.org/x/tools/cmd/gomvpkg@latest
-;; go install golang.org/x/tools/cmd/godex@latest
-;; NOTE: "oracle" was renamed to "guru"
-;; NOTE2: not sure how many of these are actually useful nowadays!
-;;
-;; Also "GOPATH" must be imported by exec-path-from-shell.
-; Those env variables should be inherithed using exec-path-from-shell
-; (setenv "GOPATH" (expand-file-name "~/dev/go"))
-; (setenv "PATH" (concat (getenv "PATH") ":" (concat (getenv "GOPATH") "/bin")))
-; (setq exec-path (append exec-path (list (expand-file-name "~/dev/go/bin"))))
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
+  ;; this binding exists by default
   ;; :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
     ;;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
     ;;; (add-hook 'before-save-hook #'lsp-organize-imports t t)
+    ;; (add-hook 'before-save-hook #'gofmt-before-save)
+    (add-hook 'before-save-hook #'eglot-format-buffer)
     ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
     (if (not (string-match "go" compile-command))
              (set (make-local-variable 'compile-command)
                   "go build -v && go test -v && go vet"))
-    ;; (go-eldoc-setup)
     (setq tab-width 4)
-    (local-set-key (kbd "C-c C-k") 'eldoc)
     (subword-mode +1)
     ;; (company-mode)
     (flycheck-mode)
-    ;; (go-guru-hl-identifier-mode)
-    ;; (local-set-key (kbd "M-.") 'godef-jump)
     (svg-tag-mode t)
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
