@@ -223,10 +223,13 @@ select-word-style bash
 # emacs bindings for ZLE.
 bindkey -e
 
-bindkey "${keyinfo[PageUp]}" up-line-or-history
-bindkey "${keyinfo[PageDown]}" down-line-or-history
+# the "-n" test ensure that these keys exists before actually reference them.
+[[ -n ${keyinfo[PageUp]} ]] && bindkey "${keyinfo[PageUp]}" up-line-or-history
+[[ -n ${keyinfo[PageDown]} ]] && bindkey "${keyinfo[PageDown]}" down-line-or-history
+
 # shift+tab: like TAB but backwards.
-bindkey "${keyinfo[BackTab]}" reverse-menu-complete
+[[ -n ${keyinfo[BackTab]} ]] && bindkey "${keyinfo[BackTab]}" reverse-menu-complete
+
 bindkey  '^z' undo                      # CTRL+z per undo di expansion e completion
 bindkey  '\C-w' kill-region
 
