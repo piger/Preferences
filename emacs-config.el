@@ -749,6 +749,14 @@ becomes
 
   (global-flycheck-mode))
 
+;; eldoc and eldoc-box
+;; https://github.com/casouri/eldoc-box
+(use-package eldoc
+  :bind (("C-c h" . eldoc)))
+
+;; should try eldoc-box-hover-mode
+(use-package eldoc-box)
+
 (use-package ediff
   :commands ediff
   :config
