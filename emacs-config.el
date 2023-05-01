@@ -999,7 +999,6 @@ becomes
   (ivy-rich-mode 1))
 
 (use-package counsel
-  :ensure t
   :pin melpa
   :after ivy
   :bind
@@ -1145,12 +1144,10 @@ becomes
   (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
 
 (use-package yaml-mode
-  :ensure t
   :mode "\\.ya?ml\\'"
   :hook (yaml-mode . flycheck-mode))
 
 (use-package toml-mode
-  :ensure t
   :mode "\\.toml\\'")
 
 ;; brew install hashicorp/tap/terraform-ls
