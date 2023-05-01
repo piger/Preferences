@@ -927,6 +927,8 @@ becomes
 
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
+  :init
+  (setq highlight-symbol-idle-delay 0.5)
   :hook (prog-mode . highlight-symbol-mode))
 
 (use-package rainbow-delimiters
