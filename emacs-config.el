@@ -1537,13 +1537,6 @@ becomes
   :defer t
   :hook (after-init . doom-modeline-mode))
 
-;; Per selezionare le finestre come su irssi con ALT-1, ALT-2, etc.
-;; *NOTE*: this must be configured BEFORE spaceline: https://github.com/TheBB/spaceline/issues/68
-(use-package "window-numbering"
-  :disabled t
-  :config (window-numbering-mode))
-
-
 ;; replaces the unmaintained "window-numbering"
 (use-package winum
   :init
