@@ -83,14 +83,6 @@
     :config
     (exec-path-from-shell-initialize))
 
-  ;; 2021-12-29 - not needed anymore? (emacs 27.2)
-  ;; Enable emoji, and stop the UI from freezing when trying to display them.
-  ;; (stolen from prelude)
-  ;; (if (fboundp 'set-fontset-font)
-  ;;     ;; https://github.com/zonuexe/emoji-fontset.el
-  ;;     (set-fontset-font "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend))
-  ;;     ;; (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
-
   ;; try to use GNU ls from coreutils (installed with homebrew)
   (let ((gnu-ls "/usr/local/bin/gls"))
     (when (file-exists-p gnu-ls)
