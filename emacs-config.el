@@ -1,11 +1,15 @@
 ;;; emacs-config.el --- main emacs configuration file -*- lexical-binding: t; -*-
 
+;;; Commentary:
+
 ;; NOTE
 ;; On macOS (12.1) it's better to use the Mituharu mac port packaged by railwaycat: https://github.com/railwaycat/homebrew-emacsmacport
 ;; brew tap railwaycat/emacsmacport
 ;; brew install --cask emacs-mac
 
 ;; Main configuration file.
+
+;;; Code:
 
 (defconst emacs-start-time (current-time)
   "This variable hold the time Emacs was started.")
@@ -193,9 +197,6 @@
 ;;                     :weight 'medium
 ;;                     :slant 'normal)
 ;; (set-face-attribute 'cursor nil :background "Orange")
-
-;; save bookmarks every time a bookmark is added
-(setq bookmark-save-flag 1)
 
 ; 29.3 Tabs vs. Spaces
 ;; Death to the tabs!  However, tabs historically indent to the next
@@ -1731,3 +1732,6 @@ becomes
 
 ;; shake fist!!
 (set-frame-font "JetBrains Mono 14" nil t)
+
+(provide 'emacs-config)
+;;; emacs-config.el ends here.
