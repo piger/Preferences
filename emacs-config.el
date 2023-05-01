@@ -732,7 +732,7 @@ becomes
     (subword-mode +1)
     (show-paren-mode +1)
     (flycheck-mode +1)
-    (company-mode +1)
+    ;; (company-mode +1)
     (eldoc-mode +1)
     ;; (elpy-enable)
     ;; unfuck electric indentation
@@ -1193,7 +1193,7 @@ becomes
 (defun piger/prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
   (rainbow-delimiters-mode t)
-  (company-mode t)
+  ;; (company-mode t)
   (prelude-font-lock-comment-annotations)
   (subword-mode t)
   (which-function-mode t)
@@ -1259,12 +1259,14 @@ becomes
   (counsel-projectile-mode 1))
 
 (use-package company
+  :disabled t
   :diminish
   :hook (prog-mode . company-mode)
   :config
   (setq company-transformers '(company-sort-by-occurrence)))
 
 (use-package company-quickhelp
+  :disabled t
   :config
   (company-quickhelp-mode 1))
 
@@ -1276,6 +1278,11 @@ becomes
   :after (company web)
   :disabled t)
 
+;; replacement for company
+;; https://github.com/minad/vertico
+(use-package vertico
+  :init
+  (vertico-mode))
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
 ;; modificato leggermente, perche' io i marker li uso anche senza numero (e.g. "{{{1")
