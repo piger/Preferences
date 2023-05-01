@@ -754,7 +754,9 @@ becomes
     ;;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
     ;;; (add-hook 'before-save-hook #'lsp-organize-imports t t)
     ;; (add-hook 'before-save-hook #'gofmt-before-save)
-    (add-hook 'before-save-hook #'eglot-format-buffer)
+    ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
+    ;; and as buffer-local (as opposed to global, which would run it for *every* buffer).
+    (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
     ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
