@@ -345,6 +345,8 @@
 ;; 08/04/2015 - I don't really like flyspell-mode...
 ;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
 
+;; alway start an emacs server
+(server-start)
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
