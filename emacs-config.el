@@ -600,25 +600,9 @@ becomes
   (setq simpleclip-unmark-on-copy t)
   (simpleclip-mode +1))
 
-;; hippie-expand al posto di dabbrev-expand dabbrev
-;; <2015-07-05 Sun> lo disabilito perché mi sembra esagerato.
-;; (global-set-key (kbd "M-/") 'hippie-expand)
-
-;; hippie expand is dabbrev expand on steroids
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-all-buffers
-                                         try-expand-dabbrev-from-kill
-                                         try-complete-file-name-partially
-                                         try-complete-file-name
-                                         try-expand-all-abbrevs
-                                         try-expand-list
-                                         try-expand-line
-                                         try-complete-lisp-symbol-partially
-                                         try-complete-lisp-symbol))
-
 ;; use hippie-expand instead of dabbrev
-(global-set-key (kbd "M-/") #'hippie-expand)
-;; (global-set-key (kbd "s-/") #'hippie-expand)
+;; see also: https://www.masteringemacs.org/article/text-expansion-hippie-expand
+(global-set-key (kbd "M-/") 'hippie-expand)
 
 ;;; swap default search mode to regexp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
