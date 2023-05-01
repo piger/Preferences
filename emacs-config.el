@@ -1344,23 +1344,6 @@ becomes
 (use-package winner
   :config (winner-mode +1))
 
-;; Anzu shows an indicator inside the minibar when you are searching for things telling you how many
-;; matches was found for the current search.
-(use-package anzu
-  :diminish anzu-mode
-  :bind
-  (("C-%" . anzu-query-replace-at-cursor)
-   ("M-%" . anzu-query-replace)
-   ("C-M-%" . anzu-query-replace-regexp))
-  :config
-  (global-anzu-mode +1)
-  (set-face-attribute 'anzu-mode-line nil
-                      :foreground "orange" :weight 'bold)
-  (setq anzu-minimum-input-length 3)
-  ; https://github.com/TheBB/spaceline/issues/130
-  ; hide anzu modeline [i.e. (x/X matches)]
-  (setq anzu-cons-mode-line-p nil))
-
 ;; install hunspell with brew, then download the dictionaries:
 ;; curl --output-dir ~/Library/Spelling -O https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff
 ;; curl --output-dir ~/Library/Spelling -O https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic
