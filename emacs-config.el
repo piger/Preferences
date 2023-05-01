@@ -1329,6 +1329,12 @@ becomes
 (when (executable-find "hunspell")
   (setq ispell-program-name "hunspell"))
 
+;; tell hunspell where to find the dictionaries.
+;; see: https://passingcuriosity.com/2017/emacs-hunspell-and-dictionaries/
+(setenv
+  "DICPATH"
+  (concat (getenv "HOME") "/Library/Spelling"))
+
 (setq ispell-personal-dictionary (expand-file-name "~/Preferences/emacs/flyspell.dict"))
 
 (use-package flyspell
