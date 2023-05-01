@@ -83,9 +83,6 @@
     :config
     (exec-path-from-shell-initialize))
 
-  ;; To fix 'foodcritic' (flycheck)
-  (setenv "LANG" "en_GB.UTF-8")
-
   ;; 2021-12-29 - not needed anymore? (emacs 27.2)
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   ;; (stolen from prelude)
