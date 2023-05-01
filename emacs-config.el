@@ -1361,56 +1361,13 @@ becomes
   ; hide anzu modeline [i.e. (x/X matches)]
   (setq anzu-cons-mode-line-p nil))
 
-;; Per usare =hunspell= bisogna scaricare i dizionari dal sito delle
-;; http://extensions.openoffice.org/ extension di OpenOffice che altro non sono file zippati;
-;; bisogna estrarre i file =.aff= e =.dic= e copiarli in =~/Library/Spelling=.
-
-;; NOTA: se emacs ti dice:
-;; Error enabling Flyspell mode:
-;; (error: unknown encoding UTF8: using iso88591 as fallback
-;; error: unknown encoding UTF8: using iso88591 as fallback
-;; error: unknown encoding UTF8: using iso88591 as fallback
-;; error: unknown encoding UTF8: using iso88591 as fallback
-
-;; devi sostituire questa riga:
-;; en_US.aff:SET UTF8
-;; con "SET UTF-8".
-
+;; install hunspell with brew, then download the dictionaries:
+;; curl --output-dir ~/Library/Spelling -O https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff
+;; curl --output-dir ~/Library/Spelling -O https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic
 (when (executable-find "hunspell")
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t))
+  (setq ispell-program-name "hunspell"))
 
-(let ((lt-jar "~/Downloads/LanguageTool-4.4/languagetool-commandline.jar"))
-  (when (file-exists-p lt-jar)
-    (use-package langtool
-      :ensure t
-      :bind (("C-x 4w" . langtool-check)
-             ("C-x 4W" . langtool-check-done)
-             ("C-x 4l" . langtool-switch-default-language)
-             ("C-x 44" . langtool-show-message-at-point)
-             ("C-x 4c" . langtool-correct-buffer))
-      :config
-      (setq langtool-language-tool-jar lt-jar
-            langtool-java-bin "/usr/bin/java"
-            ;; this is used to check for false friends; must be your native tongue!
-            langtool-mother-tongue "it"
-            langtool-disabled-rules '("WHITESPACE_RULE"
-                                      "EN_UNPAIRED_BRACKETS"
-                                      "COMMA_PARENTHESIS_WHITESPACE"
-                                      "EN_QUOTES")))))
-
-;;; hunspell on OS X seems to have problems with flyspell.
-;; (if (file-exists-p "/usr/local/bin/hunspell")
-;;     (progn
-;;       (setq-default ispell-program-name "hunspell"
-;;                     ispell-dictionary "en_US"))
-;;   (progn (setq-default ispell-program-name "aspell")
-;;          (setq ispell-personal-dictionary "~/.flydict"
-;;                ispell-extra-args '("--sug-mode=normal" "--ignore=3"))))
-
-; (setq-default ispell-program-name "aspell")
 (setq ispell-personal-dictionary (expand-file-name "~/Preferences/emacs/flyspell.dict"))
-; (setq ispell-extra-args '("--sug-mode=normal" "--ignore=3")
 
 (use-package flyspell
   :commands flyspell-mode
