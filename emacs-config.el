@@ -1283,6 +1283,15 @@ becomes
 (use-package vertico
   :init
   (vertico-mode))
+
+;; Goggles highlights the modified region using pulse. Currently the commands undo, yank, kill and
+;; delete are supported.
+;; https://github.com/minad/goggles
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :config
+  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
+
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
 ;; modificato leggermente, perche' io i marker li uso anche senza numero (e.g. "{{{1")
