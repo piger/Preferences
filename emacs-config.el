@@ -49,11 +49,6 @@
           ("gnu" . 10)
           ("melpa" . 40))))
 
-; try to pin helm and helm-core (which is a dependency)
-(setq package-pinned-packages
-      '((helm . "melpa-stable")
-        (helm-core . "melpa-stable")))
-
 ;; use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
