@@ -1558,6 +1558,11 @@ becomes
 
 ;; https://github.com/jscheid/dtrt-indent is a minor mode which guesses the indentation offset of a
 ;; source file and adjust the corresponding configuration in Emacs.
+;; NOTE: this will conflict with projects that use editorconfig; it would be nice to disable this
+;; package in those instances.
+;; See also:
+;; - https://github.com/doomemacs/doomemacs/blob/master/modules/tools/editorconfig/config.el
+;; - https://github.com/jscheid/dtrt-indent/issues/53
 (use-package dtrt-indent
   :commands drt-indent-mode)
 
