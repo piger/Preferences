@@ -1086,13 +1086,8 @@ becomes
     :ensure t
     :hook (git-commit-setup . git-commit-turn-on-flyspell)))
 
-;; can't use ensure here for some reasson
-;; (use-package gitconfig-mode
-;;   :ensure t)
-
-;; can't use ensure here for some reasson
-;; (use-package gitignore-mode
-;;   :ensure t)
+;; major modes for git-related files. https://github.com/magit/git-modes
+(use-package git-modes)
 
 (use-package forge
   :after magit
