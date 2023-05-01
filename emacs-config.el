@@ -57,8 +57,11 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package diminish
-  :ensure t)
+;; Assume "ensure t" for every declared package so that it's installed automatically.
+(setq use-package-always-ensure t)
+
+(use-package diminish)
+
 (require 'bind-key)
 
 ;; OSX stuff
