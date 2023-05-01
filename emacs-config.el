@@ -279,6 +279,7 @@
 
 ;; add column number to the modeline
 (use-package simple
+  :ensure nil ;; this is a native package
   :config (column-number-mode +1))
 
 ;; Replace the active region just by typing text, just like modern editors.
@@ -334,6 +335,7 @@
       (point-max))) "\n" t))
 
 (use-package tramp
+  :ensure nil ;; do not install from package repos, use the builtin version
   :config
   (setq tramp-default-method "ssh")
   (tramp-set-completion-function "ssh"
@@ -660,6 +662,7 @@ becomes
   :diminish subword-mode)
 
 (use-package abbrev
+  :ensure nil ;; this is a native package
   :commands abbrev-mode
   :diminish abbrev-mode)
 
@@ -1038,6 +1041,7 @@ becomes
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify
+  :ensure nil ;; this is a native package
   :config
   (setq uniquify-buffer-name-style 'forward
         uniquify-separator "/"
@@ -1104,10 +1108,12 @@ becomes
   (setq git-link-open-in-browser t))
 
 (use-package dired
+  :ensure nil ;; this is a native package
   :bind ("C-x d" . dired)
   :hook (dired-mode . hl-line-mode))
 
 (use-package dired-x
+  :ensure nil ;; this is a native package
   :after dired)
 
 ;; This is useful to mark /things/ inside markers, for example the text inside a quoted string or
@@ -1522,6 +1528,7 @@ becomes
 ;; for the old behaviour (<s <e etc.) you need to load org-tempo.
 ;; ref: https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work
 (use-package org-tempo
+  :ensure nil ;; this comes with org?
   :after (org))
 
 ;; is this pinging github all the time??
