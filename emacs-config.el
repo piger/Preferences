@@ -10,6 +10,11 @@
 (defconst emacs-start-time (current-time)
   "This variable hold the time Emacs was started.")
 
+;; set the font as early as possible so that in case of configuration issues we're
+;; not stuck with the default font. The font can be changed later on in the configuration
+;; or in a local settings file.
+(set-frame-font "JetBrains Mono 14" nil t)
+
 ;; load custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
