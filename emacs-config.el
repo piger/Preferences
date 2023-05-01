@@ -949,36 +949,13 @@ becomes
 (use-package jsonnet-mode)
 
 ;; Highlight indentation with coloured bars.
-
-;; *NOTE* its color autodetection code has some sort of bugs that triggers on init, while displaying
-;; the scratch buffer (which do uses prog-mode) *while* the theme is still loading (i.e. still not
-;; being displayed to the user):
-
-;; color-values: Wrong type argument: stringp, nil
-
-;; The "fix", since I only ever use one single theme nowadays, is to cheat: inspect the variables set
-;; by the autodetect code and hardcode them in the configuration.
-
-;; To get the current face color use this:
-
-;; (face-attribute 'highlight-indent-guides-character-face :background)
-
-;; Replace =:background= with =:foreground= when needed.
-
+;; this is nice but I think it's very unmaintained and possibly quite broken.
 (use-package highlight-indent-guides
-  ;; attempt to workaround the bug described above
-  :defer 5
-  ;;:hook (prog-mode . highlight-indent-guides-mode)
-  :config
-  ;; (setq highlight-indent-guides-auto-odd-face-perc 5
-  ;;       highlight-indent-guides-auto-even-face-perc 10
-  ;;       highlight-indent-guides-auto-character-face-perc 10
-  ;;       highlight-indent-guides-auto-enabled nil)
-  ;; (set-face-background 'highlight-indent-guides-odd-face "#f5efda")
-  ;; (set-face-background 'highlight-indent-guides-even-face "#f0e6c6")
-  ;; (set-face-foreground 'highlight-indent-guides-character-face "#f0e6c6"))
-  ;;(run-with-timer 10 nil 'add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-  )
+  :disabled t
+  :init
+  (setq highlight-indent-guides-method 'bitmap)
+  (setq highlight-indent-guides-responsive 'top)
+  :hook (prog-mode . highlight-indent-guides-mode))
 
 ;; Other modes
 ;; ---------------------------------------------------------------------------------------
