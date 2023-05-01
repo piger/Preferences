@@ -118,13 +118,7 @@
   (global-set-key (kbd "S-s-z") 'undo-redo))
 
 ;; Themes
-(use-package poet-theme
-  :config
-  :disabled t
-  (load-theme 'poet t))
-
 (use-package base16-theme
-  :ensure t
   :disabled t
   :config
   ;; (load-theme 'base16-railscasts t)
@@ -133,56 +127,10 @@
   ;; (load-theme 'base16-paraiso t)
   (load-theme 'base16-gruvbox-dark-hard t))
 
-(use-package dracula-theme
-  :config
-  (load-theme 'dracula t)
-  ;; color FIX for YAML...
-  (set-face-attribute 'font-lock-variable-name-face nil :foreground "#ab4a85")
-  :disabled t)
-
-;; hack to use use-package with this theme:
-;; https://github.com/nashamri/spacemacs-theme/issues/42
-(use-package spacemacs-theme
-  :disabled t
-  :defer t
-  :init
-  (load-theme 'spacemacs-light t))
-
 (use-package birds-of-paradise-plus-theme
   :disabled t
-  :ensure t
   :config
-  ;; (load-theme 'birds-of-paradise-plus t))
-  )
-
-;; (use-package doom-themes
-     :ensure t
-;;   :config
-;;   ;; these are the package defaults; I'll leave them here in case I want to disable them in the
-;;   ;; future.
-;;   (setq doom-themes-enable-bold t
-;;         doom-themes-enable-italic t)
-;;   ;; (load-theme 'doom-palenight t)
-;;   ;; (load-theme 'doom-dark+ t)
-;;   ;; (load-theme 'doom-peacock t)
-;;   ;; (load-theme 'doom-flatwhite t)
-;;   ;; (load-theme 'doom-ayu-light t)
-;;   (load-theme 'doom-tomorrow-day t)
-
-;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
-;;   (doom-themes-neotree-config)
-
-;;   ;; Treemacs
-;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-;;   (doom-themes-treemacs-config)
-
-;;   ;; Enable flashing mode-line on errors
-;;   (doom-themes-visual-bell-config))
-
-(use-package chocolate-theme
-  :disabled t
-  :config
-  (load-theme 'chocolate t))
+  (load-theme 'birds-of-paradise-plus t))
 
 ;; Generic settings
 ;; (some of them coming from from emacs-doom)
@@ -331,18 +279,15 @@
 
 ;; add column number to the modeline
 (use-package simple
-  :ensure nil
   :config (column-number-mode +1))
 
 ;; Replace the active region just by typing text, just like modern editors.
 (use-package delsel
-  :ensure nil
   :config (delete-selection-mode +1))
 
 ;; SVG tags!
 ;; NOTE: needs to be enabled via a hook in each mode where you want to use this.
 (use-package svg-tag-mode
-  :ensure t
   :init
   (setq svg-tag-tags
         '((":TODO:" . (svg-tag-make))
@@ -656,7 +601,6 @@ becomes
 
 ;; Use simpleclip to bind CMD+c, CMD+v, CMD+x to copy, yank, cut
 (use-package simpleclip
-  :ensure t
   :if *is-a-mac*
   :config
   (setq simpleclip-unmark-on-copy t)
@@ -723,7 +667,6 @@ becomes
 
 ;; See also: http://www.flycheck.org/en/latest/languages.html#flycheck-languages
 (use-package flycheck
-  :ensure t
   :commands (flycheck-mode
              flycheck-next-error
              flycheck-previous-error)
@@ -797,7 +740,6 @@ becomes
 ;; go install golang.org/x/tools/cmd/gorename@latest
 ;; go install golang.org/x/tools/cmd/gomvpkg@latest
 (use-package go-mode
-  :ensure t
   :mode "\\.go\\'"
   ;; this binding exists by default
   ;; :bind ("M-." . godef-jump)
@@ -824,26 +766,12 @@ becomes
 (use-package rust-mode
   :mode "\\.rs\\'")
 
-(use-package rubocop
-  :commands rubocop-mode
-  :diminish rubocop-mode
-  :disabled t
-  :hook (ruby-mode . rubocop-mode))
-
 ;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
 (use-package inf-ruby
-  :ensure t
   :init
   (add-hook 'after-init-hook 'inf-ruby-switch-setup)
   :bind
   (("C-c r r" . inf-ruby)))
-
-;; (use-package robe
-;;   :after (ruby company)
-;;   :hook ruby-mode
-;;   :config
-;;   (with-eval-after-load 'company
-;;     '(add-to-list 'company-backends 'company-robe)))
 
 (defun piger/ruby-mode-hooks ()
   "Personalised 'ruby-mode' hooks."
@@ -902,7 +830,6 @@ becomes
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
 (use-package rbenv
-  :ensure t
   :init
   ;; rbenv installed via homebrew
   (setq rbenv-executable "/usr/local/bin/rbenv")
@@ -913,7 +840,6 @@ becomes
   (rbenv-use-global))
 
 (use-package css-mode
-  :ensure t
   :mode "\\.css\\'"
   :custom
   (css-indent-offset 2)
@@ -921,12 +847,10 @@ becomes
          (css-mode . subword-mode)))
 
 (use-package rainbow-mode
-  :requires css-mode
-  :ensure t)
+  :requires css-mode)
 
 (use-package less-css-mode
-  :requires css-mode
-  :ensure t)
+  :requires css-mode)
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -947,13 +871,11 @@ becomes
                       (list "Ember" "DS" "App"))))))
 
 (use-package rjsx-mode
-  :ensure t
   :mode "\\.js\\'"
   :interpreter "node"
   :hook (rjsx-mode . subword-mode))
 
 (use-package json-mode
-  :ensure t
   :mode "\\.json\\'"
   :config
   (defun my-json-mode-hook ()
@@ -961,7 +883,6 @@ becomes
   :hook (json-mode . my-json-mode-hook))
 
 (use-package web-mode
-  :ensure t
   :mode ("\\.erb\\'"
          "\\.hbs\\'"
          "\\.html?\\'"
@@ -999,12 +920,10 @@ becomes
 (c-add-style "piger-cc-style" piger-cc-style)
 
 (use-package highlight-symbol
-  :ensure t
   :diminish highlight-symbol-mode
   :hook (prog-mode . highlight-symbol-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; Minor mode to selectively hide/show code and comment blocks.
@@ -1019,8 +938,7 @@ becomes
                   (js-mode "{" "}" "/[*/]" nil)
                   (javascript-mode "{" "}" "/[*/]" nil)))))
 
-(use-package jsonnet-mode
-  :ensure t)
+(use-package jsonnet-mode)
 
 ;; Highlight indentation with coloured bars.
 
@@ -1060,7 +978,6 @@ becomes
 
 (use-package ivy
   :pin melpa
-  :ensure t
   :diminish
   :demand t
   :bind (("C-x b" . ivy-switch-buffer)
@@ -1109,7 +1026,6 @@ becomes
 
 ;; smex can augment counsel-M-x, adding for example the recent used commands.
 (use-package smex
-  :ensure t
   ;; :bind (("M-x" . smex)
   ;;        ("M-X" . smex-major-mode-commands)
   ;;        ("C-c C-c M-x" . execute-extended-command))
@@ -1117,7 +1033,6 @@ becomes
   (smex-initialize))
 
 (use-package ibuffer
-  :ensure t
   :bind ("C-x C-b" . ibuffer))
 
 ;; meaningful names for buffers with the same name
@@ -1142,15 +1057,12 @@ becomes
 ;; This package provides some useful commands to move windows around, for example =transpose-frame=
 ;; on a frame with two vertical windows will give you an horizontal split.
 (use-package transpose-frame
-  :ensure t
   :bind (("C-x j" . transpose-frame)))
 
 (use-package magit-popup
-  :defer t
-  :ensure t)
+  :defer t)
 
 (use-package magit
-  :ensure t
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup))
   :config
@@ -1166,12 +1078,6 @@ becomes
     :ensure t
     :hook (git-commit-setup . git-commit-turn-on-flyspell)))
 
-(use-package magit-delta
-  :after magit
-  :disabled t
-  :config
-  (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1))))
-
 ;; can't use ensure here for some reasson
 ;; (use-package gitconfig-mode
 ;;   :ensure t)
@@ -1182,19 +1088,13 @@ becomes
 
 (use-package forge
   :after magit
-  :ensure t
   :config
   (setq forge-pull-notifications nil))
-
-(use-package github-review
-  :disabled t
-  :after forge)
 
 (use-package gist
   :defer t)
 
 (use-package git-timemachine
-  :ensure t
   :bind (("C-x v t" . git-timemachine)))
 
 (use-package git-link
@@ -1212,7 +1112,6 @@ becomes
 ;; This is useful to mark /things/ inside markers, for example the text inside a quoted string or
 ;; inside some parenthesis.
 (use-package expand-region
-  :ensure t
   :bind ("C-=" . er/expand-region))
 
 ;; (require 'move-text)
@@ -1221,7 +1120,6 @@ becomes
 ;; (move-text-default-bindings)
 
 (use-package evil
-  :ensure t
   :commands (evil-mode evil-local-mode)
   :init
   (setq evil-want-C-u-scroll t) ; enable scroll-down with C-u
@@ -1269,21 +1167,17 @@ becomes
   (company-terraform-init))
 
 (use-package hcl-mode
-  :ensure t
   :mode "\\.hcl\\'")
 
 (use-package nginx-mode
-  :ensure t
   :commands nginx-mode)
 
 (use-package ssh-config-mode
   :mode "\\.ssh/config\\'"
-  :ensure t
   :config
   (setq ssh-config-mode-indent 4))
 
 (use-package systemd
-  :ensure t
   :mode ("\\.service\\'" . systemd-mode))
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
@@ -1331,7 +1225,6 @@ becomes
                                   (run-hooks 'pl-elisp-mode-hooks)))
 
 (use-package projectile
-  :ensure t
   :init
   ;; like here: https://github.com/bbatsov/emacs.d/blob/8962c0f09abd261f76f00afb64408fd658eb3028/init.el#L286
   (setq projectile-completion-system 'ivy)
@@ -1352,27 +1245,23 @@ becomes
   (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
 
 ;; required by the command projectile-ripgrep
-(use-package rg
-  :ensure t)
+(use-package rg)
 
 ;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
 (use-package counsel-projectile
   :disabled t
   :after (counsel projectile)
   :pin melpa
-  :ensure t
   :config
   (counsel-projectile-mode 1))
 
 (use-package company
-  :ensure t
   :diminish
   :hook (prog-mode . company-mode)
   :config
   (setq company-transformers '(company-sort-by-occurrence)))
 
 (use-package company-quickhelp
-  :ensure t
   :config
   (company-quickhelp-mode 1))
 
@@ -1639,7 +1528,6 @@ becomes
 ;; is this pinging github all the time??
 ;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
-  :ensure t
   :defer t
   :hook (after-init . doom-modeline-mode))
 
@@ -1652,7 +1540,6 @@ becomes
 
 ;; replaces the unmaintained "window-numbering"
 (use-package winum
-  :ensure t
   :init
   (setq winum-keymap
         (let ((map (make-sparse-keymap)))
@@ -1679,7 +1566,6 @@ becomes
 ;; useful for less used modes (like Org), for example I can press =C-c= and then read the list of
 ;; org bindings.
 (use-package which-key
-  :ensure t
   :diminish
   :defer 5
   :commands which-key-mode
@@ -1687,32 +1573,26 @@ becomes
   (which-key-mode))
 
 (use-package discover-my-major
-  :ensure t
   :bind
   ("C-h C-m" . discover-my-major))
 
 (use-package buffer-move
-  :commands (buf-move-up buf-move-down buf-move-left buf-move-right)
-  :ensure t)
+  :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
 
 (use-package unfill
-  :commands (unfill-paragraph unfill-region)
-  :ensure t)
+  :commands (unfill-paragraph unfill-region))
 
 (use-package whitespace-cleanup-mode
-  :ensure t
   :commands whitespace-cleanup-mode
   :diminish 'whitespace-cleanup-mode)
 
 ;; misc utilities
 (use-package crux
-  :ensure t
   :config
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
   (global-set-key (kbd "C-c o") #'crux-open-with))
 
 (use-package editorconfig
-  :ensure t
   :diminish
   :config
   (editorconfig-mode 1))
@@ -1732,7 +1612,6 @@ becomes
     (all-the-icons-ivy-setup)))
 
 (use-package helpful
-  :ensure t
   :bind (("C-h f" . helpful-callable)
          ("C-h v" . helpful-variable)
          ("C-h k" . helpful-key)
@@ -1748,7 +1627,6 @@ becomes
   :disabled t)
 
 (use-package engine-mode
-  :ensure t
   :config
   (defengine github-repo
     "https://github.com/search?utf8=✓&type=Repositories&q=%s")
@@ -1779,17 +1657,14 @@ becomes
           (530 ("1XXX Error" "HTTP error 530 is returned with an accompanying 1XXX error displayed.")))))
 
 (use-package lua-mode
-  :ensure t
   :mode "\\.lua$"
   :interpreter "lua")
 
 (use-package dockerfile-mode
-  :ensure t
   :mode ("Dockerfile" . dockerfile-mode))
 
 ;;; trim whitespaces only on edited lines
 (use-package ws-butler
-  :ensure t
   :hook (prog-mode . ws-butler-mode))
 
 ;; re-builder can be useful
@@ -1807,7 +1682,6 @@ becomes
 ;; - mc/edit-ends-of-lines
 ;; - mc/mark-next-like-this, mc/mark-previous-like-this, mc/mark-all-like-this
 (use-package multiple-cursors
-  :ensure t
   :bind ("C-S-c C-S-c" . mc/edit-lines))
 
 ;; spell checking
