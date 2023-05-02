@@ -977,7 +977,7 @@ becomes
    ("C-x C-f" . counsel-find-file)
    ("C-h f"   . counsel-describe-function)
    ("C-h v"   . counsel-describe-variable)
-   ("C-c k"   . counsel-ag)
+   ("C-c k"   . counsel-rg)
    ("C-c g"   . counsel-git)
    ("C-c j"   . counsel-git-grep)
    ("M-y"     . counsel-yank-pop))
