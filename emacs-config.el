@@ -1313,6 +1313,9 @@ becomes
   "DICPATH"
   (concat (getenv "HOME") "/Library/Spelling"))
 
+;; set en_US for spell checking.
+(setenv "LANG" "en_US.UTF-8")
+
 (setq ispell-personal-dictionary (expand-file-name "~/Preferences/emacs/flyspell.dict"))
 
 (use-package flyspell
