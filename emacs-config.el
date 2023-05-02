@@ -1242,12 +1242,6 @@ becomes
   :after (company web)
   :disabled)
 
-;; replacement for company
-;; https://github.com/minad/vertico
-(use-package vertico
-  :init
-  (vertico-mode))
-
 ;; Goggles highlights the modified region using pulse. Currently the commands undo, yank, kill and
 ;; delete are supported.
 ;; https://github.com/minad/goggles
