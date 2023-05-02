@@ -1024,7 +1024,8 @@ becomes
 
 (use-package magit
   :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch-popup))
+         ("C-x M-g" . magit-dispatch)
+         ("C-c M-g" . magit-file-dispatch))
   :config
   (setq magit-diff-refine-hunk 'all
         git-commit-turn-on-flyspell t
