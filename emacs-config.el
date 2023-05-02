@@ -168,6 +168,9 @@
 ;; show empty lines at the bottom of the buffer, kinda like Vim.
 ;; (setq-default indicate-empty-lines t)
 
+;; enable context menu mode, which binds the right button to a context aware menu.
+(context-menu-mode)
+
 ;; minibuffer history
 (use-package savehist
   :init
