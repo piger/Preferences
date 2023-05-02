@@ -1038,17 +1038,16 @@ becomes
          ("C-x M-g" . magit-dispatch)
          ("C-c M-g" . magit-file-dispatch))
   :config
-  (setq magit-diff-refine-hunk 'all
-        git-commit-turn-on-flyspell t
-        git-commit-turn-on-auto-fill t
-        git-commit-fill-column 72
-        ;; magit-display-buffer-function #'magit-display-buffer-fullcolumn-most-v1
-        git-commit-summary-max-length 70)
-  ;; (global-magit-file-mode 1)
+  (setq magit-diff-refine-hunk 'all))
 
-  (use-package git-commit
-    :ensure t
-    :hook (git-commit-setup . git-commit-turn-on-flyspell)))
+;; magit's mode for editing git commits.
+(use-package git-commit
+  :hook (git-commit-setup . git-commit-turn-on-flyspell)
+  :config
+  ;; set the subject line to a maximum of 70 columns.
+  (setq git-commit-summary-max-length 70)
+  ;; also reset fill-column to be 70 columns for the body of the commit message.
+  (add-hook 'git-commit-mode-hook (lambda () (setq fill-column 70))))
 
 ;; major modes for git-related files. https://github.com/magit/git-modes
 (use-package git-modes)
