@@ -112,7 +112,7 @@
 
 ;; Themes
 (use-package base16-theme
-  :disabled t
+  :disabled
   :config
   ;; (load-theme 'base16-railscasts t)
   ;; (load-theme 'base16-tomorrow-night t)
@@ -121,7 +121,7 @@
   (load-theme 'base16-gruvbox-dark-hard t))
 
 (use-package birds-of-paradise-plus-theme
-  :disabled t
+  :disabled
   :config
   (load-theme 'birds-of-paradise-plus t))
 
@@ -771,7 +771,7 @@ becomes
 ;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
 (use-package enh-ruby-mode
   :interpreter "ruby"
-  :disabled t
+  :disabled
   :mode ("\\.rb\\'"
          "\\.ru\\'"
          "\\.rake\\'"
@@ -836,7 +836,7 @@ becomes
 (use-package js2-mode
   :mode "\\.js\\'"
   :interpreter "node"
-  :disabled t
+  :disabled
   :hook (js2-mode . subword-mode)
   :config
   (setq-default js2-global-externs
@@ -926,7 +926,7 @@ becomes
 ;; Highlight indentation with coloured bars.
 ;; this is nice but I think it's very unmaintained and possibly quite broken.
 (use-package highlight-indent-guides
-  :disabled t
+  :disabled
   :init
   (setq highlight-indent-guides-method 'bitmap)
   (setq highlight-indent-guides-responsive 'top)
@@ -1117,7 +1117,7 @@ becomes
 
 (use-package company-terraform
   :after (terraform-mode company)
-  :disabled t
+  :disabled
   :config
   (company-terraform-init))
 
@@ -1137,7 +1137,7 @@ becomes
 
 ;; gettext on OS X (homebrew) ships with additional elisp files
 (use-package po-mode
-  :disabled t
+  :disabled
   :if (file-exists-p "/usr/local/opt/gettext/share/emacs/site-lisp")
   :load-path "/usr/local/opt/gettext/share/emacs/site-lisp"
   :mode "\\.po\\'\\|\\.po\\.")
@@ -1204,31 +1204,31 @@ becomes
 
 ;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
 (use-package counsel-projectile
-  :disabled t
+  :disabled
   :after (counsel projectile)
   :pin melpa
   :config
   (counsel-projectile-mode 1))
 
 (use-package company
-  :disabled t
+  :disabled
   :diminish
   :hook (prog-mode . company-mode)
   :config
   (setq company-transformers '(company-sort-by-occurrence)))
 
 (use-package company-quickhelp
-  :disabled t
+  :disabled
   :config
   (company-quickhelp-mode 1))
 
 (use-package company-go
   :after (company go)
-  :disabled t)
+  :disabled)
 
 (use-package company-web
   :after (company web)
-  :disabled t)
+  :disabled)
 
 ;; replacement for company
 ;; https://github.com/minad/vertico
@@ -1283,7 +1283,7 @@ becomes
   (recentf-mode +1))
 
 (use-package undo-tree
-  :disabled t
+  :disabled
   :diminish undo-tree-mode
   :config
   ;;; until I figure out if I want undo-history I don't want this damn backup files
@@ -1515,14 +1515,14 @@ becomes
 
 ;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
 (use-package all-the-icons
-  :disabled t
+  :disabled
   :config
   (use-package all-the-icons-dired
     :ensure t
     :hook (dired-mode . all-the-icons-dired-mode))
 
   (use-package all-the-icons-ivy
-    :disabled t
+    :disabled
     :after ivy
     :config
     (all-the-icons-ivy-setup)))
@@ -1540,7 +1540,7 @@ becomes
          ("C-x 2" . switch-window-then-split-below)
          ("C-x 3" . switch-window-then-split-right)
          ("C-x 4" . switch-window-then-delete))
-  :disabled t)
+  :disabled)
 
 (use-package engine-mode
   :config
@@ -1608,7 +1608,7 @@ becomes
 ;; railwaycat/emacsmacport/emacs-mac: stable emacs-28.2-mac-9.1
 ;; see also: https://github.com/minad/jinx/issues/48
 (use-package jinx
-  :disabled t
+  :disabled
   :hook (emacs-startup . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
