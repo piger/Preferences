@@ -692,6 +692,7 @@ becomes
 ;; eldoc and eldoc-box
 ;; https://github.com/casouri/eldoc-box
 (use-package eldoc
+  :ensure nil ;; use the bundled version!
   :bind (("C-c h" . eldoc)))
 
 ;; should try eldoc-box-hover-mode
