@@ -734,13 +734,13 @@ becomes
   ;; :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
-    ;;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    ;;; (add-hook 'before-save-hook #'lsp-organize-imports t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
+    (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
     ;; (add-hook 'before-save-hook #'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
     ;; and as buffer-local (as opposed to global, which would run it for *every* buffer).
-    (add-hook 'before-save-hook #'eglot-interactively-organize-imports -20 t)
-    (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+    ;; (add-hook 'before-save-hook #'eglot-interactively-organize-imports -20 t)
+    ;; (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
     ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
@@ -1622,11 +1622,24 @@ becomes
 ;; https://github.com/joaotavora/eglot
 ;; An alternative to lsp-mode.
 (use-package eglot
+  :disabled t
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   (defun eglot-interactively-organize-imports ()
     (call-interactively 'eglot-code-action-organize-imports))
   :hook (go-mode . eglot-ensure))
+
+;; lsp
+(use-package lsp-mode
+  :init
+  ;; when calling eldoc, render all the documentation instead of just the signature.
+  (setq lsp-eldoc-render-all t)
+  ;; disable highlighting the symbol; in Go functions this highlight the whole function body
+  (setq lsp-enable-symbol-highlighting nil)
+  :hook
+  ((go-mode . lsp)
+   (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
