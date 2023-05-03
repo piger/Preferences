@@ -693,7 +693,9 @@ becomes
 ;; https://github.com/casouri/eldoc-box
 (use-package eldoc
   :ensure nil ;; use the bundled version!
-  :bind (("C-c h" . eldoc)))
+  :bind (("C-c h" . eldoc))
+  :init
+  (global-eldoc-mode)) ;; start it via :init so it won't be deferred
 
 ;; should try eldoc-box-hover-mode
 (use-package eldoc-box)
@@ -816,10 +818,11 @@ becomes
          (css-mode . subword-mode)))
 
 (use-package rainbow-mode
-  :requires css-mode)
+  :init
+  (rainbow-mode))
 
 (use-package less-css-mode
-  :requires css-mode)
+  :mode "\\.less\\'")
 
 (use-package js2-mode
   :mode "\\.js\\'"
@@ -909,7 +912,8 @@ becomes
                   (js-mode "{" "}" "/[*/]" nil)
                   (javascript-mode "{" "}" "/[*/]" nil)))))
 
-(use-package jsonnet-mode)
+(use-package jsonnet-mode
+  :mode "\\.jsonnet\\'")
 
 ;; Highlight indentation with coloured bars.
 ;; this is nice but I think it's very unmaintained and possibly quite broken.
@@ -972,6 +976,8 @@ becomes
    ("C-r" . swiper)))
 
 ;; smex can augment counsel-M-x, adding for example the recent used commands.
+;; NOTE: ivy reuses smex (or alternatives like amx) automatically if they are installed;
+;; https://oremacs.com/swiper/#packages
 (use-package smex
   ;; :bind (("M-x" . smex)
   ;;        ("M-X" . smex-major-mode-commands)
@@ -985,6 +991,7 @@ becomes
 ;; meaningful names for buffers with the same name
 (use-package uniquify
   :ensure nil ;; this is a native package
+  :demand t
   :config
   (setq uniquify-buffer-name-style 'forward
         uniquify-separator "/"
@@ -1076,7 +1083,6 @@ becomes
         evil-motion-state-cursor '("gray" box)))
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
@@ -1276,7 +1282,8 @@ becomes
 ;; Keep track of window layouts.
 ;; C-c LEFT and C-c RIGHT
 (use-package winner
-  :config (winner-mode +1))
+  :config
+  (winner-mode +1))
 
 ;; install hunspell with brew, then download the dictionaries:
 ;; curl --output-dir ~/Library/Spelling -O https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff
@@ -1540,7 +1547,7 @@ becomes
 ;;; HTTP status code package.
 ;;; NOTE: the command is "hc"
 (use-package httpcode
-  :load-path "/Users/dkertesz/dev/httpcode.el"
+  :load-path "~/dev/httpcode.el"
   :commands hc
   :config
   ;; https://support.cloudflare.com/hc/en-us/articles/115003011431/
@@ -1573,6 +1580,7 @@ becomes
 ;; C-c C-w copies the regex in the clipboard, in emacs syntax (re-introducing double escaping).
 ;; C-c C-q exits from re-builder
 (use-package re-builder
+  :commands re-builder
   :config
   ;; set the syntax to the normal syntax (i.e. you don't need double escaping)
   (setq reb-re-syntax 'string))
