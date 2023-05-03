@@ -779,29 +779,6 @@ becomes
 ;;                (eval . (progn (auto-fill-mode t)
 ;;                               (set (make-local-variable 'comment-auto-fill-only-comments) t))))))
 
-;; I use enh-ruby-mode because indentation in ruby-mode is fucked up
-(use-package enh-ruby-mode
-  :interpreter "ruby"
-  :disabled
-  :mode ("\\.rb\\'"
-         "\\.ru\\'"
-         "\\.rake\\'"
-         "\\.gemspec\\'"
-         "Gemfile\\'"
-         "Berksfile\\'"
-         "Rakefile\\'"
-         "Vagrantfile\\'"
-         "Capfile\\'")
-  :hook (enh-ruby-mode . subword-mode)
-  :init
-  (setq ruby-insert-encoding-magic-comment nil)
-  (setq enh-ruby-indent-level 2
-        enh-ruby-deep-indent-paren nil)
-  :config
-  (add-hook 'ruby-mode-hook 'piger/ruby-mode-hooks)
-  ;; We never want to edit Rubinius bytecode
-  (add-to-list 'completion-ignored-extensions ".rbc"))
-
 (use-package ruby-mode
   :interpreter "ruby"
   :mode ("\\.rb\\'"
