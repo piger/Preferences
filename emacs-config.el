@@ -858,11 +858,14 @@ becomes
   :mode ("\\.erb\\'"
          "\\.hbs\\'"
          "\\.html?\\'"
+         "\\.tmpl\\'"
          "\\.j2\\'")
   :init
   (setq web-mode-engines-alist
         '(("go" . "/go/src/.*\\.html\\'")
+          ("go" . "/nginx-templates/default\\.conf\\.tmpl\\'")
           ("django" . "/dev/.*/templates/.*\\.html\\'")))
+  (setq web-mode-enable-auto-indentation nil)
   :hook (web-mode . my-web-mode-hook)
   :config
   (defun my-web-mode-hook ()
