@@ -182,17 +182,10 @@ set noexpandtab
 "set autoindent                  " indenta ogni riga seguendo l'indentatura della precedente
 " }}}
 
-" Plugin Vim - Pathogen {{{
-" https://github.com/tpope/vim-pathogen.git
-" NOTA: va chiamato con `filetype off` e prima di `filetype indent on`.
-" filetype off 
-execute pathogen#infect()
 syntax on
 filetype plugin indent on
-" }}}
 
 " colori {{{
-" Vanno dopo pathogen, in caso usi pluginz
 
 if has("termguicolors")
 	set termguicolors
@@ -270,9 +263,6 @@ let g:secure_modelines_allowed_items = [
 	    \ "foldlevel", "fdl",
 	    \ "fileencoding", "fenc"
 	    \ ]
-
-" vim-json
-let g:vim_json_syntax_conceal = 0
 " }}}
 
 

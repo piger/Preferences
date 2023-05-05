@@ -7,9 +7,6 @@
 [submodule "zsh/plugins/LS_COLORS"]
 	path = zsh/plugins/LS_COLORS
 	url = https://github.com/trapd00r/LS_COLORS.git
-[submodule "vim/bundle/vim-json.git"]
-	path = vim/bundle/vim-json.git
-	url = https://github.com/elzr/vim-json.git
-[submodule "vim/bundle/gruvbox"]
-	path = vim/bundle/gruvbox
+[submodule "vim/pack/foo/start/gruvbox.git"]
+	path = vim/pack/foo/start/gruvbox.git
 	url = https://github.com/morhetz/gruvbox.git
