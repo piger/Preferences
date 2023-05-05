@@ -25,18 +25,18 @@
 
 
 " Creazione delle directory necessarie (all'avvio di vim) ------------------ {{{
-if !isdirectory(expand("~/.vim/backups"))
-    call mkdir(expand("~/.vim/backups"), "", 0700)
-endif
+" if !isdirectory(expand("~/.vim/backups"))
+"     call mkdir(expand("~/.vim/backups"), "", 0700)
+" endif
 " }}}
 
 
 " Configurazione di base --------------------------------------------------- {{{
 set nocompatible		" si comporta da vim e non da vi :)
 set backspace=indent,eol,start	" permette il backspace sempre
-set backup			" crea una copia di backup prima di sovrascrivere
-set backupdir=~/.vim/backups,.	" directory per i file di backup
-set backupskip=/tmp/*,/private/tmp/*	" Fixa il problema di vim e i file crontab (anche su OSX)
+"set backup			" crea una copia di backup prima di sovrascrivere
+"set backupdir=~/.vim/backups,.	" directory per i file di backup
+"set backupskip=/tmp/*,/private/tmp/*	" Fixa il problema di vim e i file crontab (anche su OSX)
 
 " set bg=dark			" background NERO
 set background=light
