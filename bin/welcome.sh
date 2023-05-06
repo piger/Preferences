@@ -1,11 +1,9 @@
 #!/usr/bin/env zsh
 
 os_logo() {
-    if [[ $OSTYPE = linux* ]] && which neofetch >/dev/null; then
-	neofetch --disable packages
-    fi
-
-    if [[ $OSTYPE = darwin* ]]; then
+    if which neofetch >/dev/null; then
+        neofetch -L
+    elif [[ $OSTYPE = darwin* ]]; then
 	zsh $HOME/Preferences/zsh/functions/apple-logo
     fi
 }
