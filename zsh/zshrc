@@ -17,6 +17,9 @@ export FORTUNES_DIRECTORY=${FORTUNES_DIRECTORY:-$HOME/code/fortune-tvshows/fortu
 # zsh emulation. I don't see why zsh emulation shouldn't be used by default though.
 # See also: http://bewatermyfriend.org/p/2012/003/
 
+is_linux() { [[ $OSTYPE = linux* ]] }
+is_mac() { [[ $OSTYPE = darwin* ]] }
+
 ### OPTIONS
 
 # Make cd push the old directory onto the directory stack.
@@ -436,7 +439,7 @@ if [[ $TERM != "dumb" ]]; then
 fi
 
 ### OS SPECIFIC
-if [[ $OSTYPE = darwin* ]]; then
+if is_mac; then
     # top comodo
     alias itop="top -u -s 5 -stats pid,username,command,cpu,time,mem,vsize,ppid,state"
 
@@ -503,7 +506,7 @@ EOF
     # Flush DNS cache
     alias flush_dns_cache='dscacheutil -flushcache'
 
-elif [[ $OSTYPE = linux* ]]; then
+elif is_linux; then
     alias ls="ls --color=auto $ls_options"
 
     if (( ! $+commands[gnome-open] )); then
