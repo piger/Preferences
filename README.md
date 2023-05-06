@@ -37,11 +37,7 @@ To update all the submodules run:
 
     git submodule foreach git pull origin master
 
-If `git` shows "new commits" for any submodule directory, run this command:
-
-    git submodule update
-
-Then take your time to curse `git` and it's stupid interface.
+Then `git add` and commit all the modified submodules directories.
 
 ## Notes
 
