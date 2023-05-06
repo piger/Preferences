@@ -83,8 +83,12 @@ setopt transient_rprompt
 # Doesn't work on macOS Monterey's version of zsh.
 # setopt rematch_pcre
 
-# Assume that the terminal displays combining characters correctly. (i.e. UTF-8)
-[[ $ZSH_VERSION == <5->.* ]] && setopt combining_chars
+# Correctly display UTF-8 with combining characters.
+if is_mac && [[ "$(locale LC_CTYPE)" == "UTF-8" ]]; then setopt combining_chars; fi
+
+if is_linux && [[ $(locale | awk -F'"' '/^LC_CTYPE/ { print(substr($2, index($2, ".")+1)) }') == "UTF-8" ]]; then
+    setopt combining_chars
+fi
 
 #### Disabled options
 
