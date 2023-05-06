@@ -364,6 +364,7 @@
       save-place-file (concat user-emacs-directory "places")
       ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
       minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
+      make-backup-files nil
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups")))
       ;; don't clutter the fs with auto-save files (they might be uploaded to chef during knife upload -_-)
