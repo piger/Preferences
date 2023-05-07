@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install the latest version of Go in /opt/go.
 
-set -e
+set -ueo pipefail
 
 which pv >/dev/null || exit
 
@@ -18,29 +18,33 @@ fi
 
 # LATEST will contain a string like "go1.19.4".
 LATEST="$(curl -sSL 'https://go.dev/VERSION?m=text')"
-# INSTALLED will contain a string similar to $LATEST, but containing the installed version.
-INSTALLED="$(go version | awk '{ print $3 }')"
-
-if [[ "$LATEST" == "$INSTALLED" ]]; then
-    echo "Latest version $LATEST already installed."
-    exit
-fi
 
 # VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
 VERSION="${LATEST#go}"
 
-read -p "Latest version is ${VERSION}; continue? [yn] " -n 1 -r
-echo
+if which go >/dev/null; then
+    # INSTALLED will contain a string similar to $LATEST, but containing the installed version.
+    INSTALLED="$(go version | awk '{ print $3 }')"
 
-[[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, nevermind"; exit; }
+    if [[ "$LATEST" == "$INSTALLED" ]]; then
+        echo "Latest version $LATEST already installed."
+        exit
+    fi
+
+    read -p "Latest version is ${VERSION}; continue? [yn] " -n 1 -r
+    echo
+
+    [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, nevermind"; exit; }
+fi
+
+if [[ -d /opt/go ]]; then
+    echo "Deleting the existing installation in /opt/go"
+    sudo rm -rf /opt/go
+fi
 
 echo "Downloading go ${VERSION}: https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz"
-curl -# -SL -O "https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz"
-
-echo "Extracting go $VERSION in /opt/go"
-sudo rm -rf /opt/go
-pv "go${VERSION}.${OS}-${ARCH}.tar.gz" | sudo tar -C /opt -xzf -
-rm -f "go${VERSION}.${OS}-${ARCH}.tar.gz"
+curl -sSL -o- "https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz" \
+     | pv | sudo tar -C /opt -xzf -
 
 if [[ "$OS" == "darwin" ]]; then
     echo "Setting up /etc/paths.d"
