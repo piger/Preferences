@@ -32,3 +32,4 @@ fortune-tips() {
 os_logo
 fortune-classic
 fortune-tips
+iterm-set-title $(name-gen)
