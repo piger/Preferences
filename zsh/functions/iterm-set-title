@@ -1,0 +1,5 @@
+# iterm-set-title() {
+if [[ $TERM_PROGRAM = iTerm.app ]]; then
+    printf "\e]0;%s\a" "$@"
+fi
+# }

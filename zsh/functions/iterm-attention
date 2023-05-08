@@ -1,0 +1,7 @@
+# iterm-attention() {
+if [[ $TERM_PROGRAM = iTerm.app ]]; then
+    if [[ $1 == "yes" || $1 == "once" || $1 == "no" ]]; then
+        printf "\e]1337;RequestAttention=$1\a"
+    fi
+fi
+# }

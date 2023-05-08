@@ -1,0 +1,5 @@
+# iterm-fireworks() {
+if [[ $TERM_PROGRAM = iTerm.app ]]; then
+    printf "\e]1337;RequestAttention=fireworks\a"
+fi
+# }
