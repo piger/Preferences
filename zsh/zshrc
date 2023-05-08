@@ -736,7 +736,6 @@ fi
 
 ### PLUGINS AND STUFF
 source_if_exists "$HOME/Preferences/zsh/keephack"
-source_if_exists "$HOME/Preferences/zsh/plugins/z/z.sh"
 
 ### LOCAL SETTINGS
 source_if_exists "$HOME/.zshrc.local"
