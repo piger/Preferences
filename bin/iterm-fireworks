@@ -1,5 +1,7 @@
-# iterm-fireworks() {
+#!/bin/bash
+
+set -ueo pipefail
+
 if [[ $TERM_PROGRAM = iTerm.app ]]; then
     printf "\e]1337;RequestAttention=fireworks\a"
 fi
-# }

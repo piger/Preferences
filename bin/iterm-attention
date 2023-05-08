@@ -1,7 +1,9 @@
-# iterm-attention() {
+#!/bin/bash
+
+set -ueo pipefail
+
 if [[ $TERM_PROGRAM = iTerm.app ]]; then
     if [[ $1 == "yes" || $1 == "once" || $1 == "no" ]]; then
-        printf "\e]1337;RequestAttention=$1\a"
+        printf "\e]1337;RequestAttention=%s\a" "$1"
     fi
 fi
-# }

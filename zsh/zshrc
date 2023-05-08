@@ -423,7 +423,7 @@ if [[ -d ~/.zsh-work/functions ]]; then
 fi
 
 # Autoload any custom function that I really use
-useful_autoloads=(gh-link whatwhen apple-logo unix2date http-server quote-for-knife iterm-set-title iterm-fireworks iterm-attention iterm-notification github-whoami jqi)
+useful_autoloads=(gh-link whatwhen apple-logo unix2date http-server quote-for-knife github-whoami jqi)
 for fn in $useful_autoloads; do autoload -Uz $fn; done
 
 # Autoload some nice zsh functions.

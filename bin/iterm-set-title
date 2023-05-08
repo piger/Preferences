@@ -1,5 +1,7 @@
-# iterm-set-title() {
+#!/bin/bash
+
+set -ueo pipefail
+
 if [[ $TERM_PROGRAM = iTerm.app ]]; then
     printf "\e]0;%s\a" "$@"
 fi
-# }
