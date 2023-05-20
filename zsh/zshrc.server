@@ -1,0 +1,290 @@
+# /etc/zsh/zshrc: system-wide .zshrc file for zsh(1).
+#
+# This file is sourced only for interactive shells. It
+# should contain commands to set up aliases, functions,
+# options, key bindings, etc.
+#
+# Global Order: zshenv, zprofile, zshrc, zlogin
+
+### This part comes from Debian's bullseye /etc/zsh/zshrc
+
+READNULLCMD=${PAGER:-/usr/bin/pager}
+
+# An array to note missing features to ease diagnosis in case of problems.
+typeset -ga debian_missing_features
+
+if [[ -z "${DEBIAN_PREVENT_KEYBOARD_CHANGES-}" ]] &&
+   [[ "$TERM" != 'emacs' ]]
+then
+
+    typeset -A key
+    key=(
+        BackSpace  "${terminfo[kbs]}"
+        Home       "${terminfo[khome]}"
+        End        "${terminfo[kend]}"
+        Insert     "${terminfo[kich1]}"
+        Delete     "${terminfo[kdch1]}"
+        Up         "${terminfo[kcuu1]}"
+        Down       "${terminfo[kcud1]}"
+        Left       "${terminfo[kcub1]}"
+        Right      "${terminfo[kcuf1]}"
+        PageUp     "${terminfo[kpp]}"
+        PageDown   "${terminfo[knp]}"
+    )
+
+    function bind2maps () {
+        local i sequence widget
+        local -a maps
+
+        while [[ "$1" != "--" ]]; do
+            maps+=( "$1" )
+            shift
+        done
+        shift
+
+        sequence="${key[$1]}"
+        widget="$2"
+
+        [[ -z "$sequence" ]] && return 1
+
+        for i in "${maps[@]}"; do
+            bindkey -M "$i" "$sequence" "$widget"
+        done
+    }
+
+    bind2maps emacs             -- BackSpace   backward-delete-char
+    bind2maps       viins       -- BackSpace   vi-backward-delete-char
+    bind2maps             vicmd -- BackSpace   vi-backward-char
+    bind2maps emacs             -- Home        beginning-of-line
+    bind2maps       viins vicmd -- Home        vi-beginning-of-line
+    bind2maps emacs             -- End         end-of-line
+    bind2maps       viins vicmd -- End         vi-end-of-line
+    bind2maps emacs viins       -- Insert      overwrite-mode
+    bind2maps             vicmd -- Insert      vi-insert
+    bind2maps emacs             -- Delete      delete-char
+    bind2maps       viins vicmd -- Delete      vi-delete-char
+    bind2maps emacs viins vicmd -- Up          up-line-or-history
+    bind2maps emacs viins vicmd -- Down        down-line-or-history
+    bind2maps emacs             -- Left        backward-char
+    bind2maps       viins vicmd -- Left        vi-backward-char
+    bind2maps emacs             -- Right       forward-char
+    bind2maps       viins vicmd -- Right       vi-forward-char
+
+    # Make sure the terminal is in application mode, when zle is
+    # active. Only then are the values from $terminfo valid.
+    if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+        function zle-line-init () {
+            emulate -L zsh
+            printf '%s' ${terminfo[smkx]}
+        }
+        function zle-line-finish () {
+            emulate -L zsh
+            printf '%s' ${terminfo[rmkx]}
+        }
+        zle -N zle-line-init
+        zle -N zle-line-finish
+    else
+        for i in {s,r}mkx; do
+            (( ${+terminfo[$i]} )) || debian_missing_features+=($i)
+        done
+        unset i
+    fi
+
+    unfunction bind2maps
+
+fi # [[ -z "$DEBIAN_PREVENT_KEYBOARD_CHANGES" ]] && [[ "$TERM" != 'emacs' ]]
+
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
+                                           /usr/local/bin  \
+                                           /usr/sbin       \
+                                           /usr/bin        \
+                                           /sbin           \
+                                           /bin            \
+                                           /usr/X11R6/bin
+
+(( ${+aliases[run-help]} )) && unalias run-help
+autoload -Uz run-help
+
+### end of Debian's /etc/zsh/zshrc
+
+### Helpers
+source_if_exists() { [[ -e "$1" ]] && source "$1" }
+add_path_if_exists() { [[ -d "$1" ]] && path+=("$1") }
+
+### Options
+
+# Make cd push the old directory onto the directory stack.
+setopt auto_pushd
+
+# List jobs in the long format by default.
+setopt long_list_jobs
+
+# Print the exit value of programs with non-zero exit status.
+setopt print_exit_value
+
+# Parameter expansion, command substitution and arithmetic expansion are performed in prompts.
+setopt prompt_subst
+
+# Don't push multiple copies of the same directory onto the directory stack.
+setopt pushd_ignore_dups
+
+# Disable bell alert
+setopt NO_beep
+
+# Output flow control via start/stop characters (usually assigned to ^S/^Q) is disabled in the
+# shell's editor.
+setopt NO_flow_control
+
+# Do not send the HUP signal to running jobs when the shell exits.
+setopt NO_hup
+
+# Query the user before executing `rm *' or `rm path/*'.
+setopt NO_rm_star_silent
+
+setopt append_history
+setopt extended_history
+setopt hist_ignore_dups
+setopt hist_no_store
+setopt hist_verify
+setopt hist_ignore_space
+setopt hist_expire_dups_first
+SAVEHIST=10000
+HISTSIZE=12000
+
+# set the history file
+HISTFILE=$HOME/.zsh_history
+
+### Pager and Editor
+if (( $+commands[less] )); then
+    export PAGER="less"
+    export READNULLCMD="less"
+    export LESSHISTFILE="-"
+
+    # Colors in man pages, without having to use `most`.
+    # http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html
+    export LESS_TERMCAP_mb=$'\E[01;31m'
+    export LESS_TERMCAP_md=$'\E[01;31m'
+    export LESS_TERMCAP_me=$'\E[0m'
+    export LESS_TERMCAP_se=$'\E[0m'
+    export LESS_TERMCAP_so=$'\E[01;44;33m'
+    export LESS_TERMCAP_ue=$'\E[0m'
+    export LESS_TERMCAP_us=$'\E[01;32m'
+fi
+
+# Sets vim or vi as the default editor.
+if (( $+commands[vim] )); then
+    export EDITOR=vim
+    export VISUAL=vim
+elif (( $+commands[vi] )); then
+    export EDITOR=vi
+    export VISUAL=vi
+fi
+
+### Modules
+
+# The zsh/complist module offers three extensions to completion listings: the ability to highlight
+# matches in such a list, the ability to scroll through long lists and a different style of menu
+# completion.
+zmodload zsh/complist
+
+### Key Bindings
+
+# Set META+delete to work like it does in Bash.
+autoload -Uz select-word-style
+select-word-style bash
+
+# emacs bindings for ZLE.
+bindkey -e
+
+# META+s to prefix "sudo" to the current command-line.
+_add-sudo() { [[ $BUFFER != sudo\ * ]] && LBUFFER="sudo $LBUFFER" }
+zle -N add-sudo _add-sudo
+bindkey '\es' add-sudo
+
+# META+e to edit the current command-line with $EDITOR.
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '\ee' edit-command-line
+
+### Autoloads
+
+# Autoload some nice zsh functions.
+autoload -Uz zcalc zmv zargs
+
+autoload -U promptinit
+promptinit
+
+# set a nicer prompt.
+prompt redhat
+
+# enable the completion subsystem.
+autoload -Uz compinit
+compinit
+
+### Completion
+
+zstyle ':completion:*' rehash true
+
+# group completions by tag
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-separator '-->'
+# Do not complete function names that starts with "_"
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+# separate man completions by section
+zstyle ':completion:*:manuals' separate-sections true
+
+# show descriptions of comletion suggestions.
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' auto-description 'specify: %d'
+
+# use a pager when there's too many completion suggestions.
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# bind "q" to exit the internal pager
+bindkey -M listscroll q send-break
+
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+# NOTE: _prefix must appear before _approximate
+zstyle ':completion:*:' completer _complete _prefix _approximate _ignored
+# allow 1 error per 3 characters typed:
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 ))numeric)'
+
+# fancy completion headers [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
+
+# statusline for many hits [from: https://github.com/seebi/zshrc]
+zstyle ':completion:*:default' select-prompt $'\e[01;35m -- Match %M %P -- \e[00;00m'
+
+# Completion for `kill`.
+if [[ $OSTYPE == linux* ]]; then
+    zstyle ':completion::*:kill:*:*' command 'ps xf -U $USER -o pid,%cpu,%mem,cmd'
+else
+    # -r -- sort by CPU usage
+    zstyle ':completion:*:processes' command 'ps x -U $USER -r -o pid,%cpu,%mem,tt,args'
+fi
+zstyle ':completion::*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;32'
+
+# Use $LS_COLORS in completion.
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+### Aliases
+alias ls="ls --color=auto --classify"
+
+### Functions
+
+tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
+
+### Emacs tramp support
+
+# Sets the terminal to something simple so that emacs doesn't gets confused.
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+
+### Local settings
+source_if_exists "$HOME/.zshrc.local"
+
+### Tidy up
+unfunction source_if_exists
+unfunction add_path_if_exists

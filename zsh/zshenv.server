@@ -1,0 +1,40 @@
+# /etc/zsh/zshenv: system-wide .zshenv file for zsh(1).
+#
+# This file is sourced on all invocations of the shell.
+# If the -f flag is present or if the NO_RCS option is
+# set within this file, all other initialization files
+# are skipped.
+#
+# This file should contain commands to set the command
+# search path, plus other important environment variables.
+# This file should not contain commands that produce
+# output or assume the shell is attached to a tty.
+#
+# Global Order: zshenv, zprofile, zshrc, zlogin
+
+### Helpers
+source_if_exists() { [[ -e "$1" ]] && source "$1" }
+add_path_if_exists() { [[ -d "$1" ]] && path+=("$1") }
+
+### PATH management
+typeset -U path
+
+path=(/sbin /bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin)
+
+# emulate macOS /etc/paths.d; use an anonymous function to change shell options temporarily.
+(){
+    # (N) is a Glob Qualifier: it sets the NULL_GLOB option for the current pattern.
+    for file in /etc/paths.d/*(N); do
+        # split on newlines instead of spaces
+        for line in ${(f)"$(< $file)"}; do
+            [[ -d "$line" ]] && path+="$line"
+        done
+    done
+}
+
+### Local settings
+source_if_exists "$HOME/.zshenv.local"
+
+### Tidy up
+unfunction source_if_exists
+unfunction add_path_if_exists
