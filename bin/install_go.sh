@@ -1,12 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Install the latest version of Go in /opt/go.
 
 set -ueo pipefail
 
-which pv >/dev/null || exit
+# installed checks if $1 is an existing command.
+installed() {
+    local cmd
+    cmd=$(command -v "${1}")
+    [[ -n "${cmd}" ]] && [[ -f "${cmd}" ]]
+    return ${?}
+}
 
+# fatal prints its arguments as a fatal error.
+fatal() {
+    >&2 echo "ERROR: ${*}"
+    exit 1
+}
+
+# check required dependencies.
+deps=(tr curl pv sudo awk)
+for dep in "${deps[@]}"; do
+    installed "${dep}" || fatal "missing required command: '${dep}'"
+done
+
+# determine architecture and OS.
 ARCH="$(uname -m)"
-OS="$(uname -s | tr '[A-Z]' '[a-z]')"
+OS="$(uname -s | tr 'A-Z' 'a-z')"
 
 if [[ $ARCH == "x86_64" ]]; then
     ARCH="amd64"
@@ -17,12 +36,12 @@ elif [[ $ARCH == "aarch64" ]]; then
 fi
 
 # LATEST will contain a string like "go1.19.4".
-LATEST="$(curl -sSL 'https://go.dev/VERSION?m=text')"
+LATEST="$(curl -fsSL 'https://go.dev/VERSION?m=text')"
 
 # VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
 VERSION="${LATEST#go}"
 
-if which go >/dev/null; then
+if installed go; then
     # INSTALLED will contain a string similar to $LATEST, but containing the installed version.
     INSTALLED="$(go version | awk '{ print $3 }')"
 
@@ -43,7 +62,7 @@ if [[ -d /opt/go ]]; then
 fi
 
 echo "Downloading go ${VERSION}: https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz"
-curl -sSL -o- "https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz" \
+curl -fsSL -o- "https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz" \
      | pv | sudo tar -C /opt -xzf -
 
 if [[ "$OS" == "darwin" ]]; then
@@ -53,10 +72,13 @@ if [[ "$OS" == "darwin" ]]; then
     fi
 fi
 
-echo "Fixing permissions"
+echo "Fixing permissions: 1/3"
 sudo find /opt/go -exec chmod ugo+r \{\} \;
+echo "Fixing permissions: 2/3"
 sudo find /opt/go/bin -exec chmod ugo+rx \{\} \;
+echo "Fixing permissions: 3/3"
 sudo find /opt/go -type d -exec chmod ugo+rx \{\} \;
+
 sudo chmod o-w /opt/go
 
 /opt/go/bin/go version
