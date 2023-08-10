@@ -36,7 +36,7 @@ elif [[ $ARCH == "aarch64" ]]; then
 fi
 
 # LATEST will contain a string like "go1.19.4".
-LATEST="$(curl -fsSL 'https://go.dev/VERSION?m=text')"
+LATEST="$(curl -fsSL 'https://go.dev/VERSION?m=text' | head -n1)"
 
 # VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
 VERSION="${LATEST#go}"
