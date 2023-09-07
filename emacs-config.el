@@ -172,6 +172,11 @@
 (when (display-graphic-p)
   (context-menu-mode))
 
+;; Global auto-revert mode, to allow editing the same file in multiple editors
+(setq auto-revert-interval 1)
+(setq auto-revert-check-vc-info t)
+(global-auto-revert-mode)
+
 ;; minibuffer history
 (use-package savehist
   :init
