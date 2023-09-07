@@ -169,7 +169,8 @@
 ;; (setq-default indicate-empty-lines t)
 
 ;; enable context menu mode, which binds the right button to a context aware menu.
-(context-menu-mode)
+(when (display-graphic-p)
+  (context-menu-mode))
 
 ;; minibuffer history
 (use-package savehist
