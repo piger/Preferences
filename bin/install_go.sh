@@ -72,13 +72,4 @@ if [[ "$OS" == "darwin" ]]; then
     fi
 fi
 
-echo "Fixing permissions: 1/3"
-sudo find /opt/go -exec chmod ugo+r \{\} \;
-echo "Fixing permissions: 2/3"
-sudo find /opt/go/bin -exec chmod ugo+rx \{\} \;
-echo "Fixing permissions: 3/3"
-sudo find /opt/go -type d -exec chmod ugo+rx \{\} \;
-
-sudo chmod o-w /opt/go
-
 /opt/go/bin/go version
