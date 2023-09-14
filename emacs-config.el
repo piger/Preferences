@@ -1445,11 +1445,16 @@ becomes
   :ensure nil ;; this comes with org?
   :after (org))
 
-;; is this pinging github all the time??
-;; Error running timer ‘doom-modeline--github-fetch-notifications’: (void-function async-inject-variables)
 (use-package doom-modeline
-  :defer t
-  :hook (after-init . doom-modeline-mode))
+  :config
+  ;; Install a Nerd Font font from https://www.nerdfonts.com/ to use it in the modeline
+  ;; (no need to set it as a global font!)
+  (setq doom-modeline-unicode-fallback t)
+  (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
+  ;; Increase the size of the modeline
+  (setq doom-modeline-height 30)
+  :init
+  (doom-modeline-mode 1))
 
 ;; replaces the unmaintained "window-numbering"
 (use-package winum
