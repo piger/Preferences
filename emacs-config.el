@@ -938,6 +938,16 @@ becomes
   :ensure nil
   :config
   (electric-pair-mode))
+
+;; https://oylenshpeegul.gitlab.io/blog/posts/20230129/
+;; Add a contextual menu to launch 'git-link' by right-clicking on a line.
+(defun piger/git-link-context-menu (menu click)
+  "Context menu for git-link."
+  (define-key-after menu [separator-git-link] menu-bar-separator)
+  (define-key-after menu [git-link] '(menu-item "git link" git-link :help "Link to GitHub"))
+  menu)
+(add-hook 'context-menu-functions #'piger/git-link-context-menu)
+
 ;; Other modes
 ;; ---------------------------------------------------------------------------------------
 (ido-mode -1)
