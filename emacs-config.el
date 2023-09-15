@@ -671,9 +671,9 @@ becomes
   (setq flycheck-indication-mode 'right-fringe)
 
   ;; replace flycheck's wavy underline with a straight line
-  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00"))
-  (set-face-attribute 'flycheck-warning nil :underline '(:color "#e3795c"))
-  (set-face-attribute 'flycheck-info nil :underline '(:color "ForestGreen"))
+  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line :position -3))
+  (set-face-attribute 'flycheck-warning nil :underline '(:color "#e3795c" :style line :position -3))
+  (set-face-attribute 'flycheck-info nil :underline '(:color "ForestGreen" :style line :position -3))
 
   ;; make the flycheck arrow look like an exclamation point.
   ;; but only do it when emacs runs in a window, not terminal
@@ -1315,6 +1315,8 @@ becomes
 (use-package flyspell
   :commands flyspell-mode
   :config
+  (set-face-attribute 'flyspell-duplicate nil :underline '(:color "#d79921" :style line :position -3))
+  (set-face-attribute 'flyspell-incorrect nil :underline '(:color "#cc241d" :style line :position -3))
   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "M-.") 'ispell-word)
   (define-key flyspell-mode-map [down-mouse-3] #'flyspell-correct-word)
