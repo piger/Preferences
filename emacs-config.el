@@ -934,6 +934,10 @@ becomes
   (setq highlight-indent-guides-responsive 'top)
   :hook (prog-mode . highlight-indent-guides-mode))
 
+(use-package prog-mode
+  :ensure nil
+  :config
+  (electric-pair-mode))
 ;; Other modes
 ;; ---------------------------------------------------------------------------------------
 (ido-mode -1)
