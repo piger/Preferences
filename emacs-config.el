@@ -1330,7 +1330,7 @@ becomes
   :commands flyspell-mode
   :config
   (set-face-attribute 'flyspell-duplicate nil :underline '(:color "#d79921" :style line :position -3))
-  (set-face-attribute 'flyspell-incorrect nil :underline '(:color "#cc241d" :style line :position -3))
+  (set-face-attribute 'flyspell-incorrect nil :underline '(:color "#951b9e" :style line :position -3))
   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
   (define-key flyspell-mode-map (kbd "M-.") 'ispell-word)
   (define-key flyspell-mode-map [down-mouse-3] #'flyspell-correct-word)
