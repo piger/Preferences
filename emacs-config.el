@@ -1665,6 +1665,22 @@ becomes
    (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
+;; tree-sitter
+;; See notes in the mastering emacs article:
+;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
