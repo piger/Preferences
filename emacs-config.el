@@ -1681,6 +1681,12 @@ becomes
      (toml "https://github.com/tree-sitter/tree-sitter-toml")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
+(use-package tab-bar
+  :bind (("s-{" . tab-bar-switch-to-prev-tab)
+         ("s-}" . tab-bar-switch-to-next-tab)
+         ("s-t" . tab-bar-new-tab)
+         ("s-w" . tab-bar-close-tab)))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
@@ -1704,6 +1710,12 @@ becomes
 
 ;; shake fist!!
 (set-frame-font "JetBrains Mono 14" nil t)
+
+;; bug reference mode
+;; Local Variables:
+;; bug-reference-bug-regexp: "\\([Bb]ug[#-]\\([0-9]+\\)\\)"
+;; bug-reference-url-format: "https://project.org/issues/%s"
+;; End:
 
 (provide 'emacs-config)
 ;;; emacs-config.el ends here.
