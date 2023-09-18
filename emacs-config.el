@@ -936,6 +936,7 @@ becomes
 
 (use-package prog-mode
   :ensure nil
+  :hook (prog-mode . bug-reference-mode)
   :config
   (electric-pair-mode))
 
