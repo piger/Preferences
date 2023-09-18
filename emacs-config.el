@@ -1230,11 +1230,15 @@ becomes
   (counsel-projectile-mode 1))
 
 (use-package company
-  :disabled
   :diminish
   :hook (prog-mode . company-mode)
-  :config
-  (setq company-transformers '(company-sort-by-occurrence)))
+  :custom
+  ;; Is this useful?
+  ;; (setq company-transformers '(company-sort-by-occurrence)))
+  ;; Search other buffers with the *same major/minor mode* for completion instead of
+  ;; searching all other buffers.
+  (company-dabbrev-other-buffers t)
+  (company-dabbrev-code-other-buffers t))
 
 (use-package company-quickhelp
   :disabled
