@@ -35,8 +35,7 @@ elif [[ $ARCH == "aarch64" ]]; then
     ARCH="arm64"
 fi
 
-# LATEST will contain a string like "go1.19.4".
-LATEST="$(curl -fsSL 'https://go.dev/VERSION?m=text' | head -n1)"
+read -r FILENAME LATEST < <(curl -s 'https://go.dev/dl/?mode=json' | jq --arg os "$OS" --arg arch "$ARCH" -r '.[0] | .files[] | select((.os == $os) and (.arch == $arch) and (.kind == "archive")) | "\(.filename) \(.version)"')
 
 # VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
 VERSION="${LATEST#go}"
@@ -61,8 +60,8 @@ if [[ -d /opt/go ]]; then
     sudo rm -rf /opt/go
 fi
 
-echo "Downloading go ${VERSION}: https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz"
-curl -fsSL -o- "https://go.dev/dl/go${VERSION}.${OS}-${ARCH}.tar.gz" \
+echo "Downloading go ${VERSION}: https://go.dev/dl/${FILENAME}"
+curl -fsSL -o- "https://go.dev/dl/${FILENAME}" \
      | pv | sudo tar -C /opt -xzf -
 
 if [[ "$OS" == "darwin" ]]; then
