@@ -62,7 +62,10 @@
 
 ; NOTE: default from git 2.0
 [push]
+	; https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushdefault
 	default = current
+	; https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushautoSetupRemote
+	autoSetupRemote = true
 
 [user]
 	name = Daniel Kertesz
