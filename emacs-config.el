@@ -362,6 +362,11 @@
   :config
   (save-place-mode 1))
 
+;; create the backups directory if it doesn't exists.
+(let ((backups-dir (concat user-emacs-directory "backups")))
+  (unless (file-exists-p backups-dir)
+    (make-directory backups-dir)))
+
 (setq apropos-do-all t
       ;; If non-nil, mouse yank commands yank at point instead of at click.
       mouse-yank-at-point t
