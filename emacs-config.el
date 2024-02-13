@@ -941,9 +941,9 @@ becomes
 
 (use-package prog-mode
   :ensure nil
-  :hook (prog-mode . bug-reference-mode)
-  :config
-  (electric-pair-mode))
+  :hook (prog-mode . bug-reference-mode))
+  ;; :config
+  ;; (electric-pair-mode))
 
 ;; https://oylenshpeegul.gitlab.io/blog/posts/20230129/
 ;; Add a contextual menu to launch 'git-link' by right-clicking on a line.
