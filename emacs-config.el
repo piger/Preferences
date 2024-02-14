@@ -812,9 +812,11 @@ becomes
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
 
+;; to be enabled if I have to deal with Ruby.
+;; requires: brew install rbenv
 (use-package rbenv
   :init
-  ;; rbenv installed via homebrew
+  :disabled
   (setq rbenv-executable "/usr/local/bin/rbenv")
   (setq rbenv-modeline-function 'rbenv--modeline-plain)
   (setq rbenv-show-active-ruby-in-modeline nil)
