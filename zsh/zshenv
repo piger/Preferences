@@ -15,6 +15,8 @@ add_path_if_exists() { if test -d "$1"; then path+=("$1"); fi }
 #     path[$i]=${path[$i]//$'\n'/}
 # done
 
+# or: skip the file; see below for an artisanal implementation of path_helper.
+
 ### PATH handling
 # PATH and path refers to the same variable (tied), so as MANPATH and manpath.
 # The attribute flag -U is to keep unique values inside an array.
@@ -26,6 +28,7 @@ path=(
     /usr/local/sbin /usr/local/bin
 )
 
+# macOS Homebrew
 if [[ $OSTYPE = darwin* ]]; then
     for d in /opt/homebrew /usr/local/Homebrew; do
         if [[ -x "$d/bin/brew" ]]; then
@@ -51,15 +54,9 @@ add_path_if_exists "$HOME/.cargo/bin"
 source_if_exists "$HOME/.cargo/env"
 
 # Other miscellaneous bin directories.
-# If you have a ~/bin directory, add it to PATH (here I use the path parameter
-# instead of the PATH environment variable).
-[[ -d $HOME/bin ]] && path+=$HOME/bin
-[[ -d $HOME/Preferences/bin ]] && path+=$HOME/Preferences/bin
-
-add_path_if_exists "$HOME/local/bin"
-add_path_if_exists "/opt/bin"
-add_path_if_exists "/opt/local/bin"
-add_path_if_exists "/usr/games"
+for dir in "$HOME/bin" "$HOME/Preferences/bin" "$HOME/local/bin" "/opt/bin" "/opt/local/bin" "/usr/games"; do
+    add_path_if_exists "$dir"
+done
 
 # Poetry
 add_path_if_exists "$HOME/.poetry/bin"
