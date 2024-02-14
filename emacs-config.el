@@ -1138,8 +1138,8 @@ becomes
 ;; NOTE: not sure if it's a problem with eglot or terraform-ls, but eldoc gives
 ;; pretty much NOTHING useful.
 (use-package terraform-mode
-  :mode "\\.tf\\'"
-  :hook (terraform-mode . eglot-ensure))
+  :mode "\\.tf\\'")
+  ;; :hook (terraform-mode . eglot-ensure))
 
 (use-package company-terraform
   :after (terraform-mode company)
@@ -1651,17 +1651,19 @@ becomes
 ;; eglot
 ;; An alternative to lsp-mode, now an emacs builtin.
 (use-package eglot
+  :disabled
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   ;; don't log every event (from emacs-bedrock)
-  (fset #'jsonrpc--log-event #'ignore)
+  (fset #'jsonrpc--log-event #'ignore))
   ;; (defun eglot-interactively-organize-imports ()
   ;;   (call-interactively 'eglot-code-action-organize-imports))
   ;; Python: install pyright, or search for another language server.
-  :hook (python-mode . eglot-ensure))
+  ;; :hook (python-mode . eglot-ensure))
 
 ;; lsp
 (use-package lsp-mode
+  :disabled
   :init
   ;; when calling eldoc, render all the documentation instead of just the signature.
   (setq lsp-eldoc-render-all t)
