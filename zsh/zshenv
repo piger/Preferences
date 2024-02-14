@@ -94,7 +94,7 @@ setopt no_GLOBAL_RCS
 if [[ -d /etc/paths.d ]]; then
     # 2023-04-30: skip 10-cryptex because it contains multiple paths and breaks things.
     for f in $(find /etc/paths.d -type f ! -name 10-cryptex); do
-        for line in $(cat $f); do
+        for line in "${(f)$(cat $f)}"; do
             path+="$line"
         done
     done
