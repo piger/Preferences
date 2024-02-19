@@ -259,10 +259,12 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; frame title
-(setq frame-title-format
-      '("" invocation-name " - " (:eval (if (buffer-file-name)
-                                            (abbreviate-file-name (buffer-file-name))
-                                          "%b"))))
+;; 2024-02-19 disabling this because it causes Emacs to freeze when it gets minimized.
+;; see also: https://www.reddit.com/r/emacs/comments/197zbtu/how_to_prevent_emacs_freezing_on_macos_seeking/
+;; (setq frame-title-format
+;;       '("" invocation-name " - " (:eval (if (buffer-file-name)
+;;                                             (abbreviate-file-name (buffer-file-name))
+;;                                           "%b"))))
 
 ;; highlight the current line
 (global-hl-line-mode +1)
