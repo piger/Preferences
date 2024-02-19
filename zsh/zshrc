@@ -152,7 +152,7 @@ HISTSIZE=12000
 HISTFILE=$HOME/.history
 
 ### COMMANDS CONFIGURATION
-export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5"
+export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5"
 export PAGER="less"
 # apparently this is a thing:
 # $ < file.txt
