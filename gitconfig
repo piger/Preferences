@@ -13,6 +13,16 @@
 	algorithm = histogram
 	colormoved = zebra
 	colorMovedWS = ignore-space-change
+	tool = difftastic
+
+[difftool]
+	prompt = false
+
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+	difftool = true
 
 [merge]
 	conflictStyle = zdiff3
