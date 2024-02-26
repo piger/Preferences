@@ -35,7 +35,7 @@ elif [[ $ARCH == "aarch64" ]]; then
     ARCH="arm64"
 fi
 
-read -r FILENAME LATEST < <(curl -s 'https://go.dev/dl/?mode=json' | jq --arg os "$OS" --arg arch "$ARCH" -r '.[0] | .files[] | select((.os == $os) and (.arch == $arch) and (.kind == "archive")) | "\(.filename) \(.version)"')
+read -r FILENAME LATEST < <(curl -sL 'https://go.dev/dl/?mode=json' | jq --arg os "$OS" --arg arch "$ARCH" -r '.[0] | .files[] | select((.os == $os) and (.arch == $arch) and (.kind == "archive")) | "\(.filename) \(.version)"')
 
 # VERSION contains the numerical part of a Go version; for example "go1.19.4" is "1.19.4".
 VERSION="${LATEST#go}"
