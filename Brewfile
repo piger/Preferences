@@ -198,3 +198,16 @@ brew "hashicorp/tap/terraform-ls"
 ## Casks
 cask "1password-cli"
 cask "emacs-mac"
+
+## Fonts
+
+# NOTE: at the time of writing these were all installed without Homebrew.
+# cask "font-jetbrains-mono"
+# cask "font-jetbrains-mono-nerd-font"
+
+# cask "font-monaspace"
+# cask "font-victor-mono"
+
+# cask "font-overpass"
+# cask "font-rubik"
+# cask "font-noto-serif"
