@@ -1,9 +1,9 @@
 # -*- mode: gitconfig -*-
 
 [pager]
-	log = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | less
-	show = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | less
-	diff = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | less
+	log = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | $PAGER
+	show = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | $PAGER
+	diff = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight | $PAGER
 
 [interactive]
 	diffFilter = ${HOMEBREW_PREFIX}/share/git-core/contrib/diff-highlight/diff-highlight
