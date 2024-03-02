@@ -44,6 +44,11 @@
 	; Sort the output of git branch to show most recently committed to branches first.
 	sort = -committerdate
 
+[rerere]
+	; enable "REuse REcorded REsolution" when handling merge conflicts.
+	; should make handling merge conflicts less annoying.
+	enabled = true
+
 ; Per mostrare in 'git status' anche i file nelle directory 'untracked'
 ; NOTA: determina la visibilita' anche in magit-status
 ; [status]
