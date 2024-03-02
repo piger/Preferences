@@ -8,6 +8,10 @@
 	excludesfile = ~/.gitignore
 	; pager = less -RSX
 
+[commit]
+	# shows diff while writing commit messages
+	verbose = true
+
 [diff]
 	renames = copies
 	algorithm = histogram
@@ -28,8 +32,17 @@
 	conflictStyle = zdiff3
 
 [log]
-	; show dates in "human" format, but only if the pager is in use.
-	date = auto:human
+	; shows dates using the local timezone, including when using tig, magit, etc.
+	; prefix with "auto:" to only switch format when the builtin PAGER is used.
+	date = local
+
+[tag]
+	; sort tags properly so that v10 comes after v9 instead of v1.
+	sort = version:refname
+
+[branch]
+	; Sort the output of git branch to show most recently committed to branches first.
+	sort = -committerdate
 
 ; Per mostrare in 'git status' anche i file nelle directory 'untracked'
 ; NOTA: determina la visibilita' anche in magit-status
@@ -127,6 +140,8 @@
 	path = ~/.gitconfig-macos
 
 ; work specific configuration
+; note: can also use this format:
+; [includeIf "hasconfig:remote.*.url:git@github.com:<organisation>/**"]
 [includeIf "gitdir:~/code/"]
 	path = ~/.gitconfig.work
 
