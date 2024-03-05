@@ -169,10 +169,10 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Sets vim or vi as the default editor.
-if (( $+commands[vim] )); then
+if exists vim; then
     export EDITOR=vim
     export VISUAL=vim
-elif (( $+commands[vi] )); then
+elif exists vi; then
     export EDITOR=vi
     export VISUAL=vi
 fi
@@ -511,7 +511,7 @@ EOF
     alias flush_dns_cache='dscacheutil -flushcache'
 
 elif is_linux; then
-    if (( ! $+commands[gnome-open] )); then
+    if exists gnome-open; then
         alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
     fi
 
@@ -721,7 +721,7 @@ compdef _hosts tmux-cssh
 compdef _hosts bssh
 
 # 1Password CLI
-if (( $+commands[op] )); then
+if exists op; then
     eval "$(op completion zsh)"; compdef _op op
 fi
 
