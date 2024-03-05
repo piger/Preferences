@@ -725,6 +725,11 @@ if (( $+commands[op] )); then
     eval "$(op completion zsh)"; compdef _op op
 fi
 
+# direnv
+if exists direnv; then
+    eval "$(direnv hook zsh)"
+fi
+
 ### WELCOME
 [[ -e $HOME/Preferences/bin/welcome.sh ]] && $HOME/Preferences/bin/welcome.sh
 
