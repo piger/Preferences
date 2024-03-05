@@ -1,11 +1,14 @@
 ; -*- mode: gitconfig -*-
 # vim: ft=dosini
 
-# this is a hidden gem
-[pager]
-    log = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
-    show = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
-    diff = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+# Debian apparently fucked this up:
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=925288
 
-[interactive]
-    diffFilter = /usr/share/doc/git/contrib/diff-highlight/diff-highlight
+# # this is a hidden gem
+# [pager]
+#     log = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+#     show = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+#     diff = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+
+# [interactive]
+#     diffFilter = /usr/share/doc/git/contrib/diff-highlight/diff-highlight
