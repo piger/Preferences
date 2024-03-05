@@ -179,10 +179,6 @@ fi
 
 export GREP_COLOR='1;32'
 
-# LS OPTIONS
-ls_options='--group-directories-first'
-[[ $UID = 0 ]] && ls_options+='A'
-
 ### ZSH MODULES
 # The zsh/complist module offers three extensions to completion listings: the ability to highlight
 # matches in such a list, the ability to scroll through long lists and a different style of menu
@@ -466,12 +462,6 @@ if is_mac; then
     # start the screensaver
     alias screensaver='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
 
-    # ls
-    if exists gls && [[ "$TERM" != dumb ]]; then
-        alias ls="gls --color=auto $ls_options"
-        (( $+commands[gdircolors] )) && test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
-    fi
-
     export CLICOLOR=1
 
     # Trasforma la man page in PDF e la apre con Preview, votamazzen.
@@ -521,30 +511,38 @@ EOF
     alias flush_dns_cache='dscacheutil -flushcache'
 
 elif is_linux; then
-    alias ls="ls --color=auto $ls_options"
-
     if (( ! $+commands[gnome-open] )); then
         alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
     fi
 
     alias grep='grep --color=auto'
 
-    # LS_COLORS
-    (( $+commands[dircolors] )) && test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
-
 elif [[ $OSTYPE = openbsd* ]]; then
-    if (( $+commands[gls] )); then
-        alias ls="gls --color=auto $ls_options"
-    elif (( $+commands[colorls] )); then
-        alias ls="colorls -F -G"
-    else
-        alias ls="ls -F"
-    fi
-
     alias pfdump="tcpdump -n -e -ttt -i pflog0"
     alias pfrerules="pfctl -F rules -R -f /etc/pf.conf"
     alias pfrenat="pfctl -F nat -N -f /etc/pf.conf"
 fi # end if $OSTYPE = ...
+
+### ls
+if exists vivid; then
+    export LS_COLORS=$(vivid generate gruvbox-dark)
+elif exists dircolors; then
+    test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
+elif exists gdircolors; then
+    test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
+fi
+
+if exists eza; then
+    # reduce the use of very dark colors when showing gradients
+    export EZA_MIN_LUMINANCE=50
+    # disable highlighting of current user (too bright!)
+    export EZA_COLORS="uu=0:gu=0"
+    alias ls="eza --icons --color-scale --mounts --group-directories-first"
+elif exists gls; then
+    alias ls="gls --color=auto --group-directories-first --classify=auto"
+else
+    alias ls="ls -F"
+fi
 
 ### ALIASES
 # Aliases e altri comandi che non uso mai perche' sono SCEMO
@@ -732,7 +730,7 @@ fi
 
 # Emacs tramp support
 # Sets the terminal to something simple so that emacs doesn't gets confused.
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && unalias ls
 
 ### PLUGINS AND STUFF
 source_if_exists "$HOME/Preferences/zsh/keephack"
