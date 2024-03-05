@@ -179,6 +179,8 @@ fi
 
 export GREP_COLOR='1;32'
 
+[[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
+
 ### ZSH MODULES
 # The zsh/complist module offers three extensions to completion listings: the ability to highlight
 # matches in such a list, the ability to scroll through long lists and a different style of menu
