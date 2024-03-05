@@ -130,12 +130,6 @@
 [github]
 	user = piger
 
-[filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-
 ; Include files
 ; platform specific configuration
 [includeIf "gitdir:/home/"]
