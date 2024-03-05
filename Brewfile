@@ -4,6 +4,7 @@
 # brew bundle install --file Brewfile
 
 ## Taps
+tap "homebrew/cask-fonts"
 tap "1password/tap"
 tap "hashicorp/tap"
 tap "railwaycat/emacsmacport"
@@ -201,13 +202,12 @@ cask "emacs-mac"
 
 ## Fonts
 
-# NOTE: at the time of writing these were all installed without Homebrew.
-# cask "font-jetbrains-mono"
-# cask "font-jetbrains-mono-nerd-font"
+cask "font-jetbrains-mono"
+cask "font-jetbrains-mono-nerd-font"
 
-# cask "font-monaspace"
-# cask "font-victor-mono"
+cask "font-monaspace"
+cask "font-victor-mono"
 
-# cask "font-overpass"
-# cask "font-rubik"
-# cask "font-noto-serif"
+cask "font-overpass"
+cask "font-rubik"
+cask "font-noto-serif"
