@@ -1062,7 +1062,8 @@ becomes
          ("C-x M-g" . magit-dispatch)
          ("C-c M-g" . magit-file-dispatch))
   :config
-  (setq magit-diff-refine-hunk 'all))
+  (setq magit-diff-refine-hunk 'all)
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
 ;; magit's mode for editing git commits.
 (use-package git-commit
