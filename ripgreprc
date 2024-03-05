@@ -10,7 +10,7 @@
 # --hidden
 
 # do not skip files listed in gitignore
---no-ignore
+# --no-ignore
 
 ## Generic options.
 
