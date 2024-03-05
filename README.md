@@ -29,7 +29,7 @@ For *local* configuration sometimes you can use a `.local` file:
 - `~/.zshenv.local` and `~/.zshrc.local`
 - `~/.tmux.conf.local`
 - `~/.vimrc.local`
-- `~/Preferences/elisp-init/init.local.el`
+- `~/Preferences/elisp-init/init-local.el`
 
 ## Updating
 
