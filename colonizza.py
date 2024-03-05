@@ -36,7 +36,6 @@ de backup e se lo leva dar cazzo.>>
 
 """
 import os
-import sys
 import optparse
 
 
