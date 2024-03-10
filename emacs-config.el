@@ -389,11 +389,11 @@
 ;; tree-sitter
 ;; required because some modes are hardcoded into auto-mode-alist and use-package
 ;; can't override the mappings.
-;; (setq major-mode-remap-alist
-;;       '((bash-mode . bash-ts-mode)
-;;         (json-mode . json-ts-mode)
-;;         (python-mode . python-ts-mode)
-;;         (go-mode . go-ts-mode)))
+(setq major-mode-remap-alist
+      '((bash-mode . bash-ts-mode)
+        (json-mode . json-ts-mode)
+        (python-mode . python-ts-mode)
+        (go-mode . go-ts-mode)))
 ;; See notes in the mastering emacs article:
 ;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 ;; also note:
