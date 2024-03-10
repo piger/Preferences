@@ -1706,6 +1706,36 @@ becomes
        [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
         ("S" "Difftastic show" difftastic-magit-show)])))
 
+(use-package treemacs
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (add-to-list 'treemacs-litter-directories "/dsfjsodfjsdoifjds/")
+  (treemacs-project-follow-mode t)
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t d"   . treemacs-select-directory)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-evil
+  :after (treemacs evil))
+
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once))
+
+(use-package treemacs-magit
+  :after (treemacs magit))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
