@@ -1216,23 +1216,12 @@ becomes
 
 (use-package projectile
   :init
-  ;; like here: https://github.com/bbatsov/emacs.d/blob/8962c0f09abd261f76f00afb64408fd658eb3028/init.el#L286
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-project-search-path '("~/code/"))
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode +1)
-  (setq projectile-mode-line '(:eval (format " &{%s}" (projectile-project-name)))
-        projectile-globally-ignored-directories (quote (".git" ".tox" "Godeps" "build")))
   (add-to-list 'projectile-globally-ignored-files ".pyc")
-  (add-to-list 'projectile-globally-ignored-files "__pycache__")
-  ;;; https://github.com/hlissner/doom-emacs/blob/5dacbb7cb1c6ac246a9ccd15e6c4290def67757c/core/core-projects.el#L32-L38
-  ;; Projectile root-searching functions can cause an infinite loop on TRAMP
-  ;; connections, so disable them.
-  (defun doom*projectile-locate-dominating-file (orig-fn &rest args)
-    "Don't traverse the file system if on a remote connection."
-    (unless (file-remote-p default-directory)
-      (apply orig-fn args)))
-  (advice-add #'projectile-locate-dominating-file :around #'doom*projectile-locate-dominating-file))
+  (add-to-list 'projectile-globally-ignored-files "__pycache__"))
 
 ;; required by the command projectile-ripgrep
 (use-package rg)
