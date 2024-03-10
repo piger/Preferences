@@ -386,6 +386,39 @@
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
 
+;; tree-sitter
+;; required because some modes are hardcoded into auto-mode-alist and use-package
+;; can't override the mappings.
+;; (setq major-mode-remap-alist
+;;       '((bash-mode . bash-ts-mode)
+;;         (json-mode . json-ts-mode)
+;;         (python-mode . python-ts-mode)
+;;         (go-mode . go-ts-mode)))
+;; See notes in the mastering emacs article:
+;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+;; also note:
+;; You can – should! – use tagged releases where possible. Most of Emacs 29.x is written for
+;; grammars released no later than mid 2023. If you use grammars newer than that, you’ll probably
+;; run into font locking and indentation problems.
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+;; Install by running:
+;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+
 ;; Custom functions
 ;;; https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el
 (defun untabify-buffer ()
@@ -771,11 +804,12 @@ becomes
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
-;; I hate treesitter mode!
-;; (use-package go-ts-mode
-;;   :mode "\\.go\\'"
-;;   :config
-;;   (setq tab-width 4))
+(use-package go-ts-mode
+  :config
+  (defun my-go-ts-mode-hook()
+    (setq tab-width 4)
+    (setq go-ts-mode-indent-offset 4))
+  :hook (go-ts-mode . my-go-ts-mode-hook))
 
 (use-package rust-mode
   :mode "\\.rs\\'")
@@ -1671,23 +1705,6 @@ becomes
   ((go-mode . lsp)
    (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
-
-;; tree-sitter
-;; See notes in the mastering emacs article:
-;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
-;; (setq treesit-language-source-alist
-;;    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-;;      (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-;;      (go "https://github.com/tree-sitter/tree-sitter-go")
-;;      (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
-;;      (html "https://github.com/tree-sitter/tree-sitter-html")
-;;      (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-;;      (json "https://github.com/tree-sitter/tree-sitter-json")
-;;      (make "https://github.com/alemuller/tree-sitter-make")
-;;      (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-;;      (python "https://github.com/tree-sitter/tree-sitter-python")
-;;      (toml "https://github.com/tree-sitter/tree-sitter-toml")
-;;      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 (use-package tab-bar
   :bind (("s-{" . tab-bar-switch-to-prev-tab)
