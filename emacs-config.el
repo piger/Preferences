@@ -19,6 +19,9 @@
 ;; or in a local settings file.
 (set-frame-font "JetBrains Mono 14" nil t)
 
+;; maximize the window as early as possible
+(setq default-frame-alist '((fullscreen . maximized)))
+
 ;; load custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
