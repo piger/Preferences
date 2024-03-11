@@ -783,10 +783,16 @@ becomes
   ;; this binding exists by default
   ;; :bind ("M-." . godef-jump)
   :config
+  (defun piger/eglot-organize-imports ()
+    (call-interactively 'eglot-code-action-organize-imports))
   (defun my-go-mode-hook ()
     ;; (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
     ;; (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
-    (add-hook 'before-save-hook 'gofmt-before-save)
+    ;; based on the comments in: https://github.com/joaotavora/eglot/issues/574
+    (add-hook 'before-save-hook 'eglot-format-buffer -10 t)
+    (add-hook 'before-save-hook 'piger/eglot-organize-imports nil t)
+    (eglot-ensure)
+    ;; (add-hook 'before-save-hook 'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
     ;; and as buffer-local (as opposed to global, which would run it for *every* buffer).
     ;; (add-hook 'before-save-hook #'eglot-interactively-organize-imports -20 t)
