@@ -800,9 +800,8 @@ becomes
     ;; (setq gofmt-command "goimports")
     ;; (with-eval-after-load 'company
     ;;   '(add-to-list 'company-backends 'company-go))
-    (if (not (string-match "go" compile-command))
-             (set (make-local-variable 'compile-command)
-                  "go build -v && go test -v && go vet"))
+    ;; use projectile-compile-project and projectile-test-project
+    (setq projectile-project-compilation-cmd "go build -v && go vet && staticcheck ./...")
     (setq tab-width 4)
     (subword-mode +1)
     ;; (company-mode)
