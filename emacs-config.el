@@ -784,9 +784,9 @@ becomes
   ;; :bind ("M-." . godef-jump)
   :config
   (defun my-go-mode-hook ()
-    (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
-    (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
-    ;; (add-hook 'before-save-hook #'gofmt-before-save)
+    ;; (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
+    ;; (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
+    (add-hook 'before-save-hook 'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
     ;; and as buffer-local (as opposed to global, which would run it for *every* buffer).
     ;; (add-hook 'before-save-hook #'eglot-interactively-organize-imports -20 t)
@@ -809,6 +809,7 @@ becomes
   :config
   (defun my-go-ts-mode-hook()
     (setq tab-width 4)
+    (add-hook 'before-save-hook 'gofmt-before-save)
     (setq go-ts-mode-indent-offset 4))
   :hook (go-ts-mode . my-go-ts-mode-hook))
 
