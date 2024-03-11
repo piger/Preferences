@@ -789,8 +789,8 @@ becomes
     ;; (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
     ;; (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
     ;; based on the comments in: https://github.com/joaotavora/eglot/issues/574
-    (add-hook 'before-save-hook 'eglot-format-buffer -10 t)
-    (add-hook 'before-save-hook 'piger/eglot-organize-imports nil t)
+    (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
+    (add-hook 'before-save-hook #'piger/eglot-organize-imports nil t)
     (eglot-ensure)
     ;; (add-hook 'before-save-hook 'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
