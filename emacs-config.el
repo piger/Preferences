@@ -1217,6 +1217,7 @@ becomes
 ;; NOTE: ivy reuses smex (or alternatives like amx) automatically if they are installed;
 ;; https://oremacs.com/swiper/#packages
 (use-package smex
+  :if (eq piger/completion-system 'ivy)
   ;; :bind (("M-x" . smex)
   ;;        ("M-X" . smex-major-mode-commands)
   ;;        ("C-c C-c M-x" . execute-extended-command))
