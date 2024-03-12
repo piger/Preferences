@@ -1344,11 +1344,9 @@ becomes
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+         ("\\.md\\'" . markdown-mode))
   :config
-  (setq markdown-command "markdown")
-  ;; (setq markdown-fontify-code-blocks-natively t)
+  (setq markdown-fontify-code-blocks-natively t)
   ;; (set-face-attribute 'markdown-pre-face nil :inherit 'markdown-markup-face)
   ;; (custom-set-faces
   ;;  '(markdown-pre-face ((t (:inherit markdown-markup-face)))))
