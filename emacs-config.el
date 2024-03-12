@@ -1541,11 +1541,6 @@ becomes
   (define-key flyspell-mode-map [down-mouse-3] #'flyspell-correct-word)
   (define-key flyspell-mode-map [mouse-3] #'undefined))
 
-(use-package avy
-  :bind (("C-:" . avy-goto-char)
-         ("C-'" . avy-goto-char-2)
-         ("M-g w" . avy-goto-word-1)))
-
 ;; Org mode
 (use-package org
   ;;; :ensure org-plus-contrib
