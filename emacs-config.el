@@ -48,11 +48,16 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 
 ;; tune GC
-;; https://github.com/hlissner/doom-emacs/blob/master/core/core.el
-;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-(setq gc-cons-threshold 100000000
-      read-process-output-max (* 1024 1024) ;; 1mb
-      gc-cons-percentage 0.6)
+;; (setq gc-cons-threshold 100000000
+;;       read-process-output-max (* 1024 1024) ;; 1mb
+;;       gc-cons-percentage 0.6)
+;; configuring the GC is controversial:
+;; - https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/iwz1vek/
+;; - https://news.ycombinator.com/item?id=39127859
+;; - https://github.com/emacsmirror/gcmh
+;; - https://emacs-lsp.github.io/lsp-mode/page/performance/
+;; - https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+(setq gc-cons-threshold (* 32 1024 1024))  ;; 32MB; default is 800000 (800KB).
 
 ;; Packages
 (require 'package)
@@ -1919,8 +1924,8 @@ becomes
 
 ;;; end
 ;; reset GC
-(setq gc-cons-threshold 16777216
-      gc-cons-percentage 0.1)
+;; (setq gc-cons-threshold 16777216
+;;       gc-cons-percentage 0.1)
 
 ;; display loading time
 (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
