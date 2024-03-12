@@ -1762,18 +1762,14 @@ becomes
   (editorconfig-mode 1))
 
 ;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
-(use-package all-the-icons
-  :disabled
-  :config
-  (use-package all-the-icons-dired
-    :ensure t
-    :hook (dired-mode . all-the-icons-dired-mode))
+(use-package all-the-icons)
 
-  (use-package all-the-icons-ivy
-    :disabled
-    :after ivy
-    :config
-    (all-the-icons-ivy-setup)))
+(use-package all-the-icons-ivy
+  :if (eq piger/completion-system 'ivy)
+  :after ivy
+  :after all-the-icons
+  :config
+  (all-the-icons-ivy-setup))
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
