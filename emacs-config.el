@@ -1706,7 +1706,7 @@ becomes
 ;; eglot
 ;; An alternative to lsp-mode, now an emacs builtin.
 (use-package eglot
-  :disabled
+  :hook (((python-mode go-mode yaml-mode) . eglot))
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   ;; don't log every event (from emacs-bedrock)
