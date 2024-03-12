@@ -1412,14 +1412,14 @@ becomes
 (use-package org
   ;;; :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
-  :bind (("C-c l" . org-store-link)
-         ("C-c c" . org-capture)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb)
-         ("C-c M-p" . org-babel-previous-src-block)
-         ("C-c M-n" . org-babel-next-src-block)
-         ("C-c S" . org-babel-previous-src-block)
-         ("C-c s" . org-babel-next-src-block))
+  ;; :bind (("C-c l" . org-store-link)
+  ;;        ("C-c c" . org-capture)
+  ;;        ("C-c a" . org-agenda)
+  ;;        ("C-c b" . org-iswitchb)
+  ;;        ("C-c M-p" . org-babel-previous-src-block)
+  ;;        ("C-c M-n" . org-babel-next-src-block)
+  ;;        ("C-c S" . org-babel-previous-src-block)
+  ;;        ("C-c s" . org-babel-next-src-block))
   ;; :hook (org-mode . turn-on-auto-fill)
   :custom-face
   ;; NOTE: to change this, run "customize-face" with parameter "variable-pitch"
