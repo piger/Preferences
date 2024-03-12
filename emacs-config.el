@@ -812,6 +812,7 @@ becomes
     ;; based on the comments in: https://github.com/joaotavora/eglot/issues/574
     (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
     (add-hook 'before-save-hook #'piger/eglot-organize-imports nil t)
+    ;; this call to eglot for some reason doesn't trigger the error?!
     (eglot-ensure)
     ;; (add-hook 'before-save-hook 'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
@@ -1848,7 +1849,17 @@ becomes
 ;; eglot
 ;; An alternative to lsp-mode, now an emacs builtin.
 (use-package eglot
-  :hook (((python-mode go-mode yaml-mode) . eglot))
+  ;; note that eglot-ensure's documentation says that it might be a performance hit to
+  ;; invoke eglot on every buffer, and might be more efficient to call it interactively (manually)
+  ;; when opening the first file of a project.
+
+  ;; WARNING: calling eglot from a hook cause an error. It even happens with a minimal configuration, so... 🤷
+  ;; Debugger entered--Lisp error: (wrong-number-of-arguments (5 . 6) 0)
+  ;;   eglot()
+  ;;   run-hooks(change-major-mode-after-body-hook prog-mode-hook go-mode-hook)
+  ;;   apply(run-hooks (change-major-mode-after-body-hook prog-mode-hook go-mode-hook))
+
+  ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   ;; don't log every event (from emacs-bedrock)
