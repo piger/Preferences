@@ -207,7 +207,10 @@
 ;; (setq-default indicate-empty-lines t)
 
 ;; enable context menu mode, which binds the right button to a context aware menu.
-(when (display-graphic-p)
+(use-package mouse
+  :ensure nil  ;; native
+  :if (display-graphic-p)
+  :init
   (context-menu-mode))
 
 ;; Global auto-revert mode, to allow editing the same file in multiple editors
