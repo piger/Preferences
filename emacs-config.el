@@ -14,11 +14,6 @@
 (defconst emacs-start-time (current-time)
   "This variable hold the time Emacs was started.")
 
-;; set the font as early as possible so that in case of configuration issues we're
-;; not stuck with the default font. The font can be changed later on in the configuration
-;; or in a local settings file.
-(set-frame-font "JetBrains Mono 14" nil t)
-
 ;; maximize the window as early as possible
 (setq default-frame-alist '((fullscreen . maximized)))
 
@@ -32,6 +27,23 @@
 
 (add-to-list 'load-path "~/Preferences/emacs/")
 (add-to-list 'load-path piger/preferences-dir)
+
+(defvar piger/code-directories-alist '("~/code")
+  "A list containing directories that contains code.")
+
+(defvar piger/default-font "JetBrains Mono 14"
+  "The default font to use.")
+
+(defvar piger/completion-system 'ivy
+  "The completion system to use. Can be 'ivy or 'bedrock.")
+
+(defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
+  "An optional file containing machine local settings.")
+(when (file-exists-p piger/emacs-local-settings)
+  (load-file piger/emacs-local-settings))
+
+(set-frame-font piger/default-font nil t)
+;; end of custom settings
 
 (defconst *is-a-mac* (eq system-type 'darwin))
 
@@ -1261,7 +1273,7 @@ becomes
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '("~/code/"))
+  (setq projectile-project-search-path piger/code-directories-alist)
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode +1)
@@ -1784,9 +1796,6 @@ becomes
 
 ;;; to help troubleshooting:
 (setq debug-on-error nil)
-
-;; shake fist!!
-(set-frame-font "JetBrains Mono 14" nil t)
 
 ;; bug reference mode
 ;; Local Variables:
