@@ -325,6 +325,7 @@
 
 ;; add column number to the modeline
 (use-package simple
+  :disabled
   :ensure nil ;; this is a native package
   :config (column-number-mode +1))
 
