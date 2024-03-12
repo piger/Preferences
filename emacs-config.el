@@ -404,8 +404,8 @@
       ;; don't clutter the fs with auto-save files (they might be uploaded to chef during knife upload -_-)
       auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 
-;; warn when opening files bigger than 100MB
-(setq large-file-warning-threshold 100000000)
+;; warn when opening files bigger than 50 MiB
+(setq large-file-warning-threshold (* 50 1024 1024))
 
 ;; tree-sitter
 ;; required because some modes are hardcoded into auto-mode-alist and use-package
