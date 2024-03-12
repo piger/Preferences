@@ -843,13 +843,6 @@ becomes
 (use-package rust-mode
   :mode "\\.rs\\'")
 
-;; inf-ruby provides a REPL buffer connected to a Ruby subprocess.
-(use-package inf-ruby
-  :init
-  (add-hook 'after-init-hook 'inf-ruby-switch-setup)
-  :bind
-  (("C-c r r" . inf-ruby)))
-
 (defun piger/ruby-mode-hooks ()
   "Personalised 'ruby-mode' hooks."
   (cond ((string-match "/code/misc/zcfn/" buffer-file-name)
