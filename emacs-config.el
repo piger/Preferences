@@ -37,6 +37,12 @@
 (defvar piger/completion-system 'ivy
   "The completion system to use. Can be 'ivy or 'bedrock.")
 
+(defvar piger/use-doom-themes t
+  "Whether to use doom-themes or something else.")
+
+(defvar piger/doom-themes-theme 'doom-gruvbox
+  "The theme to load when using doom-themes.")
+
 (defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
   "An optional file containing machine local settings.")
 (when (file-exists-p piger/emacs-local-settings)
@@ -144,6 +150,18 @@
   :disabled
   :config
   (load-theme 'birds-of-paradise-plus t))
+
+(use-package doom-themes
+  :if piger/use-doom-themes
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+
+  (load-theme piger/doom-themes-theme t)
+
+  (doom-themes-visual-bell-config)
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
 
 ;; Generic settings
 ;; (some of them coming from from emacs-doom)
