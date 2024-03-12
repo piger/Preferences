@@ -214,10 +214,13 @@
   (context-menu-mode))
 
 ;; Global auto-revert mode, to allow editing the same file in multiple editors
-(setopt auto-revert-avoid-polling t)
-(setq auto-revert-interval 1)
-(setq auto-revert-check-vc-info t)
-(global-auto-revert-mode)
+(use-package autorevert
+  :ensure nil  ;; native
+  :init
+  (setopt auto-revert-avoid-polling t)
+  (setq auto-revert-interval 1)
+  (setq auto-revert-check-vc-info t)
+  (global-auto-revert-mode))
 
 ;; minibuffer history
 (use-package savehist
