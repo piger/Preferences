@@ -1757,13 +1757,16 @@ becomes
          ("C-c C-d" . helpful-at-point)
          ("C-h F" . helpful-function)))
 
+;; https://github.com/dimitri/switch-window
+;; could be convenient, but I never have more than 4 windows, and I'm
+;; fine switching with alt+<number>.
 (use-package switch-window
+  :disabled
   :bind (("C-x o" . switch-window)
          ("C-x 1" . switch-window-then-maximize)
          ("C-x 2" . switch-window-then-split-below)
          ("C-x 3" . switch-window-then-split-right)
-         ("C-x 4" . switch-window-then-delete))
-  :disabled)
+         ("C-x 4" . switch-window-then-delete)))
 
 (use-package engine-mode
   :config
