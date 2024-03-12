@@ -1091,7 +1091,11 @@ becomes
   :if (eq piger/completion-system 'bedrock)
   :init
   ;; You'll want to make sure that e.g. fido-mode isn't enabled
-  (vertico-mode))
+  (vertico-mode)
+  :config
+  ;; pressing TAB while in the minibuffer will first open the completion panel, then
+  ;; jump to the completion panel itself, where one can select a candidate.
+  (setopt completion-auto-select 'second-tab))
 
 (use-package vertico-directory
   :ensure nil
@@ -1107,7 +1111,7 @@ becomes
 
 ;; Popup completion-at-point
 (use-package corfu
-    :if (eq piger/completion-system 'bedrock)
+  :if (eq piger/completion-system 'bedrock)
   :init
   (global-corfu-mode)
   :bind
