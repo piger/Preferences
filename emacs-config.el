@@ -1435,6 +1435,8 @@ becomes
   (counsel-projectile-mode 1))
 
 (use-package company
+  :if (not (eq piger/completion-system 'bedrock))
+  :disabled
   :diminish
   :hook (prog-mode . company-mode)
   :custom
