@@ -1025,7 +1025,135 @@ becomes
 ;; ---------------------------------------------------------------------------------------
 (ido-mode -1)
 
+;; consult configuration copied from emacs-bedrock: https://git.sr.ht/~ashton314/emacs-bedrock
+
+(use-package avy
+  :demand t
+  :bind (("C-c j" . avy-goto-line)
+         ("s-j"   . avy-goto-char-timer)))
+
+(use-package consult
+  :if (eq piger/completion-system 'bedrock)
+  :bind (
+         ;; Drop-in replacements
+         ("C-x b" . consult-buffer)     ; orig. switch-to-buffer
+         ("M-y"   . consult-yank-pop)   ; orig. yank-pop
+         ;; Searching
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)       ; Alternative: rebind C-s to use
+         ("C-s" . consult-line)
+         ("M-s s" . consult-line)       ; consult-line instead of isearch, bind
+         ("M-s L" . consult-line-multi) ; isearch to M-s s
+         ("M-s o" . consult-outline)
+         ("C-x C-r" . consult-recent-file)
+         ;; Isearch integration
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)   ; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history) ; orig. isearch-edit-string
+         ("M-s l" . consult-line)            ; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)      ; needed by consult-line to detect isearch
+         )
+  :config
+  ;; Narrowing lets you restrict results to certain groups of candidates
+  (setq consult-narrow-key "<"))
+
+(use-package embark
+  :if (eq piger/completion-system 'bedrock)
+  :demand t
+  :after avy
+  :bind (("C-c a" . embark-act))        ; bind this to an easy key to hit
+  :init
+  ;; Add the option to run embark when using avy
+  (defun bedrock/avy-action-embark (pt)
+    (unwind-protect
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
+
+  ;; After invoking avy-goto-char-timer, hit "." to run embark at the next
+  ;; candidate you select
+  (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark))
+
+(use-package embark-consult
+  :if (eq piger/completion-system 'bedrock))
+
+;; Vertico: better vertical completion for minibuffer commands
+(use-package vertico
+  :if (eq piger/completion-system 'bedrock)
+  :init
+  ;; You'll want to make sure that e.g. fido-mode isn't enabled
+  (vertico-mode))
+
+(use-package vertico-directory
+  :ensure nil
+  :after vertico
+  :bind (:map vertico-map
+              ("M-DEL" . vertico-directory-delete-word)))
+
+;; Marginalia: annotations for minibuffer
+(use-package marginalia
+  :if (eq piger/completion-system 'bedrock)
+  :config
+  (marginalia-mode))
+
+;; Popup completion-at-point
+(use-package corfu
+    :if (eq piger/completion-system 'bedrock)
+  :init
+  (global-corfu-mode)
+  :bind
+  (:map corfu-map
+        ("SPC" . corfu-insert-separator)
+        ("C-n" . corfu-next)
+        ("C-p" . corfu-previous)))
+
+;; Part of corfu
+(use-package corfu-popupinfo
+  :ensure nil
+  :after corfu
+  :hook (corfu-mode . corfu-popupinfo-mode)
+  :custom
+  (corfu-popupinfo-delay '(0.25 . 0.1))
+  (corfu-popupinfo-hide nil)
+  :config
+  (corfu-popupinfo-mode))
+
+;; Make corfu popup come up in terminal overlay
+(use-package corfu-terminal
+  :if (not (display-graphic-p))
+  :if (eq piger/completion-system 'bedrock)
+  :config
+  (corfu-terminal-mode))
+
+;; Fancy completion-at-point functions; there's too much in the cape package to
+;; configure here; dive in when you're comfortable!
+(use-package cape
+  :if (eq piger/completion-system 'bedrock)
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file))
+
+;; Pretty icons for corfu
+(use-package kind-icon
+  :if (display-graphic-p)
+  :if (eq piger/completion-system 'bedrock)
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+;; Orderless: powerful completion style
+(use-package orderless
+  :if (eq piger/completion-system 'bedrock)
+  :config
+  (setq completion-styles '(orderless)))
+
+;; my standard completion system with ivy
+
 (use-package ivy
+  :if (eq piger/completion-system 'ivy)
   :pin melpa
   :diminish
   :demand t
@@ -1042,12 +1170,14 @@ becomes
 
 ;; fancy descriptions in M-x
 (use-package ivy-rich
+  :if (eq piger/completion-system 'ivy)
   :after (ivy counsel)
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   (ivy-rich-mode 1))
 
 (use-package counsel
+  :if (eq piger/completion-system 'ivy)
   :pin melpa
   :after ivy
   :bind
@@ -1066,6 +1196,7 @@ becomes
   (setq counsel-find-file-ignore-regexp "\\.pyc\\'"))
 
 (use-package swiper
+  :if (eq piger/completion-system 'ivy)
   :after ivy
   :bind
   ;;; NOTE: those are not the default bindings
