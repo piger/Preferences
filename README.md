@@ -6,16 +6,12 @@ A collection of personal configuration files.
 
 To fetch the external dependencies (a couple of plugins) execute:
 
-``` shell
-git submodule update --init
-```
+    git submodule update --init
 
 Then take a look at `dotfiles.cfg`; it contains a list of files that will be symlinked by the
 `colonizza.py` script when executed. The syntax of `dotfiles.cfg` is:
 
-```
-<source filename, relative to this repo> [destination file, relative to $HOME]
-```
+    <source filename, relative to this repo> [destination file, relative to $HOME]
 
 Run `colonizza.py` to set up all the symlinks.
 
