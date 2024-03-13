@@ -1364,8 +1364,9 @@ becomes
 ;; NOTE: not sure if it's a problem with eglot or terraform-ls, but eldoc gives
 ;; pretty much NOTHING useful.
 (use-package terraform-mode
-  :mode "\\.tf\\'")
-  ;; :hook (terraform-mode . eglot-ensure))
+  :mode "\\.tf\\'"
+  :config
+  (setq terraform-format-on-save t))
 
 (use-package company-terraform
   :after (terraform-mode company)
