@@ -831,7 +831,9 @@ becomes
   ;; :bind ("M-." . godef-jump)
   :config
   (defun piger/eglot-organize-imports ()
-    (call-interactively 'eglot-code-action-organize-imports))
+    ;; if there's no import to organise, this function will throw an error and mess up
+    ;; the buffer (e.g. by adding phantom whitespaces).
+    (ignore-errors (call-interactively 'eglot-code-action-organize-imports)))
   (defun my-go-mode-hook ()
     ;; (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
     ;; (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
