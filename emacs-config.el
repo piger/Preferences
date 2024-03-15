@@ -15,7 +15,9 @@
   "This variable hold the time Emacs was started.")
 
 ;; maximize the window as early as possible
-(setq default-frame-alist '((fullscreen . maximized)))
+;; NOTE: the downside is that this *forces* the window to always be maximized, so things like
+;; the Rectangle command "half maximize" do not work.
+;; (setq default-frame-alist '((fullscreen . maximized)))
 
 ;; load custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
