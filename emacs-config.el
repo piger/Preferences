@@ -1037,8 +1037,10 @@ becomes
   :ensure nil
   :hook (prog-mode . bug-reference-mode)
   :config
-  (setq electric-pair-skip-self t)
-  (electric-pair-mode))
+  ;; electric pair mode is fucking awful.
+  ;; (setq electric-pair-skip-self t)
+  ;; (electric-pair-mode))
+)
 
 ;; https://oylenshpeegul.gitlab.io/blog/posts/20230129/
 ;; Add a contextual menu to launch 'git-link' by right-clicking on a line.
