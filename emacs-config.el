@@ -308,6 +308,10 @@
 ;; frame title
 ;; 2024-02-19 disabling this because it causes Emacs to freeze when it gets minimized.
 ;; see also: https://www.reddit.com/r/emacs/comments/197zbtu/how_to_prevent_emacs_freezing_on_macos_seeking/
+;; in particular: https://www.reddit.com/r/emacs/comments/197zbtu/how_to_prevent_emacs_freezing_on_macos_seeking/ki6s433/
+;; and: https://bitbucket.org/mituharu/emacs-mac/commits/cfefdd21a9116b68bae915693efcaaa4e474a2b9
+;; The release emacs-29.1-mac-10.0 was tagged on 2023-08-05, while the fix was merged on
+;; 2023-08-13.
 ;; (setq frame-title-format
 ;;       '("" invocation-name " - " (:eval (if (buffer-file-name)
 ;;                                             (abbreviate-file-name (buffer-file-name))
