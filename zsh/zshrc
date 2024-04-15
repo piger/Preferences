@@ -591,6 +591,11 @@ tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 # Use Python to pretty-print JSON.
 alias json.tool='python -m json.tool'
 
+# kubectl
+alias k='kubectl'
+exists kubectx && alias kctx='kubectx'
+exists kubens && alias kns='kubens'
+
 ### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
