@@ -1,3 +1,22 @@
-.mode column
-.header on
+-- sqlite configuration
+--
+-- Documentation: https://sqlite.org/cli.html
+-- Pragmas: https://www.sqlite.org/pragma.html
+
+-- https://www.sqlite.org/pragma.html#pragma_cache_size
+-- pragma cache_size = -1000000;  -- in KiB, i.e. 1 GiB
+
+-- Provides a convenient hint on how to change the options back to more common values.
+.print Setting `.headers on`, `.timer on` and `.mode box --wrap 32 -ww`.
+.print Other helpful modes are `column`, `list`, `json`, `csv`, `tabs`, `insert` or `markdown`.
+.print
+
+.mode box --wrap 32 --wordwrap on
+.headers on
 .nullvalue NULL
+
+-- index recommendations: https://sqlite.org/cli.html#index_recommendations_sqlite_expert_
+-- .expert on
+
+-- this has to be the last setting, otherwise it will print timing information about setting other options.
+.timer on
