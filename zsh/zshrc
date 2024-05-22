@@ -703,6 +703,13 @@ zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 # Use $LS_COLORS in completion.
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# I don't know how I figured this out, but this parses an additional ssh_config
+# file for completions.
+# Check also: /usr/share/zsh/5.9/functions/_ssh_hosts
+if [[ -e ~/.ssh/hosts.all.conf ]]; then
+    zstyle ':completion:*:hosts' hosts _ssh_hosts ~/.ssh/hosts.all.conf
+fi
+
 # extend ssh host completion with chef nodes. Just create a list of hostnames in ~/.chef_hosts
 add_chef_nodes_to_hosts_completion() {
     zmodload zsh/mapfile
