@@ -1296,6 +1296,7 @@ becomes
 
 ;; magit's mode for editing git commits.
 (use-package git-commit
+  :disabled
   :hook (git-commit-setup . git-commit-turn-on-flyspell)
   :config
   ;; set the subject line to a maximum of 70 columns.
