@@ -116,6 +116,11 @@ teprego() {
     eval "sudo $(fc -ln -1)"
 }
 
+# print the "main" branch, be it master, main or anything else.
+git_main_branch() {
+    git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+}
+
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
