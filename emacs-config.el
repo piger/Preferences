@@ -866,8 +866,11 @@ becomes
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
+;; (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
 (use-package go-ts-mode
   :config
+  ;; prevent go-ts-mode from being automatically used.
+  (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
   (defun my-go-ts-mode-hook()
     (setq tab-width 4)
     (add-hook 'before-save-hook 'gofmt-before-save)
@@ -1705,6 +1708,8 @@ becomes
   (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
   ;; Increase the size of the modeline
   (setq doom-modeline-height 30)
+  ;; Increase the width of the branch name
+  (setq doom-modeline-vcs-max-length 20)
   :init
   (doom-modeline-mode 1))
 
