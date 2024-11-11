@@ -72,3 +72,7 @@ if [[ "$OS" == "darwin" ]]; then
 fi
 
 /opt/go/bin/go version
+
+echo "Upgrading gopls and staticcheck"
+go install golang.org/x/tools/gopls@latest
+go install honnef.co/go/tools/cmd/staticcheck@latest
