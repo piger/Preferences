@@ -1887,6 +1887,10 @@ becomes
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
+  ;; configure go-pls
+  (setq-default eglot-workspace-configuration
+                '((:gopls .
+                          ((staticcheck . t)))))
   ;; don't log every event (from emacs-bedrock)
   (fset #'jsonrpc--log-event #'ignore))
   ;; (defun eglot-interactively-organize-imports ()
