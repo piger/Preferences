@@ -44,7 +44,7 @@ brew "direnv"
 brew "dnscrypt-proxy"
 
 # Command-line DNS client
-brew "dog"
+brew "doggo"
 
 # Spellchecker wrapping library
 brew "enchant"
