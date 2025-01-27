@@ -160,6 +160,9 @@ brew "pv"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
 
+# Diff filter highlighting which line parts have changed
+brew "riff"
+
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 
