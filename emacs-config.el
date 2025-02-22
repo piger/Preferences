@@ -51,6 +51,8 @@
   (load-file piger/emacs-local-settings))
 
 (set-frame-font piger/default-font nil t)
+(set-face-attribute 'default nil :family "JetBrains Mono" :weight 'thin)
+
 ;; end of custom settings
 
 (defconst *is-a-mac* (eq system-type 'darwin))
