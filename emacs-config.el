@@ -960,9 +960,6 @@ becomes
   :init
   (rainbow-mode))
 
-(use-package less-css-mode
-  :mode "\\.less\\'")
-
 (use-package js2-mode
   :mode "\\.js\\'"
   :interpreter "node"
