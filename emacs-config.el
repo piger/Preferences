@@ -1908,6 +1908,10 @@ becomes
   ;;   run-hooks(change-major-mode-after-body-hook prog-mode-hook go-mode-hook)
   ;;   apply(run-hooks (change-major-mode-after-body-hook prog-mode-hook go-mode-hook))
 
+  :custom
+  ;; Don't tell server of changes before Emacs's been idle for this many seconds:
+  (eglot-send-changes-idle-time 0.1)
+
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
