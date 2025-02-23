@@ -756,7 +756,9 @@ becomes
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;;; browser con M-o (I think this one is covered by crux?)
-(global-set-key "\M-o" 'browse-url-generic)
+;; NOTE: I'm assigning <M-o> to change-inner, so I'll need to find a new binding for this
+;; ... if I even want one.
+;; (global-set-key "\M-o" 'browse-url-generic)
 (if (and (eq window-system 'x) (eq system-type 'gnu/linux))
     (setq browse-url-generic-program "gvfs-open"))
 (if (and (eq window-system 'ns) *is-a-mac*)
@@ -2008,6 +2010,11 @@ becomes
   :config
   (global-diff-hl-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh t))
+
+;; gives you vim’s ci command, building on expand-region.
+(use-package change-inner
+  :bind (("M-i" . change-inner)
+         ("M-o M-o" . change-outer)))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
