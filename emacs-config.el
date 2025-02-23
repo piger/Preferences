@@ -138,7 +138,10 @@
   (global-set-key (kbd "s-o") 'find-file)
 
   ;; bind cmd-shift-z to redo (doesn't work!)
-  (global-set-key (kbd "S-s-z") 'undo-redo))
+  (global-set-key (kbd "S-s-z") 'undo-redo)
+
+  ;; bind C-/ to comment or uncomment the region (default: undo)
+  (global-set-key (kbd "C-/") 'comment-or-uncomment-region))
 
 ;; Themes
 (use-package base16-theme
