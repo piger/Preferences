@@ -205,7 +205,7 @@
 ;; (setq scroll-step 1) ;; keyboard scroll one line at a time
 
 ;; Consider a period followed by a single space to be end of sentence.
-(setq sentence-end-double-space nil)
+(setopt sentence-end-double-space nil)
 
 ;; show buffer boundaries in the fringe
 (setq-default indicate-buffer-boundaries 'left)
@@ -225,8 +225,8 @@
   :ensure nil  ;; native
   :init
   (setopt auto-revert-avoid-polling t)
-  (setq auto-revert-interval 1)
-  (setq auto-revert-check-vc-info t)
+  (setopt auto-revert-interval 1)
+  (setopt auto-revert-check-vc-info t)
   (global-auto-revert-mode))
 
 ;; minibuffer history
