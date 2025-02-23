@@ -1883,7 +1883,11 @@ becomes
 ;; - mc/edit-ends-of-lines
 ;; - mc/mark-next-like-this, mc/mark-previous-like-this, mc/mark-all-like-this
 (use-package multiple-cursors
-  :bind ("C-S-c C-S-c" . mc/edit-lines))
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
 ;; spell checking
 ;; NOTE:
