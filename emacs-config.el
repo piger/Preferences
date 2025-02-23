@@ -1897,7 +1897,13 @@ becomes
   ;; configure go-pls
   (setq-default eglot-workspace-configuration
                 '((:gopls .
-                          ((staticcheck . t)))))
+                          ((staticcheck . t)))
+                  (:yaml .
+                         ((validate . t)
+                          (format . t)
+                          (schemas .
+                                   ((https://raw.githubusercontent.com/ansible/ansible-lint/refs/heads/main/src/ansiblelint/schemas/ansible.json . ["roles/*/tasks/*.yml"])))))))
+
   ;; don't log every event (from emacs-bedrock)
   (fset #'jsonrpc--log-event #'ignore))
   ;; (defun eglot-interactively-organize-imports ()
