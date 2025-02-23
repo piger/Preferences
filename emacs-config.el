@@ -1998,6 +1998,13 @@ becomes
 (use-package treemacs-magit
   :after (treemacs magit))
 
+;; highlights uncommitted changes on the side of the window (area also known as the "gutter"),
+;; allows you to jump between and revert them selectively.
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh t))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
