@@ -51,7 +51,7 @@
   (load-file piger/emacs-local-settings))
 
 (set-frame-font piger/default-font nil t)
-(set-face-attribute 'default nil :family "JetBrains Mono" :weight 'thin)
+(set-face-attribute 'default nil :weight 'light)
 
 ;; end of custom settings
 
