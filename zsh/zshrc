@@ -534,7 +534,7 @@ fi # end if $OSTYPE = ...
 
 ### ls
 if exists vivid; then
-    export LS_COLORS=$(vivid generate gruvbox-dark)
+    export LS_COLORS=$(vivid generate jellybeans)
 elif exists dircolors; then
     test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
 elif exists gdircolors; then
