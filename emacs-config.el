@@ -541,6 +541,8 @@ Including indent-buffer, which should not be called automatically on save."
     "zsh is configured with the `e' alias which opens a file with emacsclient"
     "<TAB> is for completion and <M-/> is for expansion"
     "You can use the `hc' command to look up HTTP status codes"
+    "Remember to use occurr, as in some occasions it might be better for searching throuhg a file"
+    "Use xref! <M-.> to find a definition, <M-,> to go back, <M-?> to find references"
     "Visit the EmacsWiki at http://emacswiki.org to find out even more about Emacs."))
 
 (defun prelude-tip-of-the-day ()
