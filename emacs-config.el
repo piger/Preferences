@@ -1099,7 +1099,7 @@ becomes
          ("C-x b" . consult-buffer)     ; orig. switch-to-buffer
          ("M-y"   . consult-yank-pop)   ; orig. yank-pop
          ;; Searching
-         ("M-s r" . consult-ripgrep)
+         ("M-s r" . consult-ripgrep) ;; that's: <alt-s r>
          ("M-s l" . consult-line)       ; Alternative: rebind C-s to use
          ("C-s" . consult-line)
          ("M-s s" . consult-line)       ; consult-line instead of isearch, bind
