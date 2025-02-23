@@ -331,6 +331,26 @@
 ;; line num
 ;; (global-linum-mode +1)
 
+;; more global options
+(setopt
+ ;; set the cursor to a bar (like Visual Studio Code, for example). Default: box
+ cursor-type 'bar
+
+ ;; show window dividers (i.e. bars that delimit each window)
+ window-divider-mode t
+ ;; show the window dividers both on the right of a window and at the bottom
+ window-divider-default-places t
+
+ ;; Toggle visualization of matching parens (Show Paren mode).
+ show-paren-mode t
+ ;; even when they are offscreen; if your cursor is at the end of a parens block, but the
+ ;; opening parens is offscreen, this will briefly show a message telling the user what that
+ ;; parenthesis is closing.
+ show-paren-context-when-offscreen t
+ ;; do not wait to highlight parenthesis default: 0.125
+ show-paren-delay 0
+ )
+
 ;; add column number to the modeline
 (use-package simple
   :disabled
@@ -358,9 +378,6 @@
 
 ;;(when *is-a-mac*
 ;;  (setq mouse-wheel-scroll-amount '(0.001)))
-
-;; show parens mode
-(show-paren-mode t)
 
 ;; align per puppet
 ;; https://github.com/jwiegley/dot-emacs/blob/master/lisp/puppet-ext.el
