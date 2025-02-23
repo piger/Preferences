@@ -331,6 +331,10 @@
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 
+;; when maximizing Emacs' window (frame), use all the space.
+;; If this is set to nil then the frame doesn't take all the available space.
+(setq frame-resize-pixelwise t)
+
 ;; line num
 ;; (global-linum-mode +1)
 
