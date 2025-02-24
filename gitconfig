@@ -23,7 +23,8 @@
 	prompt = false
 
 [difftool "difftastic"]
-	cmd = difft "$LOCAL" "$REMOTE"
+	# See `man git-difftool` for a description of MERGED, LOCAL and REMOTE.
+	cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
 [pager]
 	difftool = true
@@ -83,6 +84,11 @@
 	current-branch = rev-parse --abbrev-ref HEAD
 	diffc = diff --color-words=.
 	showc = show --color-words=.
+
+	; difftastic
+	dlog = -c diff.external=difft log --ext-diff
+	dshow = -c diff.external=difft show --ext-diff
+	ddiff = -c diff.external=difft diff
 
 ; Questo e' per OSX ma su Linux non crea conflitti.
 [credential]
