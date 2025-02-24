@@ -73,15 +73,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
-
-(when (>= emacs-major-version 25)
-  (setq package-archive-priorities
-        '(("melpa-stable" . 30)
-          ("marmalade" . 20)
-          ("gnu" . 10)
-          ("melpa" . 40))))
 
 ;; use-package
 (unless (package-installed-p 'use-package)
