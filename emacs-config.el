@@ -2014,7 +2014,7 @@ becomes
 (use-package diff-hl
   :config
   (global-diff-hl-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh t))
+  :hook (magit-post-refresh . diff-hl-magit-post-refresh))
 
 ;; gives you vim’s ci command, building on expand-region.
 (use-package change-inner
