@@ -442,9 +442,7 @@
   (unless (file-exists-p backups-dir)
     (make-directory backups-dir)))
 
-(setq apropos-do-all t
-      ;; If non-nil, mouse yank commands yank at point instead of at click.
-      mouse-yank-at-point t
+(setq mouse-yank-at-point t ;; If non-nil, mouse yank commands yank at point instead of at click.
       visible-bell t
       load-prefer-newer t
       save-place-file (concat user-emacs-directory "places")
@@ -773,6 +771,12 @@ becomes
   :ensure nil ;; this is a native package
   :commands abbrev-mode
   :diminish abbrev-mode)
+
+(use-package apropos
+  :ensure nil ;; this is a native package
+  :commands apropos
+  :config
+  (setq apropos-do-all t))
 
 ;; Assign a specific mode for certain directories
 ;; note: you can't chain multiple paths in a single add-to-list call :(
