@@ -1732,8 +1732,6 @@ becomes
   ;; (no need to set it as a global font!)
   (setq doom-modeline-unicode-fallback t)
   (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
-  ;; Increase the size of the modeline
-  (setq doom-modeline-height 30)
   ;; Increase the width of the branch name
   (setq doom-modeline-vcs-max-length 20)
   :init
