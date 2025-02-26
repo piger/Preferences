@@ -1484,7 +1484,9 @@ becomes
   (add-to-list 'projectile-globally-ignored-files "__pycache__"))
 
 ;; required by the command projectile-ripgrep
-(use-package rg)
+;; Search with: C-c s
+(use-package rg
+  :hook (after-init . rg-enable-default-bindings))
 
 ;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
 (use-package counsel-projectile
