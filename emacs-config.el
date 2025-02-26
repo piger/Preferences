@@ -1329,18 +1329,11 @@ becomes
          ("C-x M-g" . magit-dispatch)
          ("C-c M-g" . magit-file-dispatch))
   :config
-  (setq magit-diff-refine-hunk 'all)
-  (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
-
-;; magit's mode for editing git commits.
-(use-package git-commit
-  :disabled
-  :hook (git-commit-setup . git-commit-turn-on-flyspell)
-  :config
-  ;; set the subject line to a maximum of 70 columns.
-  (setq git-commit-summary-max-length 70)
-  ;; also reset fill-column to be 70 columns for the body of the commit message.
-  (add-hook 'git-commit-mode-hook (lambda () (setq fill-column 70))))
+  (setq magit-diff-refine-hunk 'all
+        git-commit-summary-max-length 72)
+  :hook ((git-commit-setup . git-commit-turn-on-flyspell)
+         (git-commit-setup . (lambda () (setq fill-column 80)))
+         (after-save . magit-after-save-refresh-status)))
 
 ;; major modes for git-related files. https://github.com/magit/git-modes
 (use-package git-modes)
