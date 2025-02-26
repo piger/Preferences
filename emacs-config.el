@@ -1553,10 +1553,6 @@ becomes
 ;;                                  outline-mode-prefix-map)))
 (global-set-key (kbd "C-<tab>") 'outline-toggle-children)
 
-;; (require 'volatile-highlights)
-;; (volatile-highlights-mode t)
-;; (eval-after-load "volatile-highlights" '(diminish 'volatile-highlights-mode))
-
 (use-package recentf
   :config
   (setq recentf-max-saved-items 300
