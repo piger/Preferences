@@ -999,10 +999,7 @@ becomes
 
 (use-package json-mode
   :mode "\\.json\\'"
-  :config
-  (defun my-json-mode-hook ()
-    (flycheck-mode +1))
-  :hook (json-mode . my-json-mode-hook))
+  :hook (json-mode . flycheck-mode))
 
 (use-package web-mode
   :mode ("\\.erb\\'"
