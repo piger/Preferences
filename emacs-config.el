@@ -860,7 +860,7 @@ becomes
 ;; go install golang.org/x/tools/cmd/gorename@latest
 ;; go install golang.org/x/tools/cmd/gomvpkg@latest
 (use-package go-mode
-  :mode "\\.go\\'"
+  ;; :mode "\\.go\\'"
   :config
   (defun piger/eglot-organize-imports ()
     ;; if there's no import to organise, this function will throw an error and mess up
@@ -890,7 +890,7 @@ becomes
   :hook (go-mode . my-go-mode-hook))
 
 (use-package go-ts-mode
-  ;; :mode "\\.go\\'"
+  :mode "\\.go\\'"
   :bind
   (:map go-ts-mode-map
         ("C-c i a" . treesit-beginning-of-defun)
@@ -903,7 +903,7 @@ becomes
   (go-ts-mode-indent-offset 4)
   :config
   ;; prevent go-ts-mode from being automatically used.
-  (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
+  ;; (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
   :hook ((go-ts-mode . piger/go-mode-hook)
          (go-ts-mode . eglot-ensure)
          ;; eglot-code-action-organize-imports throws an error when there's nothing to do:
