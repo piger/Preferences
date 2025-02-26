@@ -847,6 +847,12 @@ becomes
     (setq electric-indent-chars '(?\n))))
 
 ;; go
+(defun piger/go-mode-hook ()
+  "Personalized go-mode hook."
+  (setq tab-width 4)
+  (subword-mode t)
+  (svg-tag-mode t))
+
 ;; requires a bunch of tools:
 ;; go install golang.org/x/tools/gopls@latest
 ;; go install golang.org/x/tools/cmd/godoc@latest
@@ -855,49 +861,56 @@ becomes
 ;; go install golang.org/x/tools/cmd/gomvpkg@latest
 (use-package go-mode
   :mode "\\.go\\'"
-  ;; this binding exists by default
-  ;; :bind ("M-." . godef-jump)
   :config
   (defun piger/eglot-organize-imports ()
     ;; if there's no import to organise, this function will throw an error and mess up
     ;; the buffer (e.g. by adding phantom whitespaces).
     (ignore-errors (call-interactively 'eglot-code-action-organize-imports)))
+
   (defun my-go-mode-hook ()
-    ;; (add-hook 'before-save-hook #'lsp-organize-imports -20 t)
-    ;; (add-hook 'before-save-hook #'lsp-format-buffer -10 t)
     ;; based on the comments in: https://github.com/joaotavora/eglot/issues/574
     (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
     (add-hook 'before-save-hook #'piger/eglot-organize-imports nil t)
     ;; this call to eglot for some reason doesn't trigger the error?!
     (eglot-ensure)
+
     ;; (add-hook 'before-save-hook 'gofmt-before-save)
     ;; add hook to run gofmt before save; add it with priority -10 (ie. earlier than others)
     ;; and as buffer-local (as opposed to global, which would run it for *every* buffer).
     ;; (add-hook 'before-save-hook #'eglot-interactively-organize-imports -20 t)
     ;; (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
-    ;; (setq gofmt-command "goimports")
-    ;; (with-eval-after-load 'company
-    ;;   '(add-to-list 'company-backends 'company-go))
+
     ;; use projectile-compile-project and projectile-test-project
     (setq projectile-project-compilation-cmd "go build -v && go vet && staticcheck ./...")
     (setq tab-width 4)
     (subword-mode +1)
-    ;; (company-mode)
-    (flycheck-mode)
+    ;; (flycheck-mode) ;; it's already enabled globally
     (svg-tag-mode t)
     (diminish 'subword-mode))
   :hook (go-mode . my-go-mode-hook))
 
-;; (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
 (use-package go-ts-mode
+  ;; :mode "\\.go\\'"
+  :bind
+  (:map go-ts-mode-map
+        ("C-c i a" . treesit-beginning-of-defun)
+        ("C-c i e" . treesit-end-of-defun)
+        ("C-c i t" . go-ts-mode-test-function-at-point)
+        ("C-c i f" . go-ts-mode-test-this-file)
+        ("C-c i p" . go-ts-mode-test-this-package))
+  :custom
+  ;; need also (setq tab-width 4)
+  (go-ts-mode-indent-offset 4)
   :config
   ;; prevent go-ts-mode from being automatically used.
   (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
-  (defun my-go-ts-mode-hook()
-    (setq tab-width 4)
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (setq go-ts-mode-indent-offset 4))
-  :hook (go-ts-mode . my-go-ts-mode-hook))
+  :hook ((go-ts-mode . piger/go-mode-hook)
+         (go-ts-mode . eglot-ensure)
+         ;; eglot-code-action-organize-imports throws an error when there's nothing to do:
+         ;; eglot--error: [eglot] No "source.organizeImports" code actions here
+         ;; If we want to call it on save, we need to ignore the error:
+         (before-save . (lambda () (ignore-errors (call-interactively 'eglot-code-action-organize-imports))))
+         (before-save . eglot-format-buffer)))
 
 (use-package rust-mode
   :mode "\\.rs\\'")
@@ -1912,17 +1925,28 @@ becomes
   ;;   run-hooks(change-major-mode-after-body-hook prog-mode-hook go-mode-hook)
   ;;   apply(run-hooks (change-major-mode-after-body-hook prog-mode-hook go-mode-hook))
 
-  :custom
+  ;; :custom
   ;; Don't tell server of changes before Emacs's been idle for this many seconds:
-  (eglot-send-changes-idle-time 0.1)
+  ;; (eglot-send-changes-idle-time 0.1)
 
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   ;; configure go-pls
   (setq-default eglot-workspace-configuration
+                ;; For the documentation of gopls settings:
+                ;; https://github.com/golang/tools/blob/master/gopls/doc/settings.md
                 '((:gopls .
-                          ((staticcheck . t)))
+                          ((staticcheck . t)
+                           (usePlaceholders . t)
+                           (hints .
+                                  ((parameterNames . t)
+                                   (assignVariableTypes . t)
+                                   (compositeLiteralFields  . t)
+                                   (compositeLiteralTypes . t)
+                                   (constantValues . t)
+                                   (functionTypeParameters . t)
+                                   (rangeVariableTypes . t)))))
                   (:yaml .
                          ((validate . t)
                           (format . t)
