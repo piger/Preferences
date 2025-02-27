@@ -17,6 +17,9 @@
 	algorithm = histogram
 	colormoved = zebra
 	colorMovedWS = ignore-space-change
+	;; diff.mnemonicPrefix will replace the a/ and b/ in your diff header output with where the
+        ;; diff is coming from, so i/ (index), w/ (working directory) or c/ commit.
+	mnemonicPrefix = true
 	tool = difftastic
 
 [difftool]
@@ -56,6 +59,10 @@
 ;       showUntrackedFiles = all
 
 [color]
+	ui = auto
+
+; put the branch names in a column format so you can see more per screen
+[column]
 	ui = auto
 
 [color "status"]
@@ -126,8 +133,12 @@
 	fsckobjects = true
 	; automatically drop branches that are deleted on the remotes
 	prune = true
+	;; tags too
+	pruneTags = true
 	; fetch remotes in parallel
 	parallel = 0
+	;; If true, fetch will attempt to update all available remotes.
+	all = true
 
 [receive]
 	; actually verify the hashes
