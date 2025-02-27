@@ -30,10 +30,18 @@ template:*.{tmpl,erb}
 #--max-columns=500
 --max-columns-preview
 
-# nice colors, directly from the author:
+# use a color that stands out (red), directly from the author:
 # https://github.com/BurntSushi/dotfiles/blob/fe21c02ffd2aa6e8aa36d58249e6c71f3c9cfec0/.ripgreprc#L2
 --colors=match:bg:0xff,0x7f,0x00
 --colors=match:fg:0xff,0xff,0xff
 --colors=line:none
 --colors=line:fg:magenta
 --colors=path:fg:green
+
+# Alternative color: blue
+## # colors
+## --colors
+## match:bg:0x19,0x11,0x45
+##
+## --colors
+## match:fg:0xAC,0xC8,0xE5
