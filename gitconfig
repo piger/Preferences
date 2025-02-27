@@ -10,7 +10,9 @@
 
 [commit]
 	# shows diff while writing commit messages
-	verbose = true
+	# this is only useful when using git in a terminal, because magit already shows the diff
+	# in a separate buffer; use "git commit -v" instead.
+	# verbose = true
 
 [diff]
 	renames = copies
