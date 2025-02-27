@@ -19,4 +19,4 @@
 -- .expert on
 
 -- this has to be the last setting, otherwise it will print timing information about setting other options.
-.timer on
+-- .timer on
