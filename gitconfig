@@ -20,7 +20,7 @@
 	colormoved = zebra
 	colorMovedWS = ignore-space-change
 	;; diff.mnemonicPrefix will replace the a/ and b/ in your diff header output with where the
-        ;; diff is coming from, so i/ (index), w/ (working directory) or c/ commit.
+	;; diff is coming from, so i/ (index), w/ (working directory) or c/ commit.
 	mnemonicPrefix = true
 	tool = difftastic
 
@@ -99,7 +99,7 @@
 [push]
 	; push the current branch to update a branch with the same name on the receiving end.
 	; Similar to "simple", with the difference that it doesn't fail if the current branch isn't
-        ; tracking a remote upstream branch.
+	; tracking a remote upstream branch.
 	default = current
 	; assume --set-upstream on default push when no upstream tracking exists for the current branch
 	autoSetupRemote = true
