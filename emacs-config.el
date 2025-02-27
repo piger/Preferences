@@ -857,6 +857,14 @@ becomes
     ;; unfuck electric indentation
     (setq electric-indent-chars '(?\n))))
 
+(defun piger/eglot-before-save ()
+  "Call this as a before-save-hook when needed."
+  ;; eglot-code-action-organize-imports throws an error when there's nothing to do:
+  ;; eglot--error: [eglot] No "source.organizeImports" code actions here
+  ;; If we want to call it on save, we need to ignore the error:
+  (ignore-errors (call-interactively 'eglot-code-action-organize-imports))
+  (eglot-format-buffer))
+
 ;; go
 (defun piger/go-mode-hook ()
   "Personalized go-mode hook."
@@ -871,6 +879,7 @@ becomes
 ;; go install golang.org/x/tools/cmd/gorename@latest
 ;; go install golang.org/x/tools/cmd/gomvpkg@latest
 (use-package go-mode
+  :disabled
   ;; :mode "\\.go\\'"
   :config
   (defun piger/eglot-organize-imports ()
@@ -898,7 +907,11 @@ becomes
     ;; (flycheck-mode) ;; it's already enabled globally
     (svg-tag-mode t)
     (diminish 'subword-mode))
-  :hook (go-mode . my-go-mode-hook))
+  :hook
+  ((go-mode . my-go-mode-hook)
+   (go-mode . (lambda ()
+                         ;; add my eglot hook as a local hook
+                         (add-hook 'before-save-hook #'piger/eglot-before-save nil t)))))
 
 (use-package go-ts-mode
   :mode "\\.go\\'"
@@ -915,13 +928,13 @@ becomes
   :config
   ;; prevent go-ts-mode from being automatically used.
   ;; (setq auto-mode-alist (delete '("\\.go\\'" . go-ts-mode) auto-mode-alist))
-  :hook ((go-ts-mode . piger/go-mode-hook)
-         (go-ts-mode . eglot-ensure)
-         ;; eglot-code-action-organize-imports throws an error when there's nothing to do:
-         ;; eglot--error: [eglot] No "source.organizeImports" code actions here
-         ;; If we want to call it on save, we need to ignore the error:
-         (before-save . (lambda () (ignore-errors (call-interactively 'eglot-code-action-organize-imports))))
-         (before-save . eglot-format-buffer)))
+
+  :hook
+  ((go-ts-mode . piger/go-mode-hook)
+   (go-ts-mode . eglot-ensure)
+   (go-ts-mode . (lambda ()
+                   ;; add my eglot hook as a local hook
+                   (add-hook 'before-save-hook #'piger/eglot-before-save nil t)))))
 
 (use-package rust-mode
   :mode "\\.rs\\'")
