@@ -2024,6 +2024,12 @@ becomes
   :bind (("M-i" . change-inner)
          ("M-o M-o" . change-outer)))
 
+;; easier way to switch windows
+;; call with prefix "C-u" to swap window
+;; call with double prefix "C-u C-u" to delete the selected window
+(use-package ace-window
+  :bind ("M-p" . ace-window))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
