@@ -134,7 +134,8 @@
 	; automatically drop branches that are deleted on the remotes
 	prune = true
 	;; tags too
-	pruneTags = true
+	;; 2025-02-27 - tags that gets reused (like the ones used by deploy tools) are conflicting with this setting
+	;; pruneTags = true
 	; fetch remotes in parallel
 	parallel = 0
 	;; If true, fetch will attempt to update all available remotes.
@@ -143,6 +144,15 @@
 [receive]
 	; actually verify the hashes
 	fsckObjects = true
+
+[rebase]
+	;; Automatically force-update any branches that point to commits that are being rebased.
+	;; Useful when working with stacked branches:
+	;; https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
+	updateRefs = true
+	;; Automatically squash commits with specially formatted messages into previous commits being rebased.
+	;; Git will look for commit subjects starting with: "squash! ", "fixup! " or "amend! ".
+	autosquash = true
 
 [github]
 	user = piger
