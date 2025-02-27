@@ -9,10 +9,10 @@
 	; pager = less -RSX
 
 [commit]
-	# shows diff while writing commit messages
-	# this is only useful when using git in a terminal, because magit already shows the diff
-	# in a separate buffer; use "git commit -v" instead.
-	# verbose = true
+	; shows diff while writing commit messages
+	; this is only useful when using git in a terminal, because magit already shows the diff
+	; in a separate buffer; use "git commit -v" instead.
+	; verbose = true
 
 [diff]
 	renames = copies
@@ -28,7 +28,7 @@
 	prompt = false
 
 [difftool "difftastic"]
-	# See `man git-difftool` for a description of MERGED, LOCAL and REMOTE.
+	; See `man git-difftool` for a description of MERGED, LOCAL and REMOTE.
 	cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
 [pager]
