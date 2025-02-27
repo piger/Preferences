@@ -1136,7 +1136,10 @@ becomes
   :if (eq piger/completion-system 'bedrock)
   :demand t
   :after avy
-  :bind (("C-c a" . embark-act))        ; bind this to an easy key to hit
+  :bind
+  (("C-." . embark-act)
+   ("C-;" . embark-dwim)
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
   :init
   ;; Add the option to run embark when using avy
   (defun bedrock/avy-action-embark (pt)
@@ -1153,7 +1156,9 @@ becomes
   (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark))
 
 (use-package embark-consult
-  :if (eq piger/completion-system 'bedrock))
+  :if (eq piger/completion-system 'bedrock)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 ;; Vertico: better vertical completion for minibuffer commands
 (use-package vertico
@@ -1167,7 +1172,7 @@ becomes
   (setopt completion-auto-select 'second-tab))
 
 (use-package vertico-directory
-  :ensure nil
+  :ensure nil ;; bundled with vertico
   :after vertico
   :bind (:map vertico-map
               ("M-DEL" . vertico-directory-delete-word)))
@@ -1226,8 +1231,9 @@ becomes
 ;; Orderless: powerful completion style
 (use-package orderless
   :if (eq piger/completion-system 'bedrock)
-  :config
-  (setq completion-styles '(orderless)))
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;; my standard completion system with ivy
 
