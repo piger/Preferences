@@ -53,16 +53,8 @@
 	; should make handling merge conflicts less annoying.
 	enabled = true
 
-; Per mostrare in 'git status' anche i file nelle directory 'untracked'
-; NOTA: determina la visibilita' anche in magit-status
-; [status]
-;       showUntrackedFiles = all
-
-[color]
-	ui = auto
-
-; put the branch names in a column format so you can see more per screen
 [column]
+	; show the output of supported commands in a column layout, when outputting to a terminal
 	ui = auto
 
 [color "status"]
@@ -103,24 +95,12 @@
 
 ; NOTE: default from git 2.0
 [push]
-	; https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushdefault
+	; push the current branch to update a branch with the same name on the receiving end.
+	; Similar to "simple", with the difference that it doesn't fail if the current branch isn't
+        ; tracking a remote upstream branch.
 	default = current
-	; https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushautoSetupRemote
+	; assume --set-upstream on default push when no upstream tracking exists for the current branch
 	autoSetupRemote = true
-
-[user]
-	name = Daniel Kertesz
-	email = daniel@spatof.org
-
-; Enable signing commits with an SSH key
-; [user]
-; signingKey = ~/.ssh/key.pub
-
-; [commit]
-; gpgsign = true
-
-; [gpg]
-; format = ssh
 
 ; for $deity's sake, check that anything we're getting is complete and sane on a regular basis
 ; https://groups.google.com/forum/#!topic/binary-transparency/f-BI4o8HZW0
@@ -154,8 +134,22 @@
 	;; Git will look for commit subjects starting with: "squash! ", "fixup! " or "amend! ".
 	autosquash = true
 
+[user]
+	name = Daniel Kertesz
+	email = daniel@spatof.org
+
 [github]
 	user = piger
+
+; Enable signing commits with an SSH key
+; [user]
+; signingKey = ~/.ssh/key.pub
+
+; [commit]
+; gpgsign = true
+
+; [gpg]
+; format = ssh
 
 ; Include files
 ; platform specific configuration
