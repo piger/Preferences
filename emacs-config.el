@@ -1885,7 +1885,9 @@ becomes
 
 (use-package lua-mode
   :mode "\\.lua$"
-  :interpreter "lua")
+  :interpreter "lua"
+  :hook
+  (lua-mode . eglot-ensure))
 
 (use-package dockerfile-mode
   :mode ("Dockerfile" . dockerfile-mode))
