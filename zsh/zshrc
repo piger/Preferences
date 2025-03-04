@@ -603,6 +603,10 @@ alias k='kubectl'
 exists kubectx && alias kctx='kubectx'
 exists kubens && alias kns='kubens'
 
+# Go
+alias go-show-direct-deps-updates="go list -f '{{if not .Indirect}}{{.}}{{end}}' -u -m all"
+alias go-show-all-deps-updates="go list -u -m all"
+
 ### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
