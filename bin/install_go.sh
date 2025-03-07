@@ -73,6 +73,7 @@ fi
 
 /opt/go/bin/go version
 
-echo "Upgrading gopls and staticcheck"
+echo "Install or upgrade Go tools: gopls, staticcheck, panicparse:"
 go install golang.org/x/tools/gopls@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
+go install github.com/maruel/panicparse/v2@latest
