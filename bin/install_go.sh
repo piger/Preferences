@@ -73,7 +73,8 @@ fi
 
 /opt/go/bin/go version
 
-echo "Install or upgrade Go tools: gopls, staticcheck, panicparse:"
+echo "Install or upgrade Go tools: gopls, staticcheck, panicparse, delve."
 go install golang.org/x/tools/gopls@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
 go install github.com/maruel/panicparse/v2@latest
+go install github.com/go-delve/delve/cmd/dlv@latest
