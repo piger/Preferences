@@ -13,6 +13,7 @@
 
 ;; To catch startup errors, like something unknown throwing "Package cl is deprecated":
 ;; (setq debug-on-message "Package cl is deprecated")
+;; (debug-on-variable-change 'before-save-hook)
 
 (defconst emacs-start-time (current-time)
   "This variable hold the time Emacs was started.")
