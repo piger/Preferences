@@ -222,7 +222,8 @@
   :init
   (setopt auto-revert-avoid-polling t)
   (setopt auto-revert-interval 1)
-  (setopt auto-revert-check-vc-info t)
+  ;; conflicts with diff-hl + magit: https://github.com/magit/magit/issues/4073
+  ;; (setopt auto-revert-check-vc-info t)
   (global-auto-revert-mode))
 
 ;; minibuffer history
