@@ -616,6 +616,29 @@ exists kubens && alias kns='kubens'
 alias go-show-direct-deps-updates="go list -f '{{if not .Indirect}}{{.}}{{end}}' -u -m all"
 alias go-show-all-deps-updates="go list -u -m all"
 
+# auto-expanding aliases
+# https://vincent.bernat.ch/en/blog/2025-zsh-autoexpand-aliases
+typeset -ga _vbe_abbreviations
+abbrev-alias() {
+    alias $1
+    _vbe_abbreviations+=(${1%%\=*})
+}
+
+_vbe_zle-autoexpand() {
+    local -a words; words=(${(z)LBUFFER})
+    if (( ${#_vbe_abbreviations[(r)${words[-1]}]} )); then
+        zle _expand_alias
+    fi
+    zle magic-space
+}
+
+zle -N _vbe_zle-autoexpand
+bindkey -M emacs " " _vbe_zle-autoexpand
+bindkey -M isearch " " magic-space
+
+# WARNING: these kind of aliases seems to conflict with zsh-autosuggestions.
+(( $+commands[task] )) && abbrev-alias t='task'
+
 ### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
