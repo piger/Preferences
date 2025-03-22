@@ -585,6 +585,7 @@ alias cpi="cp -i"
 
 # alias globali, che pero' non gradisco.
 alias -g L='|less'
+alias -g M='|moar'
 # alias -g H='|head'
 # alias -g T='|tail'
 
