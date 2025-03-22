@@ -442,7 +442,7 @@ autoload -Uz zcalc zmv zargs
 ### PROMPT
 # load zsh-notify first, as it needs to set up the first "precmd" hook before all the others,
 # to be able to access the original $? from the last command (and not from the last hook)
-source_if_exists "$HOME/dev/zsh-notify/zsh-notify.zsh"
+source_if_exists "$HOME/code/zsh-notify/zsh-notify.zsh"
 
 # Use the prompt framework for our own prompt (see ~/.zsh/functions/prompt_piger_setup).
 autoload -U promptinit
