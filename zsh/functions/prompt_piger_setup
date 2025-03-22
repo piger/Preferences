@@ -20,9 +20,9 @@ EOH
 SEGMENT_SEPARATOR=$'\ue0b0'
 # U+2718 : HEAVY BALLOT X
 ERROR_SYMBOL=$'\u2718'
-# U+276F : HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT
+# U+276F : HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT "❯"
 # PROMPT_SYMBOL=$'\u276f'
-PROMPT_SYMBOL='$'
+PROMPT_SYMBOL=$'\u00bb' # "»"
 
 # hash the system's hostname letters to generate a color
 prompt_piger_hostname_color() {
@@ -63,7 +63,7 @@ prompt_piger_setup() {
         time_fg="#e5989b"
         dir_bg="#08403E"
         dir_fg="#83c5be"
-        symbol_fg="30"
+        symbol_fg="#fcba03"
         vcs_bg="#706513"
         vcs_fg="#ffb703"
         vcs_logo="20"
