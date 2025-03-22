@@ -519,6 +519,14 @@ EOF
     # Flush DNS cache
     alias flush_dns_cache='dscacheutil -flushcache'
 
+    # Copy the current command-line to the clipboard
+    # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/copybuffer/copybuffer.plugin.zsh
+    _copybuffer() {
+        printf "%s" "$BUFFER" | pbcopy
+    }
+    zle -N _copybuffer
+    bindkey -M emacs "^O" _copybuffer
+
 elif is_linux; then
     if exists gnome-open; then
         alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
