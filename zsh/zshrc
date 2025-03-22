@@ -610,7 +610,7 @@ alias be='bundle exec'
 tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 
 # Use Python to pretty-print JSON.
-alias json.tool='python -m json.tool'
+alias json.tool='python3 -m json.tool'
 
 # kubectl
 alias k='kubectl'
