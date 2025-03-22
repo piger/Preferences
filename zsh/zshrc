@@ -648,6 +648,13 @@ bindkey -M isearch " " magic-space
 # zsh-completions
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
+# local completion cache
+[[ ! -d "$HOME/.cache/zsh-completions" ]] && mkdir "$HOME/.cache/zsh-completions"
+fpath=("$HOME/.cache/zsh-completions" $fpath)
+
+# docker
+[[ ! -f "$HOME/.cache/zsh-completions/_docker" ]] && docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
+
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
     # homebrew completion
     [[ -d $HOMEBREW_PREFIX/completions/zsh ]] && fpath+="$HOMEBREW_PREFIX/completions/zsh"
