@@ -288,8 +288,6 @@ if exists fzf; then
     export FZF_DEFAULT_OPTS="--height=~80%"
     if is_mac; then
         source <(fzf --zsh)
-        source $HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh
-        source $HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh
     elif is_linux; then
         # assume linux is running a version older than 0.48.0, so can't use the "source"
         # method.
