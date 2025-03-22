@@ -1958,15 +1958,15 @@ becomes
                 ;; https://github.com/golang/tools/blob/master/gopls/doc/settings.md
                 '((:gopls .
                           ((staticcheck . t)
-                           (usePlaceholders . t)
-                           (hints .
-                                  ((parameterNames . t)
-                                   (assignVariableTypes . t)
-                                   (compositeLiteralFields  . t)
-                                   (compositeLiteralTypes . t)
-                                   (constantValues . t)
-                                   (functionTypeParameters . t)
-                                   (rangeVariableTypes . t)))))
+                           (usePlaceholders . t)))
+                           ;; (hints .
+                           ;;        ((parameterNames . t)
+                           ;;         (assignVariableTypes . t)
+                           ;;         (compositeLiteralFields  . t)
+                           ;;         (compositeLiteralTypes . t)
+                           ;;         (constantValues . t)
+                           ;;         (functionTypeParameters . t)
+                           ;;         (rangeVariableTypes . t)))))
                   (:yaml .
                          ((validate . t)
                           (format . t)
