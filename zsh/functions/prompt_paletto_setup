@@ -1,0 +1,107 @@
+# paletto prompt
+# A prompt inspired by Alex Kretzschmar's prompt seen in:
+# https://blog.ktz.me/git-submodules-for-fun-and-profit-with-ansible/
+
+prompt_paletto_help() {
+    echo "There is no help only Zuul."
+}
+
+prompt_paletto_setup() {
+    # silly local function to avoid polluting the global namespace; "returns" a segment for the prompt.
+    seg() {
+        local background="$1"
+        local foreground="$2"
+        local text="$3"
+        echo "%K{$background}%F{$foreground}${text}%k%f"
+    }
+
+    # Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
+    # nf-pl-left_hard_divider 
+    local segment_separator=$'\ue0b0'
+
+    # nf-oct-git_branch 
+    local git_symbol=$'\uf418'
+
+    # nf-ple-left_half_circle_thick 
+    local half_circle_left=$'\ue0b6'
+
+    # nf-ple-right_half_circle_thick 
+    local half_circle_right=$'\ue0b4'
+
+    # nf-fa-clock 
+    local clock=$'\uf017'
+
+    # https://en.wikipedia.org/wiki/Guillemet "»"
+    local prompt_symbol=$'\u00bb'
+
+    # nf-cod-vm 
+    local computer=$'\uea7a'
+
+    # nf-oct-dot_fill 
+    local dot=$'\uf444'
+
+    # nf-fa-plus 
+    local plus=$'\uf067'
+
+    # promptinit should already have defined $prompt_newline, so this should not be necessary.
+    # https://github.com/zsh-users/zsh/blob/master/Functions/Prompts/promptinit
+    [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
+
+    autoload -Uz add-zsh-hook
+    autoload -Uz vcs_info
+
+    # Configuration for vcs_info
+    #
+    # nvcsformats define the prompt segment to use when no VCS was detected; in this prompt we just
+    # print an empty segment (so, the usual arrow pointing right).
+    zstyle ':vcs_info:*' nvcsformats "$(seg '#739C70' '#CE9C3E' "$segment_separator")$(seg '#548387' '#739C70' "$segment_separator")"
+
+    # formats define the prompt segment to use when a VCS (git) was detected; it just shows the branch name.
+    zstyle ':vcs_info:*' formats "$(seg '#739C70' '#CE9C3E' $segment_separator)$(seg '#739C70' '#2A2821' " $git_symbol %b")$(seg '#739C70' '#2A2821' ' ')$(seg '#548387' '#739C70' $segment_separator)" "$(seg '' '#3D7FA4' "%c%u")"
+
+    # actionformats define the prompt segment to use during VCS actions (e.g. rebase); it shows the action's name
+    # and the branch name.
+    zstyle ':vcs_info:*' actionformats "$(seg '#739C70' '#CE9C3E' $segment_separator)$(seg '#739C70' '#2A2821' " $git_symbol %b")(%a) %b$(seg '#739C70' '#2A2821' ' ')$(seg '#548387' '#739C70' $segment_separator)"
+
+    # used to signal the presence of unstaged changes
+    zstyle ':vcs_info:*' unstagedstr "$dot "
+
+    # used to signal the presence of staged changes
+    zstyle ':vcs_info:*' stagedstr "$plus "
+
+    # how to print the branch name
+    zstyle ':vcs_info:*' branchformat "%b"
+
+    zstyle ':vcs_info:*' enable git
+    zstyle ':vcs_info:*' check-for-changes true
+
+    add-zsh-hook precmd vcs_info
+
+    PROMPT=""
+    PROMPT+=$(seg '' '#C8642A' $half_circle_left)
+    PROMPT+=$(seg '#C8642A' '#1B1914' "$computer %m ")
+    PROMPT+=$(seg '#CE9C3E' '#C8642A' $segment_separator)
+    PROMPT+=$(seg '#CE9C3E' '#3A3930' " %~ ")
+
+    #PROMPT+=$(seg '#739C70' '#CE9C3E' $segment_separator)
+    #PROMPT+=$(seg '#739C70' '#2A2821' " $git_symbol ")
+    PROMPT+='${vcs_info_msg_0_}'
+    #PROMPT+=$(seg '#739C70' '#2A2821' " ")
+    #PROMPT+=$(seg '#548387' '#739C70' "$segment_separator")
+
+    PROMPT+=$(seg '#645D55' '#548387' "$segment_separator")
+    PROMPT+=$(seg '#3A3837' '#645D55' "$segment_separator ")
+    PROMPT+=$(seg '#3A3837' '#FAF2CB' "$clock %T ")
+    PROMPT+=$(seg '' '#3A3837' "$half_circle_right $prompt_newline")
+    PROMPT+='${vcs_info_msg_1_}'
+    PROMPT+=$(seg '' "#FCBA03" "$prompt_symbol ")
+
+    prompt_opts=(cr subst percent sp)
+}
+
+prompt_paletto_preview() {
+    # prompt_preview_theme is defined by "promptinit"
+    prompt_preview_theme paletto "$@"
+}
+
+prompt_paletto_setup "$@"
