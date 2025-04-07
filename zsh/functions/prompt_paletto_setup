@@ -53,6 +53,9 @@ prompt_paletto_setup() {
     # nf-oct-file_directory 
     local dir_icon=$'\uf413'
 
+    # U+2718 : HEAVY BALLOT ✘
+    local error_symbol=$'\u2718'
+
     # colors
     local orange='#C8642A'
     local black='#1B1914'
@@ -66,6 +69,7 @@ prompt_paletto_setup() {
     local grey3='#3A3837'
     local cream='#FAF2CB'
     local gold='#FCBA03'
+    local red='#D61C0F'
 
     # promptinit should already have defined $prompt_newline, so this should not be necessary.
     # https://github.com/zsh-users/zsh/blob/master/Functions/Prompts/promptinit
@@ -121,7 +125,14 @@ prompt_paletto_setup() {
     PROMPT+=$(seg $grey3 $cream "$clock %T ")
     PROMPT+=$(seg '' $grey3 "${half_circle_right}${prompt_newline}")
     PROMPT+='${vcs_info_msg_1_}'
-    PROMPT+=$(seg '' $gold "$prompt_symbol ")
+    # the prompt symbol will be '#' if you're root.
+    PROMPT+=$(seg '' $gold "%(!.#.${prompt_symbol}) ")
+
+    # Use RPROMPT to show the exit status of the last command if non-zero
+    RPROMPT="%(?..%B%F{$red}${error_symbol}%f %?%b)"
+
+    # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
+    SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
 
     prompt_opts=(cr subst percent sp)
 }
