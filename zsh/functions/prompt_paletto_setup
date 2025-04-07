@@ -56,6 +56,9 @@ prompt_paletto_setup() {
     # U+2718 : HEAVY BALLOT ✘
     local error_symbol=$'\u2718'
 
+    # nf-fa-dolly 
+    local dolly_symbol=$'\ued7e'
+
     # colors
     local orange='#C8642A'
     local black='#1B1914'
@@ -124,6 +127,18 @@ prompt_paletto_setup() {
     PROMPT+=$(seg $grey3 $grey2 "$segment_separator ")
     PROMPT+=$(seg $grey3 $cream "$clock %T ")
     PROMPT+=$(seg '' $grey3 "${half_circle_right}${prompt_newline}")
+
+    # Second prompt line.
+    # Print the mark used by iTerm2's shell integration.
+    # NOTE: this must be the first "element" of the prompt's second line, otherwise
+    # it will add an extra newline.
+    if [[ -e $HOME/.iterm2_shell_integration.zsh && "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        PROMPT+="%{$(iterm2_prompt_mark)%}"
+    fi
+
+    # Show background jobs:
+    PROMPT+="%(1j.$dolly_symbol %j|.)"
+
     PROMPT+='${vcs_info_msg_1_}'
     # the prompt symbol will be '#' if you're root.
     PROMPT+=$(seg '' $gold "%(!.#.${prompt_symbol}) ")
