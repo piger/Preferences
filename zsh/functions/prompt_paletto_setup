@@ -43,6 +43,23 @@ prompt_paletto_setup() {
     # nf-fa-plus 
     local plus=$'\uf067'
 
+    # nf-oct-file_directory 
+    local dir_icon=$'\uf413'
+
+    # colors
+    local orange='#C8642A'
+    local black='#1B1914'
+    local mustard='#CE9C3E'
+    local grey='#3A3930'
+    local green='#739C70'
+    local blue='#548387'
+    local black2='#2A2821'
+    local blue2='#3D7FA4'
+    local grey2='#645D55'
+    local grey3='#3A3837'
+    local cream='#FAF2CB'
+    local gold='#FCBA03'
+
     # promptinit should already have defined $prompt_newline, so this should not be necessary.
     # https://github.com/zsh-users/zsh/blob/master/Functions/Prompts/promptinit
     [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
@@ -54,14 +71,17 @@ prompt_paletto_setup() {
     #
     # nvcsformats define the prompt segment to use when no VCS was detected; in this prompt we just
     # print an empty segment (so, the usual arrow pointing right).
-    zstyle ':vcs_info:*' nvcsformats "$(seg '#739C70' '#CE9C3E' "$segment_separator")$(seg '#548387' '#739C70' "$segment_separator")"
+    zstyle ':vcs_info:*' nvcsformats "$(seg $green $mustard "$segment_separator")$(seg $blue $green "$segment_separator")"
 
     # formats define the prompt segment to use when a VCS (git) was detected; it just shows the branch name.
-    zstyle ':vcs_info:*' formats "$(seg '#739C70' '#CE9C3E' $segment_separator)$(seg '#739C70' '#2A2821' " $git_symbol %b")$(seg '#739C70' '#2A2821' ' ')$(seg '#548387' '#739C70' $segment_separator)" "$(seg '' '#3D7FA4' "%c%u")"
+    # We're defining two formats here, where the first is used in the first prompt line and the second is shown before the prompt symbol in the second line;
+    # this can then be referred to with $vcs_info_msg_X_.
+    zstyle ':vcs_info:*' formats "$(seg $green $mustard $segment_separator)$(seg $green $black2 " $git_symbol %b")$(seg $green $black2 ' ')$(seg $blue $green $segment_separator)" "$(seg '' $blue2 "%c%u")"
 
+    # TODO: add second vcs_info_msg here?
     # actionformats define the prompt segment to use during VCS actions (e.g. rebase); it shows the action's name
     # and the branch name.
-    zstyle ':vcs_info:*' actionformats "$(seg '#739C70' '#CE9C3E' $segment_separator)$(seg '#739C70' '#2A2821' " $git_symbol %b")(%a) %b$(seg '#739C70' '#2A2821' ' ')$(seg '#548387' '#739C70' $segment_separator)"
+    zstyle ':vcs_info:*' actionformats "$(seg $green $mustard $segment_separator)$(seg $green $black2 " $git_symbol %b")(%a) %b$(seg $green $black2 ' ')$(seg $blue $green $segment_separator)"
 
     # used to signal the presence of unstaged changes
     zstyle ':vcs_info:*' unstagedstr "$dot "
@@ -78,23 +98,23 @@ prompt_paletto_setup() {
     add-zsh-hook precmd vcs_info
 
     PROMPT=""
-    PROMPT+=$(seg '' '#C8642A' $half_circle_left)
-    PROMPT+=$(seg '#C8642A' '#1B1914' "$computer %m ")
-    PROMPT+=$(seg '#CE9C3E' '#C8642A' $segment_separator)
-    PROMPT+=$(seg '#CE9C3E' '#3A3930' " %~ ")
+    PROMPT+=$(seg '' $orange $half_circle_left)
+    PROMPT+=$(seg $orange $black "$computer %m ")
+    PROMPT+=$(seg $mustard $orange $segment_separator)
+    PROMPT+=$(seg $mustard $grey " $dir_icon %~ ")
 
-    #PROMPT+=$(seg '#739C70' '#CE9C3E' $segment_separator)
-    #PROMPT+=$(seg '#739C70' '#2A2821' " $git_symbol ")
+    #PROMPT+=$(seg $green $mustard $segment_separator)
+    #PROMPT+=$(seg $green $black2 " $git_symbol ")
     PROMPT+='${vcs_info_msg_0_}'
-    #PROMPT+=$(seg '#739C70' '#2A2821' " ")
-    #PROMPT+=$(seg '#548387' '#739C70' "$segment_separator")
+    #PROMPT+=$(seg $green $black2 " ")
+    #PROMPT+=$(seg $blue $green "$segment_separator")
 
-    PROMPT+=$(seg '#645D55' '#548387' "$segment_separator")
-    PROMPT+=$(seg '#3A3837' '#645D55' "$segment_separator ")
-    PROMPT+=$(seg '#3A3837' '#FAF2CB' "$clock %T ")
-    PROMPT+=$(seg '' '#3A3837' "$half_circle_right $prompt_newline")
+    PROMPT+=$(seg $grey2 $blue "$segment_separator")
+    PROMPT+=$(seg $grey3 $grey2 "$segment_separator ")
+    PROMPT+=$(seg $grey3 $cream "$clock %T ")
+    PROMPT+=$(seg '' $grey3 "$half_circle_right $prompt_newline")
     PROMPT+='${vcs_info_msg_1_}'
-    PROMPT+=$(seg '' "#FCBA03" "$prompt_symbol ")
+    PROMPT+=$(seg '' $gold "$prompt_symbol ")
 
     prompt_opts=(cr subst percent sp)
 }
