@@ -150,6 +150,7 @@ prompt_paletto_setup() {
     SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
 
     prompt_opts=(cr subst percent sp)
+    unfunction seg
 }
 
 prompt_paletto_preview() {
