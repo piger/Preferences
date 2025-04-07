@@ -12,7 +12,14 @@ prompt_paletto_setup() {
         local background="$1"
         local foreground="$2"
         local text="$3"
-        echo "%K{$background}%F{$foreground}${text}%k%f"
+
+        [[ ! -z $background ]] && echo -n "%K{$background}"
+        [[ ! -z $foreground ]] && echo -n "%F{$foreground}"
+        [[ ! -z $text ]] && echo -n "$text"
+        [[ ! -z $background ]] && echo -n "%k"
+        [[ ! -z $foreground ]] && echo -n "%f"
+
+        echo
     }
 
     # Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
@@ -112,7 +119,7 @@ prompt_paletto_setup() {
     PROMPT+=$(seg $grey2 $blue "$segment_separator")
     PROMPT+=$(seg $grey3 $grey2 "$segment_separator ")
     PROMPT+=$(seg $grey3 $cream "$clock %T ")
-    PROMPT+=$(seg '' $grey3 "$half_circle_right $prompt_newline")
+    PROMPT+=$(seg '' $grey3 "${half_circle_right}${prompt_newline}")
     PROMPT+='${vcs_info_msg_1_}'
     PROMPT+=$(seg '' $gold "$prompt_symbol ")
 
