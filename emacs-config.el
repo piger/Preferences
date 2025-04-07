@@ -158,7 +158,7 @@
   :if piger/use-doom-themes
   :config
   (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
+        doom-themes-enable-italic nil)
 
   (load-theme piger/doom-themes-theme t)
 
