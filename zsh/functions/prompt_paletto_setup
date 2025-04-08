@@ -59,6 +59,9 @@ prompt_paletto_setup() {
     # nf-fa-dolly 
     local dolly_symbol=$'\ued7e'
 
+    # nf-cod-globe 
+    local network_symbol=$'\ueb01'
+
     # colors
     local orange='#C8642A'
     local black='#1B1914'
@@ -113,7 +116,11 @@ prompt_paletto_setup() {
 
     PROMPT=""
     PROMPT+=$(seg '' $orange $half_circle_left)
-    PROMPT+=$(seg $orange $black "$computer %m ")
+    if [[ ! -z $SSH_CONNECTION ]]; then
+        PROMPT+=$(seg $orange $black "$network_symbol %n@%m ")
+    else
+        PROMPT+=$(seg $orange $black "$computer %m ")
+    fi
     PROMPT+=$(seg $mustard $orange $segment_separator)
     PROMPT+=$(seg $mustard $grey " $dir_icon %~ ")
 
