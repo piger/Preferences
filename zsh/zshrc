@@ -535,7 +535,8 @@ bindkey -M isearch " " magic-space
 fpath=("$HOME/.cache/zsh-completions" $fpath)
 
 # docker
-[[ ! -f "$HOME/.cache/zsh-completions/_docker" ]] && docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
+(( $+commands[docker] )) && \
+    [[ ! -f "$HOME/.cache/zsh-completions/_docker" ]] && docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
 
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
     # homebrew completion
