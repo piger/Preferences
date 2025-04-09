@@ -634,6 +634,7 @@ zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/.zcompcache
 
 # Use $LS_COLORS in completion.
+# NOTE: this needs to be set again when LS_COLORS changes
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # I don't know how I figured this out, but this parses an additional ssh_config
