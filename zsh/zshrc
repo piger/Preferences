@@ -158,7 +158,19 @@ HISTFILE=$HOME/.history
 
 ### COMMANDS CONFIGURATION
 export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5"
-export PAGER="less"
+
+if [[ -x $HOMEBREW_PREFIX/bin/moar ]]; then
+    # Styles: https://xyproto.github.io/splash/docs/longer/all.html
+    # Mouse support: https://github.com/walles/moar/blob/master/MOUSE.md
+    # dark
+    export MOAR="--mousemode=select --style=gruvbox -no-linenumbers"
+    # light
+    # export MOAR="--mousemode=select --style=rose-pine-dawn -no-linenumbers"
+    export PAGER=$HOMEBREW_PREFIX/bin/moar
+else
+    export PAGER="less"
+fi
+
 # apparently this is a thing:
 # $ < file.txt
 export READNULLCMD="$PAGER"
