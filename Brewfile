@@ -4,213 +4,87 @@
 # brew bundle install --file Brewfile
 
 ## Taps
-tap "homebrew/cask-fonts"
 tap "1password/tap"
-tap "hashicorp/tap"
 tap "railwaycat/emacsmacport"
 
 ## Formulas
-# Simple, modern, secure file encryption
-brew "age"
-
-# Plugin for encrypting files with age and PIV tokens such as YubiKeys
-brew "age-plugin-yubikey"
-
-# Command-line interface for SQLite
-brew "sqlite"
-
-# Download with resuming and segmented downloading
-brew "aria2"
-
-# Archival front-end
-brew "atool"
-
-# Powerful, enterprise-ready, open source web server with automatic HTTPS
-brew "caddy"
-
-# Tool for service discovery, monitoring and configuration
-brew "consul"
-
-# GNU File, Shell, and Text utilities
-brew "coreutils"
-
-# Diff that understands syntax
-brew "difftastic"
-
-# Load/unload environment variables based on $PWD
-brew "direnv"
-
-# Secure communications between a client and a DNS resolver
-brew "dnscrypt-proxy"
-
-# Command-line DNS client
-brew "doggo"
-
-# Spellchecker wrapping library
-brew "enchant"
-
-# Modern, maintained replacement for ls
-brew "eza"
-
-# Simple, fast and user-friendly alternative to find
-brew "fd"
-
-# Banner-like program prints strings as ASCII art
-brew "figlet"
-
-# Infamous electronic fortune-cookie generator
-brew "fortune"
-
-# Platform built on V8 to build network applications
-brew "node"
-
-# Terminal JSON viewer
-brew "fx"
-
-# Command-line fuzzy finder written in Go
-brew "fzf"
-
-# WebDriver <-> Marionette proxy
-brew "geckodriver"
-
-# GitHub command-line tool
-brew "gh"
-
-# Distributed revision control system
-brew "git"
-
-# Syntax-highlighting pager for git and diff output
-brew "git-delta"
-
-# Deliver Go binaries as fast and easily as possible
-brew "goreleaser"
-
-# Ping, but with a graph
-brew "gping"
-
-# Tool for glamorous shell scripts
-brew "gum"
-
-# Smarter Dockerfile linter to validate best practices
-brew "hadolint"
-
-# Configurable static site generator
-brew "hugo"
-
-# Spell checker and morphological analyzer
-brew "hunspell"
-
-# Full featured terminal-based screen editor
-brew "joe"
-
-# Lightweight and flexible command-line JSON processor
-brew "jq"
-
-# Domain specific configuration language for defining JSON data
-brew "jsonnet"
-
-# Package manager for Jsonnet
-brew "jsonnet-bundler"
-
-# Key-value storage library with ordered mapping
-brew "leveldb"
-
-# Sophisticated file transfer program
-brew "lftp"
-
-# Lynx-like WWW browser that supports tables, menus, etc.
-brew "links"
-
-# Simple tool to make locally trusted development certificates
-brew "mkcert"
-
-# Collection of tools that nobody wrote when UNIX was young
-brew "moreutils"
-
-# Remote terminal application
-brew "mosh"
-
-# 'traceroute' and 'ping' in a single tool
-brew "mtr"
-
-# Text-based UI library
-brew "ncurses"
-
-# NCurses Disk Usage
-brew "ncdu"
-
-# Fast, highly customisable system info script
-brew "neofetch"
-
-# Port scanning utility for large networks
-brew "nmap"
-
-# Distributed, Highly Available, Datacenter-Aware Scheduler
-brew "nomad"
-
-# Manage compile and link flags for libraries
-brew "pkg-config"
-
-# Service monitoring system and time series database
-brew "prometheus"
-
-# Monitor data's progress through a pipe
-brew "pv"
-
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
-
-# Diff filter highlighting which line parts have changed
-brew "riff"
-
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
-
-# 7-Zip is a file archiver with a high compression ratio
-brew "sevenzip"
-
-# Static analysis and lint tool, for (ba)sh scripts
-brew "shellcheck"
-
-# Tool to build, change, and version infrastructure
-brew "terraform"
-
-# Text interface for Git repositories
-brew "tig"
-
-# Terminal multiplexer
-brew "tmux"
-
-# Secures, stores, and tightly controls access to secrets
-brew "vault"
-
-# HTTP load testing tool and library
-brew "vegeta"
-
-# Generator for LS_COLORS with support for multiple color themes
-brew "vivid"
-
-# Internet file retriever
-brew "wget"
-
-# Tool for managing your YubiKey configuration
-brew "ykman"
-
-# Terraform Language Server
-brew "hashicorp/tap/terraform-ls"
+brew "age"                  # Simple, modern, secure file encryption
+brew "age-plugin-yubikey"   # Plugin for encrypting files with age and PIV tokens such as YubiKeys
+brew "aria2"                # Download with resuming and segmented downloading
+brew "atool"                # Archival front-end
+brew "caddy"                # Powerful, enterprise-ready, open source web server with automatic HTTPS
+brew "comby"                # Tool for changing code across many languages
+brew "coreutils"            # GNU File, Shell, and Text utilities
+brew "difftastic"           # Diff that understands syntax
+brew "direnv"               # Load/unload environment variables based on $PWD
+brew "dnscontrol"           # Synchronize your DNS to multiple providers from a simple DSL
+brew "dnscrypt-proxy"       # Secure communications between a client and a DNS resolver
+brew "doggo"                # Command-line DNS client
+brew "enchant"              # Spellchecker wrapping library
+brew "eza"                  # Modern, maintained replacement for ls
+brew "fd"                   # Simple, fast and user-friendly alternative to find
+brew "figlet"               # Banner-like program prints strings as ASCII art
+brew "fortune"              # Infamous electronic fortune-cookie generator
+brew "fx"                   # Terminal JSON viewer
+brew "fzf"                  # Command-line fuzzy finder written in Go
+brew "gh"                   # GitHub command-line tool
+brew "git"                  # Distributed revision control system
+brew "git-delta"            # Syntax-highlighting pager for git and diff output
+brew "go-task"              # Task is a task runner/build tool that aims to be simpler and easier to use
+brew "goreleaser"           # Deliver Go binaries as fast and easily as possible
+brew "gping"                # Ping, but with a graph
+brew "gum"                  # Tool for glamorous shell scripts
+brew "hadolint"             # Smarter Dockerfile linter to validate best practices
+brew "hugo"                 # Configurable static site generator
+brew "hunspell"             # Spell checker and morphological analyzer
+brew "jj"                   # Git-compatible distributed version control system
+brew "jq"                   # Lightweight and flexible command-line JSON processor
+brew "jsonnet"              # Domain specific configuration language for defining JSON data
+brew "jsonnet-bundler"      # Package manager for Jsonnet
+brew "k9s"                  # Kubernetes CLI To Manage Your Clusters In Style!
+brew "kubectx"              # Tool that can switch between kubectl contexts easily and create aliases
+brew "kubernetes-cli"       # Kubernetes command-line interface
+brew "leveldb"              # Key-value storage library with ordered mapping
+brew "lftp"                 # Sophisticated file transfer program
+brew "links"                # Lynx-like WWW browser that supports tables, menus, etc.
+brew "magic-wormhole"       # Securely transfers data between computers
+brew "mkcert"               # Simple tool to make locally trusted development certificates
+brew "moreutils"            # Collection of tools that nobody wrote when UNIX was young
+brew "mosh"                 # Remote terminal application
+brew "mtr"                  # 'traceroute' and 'ping' in a single tool
+brew "ncdu"                 # NCurses Disk Usage
+brew "neofetch"             # Fast, highly customisable system info script
+brew "nmap"                 # Port scanning utility for large networks
+brew "nushell"              # Modern shell for the GitHub era
+brew "pkg-config"           # Manage compile and link flags for libraries
+brew "pstree"               # Show ps output as a tree
+brew "pv"                   # Monitor data's progress through a pipe
+brew "python3"              # Interpreted, interactive, object-oriented programming language
+brew "riff"                 # Diff filter highlighting which line parts have changed
+brew "ripgrep"              # Search tool like grep and The Silver Searcher
+brew "shellcheck"           # Static analysis and lint tool, for (ba)sh scripts
+brew "sqlite"               # Command-line interface for SQLite
+brew "stern"                # Tail multiple Kubernetes pods & their containers
+brew "tig"                  # Text interface for Git repositories
+brew "tmux"                 # Terminal multiplexer
+brew "trippy"               # Network diagnostic tool, inspired by mtr
+brew "vivid"                # Generator for LS_COLORS with support for multiple color themes
+brew "wget"                 # Internet file retriever
+brew "yaml-language-server" # Language Server for Yaml Files
+brew "ykman"                # Tool for managing your YubiKey configuration
+brew "zoxide"               # Shell extension to navigate your filesystem faster
+brew "zsh-autosuggestions"  # Fish-like fast/unobtrusive autosuggestions for zsh
 
 ## Casks
 cask "1password-cli"
 cask "emacs-mac"
 
 ## Fonts
-
+cask "font-iosevka"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
-
 cask "font-monaspace"
-cask "font-victor-mono"
-
+cask "font-noto-serif"
 cask "font-overpass"
 cask "font-rubik"
-cask "font-noto-serif"
+cask "font-victor-mono"
