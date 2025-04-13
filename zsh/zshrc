@@ -132,6 +132,12 @@ light_mode() {
     export LS_COLORS=$(vivid generate modus-operandi)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 }
+
+gdoc() {
+    # godoc -http=:6060 -play
+    open "http://localhost:6060/pkg/${@}"
+}
+
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
