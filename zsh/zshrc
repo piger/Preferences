@@ -121,6 +121,17 @@ git_main_branch() {
     git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
 }
 
+dark_mode() {
+    export MOAR="$(echo $MOAR | sd -- '--style=[^ ]+' '--style=gruvbox')"
+    export LS_COLORS=$(vivid generate jellybeans)
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+}
+
+light_mode() {
+    export MOAR="$(echo $MOAR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
+    export LS_COLORS=$(vivid generate modus-operandi)
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+}
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
