@@ -62,6 +62,7 @@ brew "pv"                   # Monitor data's progress through a pipe
 brew "python3"              # Interpreted, interactive, object-oriented programming language
 brew "riff"                 # Diff filter highlighting which line parts have changed
 brew "ripgrep"              # Search tool like grep and The Silver Searcher
+brew "sd"                   # Intuitive find & replace CLI
 brew "shellcheck"           # Static analysis and lint tool, for (ba)sh scripts
 brew "sqlite"               # Command-line interface for SQLite
 brew "stern"                # Tail multiple Kubernetes pods & their containers
