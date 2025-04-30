@@ -2,11 +2,6 @@
 
 ;;; Commentary:
 
-;; NOTE
-;; On macOS (12.1) it's better to use the Mituharu mac port packaged by railwaycat: https://github.com/railwaycat/homebrew-emacsmacport
-;; brew tap railwaycat/emacsmacport
-;; brew install --cask emacs-mac
-
 ;; Main configuration file.
 
 ;;; Code:
