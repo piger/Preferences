@@ -211,7 +211,7 @@ elif exists vi; then
     export VISUAL=vi
 fi
 
-export GREP_COLOR='1;32'
+export GREP_COLORS='mt=1;32'
 
 [[ -e ~/.pythonrc.py ]] && export PYTHONSTARTUP=~/.pythonrc.py
 
