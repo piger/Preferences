@@ -197,7 +197,10 @@ if !has("gui_running")
     " colorscheme molokai
 	" colorscheme xoria256
 	set bg=dark
-	colorscheme gruvbox
+        try
+	    colorscheme gruvbox
+        catch
+        endtry
 endif
 
 " }}}
