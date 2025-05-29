@@ -79,9 +79,8 @@ setopt interactive_comments
 setopt transient_rprompt
 
 # Regular expression matching with the =~ operator will use Perl-Compatible Regular Expressions from
-# the PCRE library, if available.
-# Doesn't work on macOS Monterey's version of zsh.
-# setopt rematch_pcre
+# the PCRE library.
+setopt rematch_pcre
 
 # Correctly display UTF-8 with combining characters.
 if is_mac && [[ "$(locale LC_CTYPE)" == "UTF-8" ]]; then setopt combining_chars; fi
