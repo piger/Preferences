@@ -137,6 +137,29 @@ gdoc() {
     open "http://localhost:6060/pkg/${@}"
 }
 
+# inspired by
+# https://github.com/jessfraz/dotfiles/blob/01f471f2da9a4b3be662de118556ab76fdb2a0cf/.dockerfunc#L107-L117
+ubuntu() {
+    local version
+
+    if [[ -z "$1" ]]; then
+        version="22.04"
+    else
+        version="$1"
+    fi
+
+    docker run --rm -it --log-driver none --name ubuntu ubuntu:$version
+}
+
+git_main_branch () {
+    git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+}
+
+# quick git changelog
+changelog () {
+    git log --reverse --pretty=tformat:"### %s (%h)%n%n%b" origin/$(git_main_branch).. | tee | pbcopy
+}
+
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
@@ -529,6 +552,9 @@ exists kubens && alias kns='kubens'
 # Go
 alias go-show-direct-deps-updates="go list -f '{{if not .Indirect}}{{.}}{{end}}' -u -m all"
 alias go-show-all-deps-updates="go list -u -m all"
+
+# dig
+alias dig-quiet="dig +noall +answer"
 
 # auto-expanding aliases
 # https://vincent.bernat.ch/en/blog/2025-zsh-autoexpand-aliases
