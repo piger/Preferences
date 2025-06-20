@@ -160,6 +160,13 @@ changelog () {
     git log --reverse --pretty=tformat:"### %s (%h)%n%n%b" origin/$(git_main_branch).. | tee | pbcopy
 }
 
+# Use whois to query for ASN data:
+# » whois-ip 172.217.16.238
+# AS      | IP               | AS Name
+# 15169   | 172.217.16.238   | GOOGLE, US
+alias whois-ip='whois -h whois.cymru.com'
+alias whois-ip-bgptools='whois -h bgp.tools'
+
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
