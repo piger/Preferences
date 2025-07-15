@@ -596,7 +596,7 @@ bindkey -M isearch " " magic-space
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
 # local completion cache
-[[ ! -d "$HOME/.cache/zsh-completions" ]] && mkdir "$HOME/.cache/zsh-completions"
+[[ ! -d "$HOME/.cache/zsh-completions" ]] && mkdir -p "$HOME/.cache/zsh-completions"
 fpath=("$HOME/.cache/zsh-completions" $fpath)
 
 # docker
