@@ -160,6 +160,11 @@ changelog () {
     git log --reverse --pretty=tformat:"### %s (%h)%n%n%b" origin/$(git_main_branch).. | tee | pbcopy
 }
 
+# quick temporary directory
+tmp() {
+    [[ ! -z $1 ]] && pushd $(mktemp -d /tmp/$1.XXXX)
+}
+
 # Use whois to query for ASN data:
 # » whois-ip 172.217.16.238
 # AS      | IP               | AS Name
