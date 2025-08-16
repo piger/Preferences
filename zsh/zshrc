@@ -121,13 +121,13 @@ git_main_branch() {
 }
 
 dark_mode() {
-    export MOAR="$(echo $MOAR | sd -- '--style=[^ ]+' '--style=gruvbox')"
+    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=gruvbox')"
     export LS_COLORS=$(vivid generate jellybeans)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 }
 
 light_mode() {
-    export MOAR="$(echo $MOAR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
+    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
     export LS_COLORS=$(vivid generate modus-operandi)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 }
@@ -210,14 +210,14 @@ HISTFILE=$HOME/.history
 ### COMMANDS CONFIGURATION
 export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5"
 
-if [[ -x $HOMEBREW_PREFIX/bin/moar ]]; then
+if [[ -x $HOMEBREW_PREFIX/bin/moor ]]; then
     # Styles: https://xyproto.github.io/splash/docs/longer/all.html
-    # Mouse support: https://github.com/walles/moar/blob/master/MOUSE.md
+    # Mouse support: https://github.com/walles/moor/blob/master/MOUSE.md
     # dark
-    export MOAR="--mousemode=select --style=gruvbox -no-linenumbers"
+    export MOOR="--mousemode=select --style=gruvbox -no-linenumbers"
     # light
-    # export MOAR="--mousemode=select --style=rose-pine-dawn -no-linenumbers"
-    export PAGER=$HOMEBREW_PREFIX/bin/moar
+    # export MOOR="--mousemode=select --style=rose-pine-dawn -no-linenumbers"
+    export PAGER=$HOMEBREW_PREFIX/bin/moor
 else
     export PAGER="less"
 fi
@@ -534,7 +534,7 @@ alias cpi="cp -i"
 
 # alias globali, che pero' non gradisco.
 alias -g L='|less'
-alias -g M='|moar'
+alias -g M='|moor'
 # alias -g H='|head'
 # alias -g T='|tail'
 
