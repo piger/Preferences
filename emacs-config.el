@@ -1352,6 +1352,7 @@ becomes
   :config
   (setq magit-diff-refine-hunk 'all
         git-commit-summary-max-length 72)
+  (setopt magit-format-file-function #'magit-format-file-all-the-icons)
   :hook ((git-commit-setup . git-commit-turn-on-flyspell)
          (git-commit-setup . (lambda () (setq fill-column 80)))
          (after-save . magit-after-save-refresh-status)))
