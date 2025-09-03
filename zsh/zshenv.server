@@ -21,6 +21,8 @@ typeset -U path
 
 path=(/sbin /bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin)
 
+add_path_if_exists /opt/go/bin
+
 # emulate macOS /etc/paths.d; use an anonymous function to change shell options temporarily.
 (){
     # (N) is a Glob Qualifier: it sets the NULL_GLOB option for the current pattern.

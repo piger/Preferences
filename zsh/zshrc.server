@@ -110,6 +110,9 @@ autoload -Uz run-help
 ### Helpers
 source_if_exists() { [[ -e "$1" ]] && source "$1" }
 add_path_if_exists() { [[ -d "$1" ]] && path+=("$1") }
+exists() { which $1 &> /dev/null }
+is_linux() { [[ $OSTYPE = linux* ]] }
+is_mac() { [[ $OSTYPE = darwin* ]] }
 
 ### Options
 
@@ -272,10 +275,34 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 ### Aliases
 alias ls="ls --color=auto --classify"
+alias ip="ip --color=auto"
 
 ### Functions
 
 tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
+
+today() { date "+%Y-%m-%d" }
+
+# quick temporary directory
+tmp() {
+    [[ ! -z $1 ]] && pushd $(mktemp -d /tmp/$1.XXXX)
+}
+
+if exists fzf; then
+    export FZF_DEFAULT_OPTS="--height=~80%"
+    if is_mac; then
+        source <(fzf --zsh)
+    elif is_linux; then
+        if fzf --help | grep -q -- --zsh; then
+            source <(fzf --zsh)
+        else
+            if [[ -d /usr/share/doc/fzf/examples ]]; then
+                source /usr/share/doc/fzf/examples/completion.zsh
+                source /usr/share/doc/fzf/examples/key-bindings.zsh
+            fi
+        fi
+    fi
+fi
 
 ### Emacs tramp support
 
@@ -288,3 +315,4 @@ source_if_exists "$HOME/.zshrc.local"
 ### Tidy up
 unfunction source_if_exists
 unfunction add_path_if_exists
+unfunction exists
