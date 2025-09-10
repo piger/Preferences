@@ -43,7 +43,10 @@ if not (prompt "Select yes to continue") {
 }
 
 let os = uname | get operating-system | str downcase
-let arch = uname | get machine
+let arch = uname | get machine | match $in {
+    "x86_64" => "amd64",
+    _ => $in,
+}
 
 let download = $release
 | get files
