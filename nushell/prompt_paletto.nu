@@ -42,11 +42,34 @@ export def main [] {
 
 # indicator returns the prompt displayed right before the input prompt; this is what in bash is tradionally "$" or "#".
 export def indicator [] {
-    let symbol = match (is-admin) {
+    let prompt_char = match (is-admin) {
         true => "#",
         false => $symbols.prompt,
     }
-    (segment "" $colors.gold $"nu ($symbol) ")
+
+    let modified = if (gstat | get wt_modified) > 0 {
+        [$symbols.dot " "] | str join
+    } else {
+        ""
+    }
+
+    let added = if (gstat | get idx_modified_staged) > 0 {
+        [$symbols.plus " "] | str join
+    } else {
+        ""
+    }
+
+    [
+        (ansi $colors.gold)
+        "nu "
+        (ansi $colors.blue2)
+        $added
+        $modified
+        (ansi $colors.gold)
+        $prompt_char
+        " "
+    ] | str join
+    # segment "" $colors.gold $"nu ($modified)($prompt_char) "
 }
 
 # prompt_right returns the prompt for the right side of the screen.
@@ -70,6 +93,7 @@ def prompt [] {
         (segment $colors.mustard $colors.orange $symbols.separator)
         (current_directory)
         (git_info)
+        # end of the prompts' first line: colored arrows and clock
         (segment $colors.grey2 $colors.blue $symbols.separator)
         (segment $colors.grey3 $colors.grey2 $symbols.separator)
         (segment $colors.grey3 $colors.cream $" ($symbols.clock) ($now) ")
