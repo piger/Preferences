@@ -55,8 +55,8 @@ export def prompt_right [] {
 
 # prompt returns the main part of the promt.
 def prompt [] {
-    plugin add nu_plugin_gstat
-    plugin use gstat
+    # plugin add nu_plugin_gstat
+    # plugin use gstat
 
     let now = date now | format date "%H:%M"
 
