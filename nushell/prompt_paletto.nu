@@ -20,19 +20,45 @@ const colors = {
     red: "#D61C0F",
 }
 
+# Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
 const symbols = {
+    # nf-pl-left_hard_divider 
     separator: (char --unicode "e0b0"),
+
+    # nf-oct-git_branch 
     git: (char --unicode "f418"),
+
+    # nf-ple-left_half_circle_thick 
     half_circle_left: (char --unicode "e0b6"),
+
+    # nf-ple-right_half_circle_thick 
     half_circle_right: (char --unicode "e0b4"),
+
+    # nf-fa-clock 
     clock: (char --unicode "f017"),
+
+    # https://en.wikipedia.org/wiki/Guillemet "»"
     prompt: (char --unicode "00bb"),
+
+    # nf-cod-vm 
     computer: (char --unicode "ea7a"),
+
+    # nf-oct-dot_fill 
     dot: (char --unicode "f444"),
+
+    # nf-fa-plus 
     plus: (char --unicode "f067"),
+
+    # nf-oct-file_directory 
     directory: (char --unicode "f413"),
+
+    # U+2718 : HEAVY BALLOT ✘
     error: (char --unicode "2718"),
+
+    # nf-fa-dolly 
     dolly: (char --unicode "ed7e"),
+
+    # nf-cod-globe 
     network: (char --unicode "eb01"),
 }
 
@@ -69,7 +95,6 @@ export def indicator [] {
         $prompt_char
         " "
     ] | str join
-    # segment "" $colors.gold $"nu ($modified)($prompt_char) "
 }
 
 # prompt_right returns the prompt for the right side of the screen.
