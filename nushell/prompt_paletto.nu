@@ -4,33 +4,37 @@
 # $ $env.PROMPT_INDICATOR = { || prompt_paletto indicator }
 # $ $env.PROMPT_COMMAND_RIGHT = { || prompt_paletto prompt_right }
 
-const orange = "#C8642A"
-const black = "#1B1914"
-const mustard = "#CE9C3E"
-const grey = "#3A3930"
-const green = "#739C70"
-const blue = "#548387"
-const black2 = "#2A2821"
-const blue2 = "#3D7FA4"
-const grey2 = "#645D55"
-const grey3 = "#3A3837"
-const cream = "#FAF2CB"
-const gold = "#FCBA03"
-const red = "#D61C0F"
+const colors = {
+    orange: "#C8642A",
+    black: "#1B1914",
+    mustard: "#CE9C3E",
+    grey: "#3A3930",
+    green: "#739C70",
+    blue: "#548387",
+    black2: "#2A2821",
+    blue2: "#3D7FA4",
+    grey2: "#645D55",
+    grey3: "#3A3837",
+    cream: "#FAF2CB",
+    gold: "#FCBA03",
+    red: "#D61C0F",
+}
 
-const segment_separator = char --unicode e0b0
-const git_symbol = char --unicode f418
-const half_circle_left = char --unicode e0b6
-const half_circle_right = char --unicode e0b4
-const clock = char --unicode f017
-const prompt_symbol = char --unicode "00bb"
-const computer = char --unicode "ea7a"
-const dot = char --unicode f444
-const plus = char --unicode f067
-const dir_icon = char --unicode f413
-const error_symbol = char --unicode "2718"
-const dolly_symbol = char --unicode ed7e
-const network_symbol = char --unicode eb01
+const symbols = {
+    separator: (char --unicode "e0b0"),
+    git: (char --unicode "f418"),
+    half_circle_left: (char --unicode "e0b6"),
+    half_circle_right: (char --unicode "e0b4"),
+    clock: (char --unicode "f017"),
+    prompt: (char --unicode "00bb"),
+    computer: (char --unicode "ea7a"),
+    dot: (char --unicode "f444"),
+    plus: (char --unicode "f067"),
+    directory: (char --unicode "f413"),
+    error: (char --unicode "2718"),
+    dolly: (char --unicode "ed7e"),
+    network: (char --unicode "eb01"),
+}
 
 export def main [] {
     prompt
@@ -40,16 +44,16 @@ export def main [] {
 export def indicator [] {
     let symbol = match (is-admin) {
         true => "#",
-        false => $prompt_symbol,
+        false => $symbols.prompt,
     }
-    (segment "" $gold $"nu ($symbol) ")
+    (segment "" $colors.gold $"nu ($symbol) ")
 }
 
 # prompt_right returns the prompt for the right side of the screen.
 export def prompt_right [] {
     match $env.LAST_EXIT_CODE {
         0 => "",
-        _ => $"(ansi $red)($error_symbol)(ansi reset) (ansi bo)($env.LAST_EXIT_CODE)(ansi reset)",
+        _ => $"(ansi $colors.red)($symbols.error)(ansi reset) (ansi bo)($env.LAST_EXIT_CODE)(ansi reset)",
     }
 }
 
@@ -63,29 +67,29 @@ def prompt [] {
     [
         (prompt_start)
         (computer_name)
-        (segment $mustard $orange $segment_separator)
+        (segment $colors.mustard $colors.orange $symbols.separator)
         (current_directory)
         (git_info)
-        (segment $grey2 $blue $segment_separator)
-        (segment $grey3 $grey2 $segment_separator)
-        (segment $grey3 $cream $" ($clock) ($now) ")
-        (segment "" $grey3 $"($half_circle_right) (char newline)")
+        (segment $colors.grey2 $colors.blue $symbols.separator)
+        (segment $colors.grey3 $colors.grey2 $symbols.separator)
+        (segment $colors.grey3 $colors.cream $" ($symbols.clock) ($now) ")
+        (segment "" $colors.grey3 $"($symbols.half_circle_right) (char newline)")
     ] | str join
 }
 
 # segment returns a colored segment for the prompt; imagine the prompt as an array of segments
 # that gets joined together before being displayed.
 def segment [background: string, foreground: string, text: string] {
-    mut colors = {}
+    mut attrs = {}
     if not ($background | is-empty) {
-        $colors.bg = $background
+        $attrs.bg = $background
      }
 
     if not ($foreground | is-empty) {
-        $colors.fg = $foreground
+        $attrs.fg = $foreground
     }
 
-    $"(ansi --escape $colors)($text)(ansi reset)"
+    $"(ansi --escape $attrs)($text)(ansi reset)"
 }
 
 # computer_name returns the hostname of the machine or, when logged in into a remote system via ssh,
@@ -95,10 +99,10 @@ def computer_name [] {
 
     match ($env.SSH_CONNECTION? | default "") {
         # not set
-        "" => (segment $orange $black $"($computer) ($hostname) "),
+        "" => (segment $colors.orange $colors.black $"($symbols.computer) ($hostname) "),
 
         # is set
-        _ => (segment $orange $black $"($network_symbol) ($env.USER)@($hostname)"),
+        _ => (segment $colors.orange $colors.black $"($symbols.network) ($env.USER)@($hostname)"),
     }
 }
 
@@ -114,26 +118,26 @@ def current_directory [] {
     } else {
         $"~/($cwd_relative)"
     }
-    segment $mustard $grey $" ($dir_icon) ($cwd) "
+    segment $colors.mustard $colors.grey $" ($symbols.directory) ($cwd) "
 }
 
 def prompt_start [] {
-    segment "" $orange $half_circle_left
+    segment "" $colors.orange $symbols.half_circle_left
 }
 
 def git_info [] {
     let info = gstat
     if ($info | get repo_name) == "no_repository" {
         [
-            (segment $green $mustard $segment_separator)
-            (segment $blue $green $segment_separator)
+            (segment $colors.green $colors.mustard $symbols.separator)
+            (segment $colors.blue $colors.green $symbols.separator)
         ] | str join
     } else {
         [
-            (segment $green $mustard $segment_separator)
-            (segment $green $black2 $" ($git_symbol) ($info | get branch)")
-            (segment $green $black2 " ")
-            (segment $blue $green $segment_separator)
+            (segment $colors.green $colors.mustard $symbols.separator)
+            (segment $colors.green $colors.black2 $" ($symbols.git) ($info | get branch)")
+            (segment $colors.green $colors.black2 " ")
+            (segment $colors.blue $colors.green $symbols.separator)
         ] | str join
     }
 }
