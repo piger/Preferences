@@ -115,27 +115,31 @@ def prompt [] {
     [
         (prompt_start)
         (computer_name)
-        (segment $colors.mustard $colors.orange $symbols.separator)
+        (segment --bg $colors.mustard --fg $colors.orange $symbols.separator)
         (current_directory)
         (git_info)
         # end of the prompts' first line: colored arrows and clock
-        (segment $colors.grey2 $colors.blue $symbols.separator)
-        (segment $colors.grey3 $colors.grey2 $symbols.separator)
-        (segment $colors.grey3 $colors.cream $" ($symbols.clock) ($now) ")
-        (segment "" $colors.grey3 $"($symbols.half_circle_right) (char newline)")
+        (segment --bg $colors.grey2 --fg $colors.blue $symbols.separator)
+        (segment --bg $colors.grey3 --fg $colors.grey2 $symbols.separator)
+        (segment --bg $colors.grey3 --fg $colors.cream $" ($symbols.clock) ($now) ")
+        (segment --fg $colors.grey3 $"($symbols.half_circle_right) (char newline)")
     ] | str join
 }
 
 # segment returns a colored segment for the prompt; imagine the prompt as an array of segments
 # that gets joined together before being displayed.
-def segment [background: string, foreground: string, text: string] {
+def segment [
+    text: string
+    --bg: string
+    --fg: string
+] {
     mut attrs = {}
-    if not ($background | is-empty) {
-        $attrs.bg = $background
+    if not ($bg | is-empty) {
+        $attrs.bg = $bg
      }
 
-    if not ($foreground | is-empty) {
-        $attrs.fg = $foreground
+    if not ($fg | is-empty) {
+        $attrs.fg = $fg
     }
 
     $"(ansi --escape $attrs)($text)(ansi reset)"
@@ -148,10 +152,10 @@ def computer_name [] {
 
     match ($env.SSH_CONNECTION? | default "") {
         # not set
-        "" => (segment $colors.orange $colors.black $"($symbols.computer) ($hostname) "),
+        "" => (segment --bg $colors.orange --fg $colors.black $"($symbols.computer) ($hostname) "),
 
         # is set
-        _ => (segment $colors.orange $colors.black $"($symbols.network) ($env.USER)@($hostname)"),
+        _ => (segment --bg $colors.orange --fg $colors.black $"($symbols.network) ($env.USER)@($hostname)"),
     }
 }
 
@@ -167,26 +171,26 @@ def current_directory [] {
     } else {
         $"~/($cwd_relative)"
     }
-    segment $colors.mustard $colors.grey $" ($symbols.directory) ($cwd) "
+    segment --bg $colors.mustard --fg $colors.grey $" ($symbols.directory) ($cwd) "
 }
 
 def prompt_start [] {
-    segment "" $colors.orange $symbols.half_circle_left
+    segment --fg $colors.orange $symbols.half_circle_left
 }
 
 def git_info [] {
     let info = gstat
     if ($info | get repo_name) == "no_repository" {
         [
-            (segment $colors.green $colors.mustard $symbols.separator)
-            (segment $colors.blue $colors.green $symbols.separator)
+            (segment --bg $colors.green --fg $colors.mustard $symbols.separator)
+            (segment --bg $colors.blue --fg $colors.green $symbols.separator)
         ] | str join
     } else {
         [
-            (segment $colors.green $colors.mustard $symbols.separator)
-            (segment $colors.green $colors.black2 $" ($symbols.git) ($info | get branch)")
-            (segment $colors.green $colors.black2 " ")
-            (segment $colors.blue $colors.green $symbols.separator)
+            (segment --bg $colors.green --fg $colors.mustard $symbols.separator)
+            (segment --bg $colors.green --fg $colors.black2 $" ($symbols.git) ($info | get branch)")
+            (segment --bg $colors.green --fg $colors.black2 " ")
+            (segment --bg $colors.blue --fg $colors.green $symbols.separator)
         ] | str join
     }
 }
