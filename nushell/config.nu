@@ -49,3 +49,9 @@ $env.config.hooks = {
 
 # Disable "linking" files in ls
 $env.config.shell_integration.osc8 = false
+
+# I'll stick with eza, for now.
+alias nu-ls = ls
+alias ls = eza --icons --color-scale --mounts --group-directories-first
+
+$env.config.buffer_editor = "vim"
