@@ -6,6 +6,7 @@
 
 const colors = {
     orange: "#C8642A",
+    lilac: "#a76cba",
     black: "#1B1914",
     mustard: "#CE9C3E",
     grey: "#3A3930",
@@ -18,6 +19,7 @@ const colors = {
     cream: "#FAF2CB",
     gold: "#FCBA03",
     red: "#D61C0F",
+    light_blue: "#5ed7ff",
 }
 
 # Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
@@ -45,6 +47,9 @@ const symbols = {
 
     # nf-oct-dot_fill 
     dot: (char --unicode "f444"),
+
+    # nf-md-dots_vertical
+    dots_vertical: (char --unicode "f01d9"),
 
     # nf-fa-plus 
     plus: (char --unicode "f067"),
@@ -103,7 +108,16 @@ export def simple_indicator [] {
         false => $symbols.prompt,
     }
 
+    let now = date now | format date "%H:%M"
+
     [
+        (ansi $colors.light_blue)
+        $symbols.clock
+        (ansi reset)
+        " "
+        $now
+        $" ($symbols.dots_vertical) "
+        (ansi $colors.light_blue)
         $symbols.directory
         " "
         (ansi $colors.cream)
