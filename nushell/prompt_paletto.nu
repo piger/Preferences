@@ -1,8 +1,10 @@
 # How to use:
-# $ use ./prompt_paletto.nu
-# $ $env.PROMPT_COMMAND = { || prompt_paletto }
-# $ $env.PROMPT_INDICATOR = { || prompt_paletto indicator }
-# $ $env.PROMPT_COMMAND_RIGHT = { || prompt_paletto prompt_right }
+# use ([$nu.home-path "Preferences/nushell/prompt_paletto.nu"] | path join)
+# $env.PROMPT_COMMAND = { || prompt_paletto }
+# $env.PROMPT_INDICATOR = { || prompt_paletto indicator }
+# $env.PROMPT_COMMAND_RIGHT = { || prompt_paletto prompt_right }
+# $env.TRANSIENT_PROMPT_COMMAND = { || }
+# $env.TRANSIENT_PROMPT_INDICATOR = { || prompt_paletto simple_indicator }
 
 const colors = {
     orange: "#C8642A",
