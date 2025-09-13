@@ -46,3 +46,6 @@ $env.config.hooks = {
         ]
     }
 }
+
+# Disable "linking" files in ls
+$env.config.shell_integration.osc8 = false
