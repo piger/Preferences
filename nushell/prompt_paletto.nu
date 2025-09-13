@@ -97,6 +97,25 @@ export def indicator [] {
     ] | str join
 }
 
+export def simple_indicator [] {
+    let prompt_char = match (is-admin) {
+        true => "#",
+        false => $symbols.prompt,
+    }
+
+    [
+        $symbols.directory
+        " "
+        (ansi $colors.cream)
+        (current_directory)
+        " "
+        (ansi $colors.gold)
+        $prompt_char
+        " "
+        (ansi reset)
+    ] | str join
+}
+
 # prompt_right returns the prompt for the right side of the screen.
 export def prompt_right [] {
     match $env.LAST_EXIT_CODE {
@@ -116,7 +135,7 @@ def prompt [] {
         (prompt_start)
         (computer_name)
         (segment --bg $colors.mustard --fg $colors.orange $symbols.separator)
-        (current_directory)
+        (segment_directory)
         (git_info)
         # end of the prompts' first line: colored arrows and clock
         (segment --bg $colors.grey2 --fg $colors.blue $symbols.separator)
@@ -164,14 +183,18 @@ def computer_name [] {
 def current_directory [] {
     # like it's done here: https://github.com/nushell/nu_scripts/blob/main/modules/prompt/panache-git.nu#L28
     let cwd_relative = (do --ignore-errors { pwd | path relative-to $nu.home-path })
-    let cwd = if (pwd) == $nu.home-path {
+
+    if (pwd) == $nu.home-path {
         "~"
     } else if ($cwd_relative | is-empty) {
         pwd
     } else {
         $"~/($cwd_relative)"
     }
-    segment --bg $colors.mustard --fg $colors.grey $" ($symbols.directory) ($cwd) "
+}
+
+def segment_directory [] {
+    segment --bg $colors.mustard --fg $colors.grey $" ($symbols.directory) (current_directory) "
 }
 
 def prompt_start [] {
