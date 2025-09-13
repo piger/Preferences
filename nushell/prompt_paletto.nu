@@ -22,6 +22,10 @@ const colors = {
     light_blue: "#5ed7ff",
 }
 
+const colormap = {
+    first_segment_fg: $colors.lilac,
+}
+
 # Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
 const symbols = {
     # nf-pl-left_hard_divider 
@@ -91,8 +95,6 @@ export def indicator [] {
     }
 
     [
-        (ansi $colors.gold)
-        "nu "
         (ansi $colors.blue2)
         $added
         $modified
@@ -148,7 +150,7 @@ def prompt [] {
     [
         (prompt_start)
         (computer_name)
-        (segment --bg $colors.mustard --fg $colors.orange $symbols.separator)
+        (segment --bg $colors.mustard --fg $colormap.first_segment_fg $symbols.separator)
         (segment_directory)
         (git_info)
         # end of the prompts' first line: colored arrows and clock
@@ -185,10 +187,10 @@ def computer_name [] {
 
     match ($env.SSH_CONNECTION? | default "") {
         # not set
-        "" => (segment --bg $colors.orange --fg $colors.black $"($symbols.computer) ($hostname) "),
+        "" => (segment --bg $colormap.first_segment_fg --fg $colors.black $"($symbols.computer) ($hostname) "),
 
         # is set
-        _ => (segment --bg $colors.orange --fg $colors.black $"($symbols.network) ($env.USER)@($hostname)"),
+        _ => (segment --bg $colormap.first_segment_fg --fg $colors.black $"($symbols.network) ($env.USER)@($hostname)"),
     }
 }
 
@@ -212,7 +214,7 @@ def segment_directory [] {
 }
 
 def prompt_start [] {
-    segment --fg $colors.orange $symbols.half_circle_left
+    segment --fg $colormap.first_segment_fg $symbols.half_circle_left
 }
 
 def git_info [] {
