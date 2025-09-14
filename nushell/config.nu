@@ -1,4 +1,12 @@
 # nushell config
+#
+# Run "config nu" and add "source <path to this file>".
+
+# having a const for the nushell directory in Preferences allows to use "source" and "use".
+# See also:
+# - https://www.nushell.sh/book/configuration.html#using-constants
+# - https://www.nushell.sh/book/how_nushell_code_gets_run.html#multiline-repl-commandlines
+const nu_dotfiles_dir = path self | path dirname
 
 # git plugin
 plugin add nu_plugin_gstat
@@ -14,7 +22,7 @@ $env.config.plugin_gc = {
     }
 }
 
-use ([$nu.home-path "Preferences/nushell/prompt_paletto.nu"] | path join)
+use ([$nu_dotfiles_dir prompt_paletto.nu] | path join)
 $env.PROMPT_COMMAND = { || prompt_paletto }
 $env.PROMPT_INDICATOR = { || prompt_paletto indicator }
 $env.PROMPT_COMMAND_RIGHT = { || prompt_paletto prompt_right }
@@ -55,3 +63,8 @@ alias nu-ls = ls
 alias ls = eza --icons --color-scale --mounts --group-directories-first
 
 $env.config.buffer_editor = "vim"
+$env.config.show_banner = false
+
+# zoxidue support
+# zoxide init nushell out> zoxide.nu
+source ([$nu_dotfiles_dir zoxide.nu] | path join)
