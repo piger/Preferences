@@ -29,6 +29,15 @@ fortune-tips() {
     fi
 }
 
-os_logo
-fortune-classic
-fortune-tips
+if which figurine >/dev/null && which boxes >/dev/null; then
+    echo
+    figurine -f 3d.flf $(hostname)
+    echo
+    boxes -d parchment <(fortune -s -e "$FORTUNES_DIRECTORY")
+    echo
+    fortune-tips
+else
+    os_logo
+    fortune-classic
+    fortune-tips
+fi
