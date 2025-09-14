@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -ueo pipefail
+
+if [[ $TERM_PROGRAM = iTerm.app ]]; then
+    remote="$(git remote -v | awk '/^origin/ { print $2; exit }')"
+    url="$(echo $remote | sed 's/.*@github.com:/https:\/\/github.com\//')"
+    name="$(echo $remote | cut -d':' -f 2 | sed 's/\.git$//')"
+    printf "\e]8;;%s\a%s\e]8;;\a\n" "$url" "$name"
+fi
