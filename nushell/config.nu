@@ -68,3 +68,20 @@ $env.config.show_banner = false
 # zoxidue support
 # zoxide init nushell out> zoxide.nu
 source ([$nu_dotfiles_dir zoxide.nu] | path join)
+
+# welcome
+if not (which figurine | is-empty) {
+    sys host | get hostname | figurine -f 3d.flf $in
+    print ""
+}
+
+if not (which boxes | is-empty) {
+    fortune -s -e $env.FORTUNES_DIRECTORY | boxes -d parchment -
+    print ""
+}
+
+if ([$nu.home-path code cli-tips-fortune] | path join | path exists) {
+    print $"(ansi i)Tip of the day(ansi reset)"
+    fortune ([$nu.home-path code cli-tips-fortune] | path join)
+    print ""
+}
