@@ -22,10 +22,11 @@ const colors = {
     gold: "#FCBA03",
     red: "#D61C0F",
     light_blue: "#5ed7ff",
+    light_green: "#95ccae",
 }
 
 const colormap = {
-    first_segment_fg: $colors.lilac,
+    first_segment_fg: $colors.light_green,
 }
 
 # Nerd Fonts: https://www.nerdfonts.com/cheat-sheet
