@@ -27,3 +27,4 @@ zsh/.zcalc_history
 /elisp-init/init-local.el
 /emacs-settings.el
 /emacs-settings.html
+/Brewfile.lock.json
