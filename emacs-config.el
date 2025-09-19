@@ -989,8 +989,16 @@ becomes
          (css-mode . subword-mode)))
 
 (use-package rainbow-mode
+  :disabled
   :init
   (rainbow-mode))
+
+;; https://github.com/DevelopmentCool2449/colorful-mode
+(use-package colorful-mode
+  :custom
+  (colorful-use-prefix t)
+  :config
+  (global-colorful-mode t))
 
 (use-package js2-mode
   :mode "\\.js\\'"
