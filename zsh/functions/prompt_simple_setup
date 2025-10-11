@@ -1,0 +1,70 @@
+# simple prompt
+# Simple, one-line prompt with no git integration, no right prompt; it just prints the time and
+# the current directory.
+
+prompt_simple_help() {
+    echo "There is no help only Zuul."
+}
+
+prompt_simple_setup() {
+    seg() {
+        local background="$1"
+        local foreground="$2"
+        local text="$3"
+
+        [[ ! -z $background ]] && echo -n "%K{$background}"
+        [[ ! -z $foreground ]] && echo -n "%F{$foreground}"
+        [[ ! -z $text ]] && echo -n "$text"
+        [[ ! -z $background ]] && echo -n "%k"
+        [[ ! -z $foreground ]] && echo -n "%f"
+
+        echo
+    }
+
+    # nf-fa-clock 
+    local symbol_clock=$'\uf017'
+
+    # nf-md-dots_vertical (not exactly the same unicode as f01d9, but for some reason that doesn't work.
+    local symbol_three_dots=$'\u22ee'
+
+    # nf-oct-file_directory 
+    local symbol_folder=$'\uf413'
+
+    # https://en.wikipedia.org/wiki/Guillemet "»"
+    local symbol_prompt=$'\u00bb'
+
+    local color_light_blue="#5ed7ff"
+    local color_cream="#FAF2CB"
+    local color_gold="#FCBA03"
+
+    # promptinit should already have defined $prompt_newline, so this should not be necessary.
+    # https://github.com/zsh-users/zsh/blob/master/Functions/Prompts/promptinit
+    [[ -z $prompt_newline ]] && prompt_newline=$'\n%{\r%}'
+
+    PROMPT=""
+
+    # Print the mark used by iTerm2's shell integration.
+    # NOTE: this must be the first "element" of the prompt's line, otherwise it will add an extra
+    # newline.
+    if [[ "$ITERM_SHELL_INTEGRATION_INSTALLED" == "Yes" && "$TERM_PROGRAM" == "iTerm.app" ]]; then
+        PROMPT+="%{$(iterm2_prompt_mark)%}"
+    fi
+
+    PROMPT+=$(seg '' $color_light_blue $symbol_clock)
+    PROMPT+=" %T $symbol_three_dots "
+    PROMPT+=$(seg '' $color_light_blue $symbol_folder)
+    PROMPT+=$(seg '' $color_cream " %~")
+    PROMPT+=$(seg '' $color_gold " $symbol_prompt ")
+
+    # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
+    SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
+
+    prompt_opts=(cr subst percent sp)
+    unfunction seg
+}
+
+prompt_simple_preview() {
+    prompt_preview_theme simple "$@"
+}
+
+prompt_simple_setup "$@"
