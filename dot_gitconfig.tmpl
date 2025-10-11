@@ -22,17 +22,32 @@
 	;; diff.mnemonicPrefix will replace the a/ and b/ in your diff header output with where the
 	;; diff is coming from, so i/ (index), w/ (working directory) or c/ commit.
 	mnemonicPrefix = true
+	{{- if lookPath "difft" }}
 	tool = difftastic
+	{{- end }}
 
 [difftool]
 	prompt = false
 
+{{ if lookPath "difft" -}}
 [difftool "difftastic"]
 	; See `man git-difftool` for a description of MERGED, LOCAL and REMOTE.
 	cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 
+{{ end -}}
+
 [pager]
 	difftool = true
+	{{- if lookPath "riff" }}
+	log = riff
+	show = riff
+	diff = riff
+	{{- end }}
+
+[interactive]
+	{{- if lookPath "riff" }}
+	diffFilter = riff --color=on
+	{{- end }}
 
 [merge]
 	conflictStyle = zdiff3
@@ -86,14 +101,18 @@
 	diffc = diff --color-words=.
 	showc = show --color-words=.
 
+{{- if lookPath "difft" }}
 	; difftastic
 	dlog = -c diff.external=difft log --ext-diff
 	dshow = -c diff.external=difft show --ext-diff
 	ddiff = -c diff.external=difft diff
+{{- end }}
 
-; Questo e' per OSX ma su Linux non crea conflitti.
+{{ if eq .chezmoi.os "darwin" -}}
 [credential]
 	helper = osxkeychain
+
+{{ end -}}
 
 ; NOTE: default from git 2.0
 [push]
@@ -137,29 +156,26 @@
 	autosquash = true
 
 [user]
-	name = Daniel Kertesz
-	email = daniel@spatof.org
+	name = {{ .name }}
+	email = {{ .email }}
 
 [github]
 	user = piger
 
-; Enable signing commits with an SSH key
-; [user]
-; signingKey = ~/.ssh/key.pub
+{{ if and (eq .hostType "personal") (eq .chezmoi.os "darwin") -}}
+[user]
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKOM2rFXxrxvh1mWZBDXVttyIBYk0LDwi92Grt8LM2dx
 
-; [commit]
-; gpgsign = true
+[gpg]
+  format = ssh
 
-; [gpg]
-; format = ssh
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
-; Include files
-; platform specific configuration
-[includeIf "gitdir:/home/"]
-	path = ~/.gitconfig-linux
+[commit]
+  gpgsign = true
 
-[includeIf "gitdir:/Users/"]
-	path = ~/.gitconfig-macos
+{{ end -}}
 
 ; work specific configuration
 ; note: can also use this format:

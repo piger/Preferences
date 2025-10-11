@@ -1,0 +1,10 @@
+{{- $name := promptStringOnce . "name" "What's your name? (for git commits and such)" -}}
+{{- $email := promptStringOnce . "email" "What's your email address?" -}}
+{{- $hostTypes := list "personal" "work" -}}
+{{- $hostType := promptChoiceOnce . "hostType" "What type of computer is this?" $hostTypes  -}}
+
+sourceDir: "~/Preferences"
+data:
+  name: {{ $name | quote }}
+  email: {{ $email | quote }}
+  hostType: {{ $hostType | quote }}
