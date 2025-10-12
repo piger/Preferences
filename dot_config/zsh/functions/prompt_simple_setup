@@ -51,7 +51,7 @@ prompt_simple_setup() {
     fi
 
     PROMPT+=$(seg '' $color_light_blue $symbol_clock)
-    PROMPT+=" %T $symbol_three_dots "
+    PROMPT+=" %T$symbol_three_dots "
     PROMPT+=$(seg '' $color_light_blue $symbol_folder)
     PROMPT+=$(seg '' $color_cream " %~")
     PROMPT+=$(seg '' $color_gold " $symbol_prompt ")
