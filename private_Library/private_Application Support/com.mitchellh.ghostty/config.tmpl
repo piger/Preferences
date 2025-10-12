@@ -1,0 +1,18 @@
+{{- if stat (joinPath .chezmoi.homeDir "code/others/ghostty-shaders") -}}
+# custom-shader = /Users/dkertesz/code/others/ghostty-shaders/cursor_blaze.glsl
+custom-shader = /Users/dkertesz/code/others/ghostty-shaders/gears-and-belts.glsl
+{{- end }}
+
+# theme = Embark
+# theme = Gruvbox Dark Hard
+theme = Monokai Pro Octagon
+# theme = Popping and Locking
+
+font-family = Iosevka
+font-size = 15.5
+
+# font-family = JetBrainsMono Nerd Font Mono
+# font-size = 13.5
+
+# optional local configuration file; see https://ghostty.org/docs/config#splitting-into-multiple-files
+config-file = ?config.local
