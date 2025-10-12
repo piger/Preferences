@@ -21,6 +21,7 @@ brew "direnv"               # Load/unload environment variables based on $PWD
 brew "dnscontrol"           # Synchronize your DNS to multiple providers from a simple DSL
 brew "dnscrypt-proxy"       # Secure communications between a client and a DNS resolver
 brew "doggo"                # Command-line DNS client
+brew "dysk"                 # Linux utility to get information on filesystems, like df but better
 brew "enchant"              # Spellchecker wrapping library
 brew "eza"                  # Modern, maintained replacement for ls
 brew "fd"                   # Simple, fast and user-friendly alternative to find
@@ -59,7 +60,7 @@ brew "nushell"              # Modern shell for the GitHub era
 brew "pkg-config"           # Manage compile and link flags for libraries
 brew "pstree"               # Show ps output as a tree
 brew "pv"                   # Monitor data's progress through a pipe
-brew "python3"              # Interpreted, interactive, object-oriented programming language
+brew "python@3.14"          # Interpreted, interactive, object-oriented programming language
 brew "riff"                 # Diff filter highlighting which line parts have changed
 brew "ripgrep"              # Search tool like grep and The Silver Searcher
 brew "sd"                   # Intuitive find & replace CLI
