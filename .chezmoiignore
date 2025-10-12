@@ -9,3 +9,9 @@
 !.tigrc
 !.sqliterc
 !.emacs.d
+!.pythonrc.py
+!.inputrc
+!.lftprc
+!Library/**
+!.luacheckrc
+
