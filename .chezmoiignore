@@ -8,7 +8,7 @@
 !.tmux.conf
 !.tigrc
 !.sqliterc
-!.emacs.d
+!.emacs.d/
 !.pythonrc.py
 !.inputrc
 !.lftprc
