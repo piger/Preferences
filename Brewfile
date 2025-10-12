@@ -5,7 +5,7 @@
 
 ## Taps
 tap "1password/tap"
-tap "railwaycat/emacsmacport"
+# tap "railwaycat/emacsmacport"
 
 ## Formulas
 brew "age"                  # Simple, modern, secure file encryption
@@ -13,6 +13,7 @@ brew "age-plugin-yubikey"   # Plugin for encrypting files with age and PIV token
 brew "aria2"                # Download with resuming and segmented downloading
 brew "atool"                # Archival front-end
 brew "caddy"                # Powerful, enterprise-ready, open source web server with automatic HTTPS
+brew "chezmoi"              # Manage your dotfiles across multiple diverse machines, securely
 brew "comby"                # Tool for changing code across many languages
 brew "coreutils"            # GNU File, Shell, and Text utilities
 brew "difftastic"           # Diff that understands syntax
@@ -53,7 +54,6 @@ brew "moreutils"            # Collection of tools that nobody wrote when UNIX wa
 brew "mosh"                 # Remote terminal application
 brew "mtr"                  # 'traceroute' and 'ping' in a single tool
 brew "ncdu"                 # NCurses Disk Usage
-brew "neofetch"             # Fast, highly customisable system info script
 brew "nmap"                 # Port scanning utility for large networks
 brew "nushell"              # Modern shell for the GitHub era
 brew "pkg-config"           # Manage compile and link flags for libraries
@@ -78,7 +78,7 @@ brew "zsh-autosuggestions"  # Fish-like fast/unobtrusive autosuggestions for zsh
 
 ## Casks
 cask "1password-cli"
-cask "emacs-mac"
+# cask "emacs-mac"
 
 ## Fonts
 cask "font-iosevka"
