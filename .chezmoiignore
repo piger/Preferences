@@ -1,4 +1,7 @@
+# Exclude everything by default
 *
+
+# Only manage the following files:
 !.ripgreprc
 !.gitconfig
 !.config
