@@ -34,6 +34,8 @@ if [[ is_mac && $XDG_CONFIG_HOME == "" ]]; then
     export XDG_CONFIG_HOME="$HOME/.config"
 fi
 
+export ZDOTDIR=$XDG_CONFIG_HOME/zsh
+
 # macOS Homebrew
 if [[ $OSTYPE = darwin* ]]; then
     for d in /opt/homebrew /usr/local/Homebrew; do
@@ -108,6 +110,6 @@ if [[ -d /etc/paths.d ]]; then
 fi
 
 # Load local zshenv
-source_if_exists "$HOME/.zshenv.local"
+source_if_exists "$XDG_CONFIG_HOME/zsh/zshenv.local"
 
 # vim: ft=zsh

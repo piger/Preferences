@@ -368,8 +368,8 @@ fi
 # See also:
 # http://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 typeset -U fpath
-[[ -d ~/Preferences/zsh/scripts ]] && fpath+=~/Preferences/zsh/scripts
-[[ -d ~/Preferences/zsh/functions ]] && fpath+=~/Preferences/zsh/functions
+[[ -d $XDG_CONFIG_HOME/zsh/scripts ]] && fpath+=$XDG_CONFIG_HOME/zsh/scripts
+[[ -d $XDG_CONFIG_HOME/zsh/functions ]] && fpath+=$XDG_CONFIG_HOME/zsh/functions
 
 # if there's a local functions dir, prepend it to fpath to override the custom zsh functions.
 if [[ -d ~/.zsh-work/functions ]]; then
@@ -771,6 +771,6 @@ source_if_exists $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highl
 source_if_exists "$HOME/Preferences/zsh/keephack"
 
 ### LOCAL SETTINGS
-source_if_exists "$HOME/.zshrc.local"
+source_if_exists "$XDG_CONFIG_HOME/zsh/zshrc.local"
 
 # zprof

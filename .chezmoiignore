@@ -1,3 +1,6 @@
 *
 !.ripgreprc
 !.gitconfig
+!.config
+!.zshenv
+!.config/zsh/*
