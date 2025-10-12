@@ -6,6 +6,8 @@
 ### Helpers
 source_if_exists() { if test -e "$1"; then source "$1"; fi }
 add_path_if_exists() { if test -d "$1"; then path+=("$1"); fi }
+is_linux() { [[ $OSTYPE = linux* ]] }
+is_mac() { [[ $OSTYPE = darwin* ]] }
 
 # unfuck $PATH broken by /etc/paths.d/10-cryptex, which adds multiple paths in the same
 # file, breaking EVERYTHING. These are two possible solutions:
@@ -27,6 +29,10 @@ path=(
     $path /sbin /bin /usr/sbin /usr/bin /usr/X11R6/bin 
     /usr/local/sbin /usr/local/bin
 )
+
+if [[ is_mac && $XDG_CONFIG_HOME == "" ]]; then
+    export XDG_CONFIG_HOME="$HOME/.config"
+fi
 
 # macOS Homebrew
 if [[ $OSTYPE = darwin* ]]; then
