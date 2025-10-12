@@ -1,0 +1,4 @@
+.config/vim/pack/foo/start/gruvbox.git:
+  type: git-repo
+  url: https://github.com/morhetz/gruvbox.git
+  refreshPeriod: 168h # 7d
