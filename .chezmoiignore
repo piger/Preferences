@@ -3,4 +3,9 @@
 !.gitconfig
 !.config
 !.zshenv
-!.config/zsh/*
+!.config/*
+!.curlrc
+!.tmux.conf
+!.tigrc
+!.sqliterc
+!.emacs.d
