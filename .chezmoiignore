@@ -7,6 +7,8 @@
 !.config
 !.zshenv
 !.config/*
+.config/tmux/README
+.config/tmux/tmux.terminfo
 !.curlrc
 !.tmux.conf
 !.tigrc
