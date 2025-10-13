@@ -161,6 +161,8 @@
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
+(use-package kaolin-themes)
+
 ;; Generic settings
 ;; (some of them coming from from emacs-doom)
 (set-language-environment "UTF-8")
