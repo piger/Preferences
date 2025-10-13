@@ -1,4 +1,4 @@
-{{- if stat (joinPath .chezmoi.homeDir "code/others/ghostty-shaders") -}}
+{{- if (and .enable_ghostty_shader (stat (joinPath .chezmoi.homeDir "code/others/ghostty-shaders"))) -}}
 # custom-shader = /Users/dkertesz/code/others/ghostty-shaders/cursor_blaze.glsl
 custom-shader = /Users/dkertesz/code/others/ghostty-shaders/gears-and-belts.glsl
 {{- end }}
