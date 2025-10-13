@@ -4,7 +4,7 @@ os_logo() {
     if which fastfetch >/dev/null; then
         fastfetch
     elif [[ $OSTYPE = darwin* ]]; then
-	zsh $HOME/Preferences/zsh/functions/apple-logo
+        zsh $HOME/Preferences/zsh/functions/apple-logo
     fi
 }
 
@@ -23,7 +23,7 @@ fortune-classic() {
 
 fortune-tips() {
     if [[ -d ${PERSONAL_CODE_DIR}/cli-tips-fortune/ ]]; then
-	printf "\e[3m\e[1mTip of the day\e[0m\n"
+        printf "\e[3m\e[1mTip of the day\e[0m\n"
         fortune ${PERSONAL_CODE_DIR}/cli-tips-fortune/
         echo ""
     fi
