@@ -30,9 +30,13 @@ path=(
     /usr/local/sbin /usr/local/bin
 )
 
-if [[ is_mac && $XDG_CONFIG_HOME == "" ]]; then
-    export XDG_CONFIG_HOME="$HOME/.config"
-fi
+# https://specifications.freedesktop.org/basedir-spec/latest/
+export XDG_BIN_HOME="$HOME/.local/bin" # non standard?
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+path+=("$XDG_BIN_HOME")
 
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 
