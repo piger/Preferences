@@ -51,10 +51,10 @@ prompt_simple_setup() {
     fi
 
     PROMPT+=$(seg '' $color_light_blue $symbol_clock)
-    PROMPT+=" %T$symbol_three_dots "
+    PROMPT+=" %F{#b3b3b5}%T%f$symbol_three_dots "
     PROMPT+=$(seg '' $color_light_blue $symbol_folder)
-    PROMPT+=$(seg '' $color_cream " %~")
-    PROMPT+=$(seg '' $color_gold " $symbol_prompt ")
+    PROMPT+=$(seg '' $color_cream "  %~")
+    PROMPT+=$(seg '' $color_gold " %(!.#.${symbol_prompt}) ")
 
     # Spell checker prompt: shown when the command does not exists but look similar to an existing one.
     SPROMPT="%B%R%b does not exists; did you mean %B%r%b (%BY%bes/%BN%bo/%BE%bdit/%BA%bbort)? "
