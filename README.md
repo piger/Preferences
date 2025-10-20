@@ -16,6 +16,14 @@ A collection of personal configuration files.
 1. Install chezmoi
     * Check the prebuilt packages [here](https://www.chezmoi.io/install/#download-a-pre-built-linux-package)
 
+### First time run
+
+The first time you run chezmoi, you need to specify the source directory manually:
+
+```
+$ chezmoi --source ~/Preferences init
+```
+
 ### Sync all the dotfiles
 
 1. `chezmoi apply`
