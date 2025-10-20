@@ -4,7 +4,7 @@ os_logo() {
     if which fastfetch >/dev/null; then
         fastfetch
     elif [[ $OSTYPE = darwin* ]]; then
-        zsh $HOME/Preferences/zsh/functions/apple-logo
+        zsh $HOME/Preferences/dot_config/zsh/functions/apple-logo
     fi
 }
 
