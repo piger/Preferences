@@ -16,3 +16,7 @@ font-size = 15.5
 
 # optional local configuration file; see https://ghostty.org/docs/config#splitting-into-multiple-files
 config-file = ?config.local
+
+{{ if .small_keyboard_tilde_ghostty -}}
+keybind = shift+escape=text:~
+{{- end }}
