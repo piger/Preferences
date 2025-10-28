@@ -208,19 +208,12 @@ HISTSIZE=12000
 HISTFILE=$HOME/.history
 
 ### COMMANDS CONFIGURATION
-export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5"
 
-if [[ -x $HOMEBREW_PREFIX/bin/moor ]]; then
-    # Styles: https://xyproto.github.io/splash/docs/longer/all.html
-    # Mouse support: https://github.com/walles/moor/blob/master/MOUSE.md
-    # dark
-    export MOOR="--mousemode=select --style=gruvbox -no-linenumbers"
-    # light
-    # export MOOR="--mousemode=select --style=rose-pine-dawn -no-linenumbers"
-    export PAGER=$HOMEBREW_PREFIX/bin/moor
-else
-    export PAGER="less"
-fi
+# Note: I've used "moor" https://github.com/walles/moor for a while, but then I realised that less already does
+# all the things I need (mouse support, incremental search), except the fancy themes. But the fancy themes can easily
+# get unreadable.
+export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5 --incsearch --mouse"
+export PAGER="less"
 
 # apparently this is a thing:
 # $ < file.txt
@@ -228,13 +221,27 @@ export READNULLCMD="$PAGER"
 
 # Colors in man pages, without having to use `most`.
 # http://nion.modprobe.de/blog/archives/572-less-colors-for-man-pages.html
+# mb = start blinking
 export LESS_TERMCAP_mb=$'\E[01;31m'
+# md = start bold mode
 export LESS_TERMCAP_md=$'\E[01;31m'
+# me = end all mode like so, us, mb, md, and mr
 export LESS_TERMCAP_me=$'\E[0m'
+# so = start standout mode
+# export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_so=$'\E[01;30;45m'
+# se = end standout mode
 export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
+# us = start underlining
 export LESS_TERMCAP_us=$'\E[01;32m'
+# ue = end underlining
+export LESS_TERMCAP_ue=$'\E[0m'
+
+# 01 = bold
+# XX;YY = bg color, fg color
+# 0 = reset
+
+# NOTE: these are ANSI color codes: https://jakob-bagterp.github.io/colorist-for-python/ansi-escape-codes/standard-16-colors/#examples
 
 # Sets vim or vi as the default editor.
 if exists vim; then
