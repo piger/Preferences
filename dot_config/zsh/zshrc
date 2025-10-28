@@ -601,7 +601,8 @@ bindkey -M isearch " " magic-space
 #
 # :completion:function:completer:command:argument:tag
 
-# zsh-completions
+# zsh-completions: https://github.com/zsh-users/zsh-completions
+[[ -d $HOME/code/others/zsh-completions ]] && fpath=($HOME/code/others/zsh-completions/src $fpath)
 [[ -d /usr/local/share/zsh-completions/ ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 
 # local completion cache
