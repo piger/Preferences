@@ -565,6 +565,10 @@ exists kubens && alias kns='kubens'
 alias go-show-direct-deps-updates="go list -f '{{if not .Indirect}}{{.}}{{end}}' -u -m all"
 alias go-show-all-deps-updates="go list -u -m all"
 
+godoc() {
+    go doc -all "$@" | $PAGER
+}
+
 # dig
 alias dig-quiet="dig +noall +answer"
 
@@ -745,6 +749,15 @@ if exists op; then
     eval "$(op completion zsh)"
     compdef _op op
 fi
+
+# Completion for my "go doc" wrapper
+_godoc() {
+    words=(go doc $words[@])
+    CURRENT+=1
+    _dispatch go go
+}
+
+compdef _godoc godoc
 
 # direnv
 exists direnv && eval "$(direnv hook zsh)"
