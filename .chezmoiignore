@@ -17,5 +17,9 @@
 !.pythonrc.py
 !.inputrc
 !.lftprc
+
+{{- if ne .chezmoi.os "linux" }}
 !Library/**
+{{- end }}
+
 !.luacheckrc
