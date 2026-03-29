@@ -120,16 +120,22 @@ git_main_branch() {
     git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
 }
 
+# maybe check if emacs is running, with emacsclient -a false -e 't'
+# https://stackoverflow.com/questions/1510481/how-can-i-detect-that-emacs-server-is-running-from-a-shell-prompt
+
 dark_mode() {
     export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=gruvbox')"
     export LS_COLORS=$(vivid generate jellybeans)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+    # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-tomorrow-night)" >/dev/null
 }
 
 light_mode() {
     export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
-    export LS_COLORS=$(vivid generate modus-operandi)
+    # export LS_COLORS=$(vivid generate modus-operandi)
+    export LS_COLORS=$(vivid generate gruvbox-light)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+    # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-opera-light)" >/dev/null
 }
 
 gdoc() {
