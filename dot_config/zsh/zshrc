@@ -218,7 +218,7 @@ HISTFILE=$HOME/.history
 # Note: I've used "moor" https://github.com/walles/moor for a while, but then I realised that less already does
 # all the things I need (mouse support, incremental search), except the fancy themes. But the fancy themes can easily
 # get unreadable.
-export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5 --incsearch --mouse"
+export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5 --incsearch"
 export PAGER="less"
 
 # apparently this is a thing:
