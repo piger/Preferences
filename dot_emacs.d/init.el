@@ -2078,6 +2078,11 @@ becomes
 ;;; to help troubleshooting:
 (setq debug-on-error nil)
 
+(use-package kanagawa-themes
+  :config
+  (setq kanagawa-themes-comment-italic nil)
+  (setq kanagawa-themes-keyword-italic nil))
+
 ;; bug reference mode
 ;; Local Variables:
 ;; bug-reference-bug-regexp: "\\([Bb]ug[#-]\\([0-9]+\\)\\)"
