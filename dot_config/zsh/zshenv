@@ -100,7 +100,7 @@ export PERSONAL_CODE_DIR OTHERS_CODE_DIR
 # everything done so far.
 # Also if we ever need to have this feature we can just read files in /etc/paths.d and /etc/manpaths.d by
 # ourselves; see man 'path_helper'.
-setopt no_GLOBAL_RCS
+is_mac && setopt no_GLOBAL_RCS
 
 # Manually add paths from /etc/paths.d on macOS rather than calling path_helper; this is used for things like Go
 # installed in /opt/go.
