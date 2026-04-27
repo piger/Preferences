@@ -55,6 +55,7 @@
 ;; end of custom settings
 
 (defconst *is-a-mac* (eq system-type 'darwin))
+(defconst *is-a-linux* (eq system-type 'gnu/linux))
 
 ;; tune GC
 ;; (setq gc-cons-threshold 100000000
@@ -69,10 +70,10 @@
 (setq gc-cons-threshold (* 32 1024 1024))  ;; 32MB; default is 800000 (800KB).
 
 ;; Packages
-(require 'package)
-(setq package-enable-at-startup nil)
+;; (require 'package)
+;; (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
+;; (package-initialize)
 
 ;; use-package
 (unless (package-installed-p 'use-package)
@@ -133,6 +134,10 @@
 
   ;; bind C-/ to comment or uncomment the region (default: undo)
   (global-set-key (kbd "C-/") 'comment-or-uncomment-region))
+
+(when *is-a-linux*
+  (global-set-key (kbd "s-s") 'save-buffer)
+  (global-set-key (kbd "s-z") 'undo))
 
 ;; Themes
 (use-package base16-theme
@@ -985,10 +990,8 @@ becomes
 
 (use-package css-mode
   :mode "\\.css\\'"
-  :custom
-  (css-indent-offset 2)
-  :hook ((css-mode . rainbow-mode)
-         (css-mode . subword-mode)))
+  :custom (css-indent-offset 2)
+  :hook (css-mode . subword-mode))
 
 (use-package rainbow-mode
   :disabled
@@ -1029,35 +1032,34 @@ becomes
   :mode "\\.json\\'"
   :hook (json-mode . flycheck-mode))
 
+(defun my-web-mode-hook ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  ;; (yas-minor-mode +1)
+  (whitespace-cleanup-mode +1))
+
+(defun piger/web-mode-set-engine ()
+  "Set web-mode engine based on some conditions."
+  (if (and (file-exists-p (concat (projectile-project-root) "archetypes"))
+           (file-exists-p (concat (projectile-project-root) "config.toml")))
+      (web-mode-set-engine "go")))
+
 (use-package web-mode
   :mode ("\\.erb\\'"
          "\\.hbs\\'"
          "\\.html?\\'"
          "\\.tmpl\\'"
          "\\.j2\\'")
-  :init
-  (setq web-mode-engines-alist
-        '(("go" . "/go/src/.*\\.html\\'")
-          ("go" . "/nginx-templates/default\\.conf\\.tmpl\\'")
-          ("django" . "/dev/.*/templates/.*\\.html\\'")))
-  (setq web-mode-enable-auto-indentation nil)
-  :hook (web-mode . my-web-mode-hook)
-  :config
-  (defun my-web-mode-hook ()
-    (local-set-key (kbd "RET") 'newline-and-indent)
-    ;; (yas-minor-mode +1)
-    (whitespace-cleanup-mode +1))
-  (defun piger/web-mode-set-engine ()
-    "Set web-mode engine based on some conditions."
-    (if (and (file-exists-p (concat (projectile-project-root) "archetypes"))
-             (file-exists-p (concat (projectile-project-root) "config.toml")))
-        (web-mode-set-engine "go")))
-  (add-hook 'web-mode-hook 'piger/web-mode-set-engine)
-
-  (setq web-mode-enable-current-element-highlight t
-        web-mode-enable-auto-quoting -1
-        web-mode-code-indent-offset 4
-        web-mode-markup-indent-offset 4))
+  :custom
+  (web-mode-engine-alist '(("go" . "/go/src/.*\\.html\\'")
+                           ("go" . "/nginx-templates/default\\.conf\\.tmpl\\'")
+                           ("django" . "/dev/.*/templates/.*\\.html\\'")))
+  (web-mode-enable-auto-indentation nil)
+  (web-mode-enable-current-element-highlight t)
+  (web-mode-enable-auto-quoting -1)
+  (web-mode-code-indent-offset 4)
+  (web-mode-markup-indent-offset 4)
+  :hook ((web-mode . my-web-mode-hook)
+         (web-mode . piger/web-mode-set-engine)))
 
 ;; To edit the engine list:
 ;; (setq web-mode-engines-alist (append '(("django" . "/sand/src/.*templates/")) web-mode-engines-alist))
@@ -1104,12 +1106,7 @@ becomes
 
 (use-package prog-mode
   :ensure nil
-  :hook (prog-mode . bug-reference-mode)
-  :config
-  ;; electric pair mode is fucking awful.
-  ;; (setq electric-pair-skip-self t)
-  ;; (electric-pair-mode))
-)
+  :hook (prog-mode . bug-reference-mode))
 
 ;; https://oylenshpeegul.gitlab.io/blog/posts/20230129/
 ;; Add a contextual menu to launch 'git-link' by right-clicking on a line.
@@ -1127,12 +1124,14 @@ becomes
 ;; consult configuration copied from emacs-bedrock: https://git.sr.ht/~ashton314/emacs-bedrock
 
 (use-package avy
-  :demand t
   :bind (("C-c j" . avy-goto-line)
          ("s-j"   . avy-goto-char-timer)))
 
 (use-package consult
   :if (eq piger/completion-system 'bedrock)
+  :custom
+  ;; Narrowing lets you restrict results to certain groups of candidates
+  (consult-narrow-key "<")
   :bind (
          ;; Drop-in replacements
          ("C-x b" . consult-buffer)     ; orig. switch-to-buffer
@@ -1151,10 +1150,7 @@ becomes
          ("M-s e" . consult-isearch-history) ; orig. isearch-edit-string
          ("M-s l" . consult-line)            ; needed by consult-line to detect isearch
          ("M-s L" . consult-line-multi)      ; needed by consult-line to detect isearch
-         )
-  :config
-  ;; Narrowing lets you restrict results to certain groups of candidates
-  (setq consult-narrow-key "<"))
+         ))
 
 (use-package embark
   :if (eq piger/completion-system 'bedrock)
@@ -1359,10 +1355,11 @@ becomes
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch)
          ("C-c M-g" . magit-file-dispatch))
-  :config
-  (setq magit-diff-refine-hunk 'all
-        git-commit-summary-max-length 72)
-  (setopt magit-format-file-function #'magit-format-file-all-the-icons)
+  :custom
+  (magit-diff-refine-hunk 'all)
+  (git-commit-summary-max-length 72)
+  (magit-format-file-function #'magit-format-file-all-the-icons)
+  ; (setopt magit-format-file-function #'magit-format-file-all-the-icons)
   :hook ((git-commit-setup . git-commit-turn-on-flyspell)
          (git-commit-setup . (lambda () (setq fill-column 80)))
          (after-save . magit-after-save-refresh-status)))
@@ -1407,25 +1404,24 @@ becomes
 
 (use-package evil
   :commands (evil-mode evil-local-mode)
-  :init
-  (setq evil-want-C-u-scroll t) ; enable scroll-down with C-u
-  :config
-  (setq evil-emacs-state-cursor  '("red" box)
-        evil-normal-state-cursor '("gray" box)
-        evil-visual-state-cursor '("gray" box)
-        evil-insert-state-cursor '("gray" bar)
-        evil-motion-state-cursor '("gray" box)))
+  :custom
+  (evil-want-C-u-scroll t) ; enable scroll-down with C-u
+  (evil-emacs-state-cursor  '("red" box))
+  (evil-normal-state-cursor '("gray" box))
+  (evil-visual-state-cursor '("gray" box))
+  (evil-insert-state-cursor '("gray" bar))
+  (evil-motion-state-cursor '("gray" box)))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode))
-  :config
-  (setq markdown-fontify-code-blocks-natively t)
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+  :hook (markdown-mode . turn-on-auto-fill))
   ;; (set-face-attribute 'markdown-pre-face nil :inherit 'markdown-markup-face)
   ;; (custom-set-faces
   ;;  '(markdown-pre-face ((t (:inherit markdown-markup-face)))))
-  (add-hook 'markdown-mode-hook 'turn-on-auto-fill))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'"
@@ -1439,8 +1435,8 @@ becomes
 ;; pretty much NOTHING useful.
 (use-package terraform-mode
   :mode "\\.tf\\'"
-  :config
-  (setq terraform-format-on-save t))
+  :custom
+  (terraform-format-on-save t))
 
 (use-package company-terraform
   :after (terraform-mode company)
@@ -1456,8 +1452,8 @@ becomes
 
 (use-package ssh-config-mode
   :mode "\\.ssh/config\\'"
-  :config
-  (setq ssh-config-mode-indent 4))
+  :custom
+  (ssh-config-mode-indent 4))
 
 (use-package systemd
   :mode ("\\.service\\'" . systemd-mode))
@@ -1499,21 +1495,19 @@ becomes
 (defun pl-elisp-mode-defaults ()
   "Some defaults for elisp mode"
   (turn-on-eldoc-mode)
-  (diminish 'eldoc-mode)
-  (rainbow-mode +1)
-  (diminish 'rainbow-mode))
+  (diminish 'eldoc-mode))
 (setq pl-elisp-mode-hooks 'pl-elisp-mode-defaults)
 (add-hook 'emacs-lisp-mode-hook (lambda ()
                                   (run-hooks 'pl-elisp-mode-hooks)))
 
 (use-package projectile
-  :init
-  (setq projectile-project-search-path piger/code-directories-alist)
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode +1)
-  (add-to-list 'projectile-globally-ignored-files ".pyc")
-  (add-to-list 'projectile-globally-ignored-files "__pycache__"))
+  :custom (projectile-project-search-path piger/code-directories-alist)
+  :bind-keymap (("C-c C-p" . projectile-command-map)
+                ("C-c p" . projectile-command-map)
+                ("s-p" . projectile-command-map))
+  :hook (after-init . projectile-mode))
+;  (add-to-list 'projectile-globally-ignored-files ".pyc")
+;  (add-to-list 'projectile-globally-ignored-files "__pycache__"))
 
 ;; required by the command projectile-ripgrep
 ;; Search with: C-c s
@@ -1559,8 +1553,8 @@ becomes
 ;; https://github.com/minad/goggles
 (use-package goggles
   :hook ((prog-mode text-mode) . goggles-mode)
-  :config
-  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
+  :custom
+  (goggles-pulse t)) ;; set to nil to disable pulsing
 
 ;; code folding with vim compatibility
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
@@ -1630,7 +1624,7 @@ becomes
 
 (use-package flyspell
   :commands flyspell-mode
-  :config
+  :custom
   (set-face-attribute 'flyspell-duplicate nil :underline '(:color "#d79921" :style line :position -3))
   (set-face-attribute 'flyspell-incorrect nil :underline '(:color "#951b9e" :style line :position -3))
   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
@@ -1640,6 +1634,7 @@ becomes
 
 ;; Org mode
 (use-package org
+  :defer t
   ;;; :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   ;; :bind (("C-c l" . org-store-link)
@@ -1874,7 +1869,7 @@ becomes
 ;;; HTTP status code package.
 ;;; NOTE: the command is "hc"
 (use-package httpcode
-  :load-path "~/dev/httpcode.el"
+  :load-path "~/code/httpcode.el"
   :commands hc
   :config
   ;; https://support.cloudflare.com/hc/en-us/articles/115003011431/
