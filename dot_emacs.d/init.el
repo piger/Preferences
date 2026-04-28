@@ -1973,6 +1973,8 @@ becomes
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
+  ;; shut down LSP server when last managed buffer is killed
+  (setq eglot-autoshutdown t)
   ;; configure go-pls
   (setq-default eglot-workspace-configuration
                 ;; For the documentation of gopls settings:
