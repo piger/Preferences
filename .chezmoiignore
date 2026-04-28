@@ -7,6 +7,7 @@
 !.config
 !.zshenv
 !.config/*
+.config/btop/*
 .config/tmux/README
 .config/tmux/tmux.terminfo
 !.curlrc
