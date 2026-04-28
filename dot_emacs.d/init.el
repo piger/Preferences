@@ -361,6 +361,12 @@
  show-paren-delay 0
  )
 
+;; don't pop up the *Warnings* buffer during async native compilation
+(setq native-comp-async-report-warnings-errors 'silent)
+
+;; highlight the current error in compilation/grep buffers
+(setq next-error-message-highlight t)
+
 ;; add column number to the modeline
 (use-package simple
   :disabled
