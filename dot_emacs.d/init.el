@@ -1437,6 +1437,8 @@ becomes
          ("\\.md\\'" . markdown-mode))
   :custom
   (markdown-fontify-code-blocks-natively t)
+  ;; no space between ``` and the language name
+  (markdown-spaces-after-code-fence 0)
   :hook (markdown-mode . turn-on-auto-fill))
   ;; (set-face-attribute 'markdown-pre-face nil :inherit 'markdown-markup-face)
   ;; (custom-set-faces
