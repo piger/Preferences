@@ -70,10 +70,14 @@
 ;; (setq gc-cons-threshold (* 32 1024 1024))  ;; 32MB; default is 800000 (800KB).
 
 ;; Packages
-;; (require 'package)
-;; (setq package-enable-at-startup nil)
+(require 'package)
+(setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; (package-initialize)
+(package-initialize)
+
+;; update the package metadata if the local cache is missing
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;; use-package
 (unless (package-installed-p 'use-package)
