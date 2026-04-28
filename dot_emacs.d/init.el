@@ -67,7 +67,7 @@
 ;; - https://github.com/emacsmirror/gcmh
 ;; - https://emacs-lsp.github.io/lsp-mode/page/performance/
 ;; - https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-(setq gc-cons-threshold (* 32 1024 1024))  ;; 32MB; default is 800000 (800KB).
+;; (setq gc-cons-threshold (* 32 1024 1024))  ;; 32MB; default is 800000 (800KB).
 
 ;; Packages
 ;; (require 'package)
