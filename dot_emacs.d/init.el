@@ -414,13 +414,14 @@
 
 (use-package tramp
   :ensure nil ;; do not install from package repos, use the builtin version
+  :custom
+  (tramp-default-method "ssh")
   :config
-  (setq tramp-default-method "ssh")
-  (tramp-set-completion-function "ssh"
-                                 '((tramp-parse-sconfig "/etc/ssh/ssh_config")
-                                   (tramp-parse-sconfig "~/.ssh/config")
-                                   (tramp-parse-hosts "/etc/hosts"))))
-;; (setq tramp-default-method "ssh")
+  (tramp-set-completion-function
+   "ssh"
+   '((tramp-parse-sconfig "/etc/ssh/ssh_config")
+     (tramp-parse-sconfig "~/.ssh/config")
+     (tramp-parse-hosts "/etc/hosts"))))
 
 ;; 08/04/2015 - I don't really like flyspell-mode...
 ;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
