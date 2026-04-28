@@ -1933,7 +1933,6 @@ becomes
 ;; railwaycat/emacsmacport/emacs-mac: stable emacs-28.2-mac-9.1
 ;; see also: https://github.com/minad/jinx/issues/48
 (use-package jinx
-  :disabled
   :hook (emacs-startup . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
