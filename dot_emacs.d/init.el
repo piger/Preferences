@@ -1262,7 +1262,6 @@ becomes
   :if (eq piger/completion-system 'ivy)
   :pin melpa
   :diminish
-  :demand t
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x C-r" . counsel-recentf)
          ("C-c C-r" . ivy-resume))
