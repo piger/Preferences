@@ -1870,7 +1870,7 @@ becomes
 ;;; NOTE: the command is "hc"
 (use-package httpcode
   :load-path "~/code/httpcode.el"
-  :commands hc
+  :commands httpcode-lookup
   :config
   ;; https://support.cloudflare.com/hc/en-us/articles/115003011431/
   (setq custom-http-codes
