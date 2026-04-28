@@ -35,6 +35,9 @@
 (defvar piger/default-font "JetBrains Mono 14"
   "The default font to use.")
 
+(defvar piger/default-font-weight 'light
+  "The weight of the default font (e.g. 'regular, 'light).")
+
 (defvar piger/completion-system 'ivy
   "The completion system to use. Can be 'ivy or 'bedrock.")
 
@@ -49,8 +52,12 @@
 (when (file-exists-p piger/emacs-local-settings)
   (load-file piger/emacs-local-settings))
 
-(set-frame-font piger/default-font nil t)
-(set-face-attribute 'default nil :weight 'light)
+(let ((font-name (replace-regexp-in-string "\s[0-9]+" "" piger/default-font)))
+  (cond
+   ((find-font (font-spec :name font-name))
+    (set-frame-font piger/default-font))))
+;; (set-frame-font piger/default-font nil t)
+(set-face-attribute 'default nil :weight piger/default-font-weight)
 
 ;; end of custom settings
 
