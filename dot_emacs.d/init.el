@@ -155,7 +155,7 @@
 
 ;; Themes
 (use-package base16-theme
-  :disabled
+  :defer t
   :config
   ;; (load-theme 'base16-railscasts t)
   ;; (load-theme 'base16-tomorrow-night t)
@@ -180,7 +180,8 @@
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
-(use-package kaolin-themes)
+(use-package kaolin-themes
+  :defer t)
 
 ;; Generic settings
 ;; (some of them coming from from emacs-doom)
