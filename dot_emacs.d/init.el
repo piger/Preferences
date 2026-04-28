@@ -2100,6 +2100,12 @@ becomes
   (setq kanagawa-themes-comment-italic nil)
   (setq kanagawa-themes-keyword-italic nil))
 
+(use-package dictionary
+  :ensure nil ;; native
+  :bind (("C-c l" . dictionary-lookup-definition))
+  :config
+  (setq dictionary-server "dict.org"))
+
 ;; bug reference mode
 ;; Local Variables:
 ;; bug-reference-bug-regexp: "\\([Bb]ug[#-]\\([0-9]+\\)\\)"
