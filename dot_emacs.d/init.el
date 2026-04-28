@@ -94,6 +94,10 @@
 (eval-when-compile
   (require 'use-package))
 
+;; uncomment to collect startup statistics, which can then be viewed with
+;; use-package-report.
+;; (setq use-package-compute-statistics t)
+
 ;; Assume "ensure t" for every declared package so that it's installed automatically.
 (setq use-package-always-ensure t)
 
