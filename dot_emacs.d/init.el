@@ -172,6 +172,13 @@
   :config
   (load-theme 'birds-of-paradise-plus t))
 
+(use-package ef-themes
+  :ensure t
+  :defer t)
+  ;; (ef-themes-take-over-modus-themes-mode 1)
+  ;; :config
+  ;; (modus-themes-load-theme 'ef-reverie))
+
 (use-package doom-themes
   :if piger/use-doom-themes
   :config
