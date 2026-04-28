@@ -1377,7 +1377,9 @@ becomes
   (git-commit-summary-max-length 72)
   (magit-format-file-function #'magit-format-file-all-the-icons)
   ; (setopt magit-format-file-function #'magit-format-file-all-the-icons)
-  :hook ((git-commit-setup . git-commit-turn-on-flyspell)
+  :hook (
+         ;; (git-commit-setup . git-commit-turn-on-flyspell)
+         (git-commit-setup . (lambda () (jinx-mode)))
          (git-commit-setup . (lambda () (setq fill-column 80)))
          (after-save . magit-after-save-refresh-status)))
 
@@ -1946,7 +1948,7 @@ becomes
 ;; railwaycat/emacsmacport/emacs-mac: stable emacs-28.2-mac-9.1
 ;; see also: https://github.com/minad/jinx/issues/48
 (use-package jinx
-  :hook (emacs-startup . global-jinx-mode)
+  ;; :hook (emacs-startup . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
 ;; eglot
