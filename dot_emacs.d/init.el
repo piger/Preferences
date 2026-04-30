@@ -1964,6 +1964,7 @@ becomes
 ;; spell checking
 ;; NOTE:
 ;; brew install enchant pkg-config
+;; sudo dnf install enchant2 enchant2-devel
 ;; NOTE:
 ;; it just crash on emacs 28.2 on macOS 13.3.1
 ;; railwaycat/emacsmacport/emacs-mac: stable emacs-28.2-mac-9.1
