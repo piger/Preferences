@@ -1905,8 +1905,12 @@ becomes
 ;;; HTTP status code package.
 ;;; NOTE: the command is "hc"
 (use-package httpcode
-  :load-path "~/code/httpcode.el"
-  :commands httpcode-lookup
+  :vc
+  (httpcode
+   :url "https://github.com/piger/httpcode.el"
+   :branch "master"
+   :rev :newest)
+  :commands hc ;; TODO: should rename back to httpcode-lookup
   :config
   ;; https://support.cloudflare.com/hc/en-us/articles/115003011431/
   (setq custom-http-codes
