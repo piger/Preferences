@@ -1972,6 +1972,16 @@ becomes
   ;; :hook (emacs-startup . global-jinx-mode)
   :bind ([remap ispell-word] . jinx-correct))
 
+;; NOTE: I don't know why, but calling eldoc (C-c h) on Go code result in eldoc showing
+;; two instances of the function signature's and docstring.
+;; This apparently is controlled by `eldoc-documentation-strategy`.
+;; For example:
+;; (setq-local eldoc-documentation-strategy 'eldoc-documentation-default)
+;; will only show one signature and one docstring... but no URL to gopkg.dev.
+;; ... but those URLs are also not clickable anymore so...
+;;
+;; See also: `eldoc-documentation-functions`
+
 ;; eglot
 ;; An alternative to lsp-mode, now an emacs builtin.
 (use-package eglot
