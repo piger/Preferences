@@ -2135,6 +2135,9 @@ becomes
   :config
   (setq dictionary-server "dict.org"))
 
+(use-package breadcrumb
+  :hook ((prog-mode . breadcrumb-mode)))
+
 ;; bug reference mode
 ;; Local Variables:
 ;; bug-reference-bug-regexp: "\\([Bb]ug[#-]\\([0-9]+\\)\\)"
