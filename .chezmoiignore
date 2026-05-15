@@ -23,4 +23,6 @@
 !Library/**
 {{- end }}
 
+.emacs.d/flycheck_init.el
+
 !.luacheckrc
