@@ -593,7 +593,7 @@ Including indent-buffer, which should not be called automatically on save."
      (concat "Tip of the day: " (nth (random (length prelude-tips)) prelude-tips)))))
 
 (defun prelude-eval-after-init (form)
-  "Add `(lambda () FORM)' to `after-init-hook'.
+  "Add `(lambda () FORM)' to `afeter-init-hook'.
 
     If Emacs has already finished initialization, also eval FORM immediately."
   (let ((func (list 'lambda nil form)))
@@ -773,7 +773,7 @@ becomes
 
 ;; use hippie-expand instead of dabbrev
 ;; see also: https://www.masteringemacs.org/article/text-expansion-hippie-expand
-(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key [remap dabbrev-expand] 'hippie-expand)
 
 ;;; swap default search mode to regexp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
@@ -1243,6 +1243,7 @@ becomes
   :if (eq piger/completion-system 'bedrock)
   :init
   (global-corfu-mode)
+  (corfu-history-mode)
   :bind
   (:map corfu-map
         ("SPC" . corfu-insert-separator)
@@ -1261,6 +1262,7 @@ becomes
   (corfu-popupinfo-mode))
 
 ;; Make corfu popup come up in terminal overlay
+;; needed by non-GUI Emacs < 31
 (use-package corfu-terminal
   :if (not (display-graphic-p))
   :if (eq piger/completion-system 'bedrock)

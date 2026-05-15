@@ -6,6 +6,8 @@
 ## Taps
 tap "1password/tap"
 # tap "railwaycat/emacsmacport"
+# emacs with native compilation: https://github.com/jimeh/emacs-builds
+tap "jimeh/emacs-builds"
 
 ## Formulas
 brew "age"                  # Simple, modern, secure file encryption
@@ -80,6 +82,7 @@ brew "zsh-autosuggestions"  # Fish-like fast/unobtrusive autosuggestions for zsh
 ## Casks
 cask "1password-cli"
 # cask "emacs-mac"
+cask "emacs-app" # from the tap: jimeh/emacs-builds
 
 ## Fonts
 cask "font-iosevka"
