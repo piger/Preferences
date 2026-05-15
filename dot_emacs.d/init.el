@@ -36,10 +36,10 @@
   "The default font to use.")
 
 (defvar piger/default-font-weight 'light
-  "The weight of the default font (e.g. 'regular, 'light).")
+  "The weight of the default font (e.g. regular, light).")
 
 (defvar piger/completion-system 'ivy
-  "The completion system to use. Can be 'ivy or 'bedrock.")
+  "The completion system to use. Can be ivy or bedrock.")
 
 (defvar piger/use-doom-themes t
   "Whether to use doom-themes or something else.")
@@ -832,6 +832,8 @@ becomes
   ;; spaceline provides his own indicator for that
   (setq-default flycheck-mode-line nil)
   (setq flycheck-indication-mode 'right-fringe)
+  ;; don't warn about bad elisp documentation
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
   ;; replace flycheck's wavy underline with a straight line
   (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line :position -3))
