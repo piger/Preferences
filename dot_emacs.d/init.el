@@ -1315,6 +1315,7 @@ becomes
   :after (ivy counsel)
   :config
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  (nerd-icons-ivy-rich-mode 1)
   (ivy-rich-mode 1))
 
 (use-package counsel
@@ -1394,8 +1395,7 @@ becomes
   :custom
   (magit-diff-refine-hunk 'all)
   (git-commit-summary-max-length 72)
-  (magit-format-file-function #'magit-format-file-all-the-icons)
-  ; (setopt magit-format-file-function #'magit-format-file-all-the-icons)
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :hook (
          ;; (git-commit-setup . git-commit-turn-on-flyspell)
          (git-commit-setup . (lambda () (jinx-mode)))
@@ -1868,15 +1868,10 @@ becomes
   :config
   (editorconfig-mode 1))
 
-;; NOTE: remember to install the fonts! Run: all-the-icons-install-fonts
-(use-package all-the-icons)
+;; install "Symbols Nerd Font" from: https://www.nerdfonts.com/font-downloads
+(use-package nerd-icons)
 
-(use-package all-the-icons-ivy
-  :if (eq piger/completion-system 'ivy)
-  :after ivy
-  :after all-the-icons
-  :config
-  (all-the-icons-ivy-setup))
+(use-package nerd-icons-ivy-rich)
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
