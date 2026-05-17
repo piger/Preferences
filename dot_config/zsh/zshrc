@@ -178,6 +178,10 @@ tmp() {
 alias whois-ip='whois -h whois.cymru.com'
 alias whois-ip-bgptools='whois -h bgp.tools'
 
+alias pubip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
 ### ENVIRONMENT
 # Bind environment variable to arrays (e.g. $perl5lib[@]).
 declare -T LD_LIBRARY_PATH ld_library_path
