@@ -177,6 +177,15 @@ tmp() {
     [[ ! -z $1 ]] && pushd $(mktemp -d /tmp/$1.XXXX)
 }
 
+showcase_vivid_themes() {
+    for theme in $(vivid themes); do
+        echo "theme: $theme"
+        # note: ls is aliased to eza, so if we run "ls" here, it would run /bin/ls
+        env LS_COLORS=$(vivid generate $theme) eza
+        echo
+    done
+}
+
 # Use whois to query for ASN data:
 # » whois-ip 172.217.16.238
 # AS      | IP               | AS Name
