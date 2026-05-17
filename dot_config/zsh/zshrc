@@ -241,6 +241,12 @@ export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --ta
 if is_linux && less --version 2>&1 | awk 'NR == 2 { print }' | grep 691 > /dev/null; then
     export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --jump-target=5 --incsearch"
 fi
+
+# All sort of weird issues with less are popping up now that I'm using Linux, which is very weird.
+# -J / --status-column causes this: https://github.com/gwsw/less/issues/657 - "when using -J less breaks man word wrapping".
+if is_linux; then
+    export LESS="${LESS/--status-column /}"
+fi
 export PAGER="less"
 
 # apparently this is a thing:
