@@ -271,6 +271,13 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # ue = end underlining
 export LESS_TERMCAP_ue=$'\E[0m'
 
+# apparently at a certain point in time this broke because of changes in groff; see https://bbs.archlinux.org/viewtopic.php?id=287185
+# the fix is setting "MANROFFOPT=-c":
+# > which essentially does the same thing as GROFF_NO_SGR=1 but restricts it to only happen when man is invoked, leaving grotty free to output SGR in other contexts.
+if is_linux; then
+    export MANROFFOPT=-c
+fi
+
 # 01 = bold
 # XX;YY = bg color, fg color
 # 0 = reset
