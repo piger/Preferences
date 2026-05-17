@@ -123,18 +123,24 @@ git_main_branch() {
 # maybe check if emacs is running, with emacsclient -a false -e 't'
 # https://stackoverflow.com/questions/1510481/how-can-i-detect-that-emacs-server-is-running-from-a-shell-prompt
 
+zstyle ':piger:themes:dark' vivid-theme jellybeans
+zstyle ':piger:themes:light' vivid-theme gruvbox-light
+
 dark_mode() {
-    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=gruvbox')"
-    export LS_COLORS=$(vivid generate jellybeans)
+    zstyle -s ":piger:themes:dark" vivid-theme vivid_theme
+    export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=gruvbox')"
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-tomorrow-night)" >/dev/null
 }
 
 light_mode() {
-    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
-    # export LS_COLORS=$(vivid generate modus-operandi)
-    export LS_COLORS=$(vivid generate gruvbox-light)
+    zstyle -s ":piger:themes:light" vivid-theme vivid_theme
+    export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-opera-light)" >/dev/null
 }
 
@@ -512,13 +518,18 @@ elif [[ $OSTYPE = openbsd* ]]; then
 fi # end if $OSTYPE = ...
 
 ### ls
-if exists vivid; then
-    export LS_COLORS=$(vivid generate jellybeans)
-elif exists dircolors; then
-    test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
-elif exists gdircolors; then
-    test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
-fi
+set_ls_colors() {
+    zstyle -s ":piger:themes:dark" vivid-theme vivid_theme
+
+    if exists vivid; then
+        export LS_COLORS=$(vivid generate $vivid_theme)
+    elif exists dircolors; then
+        test -e $DIRCOLORS_FILE && eval $(dircolors -b $DIRCOLORS_FILE)
+    elif exists gdircolors; then
+        test -e $DIRCOLORS_FILE && eval $(gdircolors -b $DIRCOLORS_FILE)
+    fi
+}
+set_ls_colors
 
 if exists eza; then
     # reduce the use of very dark colors when showing gradients
