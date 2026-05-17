@@ -146,15 +146,15 @@ gdoc() {
 # inspired by
 # https://github.com/jessfraz/dotfiles/blob/01f471f2da9a4b3be662de118556ab76fdb2a0cf/.dockerfunc#L107-L117
 ubuntu() {
-    local version
+    docker run --rm -it --log-driver none --name ubuntu ubuntu:${1:-26.04}
+}
 
-    if [[ -z "$1" ]]; then
-        version="22.04"
-    else
-        version="$1"
-    fi
+debian() {
+    docker run --rm -it --log-driver none --name ubuntu debian:${1:-trixie-slim}
+}
 
-    docker run --rm -it --log-driver none --name ubuntu ubuntu:$version
+fedora() {
+    docker run --rm -it --log-driver none --name ubuntu debian:${1:-44}
 }
 
 git_main_branch () {
