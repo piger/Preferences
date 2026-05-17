@@ -131,7 +131,6 @@ dark_mode() {
     export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=gruvbox')"
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-tomorrow-night)" >/dev/null
 }
 
@@ -140,7 +139,6 @@ light_mode() {
     export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-    export MOOR="$(echo $MOOR | sd -- '--style=[^ ]+' '--style=rose-pine-dawn')"
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-opera-light)" >/dev/null
 }
 
