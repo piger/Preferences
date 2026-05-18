@@ -952,6 +952,11 @@ becomes
                          ;; add my eglot hook as a local hook
                          (add-hook 'before-save-hook #'piger/eglot-before-save nil t)))))
 
+;; treesitter note
+;; If you want code with FULL COLORS, set this:
+;; (setq treesit-font-lock-level 4)
+;; beware: I don't think it's a good idea.
+
 (use-package go-ts-mode
   :mode "\\.go\\'"
   :bind
