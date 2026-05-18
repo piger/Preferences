@@ -184,6 +184,15 @@ showcase_vivid_themes() {
     done
 }
 
+# not very accurate, but...
+kde_is_dark_mode() {
+    local current_theme=$(plasma-apply-colorscheme -l | grep "(current color scheme)" | awk '{ print $2 }')
+    if [[ ${(L)current_theme} = *dark ]]; then
+        return 0
+    fi
+    return 1
+}
+
 # Use whois to query for ASN data:
 # » whois-ip 172.217.16.238
 # AS      | IP               | AS Name
