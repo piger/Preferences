@@ -161,10 +161,6 @@ fedora() {
     docker run --rm -it --log-driver none --name ubuntu debian:${1:-44}
 }
 
-git_main_branch () {
-    git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
-}
-
 # quick git changelog
 changelog () {
     git log --reverse --pretty=tformat:"### %s (%h)%n%n%b" origin/$(git_main_branch).. | tee | pbcopy
@@ -618,8 +614,9 @@ tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 # Use Python to pretty-print JSON.
 alias json.tool='python3 -m json.tool'
 
-# kubectl
-alias k='kubectl'
+# Kubernetes
+alias k="kubectl"
+alias kc="kubectl --context"
 exists kubectx && alias kctx='kubectx'
 exists kubens && alias kns='kubens'
 
