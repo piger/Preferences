@@ -80,8 +80,8 @@ if not (which boxes | is-empty) {
     print ""
 }
 
-if ([$nu.home-path code cli-tips-fortune] | path join | path exists) {
+if ([$nu.home-dir code cli-tips-fortune] | path join | path exists) {
     print $"(ansi i)Tip of the day(ansi reset)"
-    fortune ([$nu.home-path code cli-tips-fortune] | path join)
+    fortune ([$nu.home-dir code cli-tips-fortune] | path join)
     print ""
 }

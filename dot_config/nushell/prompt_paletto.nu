@@ -1,5 +1,5 @@
 # How to use:
-# use ([$nu.home-path "Preferences/nushell/prompt_paletto.nu"] | path join)
+# use ([$nu.home-dir "Preferences/nushell/prompt_paletto.nu"] | path join)
 # $env.PROMPT_COMMAND = { || prompt_paletto }
 # $env.PROMPT_INDICATOR = { || prompt_paletto indicator }
 # $env.PROMPT_COMMAND_RIGHT = { || prompt_paletto prompt_right }
@@ -201,9 +201,9 @@ def computer_name [] {
 # current user.
 def current_directory [] {
     # like it's done here: https://github.com/nushell/nu_scripts/blob/main/modules/prompt/panache-git.nu#L28
-    let cwd_relative = (do --ignore-errors { pwd | path relative-to $nu.home-path })
+    let cwd_relative = (do --ignore-errors { pwd | path relative-to $nu.home-dir })
 
-    if (pwd) == $nu.home-path {
+    if (pwd) == $nu.home-dir {
         "~"
     } else if ($cwd_relative | is-empty) {
         pwd
