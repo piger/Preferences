@@ -421,7 +421,6 @@ fi
 # See also:
 # http://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 typeset -U fpath
-[[ -d $XDG_CONFIG_HOME/zsh/scripts ]] && fpath+=$XDG_CONFIG_HOME/zsh/scripts
 [[ -d $XDG_CONFIG_HOME/zsh/functions ]] && fpath+=$XDG_CONFIG_HOME/zsh/functions
 
 # if there's a local functions dir, prepend it to fpath to override the custom zsh functions.
@@ -478,9 +477,6 @@ if is_mac; then
 
     export CLICOLOR=1
 
-    # Trasforma la man page in PDF e la apre con Preview, votamazzen.
-    man-preview() { man -t "$@" | open -f -a Preview }
-
     # print Finder directory
     pfd() {
         osascript 2>/dev/null <<EOF
@@ -533,10 +529,6 @@ EOF
     bindkey -M emacs "^O" _copybuffer
 
 elif is_linux; then
-    if exists gnome-open; then
-        alias gnome-open='echo quei maledetti di GNOME hanno deciso che ora si chiama gvfs-open, gli morisse la gente attorno'
-    fi
-
     alias grep='grep --color=auto'
 
 elif [[ $OSTYPE = openbsd* ]]; then
