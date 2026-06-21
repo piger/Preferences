@@ -154,11 +154,11 @@ ubuntu() {
 }
 
 debian() {
-    docker run --rm -it --log-driver none --name ubuntu debian:${1:-trixie-slim}
+    docker run --rm -it --log-driver none --name debian debian:${1:-trixie-slim}
 }
 
 fedora() {
-    docker run --rm -it --log-driver none --name ubuntu debian:${1:-44}
+    docker run --rm -it --log-driver none --name fedora fedora:${1:-44}
 }
 
 # quick git changelog
