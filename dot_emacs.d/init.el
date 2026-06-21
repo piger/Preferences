@@ -1803,7 +1803,8 @@ becomes
   ;; Install a Nerd Font font from https://www.nerdfonts.com/ to use it in the modeline
   ;; (no need to set it as a global font!)
   (setq doom-modeline-unicode-fallback t)
-  (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
+  ;; Need to use "Symbols Nerd Font Mono" to actually see all the icons.
+  ;; (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
   ;; Increase the width of the branch name
   (setq doom-modeline-vcs-max-length 20)
   :init
