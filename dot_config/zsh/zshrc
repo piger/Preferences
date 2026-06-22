@@ -670,6 +670,9 @@ fpath=("$HOME/.cache/zsh-completions" $fpath)
 (( $+commands[docker] )) && \
     [[ ! -f "$HOME/.cache/zsh-completions/_docker" ]] && docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
 
+is_mac && (( $+commands[container] )) && \
+    [[ ! -f "$HOME/.cache/zsh-completions/_container" ]] && container --generate-completion-script zsh > "$HOME/.cache/zsh-completions/_container"
+
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
     # homebrew completion
     [[ -d $HOMEBREW_PREFIX/completions/zsh ]] && fpath+="$HOMEBREW_PREFIX/completions/zsh"
