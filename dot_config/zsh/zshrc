@@ -244,11 +244,11 @@ HISTFILE=$HOME/.history
 # Note: I've used "moor" https://github.com/walles/moor for a while, but then I realised that less already does
 # all the things I need (mouse support, incremental search), except the fancy themes. But the fancy themes can easily
 # get unreadable.
-export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --window=-5 --jump-target=5 --incsearch"
+export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --status-column --window=-5 --jump-target=5 --incsearch"
 
 # 2026-04-30 There's a regression for '--window' and less 691 (Fedora 44) is affected: https://github.com/gwsw/less/issues/709
 if is_linux && less --version 2>&1 | awk 'NR == 2 { print }' | grep 691 > /dev/null; then
-    export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --hilite-unread --status-column --jump-target=5 --incsearch"
+    export LESS="--clear-screen --ignore-case --LONG-PROMPT --RAW-CONTROL-CHARS --tabs=4 --status-column --jump-target=5 --incsearch"
 fi
 
 # All sort of weird issues with less are popping up now that I'm using Linux, which is very weird.
