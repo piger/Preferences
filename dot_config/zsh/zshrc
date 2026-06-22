@@ -131,6 +131,8 @@ dark_mode() {
     export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+    export BAT_THEME=""
+
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-tomorrow-night)" >/dev/null
 }
 
@@ -138,6 +140,8 @@ light_mode() {
     zstyle -s ":piger:themes:light" vivid-theme vivid_theme
     export LS_COLORS=$(vivid generate $vivid_theme)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+    export BAT_THEME="Coldark-Cold"
 
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-opera-light)" >/dev/null
 }
@@ -288,6 +292,11 @@ fi
 # 0 = reset
 
 # NOTE: these are ANSI color codes: https://jakob-bagterp.github.io/colorist-for-python/ansi-escape-codes/standard-16-colors/#examples
+
+# 'bat' for man pages has better syntax highlighting than 'less', even when using LESS_TERMCAP
+if is_mac && exists bat; then
+    export MANPAGER="sh -c 'col -bx | bat --language man --plain'"
+fi
 
 # Sets vim or vi as the default editor.
 if exists vim; then
