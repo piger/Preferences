@@ -44,6 +44,9 @@ prompt_paletto_setup() {
     # nf-cod-vm 
     local computer=$'\uea7a'
 
+    # nf-oct-container 
+    local container=$'\uf4b7'
+
     # nf-oct-dot_fill 
     local dot=$'\uf444'
 
@@ -118,6 +121,10 @@ prompt_paletto_setup() {
     PROMPT+=$(seg '' $orange $half_circle_left)
     if [[ ! -z $SSH_CONNECTION ]]; then
         PROMPT+=$(seg $orange $black "$network_symbol %n@%m ")
+    elif [[ ! -z $CONTAINER_SHELL ]]; then
+        # Apple's container machine sets this environment variable.
+        # also note that the unicode character is displayed weirdly without two whitespaces.
+        PROMPT+=$(seg $orange $black "$container  %m ")
     else
         PROMPT+=$(seg $orange $black "$computer %m ")
     fi
