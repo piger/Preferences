@@ -528,6 +528,9 @@ EOF
     zle -N _copybuffer
     bindkey -M emacs "^O" _copybuffer
 
+    # Apple's version of Docker https://github.com/apple/container
+    alias c="container"
+
 elif is_linux; then
     alias grep='grep --color=auto'
 
