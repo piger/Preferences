@@ -2144,6 +2144,27 @@ becomes
 (use-package breadcrumb
   :hook ((prog-mode . breadcrumb-mode)))
 
+(use-package ghostel
+  :ensure t
+  :bind
+  ;; my workaround for simpleclip interfering with ghostel; press "C-c C-f" to paste from the system
+  ;; pasteboard instead of s-v (command + v).
+  (("C-c C-f" . (lambda () (interactive) (ghostel-send-string (simpleclip-get-contents))))
+   :map project-prefix-map
+   ("m" . ghostel-project)
+   ("M" . ghostel-project-list-buffers))
+  :config
+  (defun piger/ghostel-send-C-k-and-kill ()
+    "Send `C-k` to ghostel.
+Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
+    (interactive)
+    (kill-ring-save (point) (line-end-position))
+    (ghostel-send-key "k" "ctrl"))
+
+  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
+  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
+  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+
 ;; bug reference mode
 ;; Local Variables:
 ;; bug-reference-bug-regexp: "\\([Bb]ug[#-]\\([0-9]+\\)\\)"

@@ -667,6 +667,15 @@ bindkey -M isearch " " magic-space
 # WARNING: these kind of aliases seems to conflict with zsh-autosuggestions.
 (( $+commands[task] )) && abbrev-alias t='task'
 
+# ghostel
+if [[ "$INSIDE_EMACS" == "ghostel" ]]; then
+    edit() { ghostel_cmd find-file-other-window "$@"; }
+
+    dow() { ghostel_cmd dired-other-window "$@"; }
+
+    gst() { ghostel_cmd magit-status-setup-buffer "$(pwd)"; }
+fi
+
 ### COMPLETION
 # Completion della ZSH, perche' la pigerrimitudo e' una virtute.
 # --------------------------------------------------------------
