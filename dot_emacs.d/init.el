@@ -2109,27 +2109,6 @@ becomes
 (use-package ace-window
   :bind ("M-p" . ace-window))
 
-;; Aliases
-(defalias 'qrr 'query-replace-regexp)
-
-;; load the local settings file
-(let ((piger/local-config
-       (concat (file-name-as-directory piger/preferences-dir) "init-local.el")))
-  (when (file-exists-p piger/local-config)
-    (load piger/local-config)))
-
-;;; end
-;; reset GC
-;; (setq gc-cons-threshold 16777216
-;;       gc-cons-percentage 0.1)
-
-;; display loading time
-(let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
-  (message "Settings loaded in %.3fs" elapsed))
-
-;;; to help troubleshooting:
-(setq debug-on-error nil)
-
 (use-package kanagawa-themes
   :config
   (setq kanagawa-themes-comment-italic nil)
@@ -2164,6 +2143,27 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
   (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
   (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
   (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+
+;; Aliases
+(defalias 'qrr 'query-replace-regexp)
+
+;; load the local settings file
+(let ((piger/local-config
+       (concat (file-name-as-directory piger/preferences-dir) "init-local.el")))
+  (when (file-exists-p piger/local-config)
+    (load piger/local-config)))
+
+;;; end
+;; reset GC
+;; (setq gc-cons-threshold 16777216
+;;       gc-cons-percentage 0.1)
+
+;; display loading time
+(let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
+  (message "Settings loaded in %.3fs" elapsed))
+
+;;; to help troubleshooting:
+(setq debug-on-error nil)
 
 ;; bug reference mode
 ;; Local Variables:
