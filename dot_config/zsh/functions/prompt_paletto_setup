@@ -47,6 +47,9 @@ prompt_paletto_setup() {
     # nf-oct-container 
     local container=$'\uf4b7'
 
+    # nf-fa-ghost  (nf-md-ghost_outline would be better, but does not render in Emacs)
+    local ghost=$'\ueefe'
+
     # nf-oct-dot_fill 
     local dot=$'\uf444'
 
@@ -125,6 +128,8 @@ prompt_paletto_setup() {
         # Apple's container machine sets this environment variable.
         # also note that the unicode character is displayed weirdly without two whitespaces.
         PROMPT+=$(seg $orange $black "$container  %m ")
+    elif [[ "$INSIDE_EMACS" == "ghostel" ]]; then
+        PROMPT+=$(seg $orange $black "$ghost %m ")
     else
         PROMPT+=$(seg $orange $black "$computer %m ")
     fi
