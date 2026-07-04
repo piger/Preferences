@@ -568,7 +568,11 @@ set_ls_colors
 # In ghostel (emacs) it's better to use gnu-ls; eza's icons tend to be distracting and
 # are not rendered well when using certain fonts.
 if [[ $INSIDE_EMACS == "ghostel" ]]; then
-    alias ls="gls --color=auto --group-directories-first --classify=auto"
+    if is_linux; then
+        alias ls="ls --color=auto --group-directories-first --classify"
+    else
+        alias ls="gls --color=auto --group-directories-first --classify=auto"
+    fi
 elif exists eza; then
     # reduce the use of very dark colors when showing gradients
     export EZA_MIN_LUMINANCE=50
