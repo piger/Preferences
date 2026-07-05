@@ -2006,6 +2006,12 @@ becomes
   ;; (eglot-send-changes-idle-time 0.1)
 
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
+  :bind
+  (:map eglot-mode-map
+        ("C-c r" . eglot-rename)
+        ("C-c f" . eglot-format)
+        ("C-c o" . eglot-code-action-organize-imports)
+        ("C-c q" . eglot-code-actions))
   :config
   (add-to-list 'eglot-server-programs '(terraform-mode . ("terraform-ls" "serve")))
   ;; shut down LSP server when last managed buffer is killed
