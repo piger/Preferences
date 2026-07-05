@@ -1367,7 +1367,37 @@ becomes
   (smex-initialize))
 
 (use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
+  :bind ("C-x C-b" . ibuffer)
+  :config
+  (define-ibuffer-column size-h
+    (:name "Size" :inline t)
+    (file-size-human-readable (buffer-size)))
+  (setq ibuffer-formats
+        '((mark modified read-only vc-status-mini " "
+                (name 22 22 :left :elide)
+                " "
+                (size-h 9 -1 :right)
+                " "
+                (mode 12 12 :left :elide)
+                " "
+                vc-relative-file)
+          (mark modified read-only vc-status-mini " "
+                (name 22 22 :left :elide)
+                " "
+                (size-h 9 -1 :right)
+                " "
+                (mode 14 14 :left :elide)
+                " "
+                (vc-status 12 12 :left)
+                " "
+                vc-relative-file)))
+  (setq ibuffer-filter-group-name-face 'font-lock-doc-face))
+
+;; Group buffers in ibuffer list by VC project
+(use-package ibuffer-vc
+  :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
+  :bind (:map ibuffer-mode-map
+              ("g" . ibuffer-vc-set-filter-groups-by-vc-root)))
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify
