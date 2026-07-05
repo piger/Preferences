@@ -106,7 +106,7 @@
 (require 'bind-key)
 
 ;; maximize the frame. too bad this happen at the end of loading the config.
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 ;; OSX stuff
 (when *is-a-mac*
