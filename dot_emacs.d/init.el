@@ -660,10 +660,15 @@ buffer is not visiting a file."
                 (url-encode-url text))))
 
 ;; Ansi colors (for console dumps from samson, for example)
-(require 'ansi-color)
-(defun display-ansi-colors ()
-  (interactive)
-  (ansi-color-apply-on-region (point-min) (point-max)))
+(use-package ansi-color
+  :ensure nil ;; this is a native package
+  ;; render colors in compilation buffer
+  :hook ((compilation-filter . ansi-color-compilation-filter))
+  :config
+  (defun display-ansi-colors ()
+    "Display ANSI colors in region."
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max))))
 
 ;; Ricompila i file .el che si trovano in ~/.emacs.d
 (defun byte-compile-init-dir ()
