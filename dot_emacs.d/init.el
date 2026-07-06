@@ -131,7 +131,7 @@
     (setq exec-path-from-shell-arguments nil)
     ;; (setq exec-path-from-shell-debug t)
     (setq exec-path-from-shell-variables
-          '("PATH" "MANPATH" "PYTHONPAHT" "GOPATH" "JAVA_HOME"))
+          '("PATH" "MANPATH" "PYTHONPATH" "GOPATH" "JAVA_HOME"))
     :config
     (exec-path-from-shell-initialize))
 
