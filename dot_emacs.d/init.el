@@ -2174,6 +2174,17 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
   :config
   (ultra-scroll-mode 1))
 
+(use-package gptel
+  :commands gptel
+  :config
+  (setq gptel-model 'faggiano)
+  (setq gptel-backend (gptel-make-openai "local-gpu"
+                        :stream t
+                        :protocol "http"
+                        :host "angband:8001"
+                        :models '(faggiano)))
+  (setq gptel-include-reasoning nil))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
