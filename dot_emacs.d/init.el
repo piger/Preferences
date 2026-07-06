@@ -191,6 +191,11 @@
   ;; :config
   ;; (modus-themes-load-theme 'ef-reverie))
 
+(use-package folio-theme
+  :demand t
+  :vc (:url "https://github.com/kn66/folio-theme.el"
+            :rev :newest))
+
 (use-package doom-themes
   :if piger/use-doom-themes
   :custom
