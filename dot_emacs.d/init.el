@@ -44,8 +44,14 @@
 (defvar piger/use-doom-themes t
   "Whether to use doom-themes or something else.")
 
-(defvar piger/doom-themes-theme 'doom-gruvbox
+(defvar piger/doom-themes-theme-light 'doom-feather-light
   "The theme to load when using doom-themes.")
+
+(defvar piger/doom-themes-theme-dark 'doom-tomorrow-night
+  "The theme to load when using doom-themes.")
+
+(when (boundp 'piger/doom-themes-theme)
+  (display-warning :warning "'piger/doom-themes-theme is deprecated! Set 'piger/doom-themes-theme-light and 'piger/doom-themes-theme-dark instead."))
 
 (defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
   "An optional file containing machine local settings.")
@@ -181,15 +187,37 @@
 
 (use-package doom-themes
   :if piger/use-doom-themes
+  :custom
+  (doom-themes-enable-bold t)
+  (doom-themes-enable-italic nil)
+
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic nil)
-
-  (load-theme piger/doom-themes-theme t)
-
+  ;; (load-theme piger/doom-themes-theme t)
   (doom-themes-visual-bell-config)
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
+
+;; if we're running on a patched emacs for macOS that supports "system appearance", set the right
+;; theme automatically.
+;; https://github.com/d12frosted/homebrew-emacs-plus/blob/master/patches/emacs-28/system-appearance.patch
+;;
+;; Should try https://github.com/LionyxML/auto-dark-emacs for Linux.
+(when (boundp 'ns-system-appearance-change-functions)
+  (defun piger/switch-theme (appearance)
+    "Set the theme based on the current system appearance."
+
+    ;; disable all the current themes first, since (load-theme) otherwise will
+    ;; stack each theme on top of another.
+    (mapc #'disable-theme custom-enabled-themes)
+
+    (pcase appearance
+      ('light (load-theme piger/doom-themes-theme-light t))
+      ('dark (load-theme piger/doom-themes-theme-dark t))))
+  (add-hook 'ns-system-appearance-change-functions #'piger/switch-theme))
+
+;; otherwise, load the light theme by default
+(unless (boundp 'ns-system-appearance-change-functions)
+  (load-theme piger/doom-themes-theme-light))
 
 (use-package kaolin-themes
   :defer t)
