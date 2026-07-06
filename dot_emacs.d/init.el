@@ -32,11 +32,14 @@
 (defvar piger/code-directories-alist '("~/code")
   "A list containing directories that contains code.")
 
-(defvar piger/default-font "JetBrains Mono 14"
-  "The default font to use.")
+(defvar piger/font-family "JetBrains Mono"
+  "Set the font family to use.")
 
-(defvar piger/default-font-weight 'light
-  "The weight of the default font (e.g. regular, light).")
+(defvar piger/font-size 14
+  "Set the font height to use.")
+
+(defvar piger/font-weight 'light
+  "Set the font weight to use.")
 
 (defvar piger/use-doom-themes t
   "Whether to use doom-themes or something else.")
@@ -47,23 +50,26 @@
 (defvar piger/doom-themes-theme-dark 'doom-tomorrow-night
   "The theme to load when using doom-themes.")
 
+(defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
+  "An optional file containing machine local settings.")
+(when (file-exists-p piger/emacs-local-settings)
+  (message "local settings loaded")
+  (load-file piger/emacs-local-settings))
+
 (when (boundp 'piger/doom-themes-theme)
   (display-warning :warning "'piger/doom-themes-theme is deprecated! Set 'piger/doom-themes-theme-light and 'piger/doom-themes-theme-dark instead."))
 
 (when (boundp 'piger/completion-system)
   (display-warning :warning "'piger/completion-system has been removed."))
 
-(defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
-  "An optional file containing machine local settings.")
-(when (file-exists-p piger/emacs-local-settings)
-  (load-file piger/emacs-local-settings))
+(when (boundp 'piger/default-font)
+  (display-warning :warning "'piger/default-font is deprecated; use 'piger/font-family, 'piger/font-size, 'piger/font-weight instead."))
 
-(let ((font-name (replace-regexp-in-string "\s[0-9]+" "" piger/default-font)))
-  (cond
-   ((find-font (font-spec :name font-name))
-    (set-frame-font piger/default-font))))
-;; (set-frame-font piger/default-font nil t)
-(set-face-attribute 'default nil :weight piger/default-font-weight)
+(when (boundp 'piger/default-font-weight)
+  (display-warning :warning "'piger/default-font-weight is deprecated; use 'piger/font-family, 'piger/font-size, 'piger/font-weight instead."))
+
+;; Set all the font settings at once.
+(set-face-attribute 'default nil :family piger/font-family :height (* 10 piger/font-size) :weight piger/font-weight)
 
 ;; end of custom settings
 

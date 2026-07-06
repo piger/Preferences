@@ -1,6 +1,12 @@
-; (setq piger/default-font "Input Mono 13")
-(setq piger/default-font "Iosevka 15")
-;; (setq piger/default-font "JetBrains Mono 13")
-;; (setq piger/default-font "Victor Mono 13")
+;; local settings for Emacs
+
+;; See also: JetBrains Mono, Victor Mono.
+(setq piger/font-family "Iosevka")
+(setq piger/font-size 15)
+(setq piger/font-weight 'regular)
+
+;; code directories
 (setq piger/code-directories-alist '("~/code" "~/code/others"))
-(setq piger/doom-themes-theme 'doom-earl-grey)
+
+;; default theme (light)
+(setq piger/doom-themes-theme-light 'doom-earl-grey)
