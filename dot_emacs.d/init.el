@@ -2199,7 +2199,13 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
                         :protocol "http"
                         :host "angband:8001"
                         :models '(faggiano)))
-  (setq gptel-include-reasoning nil))
+  (gptel-make-tool
+   :name "get_datetime"
+   :description "Get the current date and time"
+   :function (lambda () (format-time-string "%A, %B %d, %Y, %H:%M:%S %Z"))
+   :category "misc")
+
+  (setq gptel-include-reasoning t))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
