@@ -2170,8 +2170,8 @@ point reaches the beginning or end of the buffer, stop there."
   ;; pasteboard instead of s-v (command + v).
   (("C-c C-f" . (lambda () (interactive) (ghostel-send-string (simpleclip-get-contents))))
    :map project-prefix-map
-   ("m" . ghostel-project)
-   ("M" . ghostel-project-list-buffers))
+   ("q" . ghostel-project)
+   ("Q" . ghostel-project-list-buffers))
   :config
   (defun piger/ghostel-send-C-k-and-kill ()
     "Send `C-k` to ghostel.
