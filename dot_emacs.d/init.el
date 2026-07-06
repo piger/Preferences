@@ -1122,6 +1122,11 @@ becomes
   :mode "\\.json\\'"
   :hook (json-mode . flycheck-mode))
 
+(use-package jsonc-mode
+  :ensure nil ;; part of json-mode
+  :mode "\\.jsonc\\'"
+  :hook (jsonc-mode . flycheck-mode))
+
 (defun my-web-mode-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   ;; (yas-minor-mode +1)
