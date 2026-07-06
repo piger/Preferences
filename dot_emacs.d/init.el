@@ -217,7 +217,11 @@
 
 ;; otherwise, load the light theme by default
 (unless (boundp 'ns-system-appearance-change-functions)
-  (load-theme piger/doom-themes-theme-light))
+  ;; disable all the current themes first, since (load-theme) otherwise will
+  ;; stack each theme on top of another.
+  (mapc #'disable-theme custom-enabled-themes)
+
+  (load-theme piger/doom-themes-theme-light t))
 
 (use-package kaolin-themes
   :defer t)
