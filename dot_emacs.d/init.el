@@ -2202,7 +2202,7 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
   (gptel-make-tool
    :name "get_datetime"
    :description "Get the current date and time"
-   :function (lambda () (format-time-string "%A, %B %d, %Y, %H:%M:%S %Z"))
+   :function (lambda () (format-time-string "%A, %B %d, %Y at %H:%M:%S %z"))
    :category "misc")
 
   (setq gptel-include-reasoning t))
