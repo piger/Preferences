@@ -18,10 +18,11 @@ A collection of personal configuration files.
 
 ### First time run
 
-The first time you run chezmoi, you need to specify the source directory manually:
+The first time you run chezmoi you need to specify the source directory manually, then run apply:
 
-```
+```bash
 $ chezmoi --source ~/Preferences init
+$ chezmoi apply
 ```
 
 ### Sync all the dotfiles
