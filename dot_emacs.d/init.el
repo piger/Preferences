@@ -1924,14 +1924,36 @@ point reaches the beginning or end of the buffer, stop there."
          ("C-x 4" . switch-window-then-delete)))
 
 (use-package engine-mode
+  :bind-keymap ("C-x /" . engine-mode-prefixed-map)
   :config
   (defengine github-repo
-    "https://github.com/search?utf8=✓&type=Repositories&q=%s")
+    "https://github.com/search?type=Repositories&q=%s"
+    :keybinding "r")
+
   (defengine github-code
-    "https://github.com/search?utf8=✓&type=Code&q=%s")
+    "https://github.com/search?type=Code&q=%s"
+    :keybinding "c")
+
   (defengine google
-    "https://www.google.com/search?client=emacs&q=%s")
-  (engine-mode))
+    "https://www.google.com/search?client=emacs&q=%s"
+    :keybinding "g")
+
+  (defengine qwant
+    "https://www.qwant.com/?q=%s"
+    :keybinding "q")
+
+  (defengine stack-overflow
+    "https://stackoverflow.com/search?q=%s"
+    :keybinding "s")
+
+  (defengine wikipedia
+    "https://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+    :keybinding "w"
+    :docstring "Searchin' the wikis.")
+
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d"))
 
 ;;; HTTP status code package.
 ;;; NOTE: the command is "hc"
