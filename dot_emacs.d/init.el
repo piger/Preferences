@@ -2138,6 +2138,8 @@ becomes
   :config
   (add-to-list 'treemacs-litter-directories "/dsfjsodfjsdoifjds/")
   (treemacs-project-follow-mode t)
+  ;; recommended size for Hi-DPI displays (default: 22)
+  (treemacs-resize-icons 44)
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
@@ -2147,6 +2149,10 @@ becomes
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-nerd-icons-config))
 
 (use-package treemacs-evil
   :after (treemacs evil))
