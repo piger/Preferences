@@ -167,7 +167,8 @@
 
 (when *is-a-linux*
   (global-set-key (kbd "s-s") 'save-buffer)
-  (global-set-key (kbd "s-z") 'undo))
+  (global-set-key (kbd "s-z") 'undo)
+  (setq dired-listing-switches "-aBhl --group-directories-first"))
 
 ;; Themes
 (use-package base16-theme
