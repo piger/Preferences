@@ -38,9 +38,6 @@
 (defvar piger/default-font-weight 'light
   "The weight of the default font (e.g. regular, light).")
 
-(defvar piger/completion-system 'ivy
-  "The completion system to use. Can be ivy or bedrock.")
-
 (defvar piger/use-doom-themes t
   "Whether to use doom-themes or something else.")
 
@@ -52,6 +49,9 @@
 
 (when (boundp 'piger/doom-themes-theme)
   (display-warning :warning "'piger/doom-themes-theme is deprecated! Set 'piger/doom-themes-theme-light and 'piger/doom-themes-theme-dark instead."))
+
+(when (boundp 'piger/completion-system)
+  (display-warning :warning "'piger/completion-system has been removed."))
 
 (defvar piger/emacs-local-settings (expand-file-name "emacs-local.el" user-emacs-directory)
   "An optional file containing machine local settings.")
@@ -590,7 +590,6 @@ Including indent-buffer, which should not be called automatically on save."
     "Press <j u> in Magit to jump to unstaged files"
     "`disable-theme' can unload a theme"
     "<⌘-j> jumps to a given character on the buffer; useful to avoid using the mouse"
-    "<M-s o> is occur which is a nice thing to use, especially with ivy/counsel!"
     "<C-c p s r> runs ripgrep on the projectile project"
     "<C-c p k> to close all the buffers of a project"
     "<C-x j> to switch window layout (transpose-frame)"
@@ -1201,7 +1200,6 @@ becomes
          ("s-j"   . avy-goto-char-timer)))
 
 (use-package consult
-  :if (eq piger/completion-system 'bedrock)
   :custom
   ;; Narrowing lets you restrict results to certain groups of candidates
   (consult-narrow-key "<")
@@ -1226,7 +1224,6 @@ becomes
          ))
 
 (use-package embark
-  :if (eq piger/completion-system 'bedrock)
   :demand t
   :after avy
   :bind
@@ -1249,13 +1246,11 @@ becomes
   (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark))
 
 (use-package embark-consult
-  :if (eq piger/completion-system 'bedrock)
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
 ;; Vertico: better vertical completion for minibuffer commands
 (use-package vertico
-  :if (eq piger/completion-system 'bedrock)
   :init
   ;; You'll want to make sure that e.g. fido-mode isn't enabled
   (vertico-mode)
@@ -1272,13 +1267,11 @@ becomes
 
 ;; Marginalia: annotations for minibuffer
 (use-package marginalia
-  :if (eq piger/completion-system 'bedrock)
   :config
   (marginalia-mode))
 
 ;; Popup completion-at-point
 (use-package corfu
-  :if (eq piger/completion-system 'bedrock)
   :init
   (global-corfu-mode)
   (corfu-history-mode)
@@ -1303,14 +1296,12 @@ becomes
 ;; needed by non-GUI Emacs < 31
 (use-package corfu-terminal
   :if (not (display-graphic-p))
-  :if (eq piger/completion-system 'bedrock)
   :config
   (corfu-terminal-mode))
 
 ;; Fancy completion-at-point functions; there's too much in the cape package to
 ;; configure here; dive in when you're comfortable!
 (use-package cape
-  :if (eq piger/completion-system 'bedrock)
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
@@ -1318,81 +1309,15 @@ becomes
 ;; Pretty icons for corfu
 (use-package kind-icon
   :if (display-graphic-p)
-  :if (eq piger/completion-system 'bedrock)
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Orderless: powerful completion style
 (use-package orderless
-  :if (eq piger/completion-system 'bedrock)
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
-
-;; my standard completion system with ivy
-
-(use-package ivy
-  :if (eq piger/completion-system 'ivy)
-  :pin melpa
-  :diminish
-  :bind (("C-x b" . ivy-switch-buffer)
-         ("C-x C-r" . counsel-recentf)
-         ("C-c C-r" . ivy-resume))
-  :custom
-  (ivy-use-virtual-buffers t)
-  ;;; to create a directory when ivy is stubborn, either press C-M-j or enable this:
-  (ivy-use-selectable-prompt t)
-  (ivy-count-format "(%d/%d) ")
-  :config
-  (ivy-mode 1))
-
-;; fancy descriptions in M-x
-(use-package ivy-rich
-  :if (eq piger/completion-system 'ivy)
-  :after (ivy counsel)
-  :config
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  (nerd-icons-ivy-rich-mode 1)
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :if (eq piger/completion-system 'ivy)
-  :pin melpa
-  :after ivy
-  :bind
-  (("M-x"     . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)
-   ("C-h f"   . counsel-describe-function)
-   ("C-h v"   . counsel-describe-variable)
-   ("C-c k"   . counsel-rg)
-   ("C-c g"   . counsel-git)
-   ("C-c j"   . counsel-git-grep)
-   ("M-y"     . counsel-yank-pop))
-  :diminish
-  :config
-  (counsel-mode 1)
-  ;;; ignored files in C-x C-f
-  (setq counsel-find-file-ignore-regexp "\\.pyc\\'"))
-
-(use-package swiper
-  :if (eq piger/completion-system 'ivy)
-  :after ivy
-  :bind
-  ;;; NOTE: those are not the default bindings
-  (("C-s" . swiper)
-   ("C-r" . swiper)))
-
-;; smex can augment counsel-M-x, adding for example the recent used commands.
-;; NOTE: ivy reuses smex (or alternatives like amx) automatically if they are installed;
-;; https://oremacs.com/swiper/#packages
-(use-package smex
-  :if (eq piger/completion-system 'ivy)
-  ;; :bind (("M-x" . smex)
-  ;;        ("M-X" . smex-major-mode-commands)
-  ;;        ("C-c C-c M-x" . execute-extended-command))
-  :config
-  (smex-initialize))
 
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
@@ -1631,7 +1556,6 @@ becomes
   (counsel-projectile-mode 1))
 
 (use-package company
-  :if (not (eq piger/completion-system 'bedrock))
   :disabled
   :diminish
   :hook (prog-mode . company-mode)
@@ -1939,8 +1863,6 @@ becomes
 
 ;; install "Symbols Nerd Font" from: https://www.nerdfonts.com/font-downloads
 (use-package nerd-icons)
-
-(use-package nerd-icons-ivy-rich)
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)

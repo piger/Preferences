@@ -3,5 +3,4 @@
 ;; (setq piger/default-font "JetBrains Mono 13")
 ;; (setq piger/default-font "Victor Mono 13")
 (setq piger/code-directories-alist '("~/code" "~/code/others"))
-(setq piger/completion-system 'bedrock)
 (setq piger/doom-themes-theme 'doom-earl-grey)
