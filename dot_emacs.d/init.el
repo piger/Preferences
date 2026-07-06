@@ -1985,9 +1985,14 @@ becomes
   ;;   run-hooks(change-major-mode-after-body-hook prog-mode-hook go-mode-hook)
   ;;   apply(run-hooks (change-major-mode-after-body-hook prog-mode-hook go-mode-hook))
 
-  ;; :custom
+  :custom
+  ;; activate Eglot in referenced non-project files
+  ;; https://joaotavora.github.io/eglot/#index-eglot_002dextend_002dto_002dxref
+  (eglot-extend-to-xref t)
   ;; Don't tell server of changes before Emacs's been idle for this many seconds:
   ;; (eglot-send-changes-idle-time 0.1)
+  ;; Auto shutdown language servers when you kill the last project buffer
+  (eglot-autoshutdown t)
 
   ;; :hook ((python-mode go-mode yaml-mode) . eglot)
   :bind
