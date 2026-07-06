@@ -500,6 +500,8 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
 (use-package saveplace
+  :custom
+  (save-place-file (concat user-emacs-directory "places"))
   :config
   (save-place-mode 1))
 
@@ -511,7 +513,6 @@
 (setq mouse-yank-at-point t ;; If non-nil, mouse yank commands yank at point instead of at click.
       visible-bell t
       load-prefer-newer t
-      save-place-file (concat user-emacs-directory "places")
       ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
       minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
       make-backup-files nil
@@ -2061,19 +2062,6 @@ point reaches the beginning or end of the buffer, stop there."
   ;; Python: install pyright, or search for another language server.
   ;; :hook (python-mode . eglot-ensure))
 
-;; lsp
-(use-package lsp-mode
-  :disabled
-  :init
-  ;; when calling eldoc, render all the documentation instead of just the signature.
-  (setq lsp-eldoc-render-all t)
-  ;; disable highlighting the symbol; in Go functions this highlight the whole function body
-  (setq lsp-enable-symbol-highlighting nil)
-  :hook
-  ((go-mode . lsp)
-   (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
 (use-package tab-bar
   :bind (("s-{" . tab-bar-switch-to-prev-tab)
          ("s-}" . tab-bar-switch-to-next-tab)
@@ -2081,6 +2069,7 @@ point reaches the beginning or end of the buffer, stop there."
          ("s-w" . tab-bar-close-tab)))
 
 (use-package difftastic-bindings
+  :disabled
   :ensure difftastic
   :config (difftastic-bindings-mode))
 
@@ -2173,6 +2162,17 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
   (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
   (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
   (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+
+;; better scrolling, again?
+;; Install with:
+;; (package-vc-install '(ultra-scroll :vc-backend Git :url  "https://github.com/jdtsmith/ultra-scroll"))
+(use-package ultra-scroll
+  ;:load-path "~/code/emacs/ultra-scroll" ; if you git clone'd instead of package-vc-install
+  :init
+  (setq scroll-conservatively 101 ; important!
+        scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))
 
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
