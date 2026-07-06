@@ -1196,6 +1196,7 @@ becomes
 ;; consult configuration copied from emacs-bedrock: https://git.sr.ht/~ashton314/emacs-bedrock
 
 (use-package avy
+  :demand t
   :bind (("C-c j" . avy-goto-line)
          ("s-j"   . avy-goto-char-timer)))
 
@@ -1223,9 +1224,11 @@ becomes
          ("M-s L" . consult-line-multi)      ; needed by consult-line to detect isearch
          ))
 
+(use-package embark-consult)
+
 (use-package embark
   :demand t
-  :after avy
+  :after (avy embark-consult)
   :bind
   (("C-." . embark-act)
    ("C-;" . embark-dwim)
@@ -1244,10 +1247,6 @@ becomes
   ;; After invoking avy-goto-char-timer, hit "." to run embark at the next
   ;; candidate you select
   (setf (alist-get ?. avy-dispatch-alist) 'bedrock/avy-action-embark))
-
-(use-package embark-consult
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
 
 ;; Vertico: better vertical completion for minibuffer commands
 (use-package vertico
