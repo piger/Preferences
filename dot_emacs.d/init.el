@@ -1569,14 +1569,6 @@ becomes
 (use-package rg
   :hook (after-init . rg-enable-default-bindings))
 
-;; 2021-12-29 - disabling this because it has been extremely slow for the past year or more.
-(use-package counsel-projectile
-  :disabled
-  :after (counsel projectile)
-  :pin melpa
-  :config
-  (counsel-projectile-mode 1))
-
 (use-package company
   :disabled
   :diminish
