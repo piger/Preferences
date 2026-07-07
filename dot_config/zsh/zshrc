@@ -632,6 +632,12 @@ tableflip() { echo '(╯°□°）╯︵ ┻━┻' }
 alias json.tool='python3 -m json.tool'
 
 # Kubernetes
+if exists kubecolor; then
+    # probably need to pick a light theme in https://kubecolor.github.io/customizing/themes/
+    alias kubectl=kubecolor
+    # if you don't have kubectl completions: source <(kubectl completion zsh)
+    compdef kubecolor=kubectl
+fi
 alias k="kubectl"
 alias kc="kubectl --context"
 exists kubectx && alias kctx='kubectx'
