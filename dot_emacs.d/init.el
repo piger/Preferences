@@ -940,7 +940,6 @@ becomes
     (subword-mode +1)
     (show-paren-mode +1)
     (flycheck-mode +1)
-    ;; (company-mode +1)
     (eldoc-mode +1)
     ;; (elpy-enable)
     ;; unfuck electric indentation
@@ -1493,12 +1492,6 @@ becomes
   :custom
   (terraform-format-on-save t))
 
-(use-package company-terraform
-  :after (terraform-mode company)
-  :disabled
-  :config
-  (company-terraform-init))
-
 (use-package hcl-mode
   :mode "\\.hcl\\'")
 
@@ -1523,7 +1516,6 @@ becomes
 (defun piger/prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
   (rainbow-delimiters-mode t)
-  ;; (company-mode t)
   (prelude-font-lock-comment-annotations)
   (subword-mode t)
   (which-function-mode t)
@@ -1568,31 +1560,6 @@ becomes
 ;; Search with: C-c s
 (use-package rg
   :hook (after-init . rg-enable-default-bindings))
-
-(use-package company
-  :disabled
-  :diminish
-  :hook (prog-mode . company-mode)
-  :custom
-  ;; Is this useful?
-  ;; (setq company-transformers '(company-sort-by-occurrence)))
-  ;; Search other buffers with the *same major/minor mode* for completion instead of
-  ;; searching all other buffers.
-  (company-dabbrev-other-buffers t)
-  (company-dabbrev-code-other-buffers t))
-
-(use-package company-quickhelp
-  :disabled
-  :config
-  (company-quickhelp-mode 1))
-
-(use-package company-go
-  :after (company go)
-  :disabled)
-
-(use-package company-web
-  :after (company web)
-  :disabled)
 
 ;; Goggles highlights the modified region using pulse. Currently the commands undo, yank, kill and
 ;; delete are supported.
