@@ -78,3 +78,4 @@ echo "Install or upgrade Go tools: gopls, staticcheck, panicparse, delve."
 /opt/go/bin/go install honnef.co/go/tools/cmd/staticcheck@latest
 /opt/go/bin/go install github.com/maruel/panicparse/v2@latest
 /opt/go/bin/go install github.com/go-delve/delve/cmd/dlv@latest
+/opt/go/bin/go install golang.org/x/tools/cmd/goimports@latest
