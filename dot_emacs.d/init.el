@@ -2033,6 +2033,12 @@ becomes
   :init
   (setq devdocs-data-dir (expand-file-name "devdocs" user-emacs-directory)))
 
+(use-package xref
+  :ensure nil ;; native
+  :init
+  (when (executable-find "rg")
+    (setq xref-search-program 'ripgrep)))
+
 (use-package tab-bar
   :bind (("s-{" . tab-bar-switch-to-prev-tab)
          ("s-}" . tab-bar-switch-to-next-tab)
