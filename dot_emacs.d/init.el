@@ -1831,8 +1831,7 @@ becomes
 
 (use-package editorconfig
   :diminish
-  :config
-  (editorconfig-mode 1))
+  :hook after-init)
 
 ;; install "Symbols Nerd Font" from: https://www.nerdfonts.com/font-downloads
 (use-package nerd-icons)
