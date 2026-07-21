@@ -2028,6 +2028,11 @@ becomes
   ;; Python: install pyright, or search for another language server.
   ;; :hook (python-mode . eglot-ensure))
 
+(use-package devdocs
+  :commands (devdocs-install devdocs-lookup)
+  :init
+  (setq devdocs-data-dir (expand-file-name "devdocs" user-emacs-directory)))
+
 (use-package tab-bar
   :bind (("s-{" . tab-bar-switch-to-prev-tab)
          ("s-}" . tab-bar-switch-to-next-tab)
