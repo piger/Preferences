@@ -480,7 +480,7 @@
 ;;           '(nil "\\`root\\'" "/ssh:%h:"))
 ;; (add-to-list 'tramp-default-proxies-alist
 ;;           '((regexp-quote (system-name)) nil nil))
-(defun hostnames-from-file (filename)
+(defun piger/hostnames-from-file (filename)
   (split-string
    (with-temp-buffer
      (insert-file-contents filename)
@@ -576,25 +576,25 @@
 
 ;; Custom functions
 ;;; https://github.com/magnars/.emacs.d/blob/master/defuns/buffer-defuns.el
-(defun untabify-buffer ()
+(defun piger/untabify-buffer ()
   (interactive)
   (untabify (point-min) (point-max)))
 
-(defun indent-buffer ()
+(defun piger/indent-buffer ()
   (interactive)
   (indent-region (point-min) (point-max)))
 
-(defun cleanup-buffer ()
+(defun piger/cleanup-buffer ()
   "Perform a bunch of operations on the whitespace content of a buffer.
 Including indent-buffer, which should not be called automatically on save."
   (interactive)
-  (untabify-buffer)
+  (piger/untabify-buffer)
   (delete-trailing-whitespace)
-  (indent-buffer))
+  (piger/indent-buffer))
 
 ;; shutdown emacs server
 ;; http://www.emacswiki.org/emacs/EmacsAsDaemon
-(defun shutdown-server ()
+(defun piger/shutdown-server ()
   "Save buffers, Quit and Shutdown (kill) server."
   (interactive)
   (save-some-buffers)
@@ -652,7 +652,7 @@ Including indent-buffer, which should not be called automatically on save."
 
 ;; google
 ;; http://emacsredux.com/blog/2013/03/28/google/
-(defun google ()
+(defun piger/google ()
   "Google the selected region if any, display a query prompt otherwise."
   (interactive)
   (browse-url
@@ -673,7 +673,7 @@ This functions should be added to the hooks of major modes for programming."
 ;; Use this command to create a new terminal buffer; use =C-x C-j= to
 ;; switch to =term-line-mode=, where you can select text and =C-c C-k= to
 ;; switch back to =character-mode=.
-(defun visit-term-buffer ()
+(defun piger/visit-term-buffer ()
   "Create or visit a terminal buffer."
   (interactive)
   (if (not (get-buffer "*ansi-term*"))
@@ -716,13 +716,13 @@ buffer is not visiting a file."
     (ansi-color-apply-on-region (point-min) (point-max))))
 
 ;; Ricompila i file .el che si trovano in ~/.emacs.d
-(defun byte-compile-init-dir ()
+(defun piger/byte-compile-init-dir ()
   "Byte-compile all your dotfiles."
   (interactive)
   (byte-recompile-directory user-emacs-directory 0))
 
 ;; Per joinare una /region/
-(defun join-region (beg end)
+(defun piger/join-region (beg end)
   "Apply join-line over region."
   (interactive "r")
   (if mark-active
@@ -744,7 +744,7 @@ buffer is not visiting a file."
 (defvar piger/font-large "Mononoki-13"
   "The font to use when there is an external monitor connected.")
 
-(defun set-the-right-font ()
+(defun piger/set-the-right-font ()
   "Set the right font according to the connected displays"
   (interactive)
   (let ((monitors (shell-command-to-string "system_profiler SPDisplaysDataType | egrep '^ {8}[^ ]' | sed -e 's/^ *//' -e 's/:$//'"))
@@ -756,16 +756,7 @@ buffer is not visiting a file."
         (set-default-font piger/font-large)
       (set-default-font piger/font-small))))
 
-(defun my/terminal-notifier-notify (title message)
-  "Show a message with `terminal-notifier-command`."
-  (interactive)
-  (start-process "terminal-notifier"
-                 "*terminal-notifier*"
-                 "terminal-notifier"
-                 "-title" title
-                 "-message" message))
-
-(defun piger/align-vars (start end)
+(defun piger/align-statements (start end)
   "Veritcally align stuff.
 Example:
 
@@ -784,7 +775,7 @@ becomes
   (interactive "r")
   (align-regexp start end "\\S-+\\(\\s-+\\)" 1 2 nil))
 
-(defun arrayify (start end quote)
+(defun piger/quote-words (start end quote)
   "Turn strings on newlines into a QUOTEd, comma-separated one-liner."
   (interactive "r\nMQuote: ")
   (let ((insertion
@@ -1126,7 +1117,7 @@ becomes
   :mode "\\.jsonc\\'"
   :hook (jsonc-mode . flycheck-mode))
 
-(defun my-web-mode-hook ()
+(defun piger/my-web-mode-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   ;; (yas-minor-mode +1)
   (whitespace-cleanup-mode +1))
@@ -1152,7 +1143,7 @@ becomes
   (web-mode-enable-auto-quoting -1)
   (web-mode-code-indent-offset 4)
   (web-mode-markup-indent-offset 4)
-  :hook ((web-mode . my-web-mode-hook)
+  :hook ((web-mode . piger/my-web-mode-hook)
          (web-mode . piger/web-mode-set-engine)))
 
 ;; To edit the engine list:
@@ -1539,11 +1530,11 @@ becomes
 ;;             (subword-mode t)))
 
 ; elisp defaults
-(defun pl-elisp-mode-defaults ()
+(defun piger/pl-elisp-mode-defaults ()
   "Some defaults for elisp mode"
   (turn-on-eldoc-mode)
   (diminish 'eldoc-mode))
-(setq pl-elisp-mode-hooks 'pl-elisp-mode-defaults)
+(setq pl-elisp-mode-hooks 'piger/pl-elisp-mode-defaults)
 (add-hook 'emacs-lisp-mode-hook (lambda ()
                                   (run-hooks 'pl-elisp-mode-hooks)))
 
@@ -1573,7 +1564,7 @@ becomes
 ;; https://raw.githubusercontent.com/yyetim/emacs-configuration/master/elisp/vim-fold.el
 ;; modificato leggermente, perche' io i marker li uso anche senza numero (e.g. "{{{1")
 ;; per indicare il livello di outline.
-(defun set-vim-foldmarker (fmr)
+(defun piger/set-vim-foldmarker (fmr)
   "Configure a Vim-like foldmarker for the current buffer, used with outline-mode"
   (interactive "sSet local Vim foldmarker: ")
   (if (equal fmr "")
