@@ -1092,7 +1092,6 @@ becomes
 (use-package js2-mode
   :mode "\\.js\\'"
   :interpreter "node"
-  :disabled
   :hook (js2-mode . subword-mode)
   :config
   (setq-default js2-global-externs
@@ -1106,11 +1105,6 @@ becomes
                 (mapc (lambda (x)
                         (add-to-list 'js2-additional-externs x))
                       (list "Ember" "DS" "App"))))))
-
-(use-package rjsx-mode
-  :mode "\\.js\\'"
-  :interpreter "node"
-  :hook (rjsx-mode . subword-mode))
 
 (use-package json-mode
   :mode "\\.json\\'"
