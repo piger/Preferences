@@ -878,9 +878,9 @@ becomes
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
   ;; replace flycheck's wavy underline with a straight line
-  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line :position -3))
-  (set-face-attribute 'flycheck-warning nil :underline '(:color "#e3795c" :style line :position -3))
-  (set-face-attribute 'flycheck-info nil :underline '(:color "ForestGreen" :style line :position -3))
+  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line))
+  (set-face-attribute 'flycheck-warning nil :underline '(:color "#f5c187" :style line))
+  (set-face-attribute 'flycheck-info nil :underline '(:color "#4bc96c" :style line))
 
   ;; make the flycheck arrow look like an exclamation point.
   ;; but only do it when emacs runs in a window, not terminal
