@@ -90,7 +90,8 @@
 
 ;; Packages
 (require 'package)
-(setq package-enable-at-startup nil)
+;; this should be set in the early init file, not here. Here it probably doesn't do anything.
+;; (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
