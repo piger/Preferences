@@ -870,13 +870,14 @@ becomes
   :commands (flycheck-mode
              flycheck-next-error
              flycheck-previous-error)
-  :config
+  :custom
   ;; spaceline provides his own indicator for that
-  (setq-default flycheck-mode-line nil)
-  (setq flycheck-indication-mode 'right-fringe)
+  (flycheck-mode-line nil)
+  (flycheck-indication-mode 'right-fringe)
   ;; don't warn about bad elisp documentation
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
+  :config
   ;; replace flycheck's wavy underline with a straight line
   (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line))
   (set-face-attribute 'flycheck-warning nil :underline '(:color "#f5c187" :style line))
@@ -895,6 +896,8 @@ becomes
          (locate-dominating-file parent-dir "recipes")
          (locate-dominating-file parent-dir "cookbooks"))))
 
+  ;; when I used a hook the set-face-attribute in :config are ignored :(
+  ;; :hook (after-init . global-flycheck-mode)
   (global-flycheck-mode))
 
 ;; direnv
