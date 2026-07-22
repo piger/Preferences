@@ -698,6 +698,17 @@ buffer is not visiting a file."
                          (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
+;; Try a "readability" HTTP client to read web pages with eww. I don't really use
+;; eww for regular browsing, so it may make sense to use it to quickly read some online
+;; documentation.
+(when (executable-find "go-readability")
+  (use-package eww
+    :ensure nil ;; native
+    :commands eww
+    :custom
+    ;; go install codeberg.org/readeck/go-readability/cmd/go-readability@latest
+    (eww-retrieve-command '("go-readability"))))
+
 ;; Search Wikipedia using `eww'
 (defun piger/eww-wiki (text)
   "Search TEXT inside Wikipedia using eww."
