@@ -492,14 +492,26 @@
 (use-package tramp
   :defer t
   :ensure nil ;; do not install from package repos, use the builtin version
-  :custom
-  (tramp-default-method "ssh")
+
+  ;; I don't remember why I set this instead of the default (scp); according to this article
+  ;; scp or rsync should work much better than ssh, except for small files
+  ;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
+  ;; :custom
+  ;; (tramp-default-method "ssh")
+
   :config
   (tramp-set-completion-function
    "ssh"
    '((tramp-parse-sconfig "/etc/ssh/ssh_config")
      (tramp-parse-sconfig "~/.ssh/config")
      (tramp-parse-hosts "/etc/hosts"))))
+
+;; Also from this article:
+;; https://coredumped.dev/2025/06/18/making-tramp-go-brrrr./
+;; These settings might speed up things, but I haven't needed them so far.
+;; (setq remote-file-name-inhibit-locks t
+;;       tramp-use-scp-direct-remote-copying t
+;;       remote-file-name-inhibit-auto-save-visited t)
 
 ;; 08/04/2015 - I don't really like flyspell-mode...
 ;; (add-hook 'text-mode-hook (lambda () (flyspell-mode +1)))
@@ -1552,6 +1564,12 @@ becomes
   :bind-keymap (("C-c C-p" . projectile-command-map)
                 ("C-c p" . projectile-command-map)
                 ("s-p" . projectile-command-map))
+  :config
+  ;; fix HUGE lag when editing remote files with tramp:
+  ;; https://github.com/bbatsov/projectile/issues/1232#issuecomment-1890965121
+  (advice-add 'projectile-project-root :before-while
+              (lambda (&optional dir)
+                (not (file-remote-p (or dir default-directory)))))
   :hook (after-init . projectile-mode))
 ;  (add-to-list 'projectile-globally-ignored-files ".pyc")
 ;  (add-to-list 'projectile-globally-ignored-files "__pycache__"))
@@ -1775,6 +1793,13 @@ becomes
   ;; (setq nerd-icons-font-family "JetBrainsMono Nerd Font")
   ;; Increase the width of the branch name
   (setq doom-modeline-vcs-max-length 20)
+
+  ;; Might fix lag when using tramp; in my case the lag with tramp was caused by projectile,
+  ;; but I'll leave this comment here for future reference.
+  ;; https://github.com/seagle0128/doom-modeline/issues/32
+  ;; https://github.com/bbatsov/projectile/issues/657
+  ;; (setq doom-modeline-buffer-file-name-style 'file-name)
+
   :init
   (doom-modeline-mode 1))
 
@@ -2124,7 +2149,11 @@ becomes
   :config
   (setq dictionary-server "dict.org"))
 
+;; seems to interfere with tramp
+;; https://github.com/joaotavora/breadcrumb/issues/54
+;; in my case tramp buffers become laggy/slow
 (use-package breadcrumb
+  :disabled t
   :hook ((prog-mode . breadcrumb-mode)))
 
 (use-package ghostel
