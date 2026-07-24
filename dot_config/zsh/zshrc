@@ -193,6 +193,17 @@ kde_is_dark_mode() {
     return 1
 }
 
+# fix for the VERY ANNOYING ghostty terminfo story
+# NOTE: on Debian this gets installed into /etc/terminfo/x/xterm-ghostty and /etc/terminfo/g/ghostty
+# and not in /usr/share/terminfo; if not superuser, in $HOME/.terminfo/...
+fix_remote_ghostty_terminfo() {
+    if [[ ! -z $1 ]]; then
+        infocmp -x xterm-ghostty | ssh $1 -- tic -x -
+    else
+        echo "Usage: fix_remote_ghostty_terminfo [root@]hostname"
+    fi
+}
+
 # Use whois to query for ASN data:
 # » whois-ip 172.217.16.238
 # AS      | IP               | AS Name

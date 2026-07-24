@@ -24,6 +24,13 @@ notify-on-command-finish = unfocused
 notify-on-command-finish-action = bell,notify
 notify-on-command-finish-after = 60s
 
+# Automatically fix ghostty's terminfo on remote hosts
+# https://ghostty.org/docs/features/ssh
+# By doing this I don't need "SetEnv TERM=xterm-256color" in ssh_config, which breaks emacs+tramp
+# because it hardcoded a TERM that is not "dumb"... so the whole prompt detection (and disabling "zle" in zsh)
+# doesn't work.
+shell-integration-features = ssh-env,ssh-terminfo,no-cursor
+
 # optional local configuration file; see https://ghostty.org/docs/config#splitting-into-multiple-files
 config-file = ?config.local
 
