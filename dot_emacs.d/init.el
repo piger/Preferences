@@ -561,6 +561,13 @@
   :config
   (save-place-mode 1))
 
+;; https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/
+;; recenter the view after jumping to the last location
+;; NOTE: does not work!
+;; (advice-add 'save-place-find-file-hook :after
+;;             (lambda (&rest _)
+;;               (when buffer-file-name (ignore-errors (recenter)))))
+
 ;; create the backups directory if it doesn't exists.
 (let ((backups-dir (concat user-emacs-directory "backups")))
   (unless (file-exists-p backups-dir)
