@@ -548,8 +548,7 @@
 (server-start)
 
 ;; make a shell script executable automatically on save
-(add-hook 'after-save-hook
-          'executable-make-buffer-file-executable-if-script-p)
+(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
 
 ;; extracts from better defaults: https://github.com/technomancy/better-defaults/blob/master/better-defaults.el
 (autoload 'zap-up-to-char "misc"
