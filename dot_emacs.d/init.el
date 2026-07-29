@@ -890,9 +890,6 @@ becomes
 
 ;; See also: http://www.flycheck.org/en/latest/languages.html#flycheck-languages
 (use-package flycheck
-  :commands (flycheck-mode
-             flycheck-next-error
-             flycheck-previous-error)
   :custom
   ;; spaceline provides his own indicator for that
   (flycheck-mode-line nil)
@@ -900,12 +897,17 @@ becomes
   ;; don't warn about bad elisp documentation
   (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
-  :config
+  :custom-face
   ;; replace flycheck's wavy underline with a straight line
-  (set-face-attribute 'flycheck-error nil :underline '(:color "#d32e00" :style line))
-  (set-face-attribute 'flycheck-warning nil :underline '(:color "#f5c187" :style line))
-  (set-face-attribute 'flycheck-info nil :underline '(:color "#4bc96c" :style line))
+  (flycheck-error ((t (:underline (:color "#d32e00" :style line)))))
+  (flycheck-warning ((t (:underline (:color "#f5c187" :style line)))))
+  (flycheck-info ((t (:underline (:color "#4bc96c" :style line)))))
 
+  :hook ((after-init . global-flycheck-mode)
+         ;; Show diagnostics inline, next to the code (Error Lens style)
+         (after-init . global-flycheck-annotate-mode))
+
+  :config
   ;; make the flycheck arrow look like an exclamation point.
   ;; but only do it when emacs runs in a window, not terminal
   (when window-system
@@ -919,9 +921,7 @@ becomes
          (locate-dominating-file parent-dir "recipes")
          (locate-dominating-file parent-dir "cookbooks"))))
 
-  ;; when I used a hook the set-face-attribute in :config are ignored :(
-  ;; :hook (after-init . global-flycheck-mode)
-  (global-flycheck-mode))
+  (global-flycheck-eglot-mode 1))
 
 ;; direnv
 ;; https://github.com/wbolster/emacs-direnv
