@@ -282,6 +282,34 @@
 ;; show empty lines at the bottom of the buffer, kinda like Vim.
 ;; (setq-default indicate-empty-lines t)
 
+;; performance stuff
+;; https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/
+;; maybe useful for very large buffers?
+
+;; PERF: Disable bidirectional text scanning for a modest performance boost.
+;;   I've set this to `nil' in the past, but the `bidi-display-reordering's docs
+;;   say that is an undefined state and suggest this to be just as good:
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+
+;; PERF: Disabling BPA makes redisplay faster, but might produce incorrect
+;;   reordering of bidirectional text with embedded parentheses (and other
+;;   bracket characters whose 'paired-bracket' Unicode property is non-nil).
+(setq bidi-inhibit-bpa t)  ; Emacs 27+ only
+
+;; Introduced in Emacs HEAD (b2f8c9f), this inhibits fontification while
+;; receiving input, which should help a little with scrolling performance.
+(setq redisplay-skip-fontification-on-input t)
+
+(setq read-process-output-max (* 4 1024 1024)) ; default: 64KB -> 4MB
+
+;; disable ffap (find-file-at-point) network lookups.
+;; If the text under point looks like a hostname – say, something.com in a comment – ffap tries to
+;; ping it to check if it’s reachable. On a slow or firewalled network, that’s a multi-second hang.
+(setq ffap-machine-p-known 'reject)
+
+;; end of performance stuff
+
 ;; enable context menu mode, which binds the right button to a context aware menu.
 (use-package mouse
   :ensure nil  ;; native
