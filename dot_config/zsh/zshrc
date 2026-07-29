@@ -146,10 +146,15 @@ light_mode() {
     # /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -e "(consult-theme 'doom-opera-light)" >/dev/null
 }
 
-gdoc() {
-    # godoc -http=:6060 -play
-    open "http://localhost:6060/pkg/${@}"
-}
+# the "godoc" web server is deprecated; use pkgsite instead:
+# https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite
+# $ go install golang.org/x/pkgsite/cmd/pkgsite@latest
+# Unfortunately it doesn't include a playground; for a playground replacement use
+# https://github.com/x1unix/go-playground
+# gdoc() {
+#     # godoc -http=:6060 -play
+#     open "http://localhost:6060/pkg/${@}"
+# }
 
 # inspired by
 # https://github.com/jessfraz/dotfiles/blob/01f471f2da9a4b3be662de118556ab76fdb2a0cf/.dockerfunc#L107-L117
