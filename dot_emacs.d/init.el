@@ -2205,6 +2205,11 @@ Like normal Emacs `C-k`. Kill to end of line and put contents in kill-ring."
 
   (setq gptel-include-reasoning t))
 
+(use-package visual-replace
+  :bind (("C-c r" . visual-replace)
+         :map isearch-mode-map
+         ("C-c r" . visual-replace-from-isearch)))
+
 ;; Aliases
 (defalias 'qrr 'query-replace-regexp)
 
