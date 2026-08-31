@@ -55,6 +55,9 @@ if installed go; then
     [[ $REPLY =~ ^[Yy]$ ]] || { echo "ok, nevermind"; exit; }
 fi
 
+echo "Triggering sudo prompt"
+sudo uname -a
+
 if [[ -d /opt/go ]]; then
     echo "Deleting the existing installation in /opt/go"
     sudo rm -rf /opt/go
