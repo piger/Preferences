@@ -303,11 +303,6 @@
 
 (setq read-process-output-max (* 4 1024 1024)) ; default: 64KB -> 4MB
 
-;; disable ffap (find-file-at-point) network lookups.
-;; If the text under point looks like a hostname – say, something.com in a comment – ffap tries to
-;; ping it to check if it’s reachable. On a slow or firewalled network, that’s a multi-second hang.
-(setq ffap-machine-p-known 'reject)
-
 ;; end of performance stuff
 
 ;; enable context menu mode, which binds the right button to a context aware menu.
