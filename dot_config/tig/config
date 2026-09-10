@@ -14,7 +14,8 @@ set main-view-date = custom
 set main-view-date-format = "%Y-%m-%d"
 set main-view = date:relative author:full commit-title:graph=true,refs=true
 set diff-view = line-number:display=false text:commit-title-overflow=true
-set diff-options = --pretty=short
+# "short" view only shows part of the commit message, which is BAD!
+# set diff-options = --pretty=short
 # set vertical-split = false
 set git-colors = no
 set truncation-delimiter  = ~   # Character drawn for truncations, or "utf-8"
