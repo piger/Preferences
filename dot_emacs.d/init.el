@@ -1094,6 +1094,7 @@ becomes
 ;;                               (set (make-local-variable 'comment-auto-fill-only-comments) t))))))
 
 (use-package ruby-mode
+  :disabled
   :interpreter "ruby"
   :mode ("\\.rb\\'"
          "\\.ru\\'"
@@ -1111,6 +1112,24 @@ becomes
   (add-hook 'ruby-mode-hook 'piger/ruby-mode-hooks)
   ;; We never want to edit Rubinius bytecode
   (add-to-list 'completion-ignored-extensions ".rbc"))
+
+(use-package ruby-ts-mode
+  :ensure nil ;; this is a native package
+  :mode ("\\.rb\\'"
+         "\\.ru\\'"
+         "\\.rake\\'"
+         "\\.gemspec\\'"
+         "Gemfile\\'"
+         "Berksfile\\'"
+         "Rakefile\\'"
+         "Vagrantfile\\'"
+         "Capfile\\'")
+  :hook (ruby-ts-mode . subword-mode))
+
+;; https://github.com/smoeding/puppet-ts-mode
+;; Run (puppet-ts-mode-install-grammar) to install the grammar.
+(use-package puppet-ts-mode
+  :mode "\\.pp\\'")
 
 ;; to be enabled if I have to deal with Ruby.
 ;; requires: brew install rbenv
