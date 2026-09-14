@@ -1129,7 +1129,9 @@ becomes
 ;; https://github.com/smoeding/puppet-ts-mode
 ;; Run (puppet-ts-mode-install-grammar) to install the grammar.
 (use-package puppet-ts-mode
-  :mode "\\.pp\\'")
+  :mode "\\.pp\\'"
+  :custom
+  (puppet-ts-indent-level 4))
 
 ;; to be enabled if I have to deal with Ruby.
 ;; requires: brew install rbenv
