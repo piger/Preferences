@@ -717,8 +717,14 @@ fi
 fpath=("$HOME/.cache/zsh-completions" $fpath)
 
 # docker
-(( $+commands[docker] )) && \
-    [[ ! -f "$HOME/.cache/zsh-completions/_docker" ]] && docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
+if (( $+commands[docker] )); then
+    # this directory is created by Docker Desktop
+    if [[ -d "$HOME/.docker/completions" ]]; then
+        fpath+=("$HOME/.docker/completions")
+    elif [[ ! -f "$HOME/.cache/zsh-completions/_docker" ]]; then
+        docker completion zsh > "$HOME/.cache/zsh-completions/_docker"
+    fi
+fi
 
 is_mac && (( $+commands[container] )) && \
     [[ ! -f "$HOME/.cache/zsh-completions/_container" ]] && container --generate-completion-script zsh > "$HOME/.cache/zsh-completions/_container"
