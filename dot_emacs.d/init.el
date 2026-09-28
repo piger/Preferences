@@ -1481,7 +1481,7 @@ becomes
   :hook (
          ;; (git-commit-setup . git-commit-turn-on-flyspell)
          (git-commit-setup . (lambda () (jinx-mode)))
-         (git-commit-setup . (lambda () (setq fill-column 80)))
+         (git-commit-setup . (lambda () (setq fill-column 72)))
          (after-save . magit-after-save-refresh-status)))
 
 ;; major modes for git-related files. https://github.com/magit/git-modes
