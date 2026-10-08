@@ -121,6 +121,17 @@
 ;; maximize the frame. too bad this happen at the end of loading the config.
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
+;; apparently I need this on Fedora as well.
+(when *is-a-linux*
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (setq exec-path-from-shell-arguments nil)
+    (setq exec-path-from-shell-variables
+          '("PATH" "GOPATH"))
+    :config
+    (exec-path-from-shell-initialize)))
+
 ;; OSX stuff
 (when *is-a-mac*
   (use-package exec-path-from-shell
