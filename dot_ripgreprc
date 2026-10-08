@@ -25,6 +25,17 @@ jsonnet:*.jsonnet
 --type-add
 template:*.{tmpl,erb}
 
+# Varnish (note: 'vcl' file type is native)
+
+--type-add
+vclerb:*.vcl.erb
+
+--type-add
+varnish:include:vcl,vclerb
+
+--type-add
+vtc:*.vtc
+
 # Setting --max-columns could be useful when grepping in directories that contain
 # minified files.
 #--max-columns=500
