@@ -943,9 +943,9 @@ becomes
   (flycheck-warning ((t (:underline (:color "#f5c187" :style line)))))
   (flycheck-info ((t (:underline (:color "#4bc96c" :style line)))))
 
-  :hook ((after-init . global-flycheck-mode)
+  :hook ((after-init . global-flycheck-mode))
          ;; Show diagnostics inline, next to the code (Error Lens style)
-         (after-init . global-flycheck-annotate-mode))
+         ;; (after-init . global-flycheck-annotate-mode))
 
   :config
   ;; make the flycheck arrow look like an exclamation point.
