@@ -972,9 +972,10 @@ becomes
 (use-package ediff
   :commands ediff
   :config
-  (setq ediff-split-window-function 'split-window-vertically)
+  (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-  (setq-default ediff-highlight-all-diffs 'nil)
+  ;; actually seeing all diffs all the time is BETTER.
+  ;; (setq-default ediff-highlight-all-diffs 'nil)
   ; ignore all white spaces
   (setq ediff-diff-options "-w"))
 
