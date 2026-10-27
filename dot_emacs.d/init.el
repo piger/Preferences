@@ -1501,10 +1501,9 @@ becomes
 ;; major modes for git-related files. https://github.com/magit/git-modes
 (use-package git-modes)
 
-(use-package forge
-  :after magit
-  :config
-  (setq forge-pull-notifications nil))
+;; forge require some configuration, so it's best to configure it via init-local.el
+;; (use-package forge
+;;   :after magit)
 
 (use-package gist
   :defer t)
