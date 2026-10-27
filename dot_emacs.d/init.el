@@ -225,6 +225,8 @@
 ;; theme automatically.
 ;; https://github.com/d12frosted/homebrew-emacs-plus/blob/master/patches/emacs-28/system-appearance.patch
 ;;
+;; This build includes it as well: https://github.com/jimeh/emacs-builds
+;;
 ;; Should try https://github.com/LionyxML/auto-dark-emacs for Linux.
 (when (boundp 'ns-system-appearance-change-functions)
   (defun piger/switch-theme (appearance)
