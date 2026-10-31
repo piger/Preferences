@@ -662,6 +662,7 @@ exists kubens && alias kns='kubens'
 # Go
 alias go-show-direct-deps-updates="go list -f '{{if not .Indirect}}{{.}}{{end}}' -u -m all"
 alias go-show-all-deps-updates="go list -u -m all"
+go-latest-version() { curl -sL 'https://go.dev/dl/?mode=json' | jq -r 'map(select(.stable == true))[0] | .version | scan("go(.*)")[0]' }
 
 godoc() {
     go doc -all "$@" | $PAGER
