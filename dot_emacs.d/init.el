@@ -841,6 +841,11 @@ becomes
   (interactive "r")
   (align-regexp start end "\\S-+\\(\\s-+\\)" 1 2 nil))
 
+(defun align-non-space (BEG END)
+  "Align non-space columns in region BEG END, preserving indentation."
+  (interactive "r")
+  (align-regexp BEG END "[^ \t\n]\\([ \t]+\\)" 1 1 t))
+
 (defun piger/quote-words (start end quote)
   "Turn strings on newlines into a QUOTEd, comma-separated one-liner."
   (interactive "r\nMQuote: ")
